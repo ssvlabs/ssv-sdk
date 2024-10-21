@@ -1,12 +1,8 @@
-type SSVDataProps = {
-  owner_address: string
-  chain: string
-}
+import { ConfigReturnType } from '@/config/create'
 
 export class SSVData {
-  config: SSVDataProps
-
-  constructor(props: SSVDataProps) {
-    this.config = props
-  } 
+  config: ConfigReturnType
+  constructor(config: ConfigReturnType) {
+    this.config = config
+  }
 }

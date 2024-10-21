@@ -1,11 +1,10 @@
-import { createWalletClient, Hex, http } from 'viem'
+import { Chain, createWalletClient, Hex, Transport } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { chains } from '../config/chains'
 
 type CreateWalletClientProps = {
   privateKey: Hex
-  chain: keyof typeof chains
-  rpcEndpoint?: string
+  chain: Chain
+  transport: Transport
 }
 
 export const createWalletFromPrivateKey = (props: CreateWalletClientProps) => {
@@ -13,8 +12,8 @@ export const createWalletFromPrivateKey = (props: CreateWalletClientProps) => {
 
   const client = createWalletClient({
     account,
-    chain: chains[props.chain],
-    transport: http(props.rpcEndpoint),
+    chain: props.chain,
+    transport: props.transport,
   })
 
   return { client, account }

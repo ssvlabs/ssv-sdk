@@ -5,7 +5,7 @@
     "ecmaVersion": 6,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "unused-imports"],
   "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
   "rules": {
     "@typescript-eslint/naming-convention": [
@@ -14,7 +14,9 @@
         "selector": "import",
         "format": ["camelCase", "PascalCase"]
       }
-    ]
+    ],
+    "unused-imports/no-unused-imports": "warn",
+    "@typescript-eslint/consistent-type-imports": "error"
   },
   "ignorePatterns": ["out", "dist", "**/*.d.ts", "webview-ui/**"]
 }
