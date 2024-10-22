@@ -1,30 +1,32 @@
-import { subgraph } from '@/config/chains'
-import { getQueries } from '@/queries'
 import { SSVSDK } from '@/sdk'
-import { GraphQLClient } from 'graphql-request'
+import { createClusterId } from '@/utils/cluster'
 import { verifyMessage } from 'viem'
 import { describe, expect, it } from 'vitest'
 import { HoleskyV4GetterABI } from './abi/holesky/v4/getter'
 
 describe('SSVSDK 🛜  Holesky', () => {
-  const client = new GraphQLClient(subgraph.holesky)
-  const queries = getQueries(client)
-  it('testing queries', async () => {
-    const nonce = await queries.getOwnerNonce({ owner: process.env.OWNER_ADDRESS! })
+  it('can get owner nonce and cluster', async () => {
+    const sdk = new SSVSDK({
+      chain: 'holesky',
+      private_key: process.env.PRIVATE_KEY,
+    })
+    const nonce = await sdk.data.getOwnerNonce({ owner: process.env.OWNER_ADDRESS! })
     expect(nonce).toBeDefined()
 
-    const cluster = await queries.getCluster({
-      id: '9518e179681d7fd47f81ef8ea4502c9f6f7744583834f1a3f445004d0a9e76a4',
+    const { cluster } = await sdk.data.getCluster({
+      id: createClusterId(process.env.OWNER_ADDRESS!, [5, 7, 9, 11]),
     })
+
     expect(cluster).toBeTruthy()
   })
+
   it('should have the right account address', () => {
     const sdk = new SSVSDK({
       chain: 'holesky',
       private_key: process.env.PRIVATE_KEY,
     })
 
-    expect(sdk.walletClient.account?.address).toBe(process.env.OWNER_ADDRESS)
+    expect(sdk.core.walletClient.account?.address).toBe(process.env.OWNER_ADDRESS)
   })
 
   it('should have the right rpc endpoint', () => {
@@ -35,7 +37,7 @@ describe('SSVSDK 🛜  Holesky', () => {
       rpc_endpoint: rpcEndpoint,
     })
 
-    expect(sdk.publicClient.transport.url).toBe(rpcEndpoint)
+    expect(sdk.core.publicClient.transport.url).toBe(rpcEndpoint)
   })
   it('can read contract without setting an rpc', async () => {
     const sdk = new SSVSDK({
@@ -43,7 +45,7 @@ describe('SSVSDK 🛜  Holesky', () => {
       private_key: process.env.PRIVATE_KEY,
     })
 
-    const data = await sdk.publicClient.readContract({
+    const data = await sdk.core.publicClient.readContract({
       address: '0x656d5cC4e7d49EaCC063cBB8D3e072F2841D68b4',
       abi: HoleskyV4GetterABI,
       functionName: 'ssvNetwork',
@@ -59,13 +61,13 @@ describe('SSVSDK 🛜  Holesky', () => {
       private_key: process.env.PRIVATE_KEY,
     })
 
-    const signature = await sdk.walletClient.signMessage({
+    const signature = await sdk.core.walletClient.signMessage({
       message: 'Hello',
-      account: sdk.walletClient.account!,
+      account: sdk.core.walletClient.account!,
     })
 
     const verify = await verifyMessage({
-      address: sdk.walletClient.account!.address,
+      address: sdk.core.walletClient.account!.address,
       message: 'Hello',
       signature,
     })
