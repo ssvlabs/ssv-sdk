@@ -1,8 +1,6 @@
-import { ConfigReturnType } from '@/config/create'
+import { getQueries } from '@/queries'
+import { GraphQLClient } from 'graphql-request'
 
-export class SSVData {
-  config: ConfigReturnType
-  constructor(config: ConfigReturnType) {
-    this.config = config
-  }
+export const createData = (graphqlClient: GraphQLClient) => {
+  return getQueries(graphqlClient)
 }

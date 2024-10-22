@@ -1,16 +1,16 @@
-import { SSVData } from '@/libs/data'
-import { PublicClient, WalletClient } from 'viem'
-import { createConfig } from './config/create'
+import { createData } from '@/libs/data'
+import { utils } from '@/libs/utils'
+import { ConfigReturnType, createConfig } from './config/create'
 import { ConfigArgs } from './utils/zod/config'
 
 export class SSVSDK {
-  readonly data: SSVData
-  readonly publicClient: PublicClient
-  readonly walletClient: WalletClient
+  readonly core: ConfigReturnType
+  readonly data: ReturnType<typeof createData>
+  readonly utils: typeof utils
+
   constructor(props: ConfigArgs) {
-    const config = createConfig(props)
-    this.data = new SSVData(config)
-    this.publicClient = config.publicClient
-    this.walletClient = config.walletClient
+    this.core = createConfig(props)
+    this.data = createData(this.core.client)
+    this.utils = utils
   }
 }
