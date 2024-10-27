@@ -34,6 +34,16 @@ export type Account_Filter = {
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Account_Filter>>>;
   clusters_?: InputMaybe<Cluster_Filter>;
+  feeRecipient?: InputMaybe<Scalars['Bytes']['input']>;
+  feeRecipient_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  feeRecipient_gt?: InputMaybe<Scalars['Bytes']['input']>;
+  feeRecipient_gte?: InputMaybe<Scalars['Bytes']['input']>;
+  feeRecipient_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
+  feeRecipient_lt?: InputMaybe<Scalars['Bytes']['input']>;
+  feeRecipient_lte?: InputMaybe<Scalars['Bytes']['input']>;
+  feeRecipient_not?: InputMaybe<Scalars['Bytes']['input']>;
+  feeRecipient_not_contains?: InputMaybe<Scalars['Bytes']['input']>;
+  feeRecipient_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
   id?: InputMaybe<Scalars['Bytes']['input']>;
   id_contains?: InputMaybe<Scalars['Bytes']['input']>;
   id_gt?: InputMaybe<Scalars['Bytes']['input']>;
@@ -67,6 +77,7 @@ export type Account_Filter = {
 
 export enum Account_OrderBy {
   Clusters = 'clusters',
+  FeeRecipient = 'feeRecipient',
   Id = 'id',
   Nonce = 'nonce',
   Operators = 'operators',
@@ -711,6 +722,7 @@ export enum Cluster_OrderBy {
   NetworkFeeIndex = 'networkFeeIndex',
   OperatorIds = 'operatorIds',
   Owner = 'owner',
+  OwnerFeeRecipient = 'owner__feeRecipient',
   OwnerId = 'owner__id',
   OwnerNonce = 'owner__nonce',
   OwnerValidatorCount = 'owner__validatorCount',
@@ -725,8 +737,12 @@ export enum DaoUpdateTypes {
   LiquidationThreshold = 'LIQUIDATION_THRESHOLD',
   MinLiquidationCollateral = 'MIN_LIQUIDATION_COLLATERAL',
   NetworkFee = 'NETWORK_FEE',
+  OperatorAdded = 'OPERATOR_ADDED',
   OperatorFeeIncreaseLimit = 'OPERATOR_FEE_INCREASE_LIMIT',
-  OperatorMaxFee = 'OPERATOR_MAX_FEE'
+  OperatorMaxFee = 'OPERATOR_MAX_FEE',
+  OperatorRemoved = 'OPERATOR_REMOVED',
+  ValidatorAdded = 'VALIDATOR_ADDED',
+  ValidatorRemoved = 'VALIDATOR_REMOVED'
 }
 
 export type DaoValues_Filter = {
@@ -841,11 +857,59 @@ export type DaoValues_Filter = {
   operatorMaximumFee_lte?: InputMaybe<Scalars['BigInt']['input']>;
   operatorMaximumFee_not?: InputMaybe<Scalars['BigInt']['input']>;
   operatorMaximumFee_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  operatorsAdded?: InputMaybe<Scalars['BigInt']['input']>;
+  operatorsAdded_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  operatorsAdded_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  operatorsAdded_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  operatorsAdded_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  operatorsAdded_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  operatorsAdded_not?: InputMaybe<Scalars['BigInt']['input']>;
+  operatorsAdded_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  operatorsRemoved?: InputMaybe<Scalars['BigInt']['input']>;
+  operatorsRemoved_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  operatorsRemoved_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  operatorsRemoved_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  operatorsRemoved_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  operatorsRemoved_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  operatorsRemoved_not?: InputMaybe<Scalars['BigInt']['input']>;
+  operatorsRemoved_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   or?: InputMaybe<Array<InputMaybe<DaoValues_Filter>>>;
+  totalAccounts?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAccounts_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAccounts_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAccounts_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalAccounts_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAccounts_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAccounts_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalAccounts_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalOperators?: InputMaybe<Scalars['BigInt']['input']>;
+  totalOperators_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalOperators_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalOperators_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalOperators_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalOperators_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalOperators_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalOperators_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalValidators?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValidators_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValidators_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValidators_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  totalValidators_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValidators_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValidators_not?: InputMaybe<Scalars['BigInt']['input']>;
+  totalValidators_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   updateType?: InputMaybe<DaoUpdateTypes>;
   updateType_in?: InputMaybe<Array<DaoUpdateTypes>>;
   updateType_not?: InputMaybe<DaoUpdateTypes>;
   updateType_not_in?: InputMaybe<Array<DaoUpdateTypes>>;
+  validatorsAdded?: InputMaybe<Scalars['BigInt']['input']>;
+  validatorsAdded_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  validatorsAdded_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  validatorsAdded_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  validatorsAdded_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  validatorsAdded_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  validatorsAdded_not?: InputMaybe<Scalars['BigInt']['input']>;
+  validatorsAdded_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   validatorsPerOperatorLimit?: InputMaybe<Scalars['BigInt']['input']>;
   validatorsPerOperatorLimit_gt?: InputMaybe<Scalars['BigInt']['input']>;
   validatorsPerOperatorLimit_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -854,6 +918,14 @@ export type DaoValues_Filter = {
   validatorsPerOperatorLimit_lte?: InputMaybe<Scalars['BigInt']['input']>;
   validatorsPerOperatorLimit_not?: InputMaybe<Scalars['BigInt']['input']>;
   validatorsPerOperatorLimit_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  validatorsRemoved?: InputMaybe<Scalars['BigInt']['input']>;
+  validatorsRemoved_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  validatorsRemoved_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  validatorsRemoved_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  validatorsRemoved_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  validatorsRemoved_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  validatorsRemoved_not?: InputMaybe<Scalars['BigInt']['input']>;
+  validatorsRemoved_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
 };
 
 export enum DaoValues_OrderBy {
@@ -870,8 +942,15 @@ export enum DaoValues_OrderBy {
   NetworkFeeIndexBlockNumber = 'networkFeeIndexBlockNumber',
   OperatorFeeIncreaseLimit = 'operatorFeeIncreaseLimit',
   OperatorMaximumFee = 'operatorMaximumFee',
+  OperatorsAdded = 'operatorsAdded',
+  OperatorsRemoved = 'operatorsRemoved',
+  TotalAccounts = 'totalAccounts',
+  TotalOperators = 'totalOperators',
+  TotalValidators = 'totalValidators',
   UpdateType = 'updateType',
-  ValidatorsPerOperatorLimit = 'validatorsPerOperatorLimit'
+  ValidatorsAdded = 'validatorsAdded',
+  ValidatorsPerOperatorLimit = 'validatorsPerOperatorLimit',
+  ValidatorsRemoved = 'validatorsRemoved'
 }
 
 export type DeclareOperatorFeePeriodUpdated_Filter = {
@@ -2600,6 +2679,7 @@ export enum Operator_OrderBy {
   LastUpdateTransactionHash = 'lastUpdateTransactionHash',
   OperatorId = 'operatorId',
   Owner = 'owner',
+  OwnerFeeRecipient = 'owner__feeRecipient',
   OwnerId = 'owner__id',
   OwnerNonce = 'owner__nonce',
   OwnerValidatorCount = 'owner__validatorCount',
@@ -3012,6 +3092,7 @@ export enum Validator_OrderBy {
   LastUpdateTransactionHash = 'lastUpdateTransactionHash',
   Operators = 'operators',
   Owner = 'owner',
+  OwnerFeeRecipient = 'owner__feeRecipient',
   OwnerId = 'owner__id',
   OwnerNonce = 'owner__nonce',
   OwnerValidatorCount = 'owner__validatorCount',
@@ -3040,6 +3121,14 @@ export type GetOwnerNonceQueryVariables = Exact<{
 
 export type GetOwnerNonceQuery = { __typename?: 'Query', account?: { __typename?: 'Account', nonce: any } | null };
 
+export type GetOperatorsQueryVariables = Exact<{
+  operatorIds: Array<Scalars['String']['input']> | Scalars['String']['input'];
+}>;
+
+
+export type GetOperatorsQuery = { __typename?: 'Query', operators: Array<{ __typename?: 'Operator', id: string, publicKey: any }> };
+
 
 export const GetClusterDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCluster"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cluster"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"validatorCount"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}},{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndex"}}]}}]}}]} as unknown as DocumentNode<GetClusterQuery, GetClusterQueryVariables>;
 export const GetOwnerNonceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOwnerNonce"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"owner"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"owner"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nonce"}}]}}]}}]} as unknown as DocumentNode<GetOwnerNonceQuery, GetOwnerNonceQueryVariables>;
+export const GetOperatorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOperators"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"operatorIds"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"operators"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id_in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"operatorIds"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"publicKey"}}]}}]}}]} as unknown as DocumentNode<GetOperatorsQuery, GetOperatorsQueryVariables>;

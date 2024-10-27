@@ -18,6 +18,7 @@ directive @subgraphId(id: String!) on OBJECT
 
 type Account {
   clusters(first: Int = 100, orderBy: Cluster_orderBy, orderDirection: OrderDirection, skip: Int = 0, where: Cluster_filter): [Cluster!]
+  feeRecipient: Bytes!
   id: Bytes!
   nonce: BigInt!
   operators(first: Int = 100, orderBy: Operator_orderBy, orderDirection: OrderDirection, skip: Int = 0, where: Operator_filter): [Operator!]
@@ -30,6 +31,16 @@ input Account_filter {
   _change_block: BlockChangedFilter
   and: [Account_filter]
   clusters_: Cluster_filter
+  feeRecipient: Bytes
+  feeRecipient_contains: Bytes
+  feeRecipient_gt: Bytes
+  feeRecipient_gte: Bytes
+  feeRecipient_in: [Bytes!]
+  feeRecipient_lt: Bytes
+  feeRecipient_lte: Bytes
+  feeRecipient_not: Bytes
+  feeRecipient_not_contains: Bytes
+  feeRecipient_not_in: [Bytes!]
   id: Bytes
   id_contains: Bytes
   id_gt: Bytes
@@ -63,6 +74,7 @@ input Account_filter {
 
 enum Account_orderBy {
   clusters
+  feeRecipient
   id
   nonce
   operators
@@ -786,6 +798,7 @@ enum Cluster_orderBy {
   networkFeeIndex
   operatorIds
   owner
+  owner__feeRecipient
   owner__id
   owner__nonce
   owner__validatorCount
@@ -800,8 +813,12 @@ enum DAOUpdateTypes {
   LIQUIDATION_THRESHOLD
   MIN_LIQUIDATION_COLLATERAL
   NETWORK_FEE
+  OPERATOR_ADDED
   OPERATOR_FEE_INCREASE_LIMIT
   OPERATOR_MAX_FEE
+  OPERATOR_REMOVED
+  VALIDATOR_ADDED
+  VALIDATOR_REMOVED
 }
 
 type DAOValues {
@@ -818,8 +835,15 @@ type DAOValues {
   networkFeeIndexBlockNumber: BigInt!
   operatorFeeIncreaseLimit: BigInt!
   operatorMaximumFee: BigInt!
+  operatorsAdded: BigInt!
+  operatorsRemoved: BigInt!
+  totalAccounts: BigInt!
+  totalOperators: BigInt!
+  totalValidators: BigInt!
   updateType: DAOUpdateTypes!
+  validatorsAdded: BigInt!
   validatorsPerOperatorLimit: BigInt!
+  validatorsRemoved: BigInt!
 }
 
 input DAOValues_filter {
@@ -934,11 +958,59 @@ input DAOValues_filter {
   operatorMaximumFee_lte: BigInt
   operatorMaximumFee_not: BigInt
   operatorMaximumFee_not_in: [BigInt!]
+  operatorsAdded: BigInt
+  operatorsAdded_gt: BigInt
+  operatorsAdded_gte: BigInt
+  operatorsAdded_in: [BigInt!]
+  operatorsAdded_lt: BigInt
+  operatorsAdded_lte: BigInt
+  operatorsAdded_not: BigInt
+  operatorsAdded_not_in: [BigInt!]
+  operatorsRemoved: BigInt
+  operatorsRemoved_gt: BigInt
+  operatorsRemoved_gte: BigInt
+  operatorsRemoved_in: [BigInt!]
+  operatorsRemoved_lt: BigInt
+  operatorsRemoved_lte: BigInt
+  operatorsRemoved_not: BigInt
+  operatorsRemoved_not_in: [BigInt!]
   or: [DAOValues_filter]
+  totalAccounts: BigInt
+  totalAccounts_gt: BigInt
+  totalAccounts_gte: BigInt
+  totalAccounts_in: [BigInt!]
+  totalAccounts_lt: BigInt
+  totalAccounts_lte: BigInt
+  totalAccounts_not: BigInt
+  totalAccounts_not_in: [BigInt!]
+  totalOperators: BigInt
+  totalOperators_gt: BigInt
+  totalOperators_gte: BigInt
+  totalOperators_in: [BigInt!]
+  totalOperators_lt: BigInt
+  totalOperators_lte: BigInt
+  totalOperators_not: BigInt
+  totalOperators_not_in: [BigInt!]
+  totalValidators: BigInt
+  totalValidators_gt: BigInt
+  totalValidators_gte: BigInt
+  totalValidators_in: [BigInt!]
+  totalValidators_lt: BigInt
+  totalValidators_lte: BigInt
+  totalValidators_not: BigInt
+  totalValidators_not_in: [BigInt!]
   updateType: DAOUpdateTypes
   updateType_in: [DAOUpdateTypes!]
   updateType_not: DAOUpdateTypes
   updateType_not_in: [DAOUpdateTypes!]
+  validatorsAdded: BigInt
+  validatorsAdded_gt: BigInt
+  validatorsAdded_gte: BigInt
+  validatorsAdded_in: [BigInt!]
+  validatorsAdded_lt: BigInt
+  validatorsAdded_lte: BigInt
+  validatorsAdded_not: BigInt
+  validatorsAdded_not_in: [BigInt!]
   validatorsPerOperatorLimit: BigInt
   validatorsPerOperatorLimit_gt: BigInt
   validatorsPerOperatorLimit_gte: BigInt
@@ -947,6 +1019,14 @@ input DAOValues_filter {
   validatorsPerOperatorLimit_lte: BigInt
   validatorsPerOperatorLimit_not: BigInt
   validatorsPerOperatorLimit_not_in: [BigInt!]
+  validatorsRemoved: BigInt
+  validatorsRemoved_gt: BigInt
+  validatorsRemoved_gte: BigInt
+  validatorsRemoved_in: [BigInt!]
+  validatorsRemoved_lt: BigInt
+  validatorsRemoved_lte: BigInt
+  validatorsRemoved_not: BigInt
+  validatorsRemoved_not_in: [BigInt!]
 }
 
 enum DAOValues_orderBy {
@@ -963,8 +1043,15 @@ enum DAOValues_orderBy {
   networkFeeIndexBlockNumber
   operatorFeeIncreaseLimit
   operatorMaximumFee
+  operatorsAdded
+  operatorsRemoved
+  totalAccounts
+  totalOperators
+  totalValidators
   updateType
+  validatorsAdded
   validatorsPerOperatorLimit
+  validatorsRemoved
 }
 
 type DeclareOperatorFeePeriodUpdated {
@@ -2898,6 +2985,7 @@ enum Operator_orderBy {
   lastUpdateTransactionHash
   operatorId
   owner
+  owner__feeRecipient
   owner__id
   owner__nonce
   owner__validatorCount
@@ -4981,6 +5069,7 @@ enum Validator_orderBy {
   lastUpdateTransactionHash
   operators
   owner
+  owner__feeRecipient
   owner__id
   owner__nonce
   owner__validatorCount
