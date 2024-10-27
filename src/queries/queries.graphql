@@ -13,3 +13,10 @@ query GetOwnerNonce($owner: ID!) {
     nonce
   }
 }
+
+query GetOperators($operatorIds: [String!]!) {
+  operators(where: { id_in: $operatorIds }) {
+    id
+    publicKey
+  }
+}
