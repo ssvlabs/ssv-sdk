@@ -1,0 +1,22 @@
+query GetCluster($id: ID!) {
+  cluster(id: $id) {
+    active
+    validatorCount
+    balance
+    index
+    networkFeeIndex
+  }
+}
+
+query GetOwnerNonce($owner: ID!) {
+  account(id: $owner) {
+    nonce
+  }
+}
+
+query GetOperators($operatorIds: [String!]!) {
+  operators(where: { id_in: $operatorIds }) {
+    id
+    publicKey
+  }
+}
