@@ -7,6 +7,24 @@ const config: CodegenConfig = {
   generates: {
     './src/graphql/': {
       preset: 'client',
+      config: {
+        scalars: {
+          BigInt: 'string', // or 'string' if you prefer string representation
+          BigDecimal: 'string',
+          Bytes: 'Address',
+          Account: 'Address',
+        },
+        additionalImports: ['import { type Address } from "viem"'],
+        skipTypename: true,
+      },
+      plugins: [
+        {
+          add: {
+            content: "import { type Address } from 'viem';",
+          },
+        },
+      ],
+
       //   plugins: ['typescript', 'typescript-operations', 'typescript-graphql-request'],
     },
     './schema.graphql': {

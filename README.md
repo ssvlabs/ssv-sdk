@@ -1,76 +1,96 @@
-## rollup-typescript-lib-boilerplate
+# SSV SDK
 
-A starter project that makes creating a TypeScript library extremely easy.
+A TypeScript SDK for interacting with the SSV (Secret Shared Validator) network, enabling distributed validator operations on Ethereum.
 
-### Features
+## Installation
 
-- Tests using Vitest
-- Rollup(v4.x) for bundling and packaging
-- Automatic releases and changelog(release-it)
-- Lint-staged test (husky and init hooks: pre-commit, commit-msg)
-  - eslint、prettier、commitlint、vitest
-- The configuration file template released by the npm package (refer to package.json)
-- Automatic types (\*.d.ts) file generation (typescript v5.x)
-
-### Usage
-
-```
-# 1. clone repo
-git clone https://github.com/crper/rollup-typescript-lib-boilerplate.git my-project
-
-# 2. cd to project directory
-cd my-project
-
-# 3. pnpm install dependencies
-pnpm install
-
-
-# ----- npm scripts -----
-
-# run development mode  (output)
-pnpm watch
-
-# run production mode (output minify)
-pnpm build
-
-
-# run tests
-# Run all test suites but watch for changes and rerun tests when they change.
-pnpm test
-
-
-# Perform a single run without watch mode.
-pnpm test:prod
-
-# interactive commit (Angular Conventional Commit)
-pnpm commit
-
-# npm publish --dry-run (view tarball)
-pnpm v-pub-tarball
-
-# release-it is interactive and allows you to confirm each task before execution:
-pnpm release
-
+```bash
+pnpm install ssv-sdk ssv-keys viem
+# or
+npm install ssv-sdk ssv-keys viem
+# or
+yarn add ssv-sdk ssv-keys viem
 ```
 
-#### NPM Scripts Demo Gif
+## Usage
 
-[npm-scripts-intro.md](npm-scripts-intro.md)
+### Initialize the SDK
 
-### Technologies
+```typescript
+import { SSVSDK } from 'ssv-sdk'
 
-| Name       | Version | Github                                  |
-| ---------- | ------- | --------------------------------------- |
-| rollup     | 4.x     | https://github.com/rollup/rollup        |
-| typescript | 5.x     | https://github.com/microsoft/TypeScript |
-| vitest     | 1.x     | https://github.com/vitest-dev/vitest    |
-| eslint     | 8.x     | https://github.com/eslint/eslint        |
-| pnpm       | 8.x     | https://github.com/pnpm/pnpm            |
+// Initialize with basic configuration
+const sdk = new SSVSDK({
+  chain: 'mainnet', // or holesky
+  private_key: '0x.......',
+})
+```
 
-### FAQ
+### API Interactions
 
-1. Q: (!) @rollup/plugin-typescript TS5096: Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.
+```typescript
+const operators = await sdk.api.getOperators({
+  operatorIds: ['220', '221', '223', '224'],
+})
 
-known issue: [https://github.com/rollup/plugins/issues/1536](https://github.com/rollup/plugins/issues/1536)
+const nonce = await sdk.api.getOwnerNonce({
+  owner: '0x',
+})
+```
 
-**Enjoy!**
+### Cluster management
+
+```typescript
+// Get cluster balance
+import { getClusterSnapshot } from '@/utils/queries'
+import { SSVSDK } from 'ssv-sdk'
+
+// Initialize with basic configuration
+const sdk = new SSVSDK({
+  chain: 'mainnet', // or holesky
+  private_key: '0x.......',
+})
+
+// Get Cluster
+const cluster = await sdk.api.getCluster({
+  id: '',
+})
+
+const balance = await sdk.contract.write.({
+  cluster: getClusterSnapshot(cluster),
+  clusterOwner: '0x',
+  operatorIds: operators.map((o) => BigInt(o.id)),
+})
+```
+
+### Cluster Management
+
+```typescript
+import { parseEther } from 'viem'
+
+await sdk.clusters.deposit({
+  id: '...',
+  amount: parseEther('1.5'),
+  options: {
+    approve: true, // Automatically triggers token approval transaction if the allowance is lower than the deposit amount
+  },
+})
+```
+
+### Environment Setup for Testing
+
+To run tests, you'll need to set up your environment variables. Create a `.env` file in the root directory of your project using the provided `.env.example` as a template:
+
+```bash
+# Copy the example env file
+cp .env.example .env
+```
+
+The `.env` file should contain the following variables:
+
+```typescript
+PRIVATE_KEY = your_private_key_here
+OWNER_ADDRESS = your_owner_address_here
+```
+
+Make sure to never commit your actual `.env` file to version control. The `.env.example` file serves as a template showing which variables are required.

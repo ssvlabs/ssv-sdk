@@ -1,8 +1,8 @@
+import { HoleskyV4GetterABI } from '@/abi/holesky/v4/getter'
 import { SSVSDK } from '@/sdk'
 import { createClusterId } from '@/utils/cluster'
 import { verifyMessage } from 'viem'
 import { describe, expect, it } from 'vitest'
-import { HoleskyV4GetterABI } from './abi/holesky/v4/getter'
 
 describe('SSVSDK 🛜  Holesky', () => {
   it('can get owner nonce and cluster', async () => {
@@ -10,10 +10,10 @@ describe('SSVSDK 🛜  Holesky', () => {
       chain: 'holesky',
       private_key: process.env.PRIVATE_KEY,
     })
-    const nonce = await sdk.data.getOwnerNonce({ owner: process.env.OWNER_ADDRESS! })
+    const nonce = await sdk.api.getOwnerNonce({ owner: process.env.OWNER_ADDRESS! })
     expect(nonce).toBeDefined()
 
-    const { cluster } = await sdk.data.getCluster({
+    const cluster = await sdk.api.getCluster({
       id: createClusterId(process.env.OWNER_ADDRESS!, [5, 7, 9, 11]),
     })
 
