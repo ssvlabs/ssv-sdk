@@ -38,31 +38,6 @@ const nonce = await sdk.api.getOwnerNonce({
 })
 ```
 
-### Cluster management
-
-```typescript
-// Get cluster balance
-import { getClusterSnapshot } from '@/utils/queries'
-import { SSVSDK } from 'ssv-sdk'
-
-// Initialize with basic configuration
-const sdk = new SSVSDK({
-  chain: 'mainnet', // or holesky
-  private_key: '0x.......',
-})
-
-// Get Cluster
-const cluster = await sdk.api.getCluster({
-  id: '',
-})
-
-const balance = await sdk.contract.write.({
-  cluster: getClusterSnapshot(cluster),
-  clusterOwner: '0x',
-  operatorIds: operators.map((o) => BigInt(o.id)),
-})
-```
-
 ### Cluster Management
 
 ```typescript
