@@ -65,11 +65,11 @@ export const ensureValidatorsUniqueness = (keyshares: KeySharesItem[]) => {
 
 export const validateConsistentOperatorPublicKeys = (
   keyshares: KeySharesItem[],
-  operators: Pick<Operator, 'id' | 'public_key'>[],
+  operators: Pick<Operator, 'id' | 'publicKey'>[],
 ) => {
-  const operatorsMap = new Map(operators.map((o) => [o.id, o.public_key]))
+  const operatorsMap = new Map(operators.map((o) => [o.id, o.publicKey]))
   const valid = keyshares.every(({ data }) =>
-    data.operators?.every(({ id, operatorKey }) => operatorsMap.get(id) === operatorKey),
+    data.operators?.every(({ id, operatorKey }) => operatorsMap.get(id.toString()) === operatorKey),
   )
 
   if (!valid) {
@@ -77,4 +77,13 @@ export const validateConsistentOperatorPublicKeys = (
   }
 
   return valid
+}
+
+export const ensureNoKeysharesErrors = (keyshares: KeySharesItem[]) => {
+  keyshares.forEach((share) => {
+    if (share.error) {
+      throw share.error
+    }
+  })
+  return true
 }

@@ -1,3 +1,13 @@
+query GetClusterSnapshot($id: ID!) {
+  cluster(id: $id) {
+    active
+    validatorCount
+    balance
+    index
+    networkFeeIndex
+  }
+}
+
 query GetCluster($id: ID!) {
   cluster(id: $id) {
     active
@@ -5,6 +15,19 @@ query GetCluster($id: ID!) {
     balance
     index
     networkFeeIndex
+    operatorIds
+  }
+}
+
+query GetClusterIds($owner: String!) {
+  clusters(where: { owner: $owner }) {
+    id
+    active
+    validatorCount
+    balance
+    index
+    networkFeeIndex
+    operatorIds
   }
 }
 
