@@ -1,48 +1,29 @@
 import { ConfigReturnType } from '@/config/create'
-import { waitForTransaction } from '@/utils/contract'
-import { getClusterSnapshot } from '@/utils/queries'
+import {
+  deposit,
+  exitValidators,
+  liquidateCluster,
+  reactivateCluster,
+  registerValidators,
+  removeValidators,
+  setFeeRecipient,
+  withdraw,
+} from '@/libs/cluster/methods'
+import { Prettify } from '@/types/utils'
 
-type DepositProps = {
-  id: string
-  amount: bigint
-  options?: DepositOptions
-}
-type DepositOptions = {
-  approve?: boolean
-}
-const deposit = async (config: ConfigReturnType, { id, amount, options }: DepositProps) => {
-  const cluster = await config.api.getCluster({ id })
-
-  if (!cluster) {
-    throw new Error('Cluster not found')
-  }
-
-  const snapshot = getClusterSnapshot(cluster)
-  if (options?.approve) {
-    const allowance = await config.contract.token.read.allowance({
-      owner: config.walletClient.account!.address,
-      spender: config.contractAddresses.setter,
-    })
-
-    if (allowance < amount) {
-      await waitForTransaction(
-        config,
-        config.contract.token.write.approve({
-          spender: config.contractAddresses.setter,
-          amount,
-        }),
-      )
-    }
-  }
-
-  return config.contract.write.deposit({
-    amount,
-    cluster: snapshot,
-    clusterOwner: process.env.OWNER_ADDRESS!,
-    operatorIds: cluster.operatorIds.map(BigInt),
-  })
-}
+type RemoveConfigArg<T extends (...args: any[]) => any> = (
+  props: Prettify<Omit<Parameters<T>[1], 'config'>>,
+) => ReturnType<T>
 
 export const createClusterManager = (config: ConfigReturnType) => ({
-  deposit: deposit.bind(null, config),
+  deposit: deposit.bind(null, config) as RemoveConfigArg<typeof deposit>,
+  withdraw: withdraw.bind(null, config) as RemoveConfigArg<typeof withdraw>,
+  liquidate: liquidateCluster.bind(null, config) as RemoveConfigArg<typeof liquidateCluster>,
+  reactivate: reactivateCluster.bind(null, config) as RemoveConfigArg<typeof reactivateCluster>,
+  removeValidators: removeValidators.bind(null, config) as RemoveConfigArg<typeof removeValidators>,
+  setFeeRecipient: setFeeRecipient.bind(null, config) as RemoveConfigArg<typeof setFeeRecipient>,
+  exitValidators: exitValidators.bind(null, config) as RemoveConfigArg<typeof exitValidators>,
+  registerValidators: registerValidators.bind(null, config) as RemoveConfigArg<
+    typeof registerValidators
+  >,
 })
