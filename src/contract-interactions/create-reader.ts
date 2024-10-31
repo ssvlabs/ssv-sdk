@@ -1,5 +1,5 @@
 import { MainnetV4GetterABI } from '@/abi/mainnet/v4/getter'
-import { AbiInputsToParams, paramsToArray } from '@/types/contract-intercations'
+import { AbiInputsToParams, paramsToArray } from '@/types/contract-interactions'
 import { Prettify } from '@/types/utils'
 import { Address, ExtractAbiFunctions } from 'abitype'
 import { ContractFunctionArgs, PublicClient, ReadContractReturnType } from 'viem'

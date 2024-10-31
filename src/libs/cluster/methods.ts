@@ -1,6 +1,5 @@
 import { ConfigReturnType } from '@/config/create'
 import { createClusterId, createEmptyCluster, getClusterSnapshot } from '@/utils/cluster'
-import { waitForTransaction } from '@/utils/contract'
 import { Address } from 'abitype'
 import { KeySharesItem } from 'ssv-keys'
 import { Hex } from 'viem'
@@ -28,13 +27,12 @@ export const deposit = async (config: ConfigReturnType, { id, amount, options }:
     })
 
     if (allowance < amount) {
-      await waitForTransaction(
-        config,
-        config.contract.token.write.approve({
+      await config.contract.token.write
+        .approve({
           spender: config.contractAddresses.setter,
           amount,
-        }),
-      )
+        })
+        .then((tx) => tx.wait())
     }
   }
 

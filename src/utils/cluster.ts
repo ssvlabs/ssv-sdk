@@ -1,5 +1,5 @@
 import { GetClusterQuery } from '@/graphql/graphql'
-import { ClusterSnapshot } from '@/types/contract'
+import { ClusterSnapshot } from '@/types/contract-interactions'
 import { merge } from 'lodash-es'
 
 export const createClusterId = (ownerAddress: string, operatorIds: number[]) => {
