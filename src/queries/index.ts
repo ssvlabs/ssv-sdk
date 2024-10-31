@@ -2,11 +2,11 @@ import { decodeOperatorPublicKey } from '@/utils/operator'
 import { GraphQLClient } from 'graphql-request'
 import {
   GetClusterDocument,
-  GetClusterIdsDocument,
-  GetClusterIdsQueryVariables,
   GetClusterQueryVariables,
   GetClusterSnapshotDocument,
   GetClusterSnapshotQueryVariables,
+  GetClustersDocument,
+  GetClustersQueryVariables,
   GetOperatorsDocument,
   GetOperatorsQueryVariables,
   GetOwnerNonceDocument,
@@ -23,8 +23,8 @@ export const getQueries = (client: GraphQLClient) => ({
   getCluster: (args: GetClusterQueryVariables) =>
     client.request(GetClusterDocument, args).then((res) => res.cluster),
 
-  getClusterIds: (args: GetClusterIdsQueryVariables) =>
-    client.request(GetClusterIdsDocument, args).then((res) => res.clusters),
+  getClusters: (args: GetClustersQueryVariables) =>
+    client.request(GetClustersDocument, args).then((res) => res.clusters),
 
   getOperators: (args: GetOperatorsQueryVariables) =>
     client.request(GetOperatorsDocument, args).then((res) =>
