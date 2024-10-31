@@ -19,7 +19,7 @@ query GetCluster($id: ID!) {
   }
 }
 
-query GetClusterIds($owner: String!) {
+query GetClusters($owner: String!) {
   clusters(where: { owner: $owner }) {
     id
     active
