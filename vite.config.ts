@@ -16,35 +16,18 @@ export default defineConfig({
   build: {
     minify: false,
     lib: {
-      entry: resolve(__dirname, 'src/main.ts'),
-      name: 'ssv-sdk',
-      formats: ['es', 'umd', 'cjs'],
-      fileName: (format) => {
-        switch (format) {
-          case 'es':
-            return 'main.esm.js'
-          case 'umd':
-            return 'main.min.js'
-          case 'cjs':
-            return 'main.min.cjs'
-          default:
-            return 'main.js'
-        }
+      entry: {
+        main: resolve(__dirname, 'src/main.ts'),
+        utils: resolve(__dirname, 'src/utils/index.ts'),
       },
+      formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: [
-        'viem',
-        'ssv-keys' /* , 'zod', 'graphql-request', '@graphql-typed-document-node/core', 'ssv-keys' */,
-      ],
+      external: ['viem', 'ssv-keys'],
       output: {
         globals: {
           viem: 'viem',
           'ssv-keys': 'ssvKeys',
-          /* zod: 'zod',
-          'graphql-request': 'graphqlRequest',
-          '@graphql-typed-document-node/core': 'graphqlTypedDocumentNode',
-          'ssv-keys': 'ssvKeys', */
         },
       },
     },

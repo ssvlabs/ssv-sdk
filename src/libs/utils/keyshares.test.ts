@@ -79,7 +79,6 @@ describe('Keyshares', async () => {
       sdk.core,
       '0xa05e43f754661d7a58e17e0bdc55756a421ad2df991633ad02fd48513cb44630',
     )
-    console.log('result:', result)
     expect(result).toBeTruthy()
   })
 })

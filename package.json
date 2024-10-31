@@ -27,16 +27,22 @@
   "version": "0.2.0",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
-  "main": "./dist/main.min.js",
-  "module": "./dist/main.esm.js",
-  "types": "./dist/types/main.d.ts",
+  "main": "./dist/main.js",
+  "module": "./dist/main.js",
+  "types": "./dist/main.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/main.esm.js",
-      "require": "./dist/main.min.cjs",
+      "import": "./dist/main.js",
+      "require": "./dist/main.cjs",
       "types": "./dist/main.d.ts"
+    },
+    "./utils": {
+      "import": "./dist/utils.js",
+      "require": "./dist/utils.cjs",
+      "types": "./dist/utils/index.d.ts"
     }
   },
   "scripts": {
@@ -96,6 +102,7 @@
     "typescript": "^5.4.5",
     "vite": "^5.4.10",
     "vite-plugin-dts": "^4.3.0",
+    "vite-plugin-glob": "^0.3.2",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vitest": "^1.5.0"
   },
