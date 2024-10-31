@@ -1,13 +1,15 @@
 import { TokenABI } from '@/abi/token'
-import { AbiInputsToParams, paramsToArray } from '@/types/contract-intercations'
+import { AbiInputsToParams, paramsToArray } from '@/types/contract-interactions'
 import { Prettify } from '@/types/utils'
 import { Address, ExtractAbiFunctions } from 'abitype'
+import { TokenEvent } from 'dist/types/contract'
 import {
   ContractFunctionArgs,
+  Hash,
   PublicClient,
   ReadContractReturnType,
+  WaitForTransactionReceiptReturnType,
   WalletClient,
-  WriteContractReturnType,
 } from 'viem'
 
 type ReadFns = ExtractAbiFunctions<typeof TokenABI, 'view' | 'pure'>
@@ -34,9 +36,14 @@ type WriteProps = {
 
 // This type maps through each function in WriteFns and creates the desired structure
 type WriterFunctions = {
-  [K in WriteFns as K['name']]: (
-    args: Prettify<AbiInputsToParams<K['inputs']>>,
-  ) => Promise<WriteContractReturnType>
+  [K in WriteFns as K['name']]: (args: Prettify<AbiInputsToParams<K['inputs']>>) => Promise<{
+    hash: Hash
+    wait: () => Promise<
+      WaitForTransactionReceiptReturnType & {
+        events: TokenEvent[]
+      }
+    >
+  }>
 }
 
 export const createToken = ({

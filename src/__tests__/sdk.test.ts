@@ -1,7 +1,7 @@
 import { HoleskyV4GetterABI } from '@/abi/holesky/v4/getter'
 import { SSVSDK } from '@/sdk'
 import { createClusterId } from '@/utils/cluster'
-import { verifyMessage } from 'viem'
+import { parseEther, verifyMessage } from 'viem'
 import { describe, expect, it } from 'vitest'
 
 describe('SSVSDK 🛜  Holesky', () => {
@@ -78,23 +78,27 @@ describe('SSVSDK 🛜  Holesky', () => {
   it(
     'can send a transaction (⚠️ no-test commented out)',
     async () => {
-      // const sdk = new SSVSDK({
-      //   chain: 'holesky',
-      //   private_key: process.env.PRIVATE_KEY,
-      // })
-      // const { request } = await sdk.publicClient.simulateContract({
-      //   address: '0x0d33801785340072C452b994496B19f196b7eE15',
-      //   abi: HoleskyV4SetterABI,
-      //   functionName: 'withdrawOperatorEarnings',
-      //   args: [846n, parseEther('0.000001')],
-      //   account: sdk.walletClient.account!,
-      // })
-      // const txHash = await sdk.walletClient.writeContract(request)
-      // expect(txHash).toBeDefined()
-      // const receipt = await sdk.publicClient.waitForTransactionReceipt({
-      //   hash: txHash,
-      // })
-      // expect(receipt).toBeDefined()
+      const sdk = new SSVSDK({
+        chain: 'holesky',
+        private_key: process.env.PRIVATE_KEY,
+      })
+      const clusters = await sdk.api.getClusters({
+        owner: sdk.core.walletClient.account!.address,
+      })
+
+      const result = await sdk.clusters.deposit({
+        id: clusters[0].id,
+        amount: parseEther('0.1'),
+        options: {
+          approve: true,
+        },
+      })
+
+      expect(result.hash).toBeDefined()
+      expect(result.wait).toBeInstanceOf(Function)
+
+      const receipt = await result.wait()
+      expect(receipt.events).toBeInstanceOf(Array)
     },
     {
       timeout: 60000,

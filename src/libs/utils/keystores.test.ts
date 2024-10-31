@@ -14,7 +14,7 @@ describe('SSV Keys', () => {
       keystore: JSON.stringify(keystores),
       keystore_password: '123123123',
       operator_keys: operators.keys,
-      operator_ids: operators.ids,
+      operator_ids: operators.ids.map((id) => Number(id)),
       owner_address: process.env.OWNER_ADDRESS!,
       nonce: 1,
     })

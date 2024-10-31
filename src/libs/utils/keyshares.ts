@@ -1,6 +1,6 @@
 import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
 import { ConfigReturnType } from '@/config/create'
-import { MainnetEvent, ValidatorAddedEvent } from '@/types/contract'
+import { MainnetEvent, ValidatorAddedEvent } from '@/types/contract-interactions'
 import { Operator } from '@/types/operator'
 import {
   KeysharesValidationError,

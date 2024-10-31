@@ -56,6 +56,7 @@
     "prepublish": "npm test:prod",
     "prepare": "husky",
     "v-pub-tarball": "npm publish --dry-run",
+    "type-check": "tsc -b",
     "release": "release-it",
     "commit": "git-cz"
   },
