@@ -1,7 +1,7 @@
 import { createReaders } from '@/contract-interactios/create-reader'
 import { createWriters } from '@/contract-interactios/create-writer'
 import { createToken } from '@/contract-interactios/token'
-import { createAPI } from '@/libs/data'
+import { createAPI } from '@/libs/api'
 import { createWalletFromPrivateKey } from '@/utils/viem'
 import { ConfigArgs, configArgsSchema } from '@/utils/zod/config'
 import { GraphQLClient } from 'graphql-request'

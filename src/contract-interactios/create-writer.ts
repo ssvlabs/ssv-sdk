@@ -1,5 +1,6 @@
 import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
 import { AbiInputsToParams, paramsToArray } from '@/types/contract-intercations'
+import { Prettify } from '@/types/utils'
 import { Address, ExtractAbiFunctions } from 'abitype'
 import { PublicClient, WalletClient, WriteContractReturnType } from 'viem'
 
@@ -14,7 +15,7 @@ type WriteFns = ExtractAbiFunctions<typeof MainnetV4SetterABI>
 // This type maps through each function in WriteFns and creates the desired structure
 type WriterFunctions = {
   [K in WriteFns as K['name']]: (
-    args: AbiInputsToParams<K['inputs']>,
+    args: Prettify<AbiInputsToParams<K['inputs']>>,
   ) => Promise<WriteContractReturnType>
 }
 

@@ -1,5 +1,6 @@
 import { MainnetV4GetterABI } from '@/abi/mainnet/v4/getter'
 import { AbiInputsToParams, paramsToArray } from '@/types/contract-intercations'
+import { Prettify } from '@/types/utils'
 import { Address, ExtractAbiFunctions } from 'abitype'
 import { ContractFunctionArgs, PublicClient, ReadContractReturnType } from 'viem'
 
@@ -13,7 +14,7 @@ type ReadFns = ExtractAbiFunctions<typeof MainnetV4GetterABI, 'view' | 'pure'>
 // This type maps through each function in ReadFns and creates the desired structure
 type ReaderFunctions = {
   [K in ReadFns as K['name']]: (
-    args: AbiInputsToParams<K['inputs']>,
+    args: Prettify<AbiInputsToParams<K['inputs']>>,
   ) => Promise<
     ReadContractReturnType<
       typeof MainnetV4GetterABI,

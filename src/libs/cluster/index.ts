@@ -9,11 +9,7 @@ import {
   setFeeRecipient,
   withdraw,
 } from '@/libs/cluster/methods'
-import { Prettify } from '@/types/utils'
-
-type RemoveConfigArg<T extends (...args: any[]) => any> = (
-  props: Prettify<Omit<Parameters<T>[1], 'config'>>,
-) => ReturnType<T>
+import { RemoveConfigArg } from '@/types/methods-manager'
 
 export const createClusterManager = (config: ConfigReturnType) => ({
   deposit: deposit.bind(null, config) as RemoveConfigArg<typeof deposit>,
