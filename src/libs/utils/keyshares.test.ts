@@ -16,11 +16,9 @@ describe('Keyshares', async () => {
     private_key: process.env.PRIVATE_KEY,
   })
 
-  let operators = await sdk.api
-    .getOperators({
-      operatorIds: mockOperators.ids.map(String),
-    })
-    .then((res) => res.operators)
+  let operators = await sdk.api.getOperators({
+    operatorIds: mockOperators.ids.map(String),
+  })
 
   it('can validate valid keyshares', async () => {
     const result = await sdk.utils.validateKeyshares({
@@ -63,7 +61,7 @@ describe('Keyshares', async () => {
   })
 
   it('should throw an error when operator is not found', async () => {
-    const { operators: invalidOperators } = await sdk.api.getOperators({
+    const invalidOperators = await sdk.api.getOperators({
       operatorIds: ['220', '221', '223', '-1'],
     })
 
