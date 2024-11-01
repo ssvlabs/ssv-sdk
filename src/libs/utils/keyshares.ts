@@ -16,16 +16,80 @@ import { KeyShares, KeySharesItem } from 'ssv-keys'
 import { Address, Hash, decodeEventLog } from 'viem'
 
 type ValidatedKeysharesArgs = {
+  keyshares: string | object
+  operatorIds: string[]
+}
+
+export const createShares = async (
+  config: ConfigReturnType,
+  { keyshares, operatorIds }: ValidatedKeysharesArgs,
+) => {
+  const operators = await config.api.getOperators({ operatorIds })
+
+  const shares = await validateKeysharesJSON({
+    account: config.walletClient.account!.address,
+    operators,
+    keyshares,
+  })
+  
+  const statuses = await Promise.all(
+    shares.map((share) => {
+      return config.api
+        .getValidator({ id: share.data.publicKey as `0x${string}` })
+        .then((res) => [share, Boolean(res)] as [KeySharesItem, boolean])
+        .catch(() => [share, false] as [KeySharesItem, boolean])
+    }),
+  )
+
+  if (statuses.every(([_, isRegistered]) => isRegistered)) {
+    throw new Error('All validators are already registered')
+  }
+
+  const nonce = await config.api
+    .getOwnerNonce({ owner: config.walletClient.account!.address })
+    .then((nonce) => {
+      if (!nonce) throw new Error('Failed to get owner nonce')
+      return Number(nonce)
+    })
+
+  let i = 0
+
+  const sharesWithStatuses = statuses.reduce(
+    (acc, [share, isRegistered]) => {
+      if (isRegistered) {
+        acc.registered.push(share)
+      } else {
+        const validNonce = nonce + i === share.data.ownerNonce
+        if (validNonce) i++
+
+        if (validNonce) {
+          acc.available.push(share)
+        } else {
+          acc.incorrect.push(share)
+        }
+      }
+      return acc
+    },
+    { available: [], registered: [], incorrect: [] } as {
+      available: KeySharesItem[]
+      registered: KeySharesItem[]
+      incorrect: KeySharesItem[]
+    },
+  )
+
+  return sharesWithStatuses
+}
+
+type ValidatedKeysharesJSONArgs = {
   account: Address
   operators: Pick<Operator, 'id' | 'publicKey'>[]
   keyshares: string | object
 }
-
-export const validateKeyshares = async ({
+export const validateKeysharesJSON = async ({
   account,
   operators,
   keyshares,
-}: ValidatedKeysharesArgs) => {
+}: ValidatedKeysharesJSONArgs) => {
   const shares = (await KeyShares.fromJson(keyshares)).list()
 
   ensureNoKeysharesErrors(shares)

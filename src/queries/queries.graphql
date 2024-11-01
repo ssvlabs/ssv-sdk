@@ -43,3 +43,15 @@ query GetOperators($operatorIds: [String!]!) {
     publicKey
   }
 }
+
+query GetValidators($ids: [Bytes!]!) {
+  validators(where: { id_in: $ids }) {
+    id
+  }
+}
+
+query GetValidator($id: ID!) {
+  validator(id: $id) {
+    id
+  }
+}

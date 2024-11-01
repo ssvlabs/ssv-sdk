@@ -7,7 +7,7 @@ import valid_keyshares from '@/mock/keyshares/valid_keyshares.json'
 
 import { SSVSDK } from '@/sdk'
 import { KeysharesValidationError } from '@/utils/keyshares'
-import { KeySharesItem, SSVKeysException } from 'ssv-keys'
+import { SSVKeysException } from 'ssv-keys'
 import { describe, expect, it } from 'vitest'
 
 describe('Keyshares', async () => {
@@ -21,18 +21,19 @@ describe('Keyshares', async () => {
   })
 
   it('can validate valid keyshares', async () => {
-    const result = await sdk.utils.validateKeyshares({
-      account: '0x012f55B6Cc5D57F943F1E79cF00214B652513f88',
-      operators,
+    const result = await sdk.utils.createShares({
+      operatorIds: [378, 379, 381, 382].map(String),
       keyshares: valid_keyshares,
     })
-    expect(result).toBeInstanceOf(Array)
-    expect(result[0]).toBeInstanceOf(KeySharesItem)
+    expect(result).toBeDefined()
+    expect(result.available.length).toBe(0)
+    expect(result.incorrect.length).toBe(1)
+    expect(result.registered.length).toBe(8)
   })
 
   it('should throw for invalid operator key', async () => {
     await expect(
-      sdk.utils.validateKeyshares({
+      sdk.utils.validateKeysharesJSON({
         account: '0x012f55B6Cc5D57F943F1E79cF00214B652513f88',
         operators,
         keyshares: invalid_operator_key_keyshares,
@@ -42,7 +43,7 @@ describe('Keyshares', async () => {
 
   it('should throw for invalid shares data', async () => {
     await expect(
-      sdk.utils.validateKeyshares({
+      sdk.utils.validateKeysharesJSON({
         account: '0x012f55B6Cc5D57F943F1E79cF00214B652513f88',
         operators,
         keyshares: invalid_shares_data_keyshares,
@@ -52,7 +53,7 @@ describe('Keyshares', async () => {
 
   it('should throw for inconsistent operator IDs', async () => {
     await expect(
-      sdk.utils.validateKeyshares({
+      sdk.utils.validateKeysharesJSON({
         account: '0x012f55B6Cc5D57F943F1E79cF00214B652513f88',
         operators,
         keyshares: inconsistent_operator_ids_keyshares,
@@ -66,7 +67,7 @@ describe('Keyshares', async () => {
     })
 
     await expect(
-      sdk.utils.validateKeyshares({
+      sdk.utils.validateKeysharesJSON({
         account: '0x012f55B6Cc5D57F943F1E79cF00214B652513f88',
         operators: invalidOperators,
         keyshares: valid_keyshares,
