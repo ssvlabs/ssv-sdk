@@ -1,7 +1,10 @@
-import { validateKeyshares } from '@/libs/utils/keyshares'
+import { ConfigReturnType } from '@/config/create'
+import { createShares, validateKeysharesJSON } from '@/libs/utils/keyshares'
 import { generateKeyShares } from '@/libs/utils/keystores'
+import { RemoveConfigArg } from '@/types/methods-manager'
 
-export const utils = {
+export const createUtils = (config: ConfigReturnType) => ({
   generateKeyShares,
-  validateKeyshares,
-}
+  validateKeysharesJSON,
+  createShares: createShares.bind(null, config) as RemoveConfigArg<typeof createShares>,
+})

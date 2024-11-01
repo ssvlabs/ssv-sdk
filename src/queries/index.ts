@@ -11,6 +11,10 @@ import {
   GetOperatorsQueryVariables,
   GetOwnerNonceDocument,
   GetOwnerNonceQueryVariables,
+  GetValidatorDocument,
+  GetValidatorQueryVariables,
+  GetValidatorsDocument,
+  GetValidatorsQueryVariables,
 } from '../graphql/graphql'
 
 export const getQueries = (client: GraphQLClient) => ({
@@ -33,4 +37,10 @@ export const getQueries = (client: GraphQLClient) => ({
         publicKey: decodeOperatorPublicKey(o.publicKey),
       })),
     ),
+
+  getValidators: (args: GetValidatorsQueryVariables) =>
+    client.request(GetValidatorsDocument, args).then((res) => res.validators),
+
+  getValidator: (args: GetValidatorQueryVariables) =>
+    client.request(GetValidatorDocument, args).then((res) => res.validator),
 })
