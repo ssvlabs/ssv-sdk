@@ -1,5 +1,6 @@
 import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
 import { ConfigReturnType } from '@/config/create'
+import { canAccountUseOperator } from '@/libs/operator/methods'
 import { MainnetEvent, ValidatorAddedEvent } from '@/types/contract-interactions'
 import { Operator } from '@/types/operator'
 import {
@@ -31,7 +32,7 @@ export const createShares = async (
     operators,
     keyshares,
   })
-  
+
   const statuses = await Promise.all(
     shares.map((share) => {
       return config.api
@@ -76,6 +77,23 @@ export const createShares = async (
       incorrect: KeySharesItem[]
     },
   )
+
+  if (!sharesWithStatuses.available.length) {
+    throw new Error(
+      `No available keyshares to register. ${sharesWithStatuses.incorrect.length} keyshares have incorrect nonce and ${sharesWithStatuses.registered.length} are already registered`,
+    )
+  }
+
+  const limit = await config.contract.read.getValidatorsPerOperatorLimit({})
+
+  for (const operator of operators) {
+    if (!(await canAccountUseOperator(config, operator, config.walletClient.account!.address))) {
+      throw new Error(`Operator ${operator.id} is private and the account is not whitelisted`)
+    }
+    if (Number(operator.validatorCount) + sharesWithStatuses.available.length > limit) {
+      throw new Error(`Operator ${operator.id} has reached the limit of ${limit} validators`)
+    }
+  }
 
   return sharesWithStatuses
 }

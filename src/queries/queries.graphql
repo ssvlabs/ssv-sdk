@@ -36,11 +36,29 @@ query GetOwnerNonce($owner: ID!) {
     nonce
   }
 }
+query GetOperator($id: ID!) {
+  operator(id: $id) {
+    id
+    publicKey
+    validatorCount
+    isPrivate
+    whitelistedContract
+    whitelisted {
+      id
+    }
+  }
+}
 
 query GetOperators($operatorIds: [String!]!) {
   operators(where: { id_in: $operatorIds }) {
     id
     publicKey
+    validatorCount
+    isPrivate
+    whitelistedContract
+    whitelisted {
+      id
+    }
   }
 }
 

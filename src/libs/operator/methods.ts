@@ -1,5 +1,7 @@
 import { ConfigReturnType } from '@/config/create'
+import { getOperator } from '@/queries'
 import { Address } from 'abitype'
+import { isAddressEqual, zeroAddress } from 'viem'
 
 type WithdrawArgs = {
   operatorId: string
@@ -10,9 +12,9 @@ export const withdraw = async (config: ConfigReturnType, { operatorId, amount }:
     id: BigInt(operatorId),
   })
 
-  const shouldWithdrawAll = amount >= balance
+  const isWithdrawingAll = amount >= balance
 
-  if (shouldWithdrawAll) {
+  if (isWithdrawingAll) {
     return config.contract.write.withdrawAllOperatorEarnings({
       operatorId: BigInt(operatorId),
     })
@@ -43,5 +45,32 @@ export const setOperatorWhitelists = async (
   return config.contract.write.setOperatorsWhitelists({
     operatorIds: operatorIds.map(BigInt),
     whitelistAddresses: [contractAddress],
+  })
+}
+
+export const canAccountUseOperator = async (
+  config: ConfigReturnType,
+  operator: Awaited<ReturnType<typeof getOperator>>,
+  account: Address,
+) => {
+  if (!operator) return false
+  if (!operator.isPrivate) return true
+
+  const isWhitelisted = operator.whitelisted.some((addr) =>
+    isAddressEqual(addr as Address, account),
+  )
+
+  if (isWhitelisted) return true
+
+  const hasExternalContract = Boolean(
+    operator.whitelistedContract && operator.whitelistedContract !== zeroAddress,
+  )
+
+  if (!hasExternalContract) return false
+
+  return config.contract.read.isAddressWhitelistedInWhitelistingContract({
+    addressToCheck: account,
+    operatorId: BigInt(operator.id),
+    whitelistingContract: operator.whitelistedContract as Address,
   })
 }

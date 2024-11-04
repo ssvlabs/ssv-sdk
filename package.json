@@ -126,6 +126,7 @@
   ],
   "dependencies": {
     "@graphql-typed-document-node/core": "^3.2.0",
+    "@safe-global/protocol-kit": "^5.0.3",
     "abitype": "^1.0.6",
     "dotenv": "^16.4.5",
     "graphql-request": "^7.1.0",
