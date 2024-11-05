@@ -73,4 +73,8 @@ pnpm release
 
 known issue: [https://github.com/rollup/plugins/issues/1536](https://github.com/rollup/plugins/issues/1536)
 
-**Enjoy!**
+## License
+
+The ssv-api is licensed under the
+[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html),
+also included in our repository in the `LICENSE` file.
