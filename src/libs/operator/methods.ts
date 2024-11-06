@@ -74,3 +74,4 @@ export const canAccountUseOperator = async (
     whitelistingContract: operator.whitelistedContract as Address,
   })
 }
+

@@ -8,9 +8,33 @@ importers:
 
   .:
     dependencies:
+      '@chainsafe/bls':
+        specifier: ^8.1.0
+        version: 8.1.0(@chainsafe/blst@2.2.0)
+      '@chainsafe/bls-keygen':
+        specifier: ^0.4.0
+        version: 0.4.0
+      '@chainsafe/blst':
+        specifier: ^2.2.0
+        version: 2.2.0
+      '@chainsafe/ssz':
+        specifier: ^0.18.0
+        version: 0.18.0
       '@graphql-typed-document-node/core':
         specifier: ^3.2.0
         version: 3.2.0(graphql@16.9.0)
+      '@lodestar/config':
+        specifier: ^1.22.0
+        version: 1.22.0
+      '@lodestar/params':
+        specifier: ^1.22.0
+        version: 1.22.0
+      '@lodestar/state-transition':
+        specifier: ^1.22.0
+        version: 1.22.0
+      '@lodestar/types':
+        specifier: ^1.22.0
+        version: 1.22.0
       '@safe-global/protocol-kit':
         specifier: ^5.0.3
         version: 5.0.3(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -489,6 +513,104 @@ packages:
   '@babel/types@7.25.8':
     resolution: {integrity: sha512-JWtuCu8VQsMladxVz/P4HzHUGCAwpuqacmowgXFs5XjxIgKuNjnLokQzuVjlTvIzODaDmpjT3oxcC48vyk9EWg==}
     engines: {node: '>=6.9.0'}
+
+  '@chainsafe/as-sha256@0.5.0':
+    resolution: {integrity: sha512-dTIY6oUZNdC5yDTVP5Qc9hAlKAsn0QTQ2DnQvvsbTnKSTbYs3p5RPN0aIUqN0liXei/9h24c7V0dkV44cnWIQA==}
+
+  '@chainsafe/bls-hd-key@0.3.0':
+    resolution: {integrity: sha512-LsYYnfBEEmqGFPDm8hQN3Kc+v9wPFnhn+CToD403KEynUiUSHKLAf5B6UCY5eooShDOcaGCUgAUhIw1CmpEf3Q==}
+
+  '@chainsafe/bls-keygen@0.4.0':
+    resolution: {integrity: sha512-wqtuj4G/sWpIugJW1mb/nSTwcTuZKqB3DS3ANUIOn7pva8EB6LfxgIL34o4qk3lti/8Mdxqtqc2n4xRszrNdzA==}
+
+  '@chainsafe/bls@8.1.0':
+    resolution: {integrity: sha512-C4a1gUpFHYzJG7aaik4w+7QTeJ4pGCDTZ28YUwAWOFaWgAJSK+769ib6CNBu5Txb3PpvcC5GuhICQaDopIgEHg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@chainsafe/blst': ^1.0.0
+    peerDependenciesMeta:
+      '@chainsafe/blst':
+        optional: true
+
+  '@chainsafe/blst-darwin-arm64@2.2.0':
+    resolution: {integrity: sha512-BOOy2KHbV028cioPWaAMqHdLRKd6/3XyEmUEcQC2E/SpyYLdNcaKiBUYIU4pT9CrWBbJJxX68UI+3vZVg0M8/w==}
+    engines: {node: '>= 16'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@chainsafe/blst-darwin-x64@2.2.0':
+    resolution: {integrity: sha512-jG64cwIdPT7u/haRrW26tWCpfMfHBQCfGY169mFQifCwO4VEwvaiVBPOh5olFis6LjpcmD+O0jpM8GqrnsmUHQ==}
+    engines: {node: '>= 16'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@chainsafe/blst-linux-arm64-gnu@2.2.0':
+    resolution: {integrity: sha512-L8xV2uuLn8we76vdzfryS9ePdheuZrmY6yArGUFaF1Uzcwml6V1/VvyPl9/uooo/YfVRIrvF/D+lQfI2GFAnhw==}
+    engines: {node: '>= 16'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@chainsafe/blst-linux-arm64-musl@2.2.0':
+    resolution: {integrity: sha512-0Vn0luxLYVgC3lvWT1MapFHSAoz99PldqjhilXTGv0AcAk/X5LXPH2RC9Dp2KJGqthyUkpbk1j47jUBfBI+BIg==}
+    engines: {node: '>= 16'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@chainsafe/blst-linux-x64-gnu@2.2.0':
+    resolution: {integrity: sha512-gEY/z2SDBA7kXtFEI9VNhWTJAIjx16jdeAyCaS2k4ACGurWZaWk+Ee4KniTsr4WieSqeuNTUr7Pdja0Sr4EKNQ==}
+    engines: {node: '>= 16'}
+    cpu: [x64]
+    os: [linux]
+
+  '@chainsafe/blst-linux-x64-musl@2.2.0':
+    resolution: {integrity: sha512-58GKtiUmtVSuerRzPEcMNQZpICPboBKFnL7+1Wo+PSuajkvbae7tEFrFTtWeMoKIPgOEsPMnk96LF+0yNgavUg==}
+    engines: {node: '>= 16'}
+    cpu: [x64]
+    os: [linux]
+
+  '@chainsafe/blst-win32-x64-msvc@2.2.0':
+    resolution: {integrity: sha512-UFrZshl4dfX5Uh2zeKXAZtrkQ+otczHMON2tsrapQNICWmfHZrzE6pKuBL+9QeGAbgflwpbz7+D5nQRDpiuHxQ==}
+    engines: {node: '>= 16'}
+    cpu: [x64]
+    os: [win32]
+
+  '@chainsafe/blst@2.2.0':
+    resolution: {integrity: sha512-VBaQoNE2a9d9+skAjQKv3Suk0yGKqp3mZM0YWYJNPj/Ae/f6lAyeVSgKqo2LrsNQBzD/LqrJLKUY8rJT3vDKLA==}
+    engines: {node: '>= 16'}
+
+  '@chainsafe/hashtree-darwin-arm64@1.0.1':
+    resolution: {integrity: sha512-+KmEgQMpO7FDL3klAcpXbQ4DPZvfCe0qSaBBrtT4vLF8V1JGm3sp+j7oibtxtOsLKz7nJMiK1pZExi7vjXu8og==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@chainsafe/hashtree-linux-arm64-gnu@1.0.1':
+    resolution: {integrity: sha512-p1hnhGq2aFY+Zhdn1Q6L/6yLYNKjqXfn/Pc8jiM0e3+Lf/hB+yCdqYVu1pto26BrZjugCFZfupHaL4DjUTDttw==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@chainsafe/hashtree-linux-x64-gnu@1.0.1':
+    resolution: {integrity: sha512-uCIGuUWuWV0LiB4KLMy6JFa7Jp6NmPl3hKF5BYWu8TzUBe7vSXMZfqTzGxXPggFYN2/0KymfRdG9iDCOJfGRqg==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+
+  '@chainsafe/hashtree@1.0.1':
+    resolution: {integrity: sha512-bleu9FjqBeR/l6W1u2Lz+HsS0b0LLJX2eUt3hOPBN7VqOhidx8wzkVh2S7YurS+iTQtfdK4K5QU9tcTGNrGwDg==}
+    engines: {node: '>= 18'}
+
+  '@chainsafe/persistent-merkle-tree@0.8.0':
+    resolution: {integrity: sha512-hh6C1JO6SKlr0QGNTNtTLqgGVMA/Bc20wD6CeMHp+wqbFKCULRJuBUxhF4WDx/7mX8QlqF3nFriF/Eo8oYJ4/A==}
+
+  '@chainsafe/persistent-ts@0.19.1':
+    resolution: {integrity: sha512-fUFFFFxdcpYkMAHnjm83EYL/R/smtVmEkJr3FGSI6dwPk4ue9rXjEHf7FTd3V8AbVOcTJGriN4cYf2V+HOYkjQ==}
+
+  '@chainsafe/ssz@0.17.1':
+    resolution: {integrity: sha512-1ay46QqYcVTBvUnDXTPTi5WTiENu7tIxpZGMDpUWps1/nYBmh/We/UoCF/jO+o/fkcDD3p8xQPlHbcCfy+jyjA==}
+
+  '@chainsafe/ssz@0.18.0':
+    resolution: {integrity: sha512-1ikTjk3JK6+fsGWiT5IvQU0AP6gF3fDzGmPfkKthbcbgTUR8fjB83Ywp9ko/ZoiDGfrSFkATgT4hvRzclu0IAA==}
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
@@ -1037,6 +1159,21 @@ packages:
     resolution: {integrity: sha512-/gKJun8NNiWGZJkGzI/Ragc53cOdcLNdzjLaIa+GEjguQs0ulsurx8WN0jijdK9yPqDvziX995sMRLyLt1uZMQ==}
     engines: {node: '>= 0.4'}
 
+  '@lodestar/config@1.22.0':
+    resolution: {integrity: sha512-WgjR8oceKKuWU3EwU8+m5KMGGhIUJGTqDiVH8rZTS4L9ZS5OKbTbvKMdsi9hVXq8SWgukF7x2JfqPd4jdPSA1g==}
+
+  '@lodestar/params@1.22.0':
+    resolution: {integrity: sha512-wbbeQAG+4YOl1ATsSDJnx7wBk5FXsRl2OrmLkMnJXI67wqvRwWk8WQBx7wjx2hnWWrk0in4/8bTtHz3At1GydQ==}
+
+  '@lodestar/state-transition@1.22.0':
+    resolution: {integrity: sha512-2c8LaxYBaWMf0UsR5pzzL8RWZiwmYfucnjFvTEOMGTWVAjcAwfVO+jKboUy71H8OJWZ27eqKlkptPSF94H6cgw==}
+
+  '@lodestar/types@1.22.0':
+    resolution: {integrity: sha512-BB0zgiqmIYmpg1ifDJ4VW0Ka2vkdmM7ju7lAQLk1O666iGWLObhfrLzQ+LbZ8/0h+PnjpDMB55MJSffmnqCkGg==}
+
+  '@lodestar/utils@1.22.0':
+    resolution: {integrity: sha512-d+FBMBST8p+vfdHDtbSXQ3KU4vSgQJcbrGMAeBb9VkwFr4nvV1PyUbfe+9g4YiUzZlGXmPRrPI4t2hJUGk0o1A==}
+
   '@microsoft/api-extractor-model@7.29.8':
     resolution: {integrity: sha512-t3Z/xcO6TRbMcnKGVMs4uMzv/gd5j0NhMiJIGjD4cJMeFJ1Hf8wnLSx37vxlRlL0GWlGJhnFgxvnaL6JlS+73g==}
 
@@ -1056,9 +1193,16 @@ packages:
   '@molt/types@0.2.0':
     resolution: {integrity: sha512-p6ChnEZDGjg9PYPec9BK6Yp5/DdSrYQvXTBAtgrnqX6N36cZy37ql1c8Tc5LclfIYBNG7EZp8NBcRTYJwyi84g==}
 
+  '@noble/curves@1.4.2':
+    resolution: {integrity: sha512-TavHr8qycMChk8UwMld0ZDRvatedkzWfH8IiaeGCfymOP5i0hSCozz9vHOL0nkwk7HRMlFnAiKpS2jrUmSybcw==}
+
   '@noble/curves@1.6.0':
     resolution: {integrity: sha512-TlaHRXDehJuRNR9TfZDNQ45mMEd5dwUwmicsafcIX4SsNiqnCHKjE/1alYPd/lDRVhxdhUAlv8uEhMCI5zjIJQ==}
     engines: {node: ^14.21.3 || >=16}
+
+  '@noble/hashes@1.4.0':
+    resolution: {integrity: sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==}
+    engines: {node: '>= 16'}
 
   '@noble/hashes@1.5.0':
     resolution: {integrity: sha512-1j6kQFb7QRru7eKN3ZDvRcP13rugwdxZqCjbiAVZfIJwgj2A65UmT4TgARXGlXgnRkORLTDTrO19ZErt7+QXgA==}
@@ -1562,8 +1706,14 @@ packages:
   '@scure/base@1.1.9':
     resolution: {integrity: sha512-8YKhl8GHiNI/pU2VMaofa2Tor7PJRAjwQLBBuilkJ9L5+13yVbC7JO/wS7piioAvPSwR3JKM1IJ/u4xQzbcXKg==}
 
+  '@scure/bip32@1.4.0':
+    resolution: {integrity: sha512-sVUpc0Vq3tXCkDGYVWGIZTRfnvu8LoTDaev7vbwh0omSvVORONr960MQWdKqJDCReIEmTj3PAr73O3aoxz7OPg==}
+
   '@scure/bip32@1.5.0':
     resolution: {integrity: sha512-8EnFYkqEQdnkuGBVpCzKxyIwDCBLDVj3oiX0EKUFre/tOjL/Hqba1D6n/8RcmaQy4f95qQFrO2A8Sr6ybh4NRw==}
+
+  '@scure/bip39@1.3.0':
+    resolution: {integrity: sha512-disdg7gHuTDZtY+ZdkmLpPCk7fxZSu3gBiEGuoC1XYxv9cGx3Z6cpTggCgW6odSOOIXCiDjuGejW+aJKCY/pIQ==}
 
   '@scure/bip39@1.4.0':
     resolution: {integrity: sha512-BEEm6p8IueV/ZTfQLp/0vhw4NPnT9oWf5+28nvmeUICjP99f4vr2d+qc7AVGDDtwRep6ifR43Yed9ERVmiITzw==}
@@ -1930,6 +2080,9 @@ packages:
   any-promise@1.3.0:
     resolution: {integrity: sha512-7UvmKalWRt1wgjL1RrGxoSJW/0QZFIegpeGvZG9kjp8vrRu55XTHbwnqq2GpXm9uLbcuhxm3IqX9OB4MZR1b2A==}
 
+  any-signal@3.0.1:
+    resolution: {integrity: sha512-xgZgJtKEa9YmDqXodIgl7Fl1C8yNXr8w6gXjqK3LW4GcEiYT+6AQfJSE/8SPsEpLLmcvbv8YU+qet94UewHxqg==}
+
   argparse@1.0.10:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
 
@@ -2024,6 +2177,13 @@ packages:
 
   before-after-hook@3.0.2:
     resolution: {integrity: sha512-Nik3Sc0ncrMK4UUdXQmAnRtzmNQTAAXmXIopizwZ1W1t8QmfJj+zL4OA2I7XPTPW5z5TDqv4hRo/JzouDJnX3A==}
+
+  bigint-buffer@1.1.5:
+    resolution: {integrity: sha512-trfYco6AoZ+rKhKnxA0hgX0HAbVP/s808/EuDSe2JDzUnCp/xAsli35Orvk67UrTEcwuxZqYZDmfA2RXJgxVvA==}
+    engines: {node: '>= 10.0.0'}
+
+  bindings@1.5.0:
+    resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
 
   bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
@@ -2181,6 +2341,10 @@ packages:
 
   capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
+
+  case@1.6.3:
+    resolution: {integrity: sha512-mzDSXIPaFwVDvZAHqZ9VlbyF4yyXRuX6IvB06WvPYkqJVO24kX1PPhv9bfpKNFZyxYFmmgo03HUiD8iklmJYRQ==}
+    engines: {node: '>= 0.8.0'}
 
   chai@4.4.1:
     resolution: {integrity: sha512-13sOfMv2+DWduEU+/xbun3LScLoqN17nBeTLUsmDfKdoiC1fr0n9PU4guu4AhRcOVFk/sW8LyZWHuhWtQZiF+g==}
@@ -2871,6 +3035,9 @@ packages:
   ethereum-cryptography@0.1.3:
     resolution: {integrity: sha512-w8/4x1SGGzc+tO97TASLja6SLd3fRIK2tLVcV2Gx4IB21hE19atll5Cq9o3d0ZmAYC/8aw0ipieTSiekAea4SQ==}
 
+  ethereum-cryptography@2.2.1:
+    resolution: {integrity: sha512-r/W8lkHSiTLxUxW8Rf3u4HGB0xQweG2RyETjywylKZSzLWoWAijRz8WCuOtJ6wah+avllXBqZuk29HCCvhEIRg==}
+
   ethereumjs-util@7.1.5:
     resolution: {integrity: sha512-SDl5kKrQAudFBUe5OJM9Ac6WmMyYmXX/6sTmLZ3ffG2eY6ZIGBes3pEDxNN6V72WyOw4CPD5RomKdsa8DAAwLg==}
     engines: {node: '>=10.0.0'}
@@ -2978,6 +3145,9 @@ packages:
   file-entry-cache@6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
     engines: {node: ^10.12.0 || >=12.0.0}
+
+  file-uri-to-path@1.0.0:
+    resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
 
   fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
@@ -3387,6 +3557,9 @@ packages:
   immutable@3.7.6:
     resolution: {integrity: sha512-AizQPcaofEtO11RZhPPHBOJRdo/20MKQF9mBLnVkBoyHi1/zXK8fzVdnEpSV9gxqtnh6Qomfp3F0xT5qP/vThw==}
     engines: {node: '>=0.8.0'}
+
+  immutable@4.3.7:
+    resolution: {integrity: sha512-1hqclzwYwjRDFLjcFxOM5AYkkG0rpFPpr1RLPMEuGczoS7YA8gLhy8SWXYRAA/XwfEHpfo3cw5JGioS32fnMRw==}
 
   import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
@@ -6249,6 +6422,89 @@ snapshots:
       '@babel/helper-validator-identifier': 7.25.7
       to-fast-properties: 2.0.0
 
+  '@chainsafe/as-sha256@0.5.0': {}
+
+  '@chainsafe/bls-hd-key@0.3.0':
+    dependencies:
+      '@noble/hashes': 1.5.0
+
+  '@chainsafe/bls-keygen@0.4.0':
+    dependencies:
+      '@chainsafe/bls-hd-key': 0.3.0
+      '@noble/hashes': 1.5.0
+      '@scure/bip39': 1.4.0
+
+  '@chainsafe/bls@8.1.0(@chainsafe/blst@2.2.0)':
+    dependencies:
+      '@chainsafe/bls-keygen': 0.4.0
+      bls-eth-wasm: 1.4.0
+    optionalDependencies:
+      '@chainsafe/blst': 2.2.0
+
+  '@chainsafe/blst-darwin-arm64@2.2.0':
+    optional: true
+
+  '@chainsafe/blst-darwin-x64@2.2.0':
+    optional: true
+
+  '@chainsafe/blst-linux-arm64-gnu@2.2.0':
+    optional: true
+
+  '@chainsafe/blst-linux-arm64-musl@2.2.0':
+    optional: true
+
+  '@chainsafe/blst-linux-x64-gnu@2.2.0':
+    optional: true
+
+  '@chainsafe/blst-linux-x64-musl@2.2.0':
+    optional: true
+
+  '@chainsafe/blst-win32-x64-msvc@2.2.0':
+    optional: true
+
+  '@chainsafe/blst@2.2.0':
+    optionalDependencies:
+      '@chainsafe/blst-darwin-arm64': 2.2.0
+      '@chainsafe/blst-darwin-x64': 2.2.0
+      '@chainsafe/blst-linux-arm64-gnu': 2.2.0
+      '@chainsafe/blst-linux-arm64-musl': 2.2.0
+      '@chainsafe/blst-linux-x64-gnu': 2.2.0
+      '@chainsafe/blst-linux-x64-musl': 2.2.0
+      '@chainsafe/blst-win32-x64-msvc': 2.2.0
+
+  '@chainsafe/hashtree-darwin-arm64@1.0.1':
+    optional: true
+
+  '@chainsafe/hashtree-linux-arm64-gnu@1.0.1':
+    optional: true
+
+  '@chainsafe/hashtree-linux-x64-gnu@1.0.1':
+    optional: true
+
+  '@chainsafe/hashtree@1.0.1':
+    optionalDependencies:
+      '@chainsafe/hashtree-darwin-arm64': 1.0.1
+      '@chainsafe/hashtree-linux-arm64-gnu': 1.0.1
+      '@chainsafe/hashtree-linux-x64-gnu': 1.0.1
+
+  '@chainsafe/persistent-merkle-tree@0.8.0':
+    dependencies:
+      '@chainsafe/as-sha256': 0.5.0
+      '@chainsafe/hashtree': 1.0.1
+      '@noble/hashes': 1.5.0
+
+  '@chainsafe/persistent-ts@0.19.1': {}
+
+  '@chainsafe/ssz@0.17.1':
+    dependencies:
+      '@chainsafe/as-sha256': 0.5.0
+      '@chainsafe/persistent-merkle-tree': 0.8.0
+
+  '@chainsafe/ssz@0.18.0':
+    dependencies:
+      '@chainsafe/as-sha256': 0.5.0
+      '@chainsafe/persistent-merkle-tree': 0.8.0
+
   '@colors/colors@1.5.0':
     optional: true
 
@@ -7016,6 +7272,42 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
 
+  '@lodestar/config@1.22.0':
+    dependencies:
+      '@chainsafe/ssz': 0.17.1
+      '@lodestar/params': 1.22.0
+      '@lodestar/types': 1.22.0
+
+  '@lodestar/params@1.22.0': {}
+
+  '@lodestar/state-transition@1.22.0':
+    dependencies:
+      '@chainsafe/as-sha256': 0.5.0
+      '@chainsafe/blst': 2.2.0
+      '@chainsafe/persistent-merkle-tree': 0.8.0
+      '@chainsafe/persistent-ts': 0.19.1
+      '@chainsafe/ssz': 0.17.1
+      '@lodestar/config': 1.22.0
+      '@lodestar/params': 1.22.0
+      '@lodestar/types': 1.22.0
+      '@lodestar/utils': 1.22.0
+      bigint-buffer: 1.1.5
+      immutable: 4.3.7
+
+  '@lodestar/types@1.22.0':
+    dependencies:
+      '@chainsafe/ssz': 0.17.1
+      '@lodestar/params': 1.22.0
+      ethereum-cryptography: 2.2.1
+
+  '@lodestar/utils@1.22.0':
+    dependencies:
+      '@chainsafe/as-sha256': 0.5.0
+      any-signal: 3.0.1
+      bigint-buffer: 1.1.5
+      case: 1.6.3
+      js-yaml: 4.1.0
+
   '@microsoft/api-extractor-model@7.29.8(@types/node@20.12.7)':
     dependencies:
       '@microsoft/tsdoc': 0.15.0
@@ -7069,9 +7361,15 @@ snapshots:
     dependencies:
       ts-toolbelt: 9.6.0
 
+  '@noble/curves@1.4.2':
+    dependencies:
+      '@noble/hashes': 1.4.0
+
   '@noble/curves@1.6.0':
     dependencies:
       '@noble/hashes': 1.5.0
+
+  '@noble/hashes@1.4.0': {}
 
   '@noble/hashes@1.5.0': {}
 
@@ -7524,10 +7822,21 @@ snapshots:
 
   '@scure/base@1.1.9': {}
 
+  '@scure/bip32@1.4.0':
+    dependencies:
+      '@noble/curves': 1.4.2
+      '@noble/hashes': 1.4.0
+      '@scure/base': 1.1.9
+
   '@scure/bip32@1.5.0':
     dependencies:
       '@noble/curves': 1.6.0
       '@noble/hashes': 1.5.0
+      '@scure/base': 1.1.9
+
+  '@scure/bip39@1.3.0':
+    dependencies:
+      '@noble/hashes': 1.4.0
       '@scure/base': 1.1.9
 
   '@scure/bip39@1.4.0':
@@ -7984,6 +8293,8 @@ snapshots:
 
   any-promise@1.3.0: {}
 
+  any-signal@3.0.1: {}
+
   argparse@1.0.10:
     dependencies:
       sprintf-js: 1.0.3
@@ -8107,6 +8418,14 @@ snapshots:
   before-after-hook@2.2.3: {}
 
   before-after-hook@3.0.2: {}
+
+  bigint-buffer@1.1.5:
+    dependencies:
+      bindings: 1.5.0
+
+  bindings@1.5.0:
+    dependencies:
+      file-uri-to-path: 1.0.0
 
   bl@4.1.0:
     dependencies:
@@ -8298,6 +8617,8 @@ snapshots:
       no-case: 3.0.4
       tslib: 2.8.0
       upper-case-first: 2.0.2
+
+  case@1.6.3: {}
 
   chai@4.4.1:
     dependencies:
@@ -9182,6 +9503,13 @@ snapshots:
       secp256k1: 4.0.4
       setimmediate: 1.0.5
 
+  ethereum-cryptography@2.2.1:
+    dependencies:
+      '@noble/curves': 1.4.2
+      '@noble/hashes': 1.4.0
+      '@scure/bip32': 1.4.0
+      '@scure/bip39': 1.3.0
+
   ethereumjs-util@7.1.5:
     dependencies:
       '@types/bn.js': 5.1.6
@@ -9318,6 +9646,8 @@ snapshots:
   file-entry-cache@6.0.1:
     dependencies:
       flat-cache: 3.2.0
+
+  file-uri-to-path@1.0.0: {}
 
   fill-range@7.1.1:
     dependencies:
@@ -9791,6 +10121,8 @@ snapshots:
   ignore@5.3.1: {}
 
   immutable@3.7.6: {}
+
+  immutable@4.3.7: {}
 
   import-fresh@3.3.0:
     dependencies:

@@ -1,7 +1,9 @@
-import { RemoveConfigArg } from '@/types/methods-manager'
+import { RemoveConfigArg } from '@/types/methods'
 import { decodeOperatorPublicKey } from '@/utils/operator'
 import { GraphQLClient } from 'graphql-request'
 import {
+  GetClusterBalanceDocument,
+  GetClusterBalanceQueryVariables,
   GetClusterDocument,
   GetClusterQueryVariables,
   GetClusterSnapshotDocument,
@@ -56,6 +58,9 @@ export const getValidators = (client: GraphQLClient, args: GetValidatorsQueryVar
 export const getValidator = (client: GraphQLClient, args: GetValidatorQueryVariables) =>
   client.request(GetValidatorDocument, args).then((res) => res.validator)
 
+export const getClusterBalance = (client: GraphQLClient, args: GetClusterBalanceQueryVariables) =>
+  client.request(GetClusterBalanceDocument, args)
+
 export const getQueries = (client: GraphQLClient) => ({
   getOwnerNonce: getOwnerNonce.bind(null, client) as RemoveConfigArg<typeof getOwnerNonce>,
   getClusterSnapshot: getClusterSnapshot.bind(null, client) as RemoveConfigArg<
@@ -67,4 +72,7 @@ export const getQueries = (client: GraphQLClient) => ({
   getOperators: getOperators.bind(null, client) as RemoveConfigArg<typeof getOperators>,
   getValidators: getValidators.bind(null, client) as RemoveConfigArg<typeof getValidators>,
   getValidator: getValidator.bind(null, client) as RemoveConfigArg<typeof getValidator>,
+  getClusterBalance: getClusterBalance.bind(null, client) as RemoveConfigArg<
+    typeof getClusterBalance
+  >,
 })

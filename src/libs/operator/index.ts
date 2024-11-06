@@ -1,6 +1,6 @@
 import { ConfigReturnType } from '@/config/create'
 import { setOperatorWhitelists, withdraw } from '@/libs/operator/methods'
-import { RemoveConfigArg } from '@/types/methods-manager'
+import { RemoveConfigArg } from '@/types/methods'
 
 export const createOperatorManager = (config: ConfigReturnType) => ({
   registerOperator: config.contract.write.registerOperator,
