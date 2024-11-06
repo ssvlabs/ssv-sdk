@@ -73,3 +73,29 @@ query GetValidator($id: ID!) {
     id
   }
 }
+
+query GetClusterBalance($clusterId: ID!, $daoAddress: ID!, $operatorIds: [String!]!) {
+  _meta {
+    block {
+      number
+    }
+  }
+  daovalues(id: $daoAddress) {
+    networkFee
+    networkFeeIndex
+    networkFeeIndexBlockNumber
+    liquidationThreshold
+    minimumLiquidationCollateral
+  }
+  operators(where: { id_in: $operatorIds }) {
+    fee
+    feeIndex
+    feeIndexBlockNumber
+  }
+  cluster(id: $clusterId) {
+    validatorCount
+    networkFeeIndex
+    index
+    balance
+  }
+}

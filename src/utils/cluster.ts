@@ -1,9 +1,22 @@
 import { GetClusterQuery } from '@/graphql/graphql'
 import { ClusterSnapshot } from '@/types/contract-interactions'
 import { merge } from 'lodash-es'
+import { isAddress } from 'viem'
 
 export const createClusterId = (ownerAddress: string, operatorIds: number[]) => {
+  if (!isAddress(ownerAddress)) {
+    throw new Error('Invalid owner address')
+  }
   return `${ownerAddress.toLowerCase()}-${operatorIds.join('-')}`
+}
+
+export const isClusterId = (clusterId: string) => {
+  const [ownerAddress, ...operatorIds] = clusterId.split('-')
+  return (
+    isAddress(ownerAddress) &&
+    operatorIds.length >= 4 &&
+    operatorIds.every((id) => !isNaN(Number(id)))
+  )
 }
 
 export const getClusterSnapshot = (
