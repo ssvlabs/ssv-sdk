@@ -46,7 +46,7 @@
     }
   },
   "scripts": {
-    "lint": "eslint --ext .ts lib/",
+    "lint": "eslint . --ext .ts --fix",
     "watch": "rollup -w -c rollup.config.ts --configPlugin typescript --environment BUILD:development",
     "build": "pnpm test:prod && vite build",
     "build:vite": "vite build",
@@ -90,6 +90,7 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-unused-imports": "^4.1.4",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
@@ -127,6 +128,7 @@
   "dependencies": {
     "@chainsafe/bls": "^8.1.0",
     "@chainsafe/bls-keygen": "^0.4.0",
+    "@chainsafe/bls-keystore": "^3.1.0",
     "@chainsafe/blst": "^2.2.0",
     "@chainsafe/ssz": "^0.18.0",
     "@graphql-typed-document-node/core": "^3.2.0",

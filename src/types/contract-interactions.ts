@@ -1,13 +1,15 @@
 import { stringifyBigints } from '@/utils/bigint'
-import { AbiParametersToPrimitiveTypes, AbiType, AbiTypeToPrimitiveType } from 'abitype'
+import type { AbiParametersToPrimitiveTypes, AbiType, AbiTypeToPrimitiveType } from 'abitype'
 import { isUndefined } from 'lodash-es'
-import { AbiFunction, AbiParameter, AbiParameterToPrimitiveType } from 'viem'
+import type { AbiFunction, AbiParameter, AbiParameterToPrimitiveType } from 'viem'
 
-import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
-import { ExtractAbiFunction } from 'abitype'
-import { DecodeEventLogReturnType } from 'viem'
+import type { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
+import type { TokenABI } from '@/abi/token'
+import type { ExtractAbiFunction } from 'abitype'
+import type { DecodeEventLogReturnType } from 'viem'
 
 export type MainnetEvent = DecodeEventLogReturnType<typeof MainnetV4SetterABI>
+export type TokenEvent = DecodeEventLogReturnType<typeof TokenABI>
 export type ValidatorAddedEvent = Extract<MainnetEvent, { eventName: 'ValidatorAdded' }>
 
 type DepositFN = ExtractAbiFunction<typeof MainnetV4SetterABI, 'deposit'>

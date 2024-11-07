@@ -1,6 +1,6 @@
+import { createValidatorKeys } from '@/libs/utils/methods/create-validator-keys'
 import { SSVSDK } from '@/sdk'
-import { formatEther } from 'viem'
-import { describe, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
 describe('Utils 🛜  Holesky', () => {
   it('can get cluster balance', async () => {
@@ -10,7 +10,11 @@ describe('Utils 🛜  Holesky', () => {
     })
 
     const res = await sdk.utils.getClusterBalance({ operatorIds: [5, 8, 9, 10] })
-    console.log(formatEther(res.balance))
-    console.log(res.operationalRunway)
+    expect(res).toBeDefined()
+  })
+
+  it('can get cluster balance', async () => {
+    const a = await createValidatorKeys('123123123', 1)
+    console.log('a:', a)
   })
 })

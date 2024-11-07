@@ -1,5 +1,5 @@
-import { ConfigReturnType } from '@/config/create'
-import { Address } from 'abitype'
+import type { ConfigReturnType } from '@/config/create'
+import type { Address } from 'abitype'
 
 type SetFeeRecipientProps = {
   recipient: Address

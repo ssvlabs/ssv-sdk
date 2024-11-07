@@ -1,8 +1,9 @@
 import { createClusterManager } from '@/libs/cluster'
 import { createOperatorManager } from '@/libs/operator'
 import { createUtils } from '@/libs/utils'
-import { ConfigReturnType, createConfig } from './config/create'
-import { ConfigArgs } from './utils/zod/config'
+import type { ConfigReturnType} from './config/create';
+import { createConfig } from './config/create'
+import type { ConfigArgs } from './utils/zod/config'
 
 export class SSVSDK {
   readonly core: ConfigReturnType

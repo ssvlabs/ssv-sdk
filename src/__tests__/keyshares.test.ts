@@ -1,4 +1,4 @@
-import { validateEvent } from '@/libs/utils/keyshares'
+import { validateEvent } from '@/libs/utils/methods/keyshares'
 import { operators as mockOperators } from '@/mock'
 import inconsistent_operator_ids_keyshares from '@/mock/keyshares/inconsistent_operator_ids_keyshares.json'
 import invalid_operator_key_keyshares from '@/mock/keyshares/invalid_operator_key_keyshares.json'
@@ -16,7 +16,7 @@ describe('Keyshares', async () => {
     private_key: process.env.PRIVATE_KEY,
   })
 
-  let operators = await sdk.api.getOperators({
+  const operators = await sdk.api.getOperators({
     operatorIds: mockOperators.ids.map(String),
   })
 

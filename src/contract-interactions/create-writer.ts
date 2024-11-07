@@ -1,16 +1,25 @@
-import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
-import { TokenABI } from '@/abi/token'
-import { AbiInputsToParams, MainnetEvent, paramsToArray } from '@/types/contract-interactions'
-import { Prettify } from '@/types/utils'
-import { Address, ExtractAbiFunctions } from 'abitype'
-import { TokenEvent } from 'dist/types/contract'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter';
+import { TokenABI } from '@/abi/token';
+import type {
+  AbiInputsToParams,
+  MainnetEvent,
+  TokenEvent
+} from '@/types/contract-interactions';
 import {
+  paramsToArray
+} from '@/types/contract-interactions';
+import type { Prettify } from '@/types/utils';
+import type { Address, ExtractAbiFunctions } from 'abitype';
+import type {
   Hash,
   PublicClient,
   WaitForTransactionReceiptReturnType,
-  WalletClient,
-  decodeEventLog,
-} from 'viem'
+  WalletClient
+} from 'viem';
+import {
+  decodeEventLog
+} from 'viem';
 
 type Props = {
   walletClient: WalletClient

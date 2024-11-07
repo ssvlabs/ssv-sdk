@@ -1,6 +1,6 @@
-import { ConfigReturnType } from '@/config/create'
-import { getOperator } from '@/queries'
-import { Address } from 'abitype'
+import type { ConfigReturnType } from '@/config/create'
+import type { getOperator } from '@/queries'
+import type { Address } from 'abitype'
 import { isAddressEqual, zeroAddress } from 'viem'
 
 type WithdrawArgs = {

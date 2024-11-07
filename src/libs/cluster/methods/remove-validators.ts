@@ -1,6 +1,6 @@
-import { ConfigReturnType } from '@/config/create'
+import type { ConfigReturnType } from '@/config/create'
 import { getClusterSnapshot } from '@/utils/cluster'
-import { Hex } from 'viem'
+import type { Hex } from 'viem'
 
 type RemoveValidatorsProps = {
   id: string

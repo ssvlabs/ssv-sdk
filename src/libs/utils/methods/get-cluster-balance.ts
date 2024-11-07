@@ -1,4 +1,4 @@
-import { ConfigReturnType } from '@/config/create'
+import type { ConfigReturnType } from '@/config/create'
 import { globals } from '@/config/globals'
 import { bigintMax, createClusterId } from '@/utils'
 

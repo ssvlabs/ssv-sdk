@@ -1,5 +1,6 @@
 import { sortNumbers } from '@/utils/number'
-import { Address, decodeAbiParameters } from 'viem'
+import type { Address} from 'viem';
+import { decodeAbiParameters } from 'viem'
 
 export const getOperatorIds = <T extends { id: number }[]>(operators: T) => {
   return sortNumbers(operators.map((operator) => operator.id))

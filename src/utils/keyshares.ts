@@ -1,7 +1,7 @@
-import { Operator } from '@/types/operator'
+import type { Operator } from '@/types/operator'
 import { sortNumbers } from '@/utils/number'
 import { getOperatorIds } from '@/utils/operator'
-import { KeySharesItem } from 'ssv-keys'
+import type { KeySharesItem } from 'ssv-keys'
 
 export enum KeysharesValidationErrors {
   OperatorDoesNotExist,

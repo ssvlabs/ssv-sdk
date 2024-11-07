@@ -3,9 +3,11 @@ import { createWriters } from '@/contract-interactions/create-writer'
 import { createToken } from '@/contract-interactions/token'
 import { createAPI } from '@/libs/api'
 import { createWalletFromPrivateKey } from '@/utils/viem'
-import { ConfigArgs, configArgsSchema } from '@/utils/zod/config'
+import type { ConfigArgs} from '@/utils/zod/config';
+import { configArgsSchema } from '@/utils/zod/config'
 import { GraphQLClient } from 'graphql-request'
-import { Address, Chain, PublicClient, WalletClient, createPublicClient, http } from 'viem'
+import type { Address, Chain, PublicClient, WalletClient} from 'viem';
+import { createPublicClient, http } from 'viem'
 import { chains, subgraph } from './chains'
 
 export type ConfigReturnType = {

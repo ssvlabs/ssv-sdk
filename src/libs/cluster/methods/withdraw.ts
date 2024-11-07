@@ -1,4 +1,4 @@
-import { ConfigReturnType } from '@/config/create'
+import type { ConfigReturnType } from '@/config/create'
 import { getClusterSnapshot } from '@/utils/cluster'
 
 type WithdrawProps = {
