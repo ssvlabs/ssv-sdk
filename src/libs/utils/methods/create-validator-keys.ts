@@ -1,6 +1,6 @@
-import bls from '@chainsafe/bls'
-import { deriveEth2ValidatorKeys, generateRandomSecretKey } from '@chainsafe/bls-keygen'
-import { create } from '@chainsafe/bls-keystore'
+import { deriveEth2ValidatorKeys, generateRandomSecretKey } from '@chainsafe/bls-keygen';
+import { create } from '@chainsafe/bls-keystore';
+import bls from '@chainsafe/bls/herumi'; // Using herumi implementation for browser compatibility (WebAssembly-based)
 
 export const createValidatorKeys = async (password: string, index: number) => {
   // Generate master secret key if not already generated
