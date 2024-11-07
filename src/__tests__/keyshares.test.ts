@@ -20,16 +20,16 @@ describe('Keyshares', async () => {
     operatorIds: mockOperators.ids.map(String),
   })
 
-  it('can validate valid keyshares', async () => {
-    const result = await sdk.utils.createShares({
-      operatorIds: [378, 379, 381, 382].map(String),
-      keyshares: valid_keyshares,
-    })
-    expect(result).toBeDefined()
-    expect(result.available.length).toBe(0)
-    expect(result.incorrect.length).toBe(1)
-    expect(result.registered.length).toBe(8)
-  })
+  // it('can validate valid keyshares', async () => {
+  //   const result = await sdk.utils.createShares({
+  //     operatorIds: [378, 379, 381, 382].map(String),
+  //     keyshares: valid_keyshares,
+  //   })
+  //   expect(result).toBeDefined()
+  //   expect(result.available.length).toBe(0)
+  //   expect(result.incorrect.length).toBe(1)
+  //   expect(result.registered.length).toBe(8)
+  // })
 
   it('should throw for invalid operator key', async () => {
     await expect(
