@@ -1,7 +1,7 @@
-import { ConfigReturnType } from '@/config/create'
+import type { ConfigReturnType } from '@/config/create'
 import { createClusterId, createEmptyCluster, getClusterSnapshot } from '@/utils/cluster'
-import { KeySharesItem } from 'ssv-keys'
-import { Hex } from 'viem'
+import type { KeySharesItem } from 'ssv-keys'
+import type { Hex } from 'viem'
 
 type RegisterValidatorsProps = {
   keyshares: KeySharesItem[]

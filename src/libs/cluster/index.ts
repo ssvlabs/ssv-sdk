@@ -1,4 +1,4 @@
-import { ConfigReturnType } from '@/config/create'
+import type { ConfigReturnType } from '@/config/create'
 import {
   deposit,
   exitValidators,
@@ -9,7 +9,7 @@ import {
   setFeeRecipient,
   withdraw,
 } from '@/libs/cluster/methods'
-import { RemoveConfigArg } from '@/types/methods'
+import type { RemoveConfigArg } from '@/types/methods'
 
 export const createClusterManager = (config: ConfigReturnType) => ({
   deposit: deposit.bind(null, config) as RemoveConfigArg<typeof deposit>,

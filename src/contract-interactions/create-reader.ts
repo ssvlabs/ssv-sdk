@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MainnetV4GetterABI } from '@/abi/mainnet/v4/getter'
-import { AbiInputsToParams, paramsToArray } from '@/types/contract-interactions'
-import { Prettify } from '@/types/utils'
-import { Address, ExtractAbiFunctions } from 'abitype'
-import { ContractFunctionArgs, PublicClient, ReadContractReturnType } from 'viem'
+import type { AbiInputsToParams } from '@/types/contract-interactions'
+import { paramsToArray } from '@/types/contract-interactions'
+import type { Prettify } from '@/types/utils'
+import type { Address, ExtractAbiFunctions } from 'abitype'
+import type { ContractFunctionArgs, PublicClient, ReadContractReturnType } from 'viem'
 
 type Props = {
   publicClient: PublicClient

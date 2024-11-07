@@ -1,8 +1,8 @@
-import { ConfigReturnType } from '@/config/create'
-import { createShares, validateKeysharesJSON } from '@/libs/utils/keyshares'
-import { generateKeyShares } from '@/libs/utils/keystores'
+import type { ConfigReturnType } from '@/config/create'
 import { getClusterBalance, getOperatorCapacity } from '@/libs/utils/methods'
-import { RemoveConfigArg } from '@/types/methods'
+import { createShares, validateKeysharesJSON } from '@/libs/utils/methods/keyshares'
+import { generateKeyShares } from '@/libs/utils/methods/keystores'
+import type { RemoveConfigArg } from '@/types/methods'
 
 export const createUtils = (config: ConfigReturnType) => ({
   generateKeyShares,

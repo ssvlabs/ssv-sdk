@@ -1,5 +1,5 @@
-import { GetClusterQuery } from '@/graphql/graphql'
-import { ClusterSnapshot } from '@/types/contract-interactions'
+import type { GetClusterQuery } from '@/graphql/graphql'
+import type { ClusterSnapshot } from '@/types/contract-interactions'
 import { merge } from 'lodash-es'
 import { isAddress } from 'viem'
 

@@ -1,5 +1,5 @@
-import { ConfigReturnType } from '@/config/create'
-import { Hex } from 'viem'
+import type { ConfigReturnType } from '@/config/create'
+import type { Hex } from 'viem'
 
 type ExitValidatorsProps = {
   publicKeys: Hex[]

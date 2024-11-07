@@ -1,7 +1,7 @@
-import { ConfigReturnType } from '@/config/create'
+import type { ConfigReturnType } from '@/config/create'
 
-import { Address } from 'abitype'
-import { TransactionReceipt } from 'viem'
+import type { Address } from 'abitype'
+import type { TransactionReceipt } from 'viem'
 
 export const waitForTransaction = async <T extends Promise<Address>>(
   config: ConfigReturnType,

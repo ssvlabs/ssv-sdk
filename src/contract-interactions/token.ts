@@ -1,16 +1,17 @@
-import { TokenABI } from '@/abi/token'
-import { AbiInputsToParams, paramsToArray } from '@/types/contract-interactions'
-import { Prettify } from '@/types/utils'
-import { Address, ExtractAbiFunctions } from 'abitype'
-import { TokenEvent } from 'dist/types/contract'
-import {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { TokenABI } from '@/abi/token';
+import type { AbiInputsToParams, TokenEvent } from '@/types/contract-interactions';
+import { paramsToArray } from '@/types/contract-interactions';
+import type { Prettify } from '@/types/utils';
+import type { Address, ExtractAbiFunctions } from 'abitype';
+import type {
   ContractFunctionArgs,
   Hash,
   PublicClient,
   ReadContractReturnType,
   WaitForTransactionReceiptReturnType,
   WalletClient,
-} from 'viem'
+} from 'viem';
 
 type ReadFns = ExtractAbiFunctions<typeof TokenABI, 'view' | 'pure'>
 type WriteFns = ExtractAbiFunctions<typeof TokenABI, 'nonpayable' | 'payable'>

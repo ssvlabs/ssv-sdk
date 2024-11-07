@@ -1,8 +1,8 @@
 import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
-import { ConfigReturnType } from '@/config/create'
+import type { ConfigReturnType } from '@/config/create'
 import { canAccountUseOperator } from '@/libs/operator/methods'
-import { MainnetEvent, ValidatorAddedEvent } from '@/types/contract-interactions'
-import { Operator } from '@/types/operator'
+import type { MainnetEvent, ValidatorAddedEvent } from '@/types/contract-interactions'
+import type { Operator } from '@/types/operator'
 import {
   KeysharesValidationError,
   KeysharesValidationErrors,
@@ -14,7 +14,8 @@ import {
 import { sortNumbers } from '@/utils/number'
 import { isEqual } from 'lodash-es'
 import { KeyShares, KeySharesItem } from 'ssv-keys'
-import { Address, Hash, decodeEventLog } from 'viem'
+import type { Address, Hash } from 'viem'
+import { decodeEventLog } from 'viem'
 
 type ValidatedKeysharesArgs = {
   keyshares: string | object
@@ -42,7 +43,7 @@ export const createShares = async (
     }),
   )
 
-  if (statuses.every(([_, isRegistered]) => isRegistered)) {
+  if (statuses.every(([, isRegistered]) => isRegistered)) {
     throw new Error('All validators are already registered')
   }
 

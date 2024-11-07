@@ -1,25 +1,27 @@
-import { RemoveConfigArg } from '@/types/methods'
+import type { RemoveConfigArg } from '@/types/methods'
 import { decodeOperatorPublicKey } from '@/utils/operator'
-import { GraphQLClient } from 'graphql-request'
+import type { GraphQLClient } from 'graphql-request'
+import type {
+  GetClusterBalanceQueryVariables,
+  GetClusterQueryVariables,
+  GetClusterSnapshotQueryVariables,
+  GetClustersQueryVariables,
+  GetOperatorQueryVariables,
+  GetOperatorsQueryVariables,
+  GetOwnerNonceQueryVariables,
+  GetValidatorQueryVariables,
+  GetValidatorsQueryVariables,
+} from '../graphql/graphql'
 import {
   GetClusterBalanceDocument,
-  GetClusterBalanceQueryVariables,
   GetClusterDocument,
-  GetClusterQueryVariables,
   GetClusterSnapshotDocument,
-  GetClusterSnapshotQueryVariables,
   GetClustersDocument,
-  GetClustersQueryVariables,
   GetOperatorDocument,
-  GetOperatorQueryVariables,
   GetOperatorsDocument,
-  GetOperatorsQueryVariables,
   GetOwnerNonceDocument,
-  GetOwnerNonceQueryVariables,
   GetValidatorDocument,
-  GetValidatorQueryVariables,
   GetValidatorsDocument,
-  GetValidatorsQueryVariables,
 } from '../graphql/graphql'
 export const getOwnerNonce = (client: GraphQLClient, args: GetOwnerNonceQueryVariables) =>
   client.request(GetOwnerNonceDocument, args).then((r) => r.account?.nonce)

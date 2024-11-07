@@ -1,4 +1,4 @@
-import { ConfigReturnType } from '@/config/create'
+import type { ConfigReturnType } from '@/config/create'
 
 export const getOperatorCapacity = async (config: ConfigReturnType, operatorId: string) => {
   const [operator, limit] = await Promise.all([
