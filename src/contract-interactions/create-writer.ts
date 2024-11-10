@@ -40,8 +40,7 @@ type WriterFunctions = {
     >
   }>
 }
-
-export const createWriters = ({
+export const createContractWriter = ({
   walletClient,
   publicClient,
   contractAddress,

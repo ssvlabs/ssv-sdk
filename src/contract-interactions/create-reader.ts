@@ -26,7 +26,7 @@ type ReaderFunctions = {
   >
 }
 
-export const createReaders = ({ publicClient, contractAddress }: Props) => {
+export const createContractReader = ({ publicClient, contractAddress }: Props) => {
   const readFnsMainnet = MainnetV4GetterABI.filter(
     (item) =>
       item.type === 'function' &&
