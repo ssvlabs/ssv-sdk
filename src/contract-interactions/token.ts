@@ -47,7 +47,7 @@ type WriterFunctions = {
   }>
 }
 
-export const createToken = ({
+export const createTokenContractInteractions = ({
   walletClient,
   publicClient,
   contractAddress,

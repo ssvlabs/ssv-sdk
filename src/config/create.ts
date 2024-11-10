@@ -1,12 +1,12 @@
-import { createReaders } from '@/contract-interactions/create-reader'
-import { createWriters } from '@/contract-interactions/create-writer'
-import { createToken } from '@/contract-interactions/token'
+import { createContractReader } from '@/contract-interactions/create-reader'
+import { createContractWriter } from '@/contract-interactions/create-writer'
+import { createTokenContractInteractions } from '@/contract-interactions/token'
 import { createAPI } from '@/libs/api'
 import { createWalletFromPrivateKey } from '@/utils/viem'
-import type { ConfigArgs} from '@/utils/zod/config';
+import type { ConfigArgs } from '@/utils/zod/config'
 import { configArgsSchema } from '@/utils/zod/config'
 import { GraphQLClient } from 'graphql-request'
-import type { Address, Chain, PublicClient, WalletClient} from 'viem';
+import type { Address, Chain, PublicClient, WalletClient } from 'viem'
 import { createPublicClient, http } from 'viem'
 import { chains, subgraph } from './chains'
 
@@ -22,9 +22,9 @@ export type ConfigReturnType = {
     token: Address
   }
   contract: {
-    write: ReturnType<typeof createWriters>
-    read: ReturnType<typeof createReaders>
-    token: ReturnType<typeof createToken>
+    write: ReturnType<typeof createContractWriter>
+    read: ReturnType<typeof createContractReader>
+    token: ReturnType<typeof createTokenContractInteractions>
   }
 }
 
@@ -68,16 +68,16 @@ export const createConfig = (props: ConfigArgs): ConfigReturnType => {
     : parsed.wallet_client
 
   const contract = {
-    write: createWriters({
+    write: createContractWriter({
       walletClient,
       publicClient,
       contractAddress: contracts[parsed.chain].setter,
     }),
-    read: createReaders({
+    read: createContractReader({
       publicClient,
       contractAddress: contracts[parsed.chain].getter,
     }),
-    token: createToken({
+    token: createTokenContractInteractions({
       walletClient,
       publicClient,
       contractAddress: contracts[parsed.chain].token,
