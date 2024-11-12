@@ -11,7 +11,7 @@ import type {
   GetOwnerNonceQueryVariables,
   GetValidatorQueryVariables,
   GetValidatorsQueryVariables,
-} from '../graphql/graphql'
+} from '../../graphql/graphql'
 import {
   GetClusterBalanceDocument,
   GetClusterDocument,
@@ -22,7 +22,7 @@ import {
   GetOwnerNonceDocument,
   GetValidatorDocument,
   GetValidatorsDocument,
-} from '../graphql/graphql'
+} from '../../graphql/graphql'
 export const getOwnerNonce = (client: GraphQLClient, args: GetOwnerNonceQueryVariables) =>
   client.request(GetOwnerNonceDocument, args).then((r) => r.account?.nonce)
 

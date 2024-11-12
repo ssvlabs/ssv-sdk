@@ -1,17 +1,34 @@
-import { describe } from 'vitest'
+import { createValidatorKeys } from '@/libs/utils/methods/create-validator-keys'
+import { operators } from '@/mock'
+import { SSVSDK } from '@/sdk'
+import { describe, expect, it } from 'vitest'
 
 describe('Register validators 🛜  Holesky', () => {
-//   it('can register validators', async () => {
-//     const sdk = new SSVSDK({
-//       chain: 'holesky',
-//       private_key: process.env.PRIVATE_KEY,
-//     })
+  it('can register validators', async () => {
+    const sdk = new SSVSDK({
+      chain: 'holesky',
+      private_key: process.env.PRIVATE_KEY,
+    })
 
-//     const { available } = await sdk.utils.createShares({
-//       operatorIds: [378, 379, 381, 382].map(String),
-//       keyshares: valid_keyshares,
-//     })
+    const { keystores } = await createValidatorKeys({
+      count: 1,
+      chain: 'holesky',
+      withdrawal: process.env.OWNER_ADDRESS,
+      password: '123123123',
+    })
 
-//     await expect(sdk.clusters.registerValidators({ keyshares: available })).resolves.not.toThrow()
-//   })
+    const extracted = await sdk.utils.generateKeyShares({
+      keystore: JSON.stringify(keystores[0]),
+      keystore_password: '123123123',
+      operator_keys: operators.keys,
+      operator_ids: operators.ids.map((id) => Number(id)),
+      owner_address: process.env.OWNER_ADDRESS!,
+      nonce: 1,
+    })
+    
+    const balance = await sdk.utils.getClusterBalance({ operatorIds: operators.ids.map(Number) })
+    console.log('balance:', balance)
+
+    await expect(sdk.clusters.registerValidators({ keyshares: [extracted] })).resolves.not.toThrow()
+  })
 })

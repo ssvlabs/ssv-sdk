@@ -1,20 +1,20 @@
 import { createContractReader } from '@/contract-interactions/create-reader'
 import { createContractWriter } from '@/contract-interactions/create-writer'
 import { createTokenContractInteractions } from '@/contract-interactions/token'
-import { createAPI } from '@/libs/api'
+import { createQueries, createSSVAPI } from '@/libs/api'
 import { createWalletFromPrivateKey } from '@/utils/viem'
 import type { ConfigArgs } from '@/utils/zod/config'
 import { configArgsSchema } from '@/utils/zod/config'
 import { GraphQLClient } from 'graphql-request'
 import type { Address, Chain, PublicClient, WalletClient } from 'viem'
 import { createPublicClient, http } from 'viem'
-import { chains, subgraph } from './chains'
+import { chains, contracts, graph_endpoints, rest_endpoints } from './chains'
 
 export type ConfigReturnType = {
   publicClient: PublicClient
   walletClient: WalletClient
   chain: Chain
-  api: ReturnType<typeof createAPI>
+  api: ReturnType<typeof createQueries> & ReturnType<typeof createSSVAPI>
   graphQLClient: GraphQLClient
   contractAddresses: {
     setter: Address
@@ -26,26 +26,8 @@ export type ConfigReturnType = {
     read: ReturnType<typeof createContractReader>
     token: ReturnType<typeof createTokenContractInteractions>
   }
-}
-
-export const contracts: Record<
-  ConfigArgs['chain'],
-  {
-    setter: Address
-    getter: Address
-    token: Address
-  }
-> = {
-  mainnet: {
-    setter: '0xDD9BC35aE942eF0cFa76930954a156B3fF30a4E1',
-    getter: '0xafE830B6Ee262ba11cce5F32fDCd760FFE6a66e4',
-    token: '0x9D65fF81a3c488d585bBfb0Bfe3c7707c7917f54',
-  },
-  holesky: {
-    setter: '0x38A4794cCEd47d3baf7370CcC43B560D3a1beEFA',
-    getter: '0x352A18AEe90cdcd825d1E37d9939dCA86C00e281',
-    token: '0xad45A78180961079BFaeEe349704F411dfF947C6',
-  },
+  graphEndpoint: string
+  restEndpoint: string
 }
 
 export const createConfig = (props: ConfigArgs): ConfigReturnType => {
@@ -84,12 +66,19 @@ export const createConfig = (props: ConfigArgs): ConfigReturnType => {
     }),
   }
 
-  const graphQLClient = new GraphQLClient(subgraph[parsed.chain])
+  const graphEndpoint = graph_endpoints[parsed.chain]
+  const restEndpoint = rest_endpoints[parsed.chain]
+  const graphQLClient = new GraphQLClient(graphEndpoint)
   return {
     publicClient,
     walletClient,
     chain,
-    api: createAPI(graphQLClient),
+    graphEndpoint,
+    restEndpoint,
+    api: {
+      ...createQueries(graphQLClient),
+      ...createSSVAPI(restEndpoint),
+    },
     graphQLClient,
     contractAddresses: contracts[parsed.chain],
     contract,

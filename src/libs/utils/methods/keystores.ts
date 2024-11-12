@@ -47,5 +47,6 @@ export const generateKeyShares = async (args: GenerateKeySharesArgs) => {
       privateKey: extracted.privateKey,
     },
   )) as KeySharesPayload
+  
   return shares
 }
