@@ -1,10 +1,11 @@
 import type { ConfigReturnType } from '@/config/create'
+import { isKeySharesItem } from '@/utils'
 import { createClusterId, createEmptyCluster, getClusterSnapshot } from '@/utils/cluster'
 import type { KeySharesItem } from 'ssv-keys'
 import type { Hex } from 'viem'
 
 type RegisterValidatorsProps = {
-  keyshares: KeySharesItem[]
+  keyshares: KeySharesItem[] | KeySharesItem['payload'][]
   depositAmount?: bigint
 }
 
@@ -12,7 +13,11 @@ export const registerValidators = async (
   config: ConfigReturnType,
   { keyshares, depositAmount = 0n }: RegisterValidatorsProps,
 ) => {
-  const operatorIds = keyshares[0].payload.operatorIds
+  const shares = keyshares.map((share) => {
+    return isKeySharesItem(share) ? share.payload : share
+  })
+
+  const operatorIds = shares[0].operatorIds
 
   const clusterId = createClusterId(config.walletClient.account!.address, operatorIds)
   const cluster = await config.api.getCluster({
@@ -21,13 +26,13 @@ export const registerValidators = async (
 
   const snapshot = cluster ? getClusterSnapshot(cluster) : createEmptyCluster()
 
-  if (keyshares.length === 1) {
+  if (shares.length === 1) {
     return config.contract.write.registerValidator({
       amount: depositAmount,
       cluster: snapshot,
       operatorIds: operatorIds.map(BigInt),
-      publicKey: keyshares[0].payload.publicKey as Hex,
-      sharesData: keyshares[0].payload.sharesData as Hex,
+      publicKey: shares[0].publicKey as Hex,
+      sharesData: shares[0].sharesData as Hex,
     })
   }
 
@@ -35,7 +40,7 @@ export const registerValidators = async (
     cluster: snapshot,
     amount: depositAmount,
     operatorIds: operatorIds.map(BigInt),
-    publicKeys: keyshares.map((share) => share.payload.publicKey as Hex),
-    sharesData: keyshares.map((share) => share.payload.sharesData as Hex),
+    publicKeys: shares.map((share) => share.publicKey as Hex),
+    sharesData: shares.map((share) => share.sharesData as Hex),
   })
-} 
+}

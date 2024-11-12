@@ -1,5 +1,5 @@
+import type { getOperator } from '@/api/subgraph'
 import type { ConfigReturnType } from '@/config/create'
-import type { getOperator } from '@/queries'
 import type { Address } from 'abitype'
 import { isAddressEqual, zeroAddress } from 'viem'
 

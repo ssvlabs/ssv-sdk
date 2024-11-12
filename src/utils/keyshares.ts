@@ -3,6 +3,12 @@ import { sortNumbers } from '@/utils/number'
 import { getOperatorIds } from '@/utils/operator'
 import type { KeySharesItem } from 'ssv-keys'
 
+export const isKeySharesItem = (item: unknown): item is KeySharesItem => {
+  return (
+    !!item && typeof item === 'object' && 'data' in item && 'payload' in item && 'error' in item
+  )
+}
+
 export enum KeysharesValidationErrors {
   OperatorDoesNotExist,
   OperatorMismatch,
