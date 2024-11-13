@@ -18,16 +18,20 @@ export const removeValidators = async (
   }
 
   if (publicKeys.length === 1) {
-    return config.contract.write.removeValidator({
-      cluster: getClusterSnapshot(cluster),
-      publicKey: publicKeys[0],
-      operatorIds: cluster.operatorIds.map(BigInt),
+    return config.contract.ssv.write.removeValidator({
+      args: {
+        cluster: getClusterSnapshot(cluster),
+        publicKey: publicKeys[0],
+        operatorIds: cluster.operatorIds.map(BigInt),
+      },
     })
   }
 
-  return config.contract.write.bulkRemoveValidator({
-    cluster: getClusterSnapshot(cluster),
-    publicKeys,
-    operatorIds: cluster.operatorIds.map(BigInt),
+  return config.contract.ssv.write.bulkRemoveValidator({
+    args: {
+      cluster: getClusterSnapshot(cluster),
+      publicKeys,
+      operatorIds: cluster.operatorIds.map(BigInt),
+    },
   })
 } 

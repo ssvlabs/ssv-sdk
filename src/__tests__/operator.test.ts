@@ -8,6 +8,6 @@ describe('Operator 🛜  Holesky', () => {
       private_key: process.env.PRIVATE_KEY,
     })
 
-    expect(sdk.contract.write.registerOperator).toBe(sdk.operators.registerOperator)
+    expect(sdk.contract.ssv.write.registerOperator).toBe(sdk.operators.registerOperator)
   })
 })

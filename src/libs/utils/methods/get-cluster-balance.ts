@@ -14,7 +14,7 @@ export const getClusterBalance = async (
     operatorIds: operatorIds.map(String),
     clusterId: createClusterId(config.walletClient.account!.address, operatorIds),
   })
-  console.log('query:', query)
+
   if (!query.cluster || !query.daovalues || !query._meta) {
     throw new Error('Could not fetch cluster balance')
   }

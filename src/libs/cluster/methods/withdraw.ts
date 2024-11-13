@@ -13,9 +13,11 @@ export const withdraw = async (config: ConfigReturnType, { id, amount }: Withdra
     throw new Error('Cluster not found')
   }
 
-  return config.contract.write.withdraw({
-    amount,
-    cluster: getClusterSnapshot(cluster),
-    operatorIds: cluster.operatorIds.map(BigInt),
+  return config.contract.ssv.write.withdraw({
+    args: {
+      amount,
+      cluster: getClusterSnapshot(cluster),
+      operatorIds: cluster.operatorIds.map(BigInt),
+    },
   })
 } 

@@ -8,21 +8,25 @@ type WithdrawArgs = {
   amount: bigint
 }
 export const withdraw = async (config: ConfigReturnType, { operatorId, amount }: WithdrawArgs) => {
-  const balance = await config.contract.read.getOperatorEarnings({
+  const balance = await config.contract.ssv.read.getOperatorEarnings({
     id: BigInt(operatorId),
   })
 
   const isWithdrawingAll = amount >= balance
 
   if (isWithdrawingAll) {
-    return config.contract.write.withdrawAllOperatorEarnings({
-      operatorId: BigInt(operatorId),
+    return config.contract.ssv.write.withdrawAllOperatorEarnings({
+      args: {
+        operatorId: BigInt(operatorId),
+      },
     })
   }
 
-  return config.contract.write.withdrawOperatorEarnings({
-    operatorId: BigInt(operatorId),
-    amount,
+  return config.contract.ssv.write.withdrawOperatorEarnings({
+    args: {
+      operatorId: BigInt(operatorId),
+      amount,
+    },
   })
 }
 
@@ -34,7 +38,7 @@ export const setOperatorWhitelists = async (
   config: ConfigReturnType,
   { operatorIds, contractAddress }: SetOperatorWhitelistsArgs,
 ) => {
-  const isWhitelistingContract = await config.contract.read.isWhitelistingContract({
+  const isWhitelistingContract = await config.contract.ssv.read.isWhitelistingContract({
     contractAddress,
   })
 
@@ -42,9 +46,11 @@ export const setOperatorWhitelists = async (
     throw new Error('The provided contract is not whitelisting contract')
   }
 
-  return config.contract.write.setOperatorsWhitelists({
-    operatorIds: operatorIds.map(BigInt),
-    whitelistAddresses: [contractAddress],
+  return config.contract.ssv.write.setOperatorsWhitelists({
+    args: {
+      operatorIds: operatorIds.map(BigInt),
+      whitelistAddresses: [contractAddress],
+    },
   })
 }
 
@@ -68,10 +74,9 @@ export const canAccountUseOperator = async (
 
   if (!hasExternalContract) return false
 
-  return config.contract.read.isAddressWhitelistedInWhitelistingContract({
+  return config.contract.ssv.read.isAddressWhitelistedInWhitelistingContract({
     addressToCheck: account,
     operatorId: BigInt(operator.id),
     whitelistingContract: operator.whitelistedContract as Address,
   })
 }
-

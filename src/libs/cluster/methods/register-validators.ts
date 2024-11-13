@@ -27,20 +27,24 @@ export const registerValidators = async (
   const snapshot = cluster ? getClusterSnapshot(cluster) : createEmptyCluster()
 
   if (shares.length === 1) {
-    return config.contract.write.registerValidator({
-      amount: depositAmount,
-      cluster: snapshot,
-      operatorIds: operatorIds.map(BigInt),
-      publicKey: shares[0].publicKey as Hex,
-      sharesData: shares[0].sharesData as Hex,
+    return config.contract.ssv.write.registerValidator({
+      args: {
+        amount: depositAmount,
+        cluster: snapshot,
+        operatorIds: operatorIds.map(BigInt),
+        publicKey: shares[0].publicKey as Hex,
+        sharesData: shares[0].sharesData as Hex,
+      },
     })
   }
 
-  return config.contract.write.bulkRegisterValidator({
-    cluster: snapshot,
-    amount: depositAmount,
-    operatorIds: operatorIds.map(BigInt),
-    publicKeys: shares.map((share) => share.publicKey as Hex),
-    sharesData: shares.map((share) => share.sharesData as Hex),
+  return config.contract.ssv.write.bulkRegisterValidator({
+    args: {
+      cluster: snapshot,
+      amount: depositAmount,
+      operatorIds: operatorIds.map(BigInt),
+      publicKeys: shares.map((share) => share.publicKey as Hex),
+      sharesData: shares.map((share) => share.sharesData as Hex),
+    },
   })
 }

@@ -11,14 +11,18 @@ export const exitValidators = async (
   { publicKeys, operatorIds }: ExitValidatorsProps,
 ) => {
   if (publicKeys.length === 1) {
-    return config.contract.write.exitValidator({
-      publicKey: publicKeys[0],
-      operatorIds: [operatorIds[0]],
+    return config.contract.ssv.write.exitValidator({
+      args: {
+        publicKey: publicKeys[0],
+        operatorIds: [operatorIds[0]],
+      },
     })
   }
 
-  return config.contract.write.bulkExitValidator({
-    publicKeys,
-    operatorIds,
+  return config.contract.ssv.write.bulkExitValidator({
+    args: {
+      publicKeys,
+      operatorIds,
+    },
   })
 } 

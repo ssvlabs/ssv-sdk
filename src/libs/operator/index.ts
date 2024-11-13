@@ -3,19 +3,19 @@ import { setOperatorWhitelists, withdraw } from '@/libs/operator/methods'
 import type { RemoveConfigArg } from '@/types/methods'
 
 export const createOperatorManager = (config: ConfigReturnType) => ({
-  registerOperator: config.contract.write.registerOperator,
-  removeOperator: config.contract.write.removeOperator,
+  registerOperator: config.contract.ssv.write.registerOperator,
+  removeOperator: config.contract.ssv.write.removeOperator,
   withdraw: withdraw.bind(null, config) as RemoveConfigArg<typeof withdraw>,
-  setOperatorWhitelists: config.contract.write.setOperatorsWhitelists,
-  removeOperatorWhitelists: config.contract.write.removeOperatorsWhitelists,
-  setOperatorsPrivate: config.contract.write.setOperatorsPrivateUnchecked,
-  setOperatorsPublic: config.contract.write.setOperatorsPublicUnchecked,
+  setOperatorWhitelists: config.contract.ssv.write.setOperatorsWhitelists,
+  removeOperatorWhitelists: config.contract.ssv.write.removeOperatorsWhitelists,
+  setOperatorsPrivate: config.contract.ssv.write.setOperatorsPrivateUnchecked,
+  setOperatorsPublic: config.contract.ssv.write.setOperatorsPublicUnchecked,
   setOperatorWhitelistingContract: setOperatorWhitelists.bind(null, config) as RemoveConfigArg<
     typeof setOperatorWhitelists
   >,
-  removeOperatorWhitelistingContract: config.contract.write.removeOperatorsWhitelists,
-  declareOperatorFee: config.contract.write.declareOperatorFee,
-  executeOperatorFee: config.contract.write.executeOperatorFee,
-  cancelDeclaredOperatorFee: config.contract.write.cancelDeclaredOperatorFee,
-  reduceOperatorFee: config.contract.write.reduceOperatorFee,
+  removeOperatorWhitelistingContract: config.contract.ssv.write.removeOperatorsWhitelists,
+  declareOperatorFee: config.contract.ssv.write.declareOperatorFee,
+  executeOperatorFee: config.contract.ssv.write.executeOperatorFee,
+  cancelDeclaredOperatorFee: config.contract.ssv.write.cancelDeclaredOperatorFee,
+  reduceOperatorFee: config.contract.ssv.write.reduceOperatorFee,
 })

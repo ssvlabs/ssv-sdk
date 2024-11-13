@@ -85,7 +85,7 @@ export const createShares = async (
     )
   }
 
-  const limit = await config.contract.read.getValidatorsPerOperatorLimit({})
+  const limit = await config.contract.ssv.read.getValidatorsPerOperatorLimit()
 
   for (const operator of operators) {
     if (!(await canAccountUseOperator(config, operator, config.walletClient.account!.address))) {
