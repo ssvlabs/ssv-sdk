@@ -28,17 +28,21 @@ export const deposit = async (config: ConfigReturnType, { id, amount, options }:
     if (allowance < amount) {
       await config.contract.token.write
         .approve({
-          spender: config.contractAddresses.setter,
-          amount,
+          args: {
+            spender: config.contractAddresses.setter,
+            amount,
+          },
         })
         .then((tx) => tx.wait())
     }
   }
 
-  return config.contract.write.deposit({
-    amount,
-    cluster: snapshot,
-    clusterOwner: process.env.OWNER_ADDRESS!,
-    operatorIds: cluster.operatorIds.map(BigInt),
+  return config.contract.ssv.write.deposit({
+    args: {
+      amount,
+      cluster: snapshot,
+      clusterOwner: process.env.OWNER_ADDRESS!,
+      operatorIds: cluster.operatorIds.map(BigInt),
+    },
   })
-} 
+}

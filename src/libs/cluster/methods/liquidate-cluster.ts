@@ -12,9 +12,11 @@ export const liquidateCluster = async (config: ConfigReturnType, { id }: Liquida
     throw new Error('Cluster not found')
   }
 
-  return config.contract.write.liquidate({
-    cluster: getClusterSnapshot(cluster),
-    clusterOwner: config.walletClient.account!.address,
-    operatorIds: cluster.operatorIds.map(BigInt),
+  return config.contract.ssv.write.liquidate({
+    args: {
+      cluster: getClusterSnapshot(cluster),
+      clusterOwner: config.walletClient.account!.address,
+      operatorIds: cluster.operatorIds.map(BigInt),
+    },
   })
 } 

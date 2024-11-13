@@ -9,7 +9,9 @@ export const setFeeRecipient = async (
   config: ConfigReturnType,
   { recipient }: SetFeeRecipientProps,
 ) => {
-  return config.contract.write.setFeeRecipientAddress({
-    recipientAddress: recipient,
+  return config.contract.ssv.write.setFeeRecipientAddress({
+    args: {
+      recipientAddress: recipient,
+    },
   })
 } 

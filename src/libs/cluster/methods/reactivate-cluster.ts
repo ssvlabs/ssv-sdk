@@ -16,9 +16,11 @@ export const reactivateCluster = async (
     throw new Error('Cluster not found')
   }
 
-  return config.contract.write.reactivate({
-    cluster: getClusterSnapshot(cluster),
-    amount,
-    operatorIds: cluster.operatorIds.map(BigInt),
+  return config.contract.ssv.write.reactivate({
+    args: {
+      cluster: getClusterSnapshot(cluster),
+      amount,
+      operatorIds: cluster.operatorIds.map(BigInt),
+    },
   })
 } 
