@@ -57,6 +57,7 @@
     "prepare": "npm run build:vite",
     "v-pub-tarball": "npm publish --dry-run",
     "type-check": "tsc -b",
+    "type:perf": "tsc --extendedDiagnostics",
     "release": "release-it",
     "commit": "git-cz"
   },

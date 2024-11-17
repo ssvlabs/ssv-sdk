@@ -13,6 +13,7 @@ import type {
   PublicClient,
   ReadContractReturnType,
   SimulateContractParameters,
+  SimulateContractReturnType,
   WaitForTransactionReceiptReturnType,
   WalletClient,
 } from 'viem'
@@ -97,20 +98,38 @@ export type WriterFunctions<
   Fns extends Contracts[ContractName]['writeFunctions'] = Contracts[ContractName]['writeFunctions'],
 > = {
   [K in Fns as K['name']]: K['inputs'] extends readonly []
-    ? (
-        props?: Prettify<
-          (K['stateMutability'] extends 'payable' ? { value?: bigint } : object) & WriteOptions<K>
-        >,
-      ) => WriteReturnType<Contracts[ContractName]['events']>
-    : (
-        props: Prettify<
-          ((K['stateMutability'] extends 'payable' ? { value?: bigint } : object) &
-            (K['inputs'] extends readonly []
-              ? object
-              : { args: Prettify<AbiInputsToParams<K['inputs']>> })) &
-            WriteOptions<K>
-        >,
-      ) => WriteReturnType<Contracts[ContractName]['events']>
+    ? {
+        (
+          props?: Prettify<
+            (K['stateMutability'] extends 'payable' ? { value?: bigint } : object) & WriteOptions<K>
+          >,
+        ): WriteReturnType<Contracts[ContractName]['events']>
+        simulate: (
+          props?: Prettify<
+            (K['stateMutability'] extends 'payable' ? { value?: bigint } : object) & WriteOptions<K>
+          >,
+        ) => SimulateContractReturnType<SupportedAbis, K['name']>
+      }
+    : {
+        (
+          props: Prettify<
+            ((K['stateMutability'] extends 'payable' ? { value?: bigint } : object) &
+              (K['inputs'] extends readonly []
+                ? object
+                : { args: Prettify<AbiInputsToParams<K['inputs']>> })) &
+              WriteOptions<K>
+          >,
+        ): WriteReturnType<Contracts[ContractName]['events']>
+        simulate: (
+          props: Prettify<
+            ((K['stateMutability'] extends 'payable' ? { value?: bigint } : object) &
+              (K['inputs'] extends readonly []
+                ? object
+                : { args: Prettify<AbiInputsToParams<K['inputs']>> })) &
+              WriteOptions<K>
+          >,
+        ) => SimulateContractReturnType<SupportedAbis, K['name']>
+      }
 }
 
 export type ReaderFunctions<

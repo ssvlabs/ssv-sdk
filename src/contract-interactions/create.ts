@@ -8,13 +8,13 @@ import { tryCatch } from '@/utils'
 import type { AbiFunction, WriteContractParameters } from 'viem'
 import { decodeEventLog } from 'viem'
 import type {
-    ContractNames,
-    Contracts,
-    ReadProps,
-    ReaderFunctions,
-    SupportedAbis,
-    WriteProps,
-    WriterFunctions,
+  ContractNames,
+  Contracts,
+  ReadProps,
+  ReaderFunctions,
+  SupportedAbis,
+  WriteProps,
+  WriterFunctions,
 } from './types'
 
 const ABIS = [TokenABI, MainnetV4SetterABI, DepositABI, HoleskyV4GetterABI]
@@ -24,7 +24,7 @@ export const createWriter = <T extends ContractNames>({
   publicClient,
   walletClient,
   contractAddress,
-}: WriteProps) => {
+}: WriteProps): WriterFunctions<T> => {
   const writeFnsMainnet = abi.filter(
     (item) =>
       item.type === 'function' &&
@@ -33,8 +33,8 @@ export const createWriter = <T extends ContractNames>({
 
   return Object.fromEntries(
     writeFnsMainnet.map((fn) => {
-      const func = async (options: any) => {
-        const { request } = await publicClient.simulateContract({
+      const simulate = async (options: any) =>
+        publicClient.simulateContract({
           ...options,
           address: contractAddress,
           abi,
@@ -42,6 +42,9 @@ export const createWriter = <T extends ContractNames>({
           args: paramsToArray({ params: options.args, abiFunction: fn }),
           account: walletClient.account!,
         })
+
+      const func = async (options: any) => {
+        const { request } = await simulate(options)
 
         const hash = await walletClient.writeContract(request as WriteContractParameters)
         return {
@@ -78,16 +81,17 @@ export const createWriter = <T extends ContractNames>({
             })),
         }
       }
+      func.simulate = simulate
       return [fn.name, func]
     }),
-  ) as unknown as WriterFunctions<T>
+  ) as any
 }
 
 export const createReader = <T extends ContractNames>({
   abi,
   publicClient,
   contractAddress,
-}: ReadProps) => {
+}: ReadProps): ReaderFunctions<T> => {
   const readFnsMainnet = (abi as SupportedAbis).filter(
     (item) =>
       item.type === 'function' &&
@@ -106,5 +110,5 @@ export const createReader = <T extends ContractNames>({
       }
       return [fn.name, func]
     }),
-  ) as unknown as ReaderFunctions<T>
+  ) as any
 }

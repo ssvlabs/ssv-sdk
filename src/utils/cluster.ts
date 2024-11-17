@@ -1,6 +1,7 @@
 import type { GetClusterQuery } from '@/graphql/graphql'
 import type { ClusterSnapshot } from '@/types/contract-interactions'
 import { merge } from 'lodash-es'
+import type { Hex } from 'viem'
 import { isAddress } from 'viem'
 
 export const createClusterId = (ownerAddress: string, operatorIds: number[]) => {
@@ -41,3 +42,6 @@ export const createEmptyCluster = (cluster: Partial<ClusterSnapshot> = {}): Clus
     },
     cluster,
   )
+
+export const add0x = (value: string | Hex): Hex =>
+  (!value.startsWith('0x') ? `0x${value}` : value) as Hex
