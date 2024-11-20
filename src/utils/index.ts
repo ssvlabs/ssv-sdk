@@ -6,6 +6,7 @@ export * from './keyshares'
 export * from './number'
 export * from './operator'
 export * from './try-catch'
+export * from './url-join'
 export * from './viem'
 export * from './zod/config'
 
