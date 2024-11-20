@@ -1,3 +1,9 @@
+**⚠ READ BEFORE USING: This SDK is Under Heavy Development**
+
+> This repository is still under active development and testing. It is **not recommended for use** in production or live environments at this time.
+>
+> For updates on the progress and when this SDK will be ready for general use, please refer to our official [SSV documentation](https://docs.ssv.network) and follow along.
+
 # SSV SDK
 
 A TypeScript SDK for interacting with the SSV (Secret Shared Validator) network, enabling distributed validator operations on Ethereum.
