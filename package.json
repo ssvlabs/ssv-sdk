@@ -27,8 +27,7 @@
   "version": "0.2.0",
   "type": "module",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "main": "./dist/main.js",
   "module": "./dist/main.js",
@@ -43,6 +42,11 @@
       "import": "./dist/utils.js",
       "require": "./dist/utils.cjs",
       "types": "./dist/utils/index.d.ts"
+    },
+    "./chainsafe": {
+      "import": "./dist/chainsafe.js",
+      "require": "./dist/chainsafe.cjs",
+      "types": "./dist/libs/utils/methods/create-validator-keys.d.ts"
     }
   },
   "scripts": {
@@ -142,8 +146,8 @@
     "dotenv": "^16.4.5",
     "graphql-request": "^7.1.0",
     "lodash-es": "^4.17.21",
-    "ssv-keys": "https://github.com/ssvlabs/ssv-keys#fix-utility-func-usage",
     "viem": "^2.21.30",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "ssv-keys": "https://github.com/ssvlabs/ssv-keys#fix-utility-func-usage"
   }
 }

@@ -13,23 +13,44 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
+
   build: {
+    target: 'es2022',
     minify: false,
     lib: {
       entry: {
         main: resolve(__dirname, 'src/main.ts'),
         utils: resolve(__dirname, 'src/utils/index.ts'),
+        chainsafe: resolve(__dirname, 'src/libs/utils/methods/create-validator-keys.ts'),
       },
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: ['viem', 'ssv-keys'],
       output: {
         globals: {
-          viem: 'viem',
-          'ssv-keys': 'ssvKeys',
+          'ssv-keys': 'ssv-keys',
         },
       },
+      external: [
+        'viem',
+        'ssv-keys',
+        '@chainsafe/bls',
+        '@chainsafe/bls/herumi',
+        '@chainsafe/blst',
+        // '@chainsafe/bls-keygen',
+        // '@chainsafe/bls-keystore',
+        // '@chainsafe/ssz',
+        // '@lodestar/config',
+        // '@lodestar/params',
+        // '@lodestar/state-transition',
+        // '@lodestar/types/phase0',
+        // '@lodestar/types',
+        // '@lodestar/api',
+        // '@lodestar/db',
+        // '@lodestar/utils',
+        // '@lodestar/validator',
+        // '@lodestar/beacon-node',
+      ],
     },
   },
   optimizeDeps: {
