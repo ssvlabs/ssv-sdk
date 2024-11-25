@@ -23,6 +23,7 @@ type ValidatorKeysArgs = {
   chain: SupportedChains
   withdrawal: Address
   password: string
+  masterSK?: Uint8Array
 }
 
 export type DepositData = {
@@ -85,7 +86,6 @@ function verifyDepositRoot(
  * @property {boolean} [isActive] - Optional active status.
  */
 
-
 /**
  * Creates validator keys and deposit data for Ethereum 2.0 validators
  * @param {Options} params - The parameters for creating validator keys
@@ -96,8 +96,8 @@ export async function createValidatorKeys({
   chain,
   withdrawal,
   password,
+  masterSK = generateRandomSecretKey(),
 }: ValidatorKeysArgs) {
-  const masterSK = generateRandomSecretKey()
   const keystores = []
   const deposit_data = []
 
@@ -150,7 +150,7 @@ export async function createValidatorKeys({
       `0x${generated.withdrawal_credentials}`,
       generated.amount,
       `0x${generated.signature}`,
-      `0x${generated.deposit_data_root}`
+      `0x${generated.deposit_data_root}`,
     )
 
     if (!isValid) {
@@ -173,5 +173,6 @@ export async function createValidatorKeys({
   return {
     keystores,
     deposit_data,
+    masterSK,
   }
 }
