@@ -57,7 +57,6 @@
     "codegen": "graphql-codegen",
     "test": "vitest",
     "test:prod": "vitest run",
-    "prepublish": "npm run test:prod",
     "prepare": "npm run build:vite",
     "v-pub-tarball": "npm publish --dry-run",
     "type-check": "tsc -b",
