@@ -9,13 +9,13 @@ describe('Register validators 🛜  Holesky', () => {
       private_key: process.env.PRIVATE_KEY,
     })
 
-    const { isValid, validationResults } = await validateSharesPostRegistration(sdk.core, {
+    const { isValid, validations } = await validateSharesPostRegistration(sdk.core, {
       txHash: '0x0a7df125abe4d204ddae5fa6cdd42609f590b9040fb73aaef4d02004c8de6682',
     })
     console.log('isValid:', isValid)
     console.log(
       'validationResults:',
-      validationResults.map((r) => [r.validationResult.isValid, r.event.logIndex]),
+      validations.map((r) => [r.validation.isValid, r.event.logIndex]),
     )
 
     expect(isValid).toBe(true)

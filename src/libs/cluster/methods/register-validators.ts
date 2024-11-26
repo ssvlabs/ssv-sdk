@@ -2,6 +2,7 @@ import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
 import type { ConfigReturnType } from '@/config/create'
 import { isKeySharesItem } from '@/utils'
 import { createClusterId, createEmptyCluster, getClusterSnapshot } from '@/utils/cluster'
+import { isUndefined } from 'lodash-es'
 import { SSVKeys, type KeySharesItem } from 'ssv-keys'
 
 import type { Hex } from 'viem'
@@ -62,10 +63,14 @@ export const validateSharesPostRegistration = async (
     hash: args.txHash,
   })
 
-  const nonce = await config.api.getOwnerNonce({
+  const ownerNonce = await config.api.getOwnerNonce({
     owner: config.walletClient.account!.address,
     block: Number(receipt.blockNumber) - 1,
   })
+
+  if (isUndefined(ownerNonce)) {
+    throw new Error('Could not fetch owner nonce')
+  }
 
   const validatorAddedEvents = await config.publicClient.getContractEvents({
     abi: MainnetV4SetterABI,
@@ -79,36 +84,37 @@ export const validateSharesPostRegistration = async (
   })
 
   if (!validatorAddedEvents.length) {
-    throw new Error('No validator added events found')
+    throw new Error('No ValidatorAdded events found in the receipt')
   }
 
-  const validationResults: {
+  const validations: {
     event: (typeof validatorAddedEvents)[number]
-    validationResult: Awaited<ReturnType<typeof ssvKeys.validateSharesPostRegistration>>
+    validation: Awaited<ReturnType<typeof ssvKeys.validateSharesPostRegistration>>
   }[] = []
 
   for (const [index, e] of validatorAddedEvents.entries()) {
-    validationResults.push({
+    validations.push({
       event: e,
-      validationResult: await ssvKeys.validateSharesPostRegistration({
+      validation: await ssvKeys.validateSharesPostRegistration({
         blockNumber: Number(receipt.blockNumber),
         operatorsCount: e.args.operatorIds!.length,
         isAccountExists: false,
         ownerAddress: config.walletClient.account!.address,
-        ownerNonce: Number(nonce) + index,
+        ownerNonce: Number(ownerNonce) + index,
         shares: e.args.shares!,
         validatorPublicKey: e.args.publicKey!,
       }),
     })
   }
 
-  const isValid = validationResults.every((r) => r.validationResult.isValid)
-  const invalids = validationResults.filter((r) => !r.validationResult.isValid)
+  const isValid = validations.every((r) => r.validation.isValid)
+  const invalids = validations.filter((r) => !r.validation.isValid)
 
   return {
     isValid,
-    validationResults,
+    validations,
     invalids,
+    ownerNonceAtBlock: Number(ownerNonce),
     block: Number(receipt.blockNumber),
   }
 }
