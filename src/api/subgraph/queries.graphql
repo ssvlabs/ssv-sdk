@@ -36,6 +36,11 @@ query GetOwnerNonce($owner: ID!) {
     nonce
   }
 }
+query GetOwnerNonceByBlock($owner: ID!, $block: Int) {
+  account(id: $owner, block: { number: $block }) {
+    nonce
+  }
+}
 query GetOperator($id: ID!) {
   operator(id: $id) {
     id

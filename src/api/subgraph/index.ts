@@ -8,7 +8,7 @@ import type {
   GetClustersQueryVariables,
   GetOperatorQueryVariables,
   GetOperatorsQueryVariables,
-  GetOwnerNonceQueryVariables,
+  GetOwnerNonceByBlockQueryVariables,
   GetValidatorQueryVariables,
   GetValidatorsQueryVariables,
 } from '../../graphql/graphql'
@@ -19,12 +19,16 @@ import {
   GetClustersDocument,
   GetOperatorDocument,
   GetOperatorsDocument,
+  GetOwnerNonceByBlockDocument,
   GetOwnerNonceDocument,
   GetValidatorDocument,
   GetValidatorsDocument,
 } from '../../graphql/graphql'
-export const getOwnerNonce = (client: GraphQLClient, args: GetOwnerNonceQueryVariables) =>
-  client.request(GetOwnerNonceDocument, args).then((r) => r.account?.nonce)
+export const getOwnerNonce = (client: GraphQLClient, args: GetOwnerNonceByBlockQueryVariables) => {
+  const document =
+    typeof args.block === 'number' ? GetOwnerNonceByBlockDocument : GetOwnerNonceDocument
+  return client.request(document, args).then((r) => r.account?.nonce)
+}
 
 export const getClusterSnapshot = (client: GraphQLClient, args: GetClusterSnapshotQueryVariables) =>
   client.request(GetClusterSnapshotDocument, args).then((res) => res.cluster)

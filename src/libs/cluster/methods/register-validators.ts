@@ -1,7 +1,9 @@
+import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
 import type { ConfigReturnType } from '@/config/create'
 import { isKeySharesItem } from '@/utils'
 import { createClusterId, createEmptyCluster, getClusterSnapshot } from '@/utils/cluster'
-import type { KeySharesItem } from 'ssv-keys'
+import { SSVKeys, type KeySharesItem } from 'ssv-keys'
+
 import type { Hex } from 'viem'
 
 type RegisterValidatorsProps = {
@@ -47,4 +49,66 @@ export const registerValidators = async (
       sharesData: shares.map((share) => share.sharesData as Hex),
     },
   })
+}
+
+const ssvKeys = new SSVKeys()
+export const validateSharesPostRegistration = async (
+  config: ConfigReturnType,
+  args: {
+    txHash: Hex
+  },
+) => {
+  const receipt = await config.publicClient.waitForTransactionReceipt({
+    hash: args.txHash,
+  })
+
+  const nonce = await config.api.getOwnerNonce({
+    owner: config.walletClient.account!.address,
+    block: Number(receipt.blockNumber) - 1,
+  })
+
+  const validatorAddedEvents = await config.publicClient.getContractEvents({
+    abi: MainnetV4SetterABI,
+    address: config.contractAddresses.setter,
+    eventName: 'ValidatorAdded',
+    args: {
+      owner: config.walletClient.account!.address,
+    },
+    fromBlock: receipt.blockNumber,
+    toBlock: receipt.blockNumber,
+  })
+
+  if (!validatorAddedEvents.length) {
+    throw new Error('No validator added events found')
+  }
+
+  const validationResults: {
+    event: (typeof validatorAddedEvents)[number]
+    validationResult: Awaited<ReturnType<typeof ssvKeys.validateSharesPostRegistration>>
+  }[] = []
+
+  for (const [index, e] of validatorAddedEvents.entries()) {
+    validationResults.push({
+      event: e,
+      validationResult: await ssvKeys.validateSharesPostRegistration({
+        blockNumber: Number(receipt.blockNumber),
+        operatorsCount: e.args.operatorIds!.length,
+        isAccountExists: false,
+        ownerAddress: config.walletClient.account!.address,
+        ownerNonce: Number(nonce) + index,
+        shares: e.args.shares!,
+        validatorPublicKey: e.args.publicKey!,
+      }),
+    })
+  }
+
+  const isValid = validationResults.every((r) => r.validationResult.isValid)
+  const invalids = validationResults.filter((r) => !r.validationResult.isValid)
+
+  return {
+    isValid,
+    validationResults,
+    invalids,
+    block: Number(receipt.blockNumber),
+  }
 }

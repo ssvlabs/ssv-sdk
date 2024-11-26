@@ -7,6 +7,7 @@ import {
   registerValidators,
   removeValidators,
   setFeeRecipient,
+  validateSharesPostRegistration,
   withdraw,
 } from '@/libs/cluster/methods'
 import type { RemoveConfigArg } from '@/types/methods'
@@ -22,4 +23,8 @@ export const createClusterManager = (config: ConfigReturnType) => ({
   registerValidators: registerValidators.bind(null, config) as RemoveConfigArg<
     typeof registerValidators
   >,
+  validateSharesPostRegistration: validateSharesPostRegistration.bind(
+    null,
+    config,
+  ) as RemoveConfigArg<typeof validateSharesPostRegistration>,
 })

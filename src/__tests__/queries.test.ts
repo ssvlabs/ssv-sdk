@@ -7,7 +7,18 @@ describe('Queries 🛜  Holesky', () => {
       chain: 'holesky',
       private_key: process.env.PRIVATE_KEY,
     })
-    const nonce = await sdk.api.getOwnerNonce({ owner: process.env.OWNER_ADDRESS! })
+
+    const nonce = await sdk.api.getOwnerNonce({
+      owner: process.env.OWNER_ADDRESS!,
+    })
+    console.log('nonce:', nonce)
     expect(nonce).toBeDefined()
+
+    const nonce2 = await sdk.api.getOwnerNonce({
+      owner: process.env.OWNER_ADDRESS!,
+      block: 1517811,
+    })
+    console.log('nonce2:', nonce2)
+    expect(nonce2).toBeDefined()
   })
 })
