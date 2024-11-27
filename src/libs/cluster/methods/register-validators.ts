@@ -1,4 +1,6 @@
 import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
+import { registerValidatorsByClusterSizeLimits } from '@/config'
+import type { ClusterSize } from '@/config'
 import type { ConfigReturnType } from '@/config/create'
 import { isKeySharesItem } from '@/utils'
 import { createClusterId, createEmptyCluster, getClusterSnapshot } from '@/utils/cluster'
@@ -21,6 +23,19 @@ export const registerValidators = async (
   })
 
   const operatorIds = shares[0].operatorIds
+  const clusterSize = operatorIds.length as ClusterSize
+
+  const limit = registerValidatorsByClusterSizeLimits[clusterSize]
+
+  if (!limit) {
+    throw new Error(
+      `Invalid number of operators in keyshares: ${clusterSize}, should be one of: ${Object.keys(registerValidatorsByClusterSizeLimits).join(', ')}`,
+    )
+  }
+
+  if (shares.length > limit) {
+    throw new Error(`You can't register more than ${limit} validators in a single transaction`)
+  }
 
   const clusterId = createClusterId(config.walletClient.account!.address, operatorIds)
   const cluster = await config.api.getCluster({
