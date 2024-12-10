@@ -2,8 +2,8 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module",
+    "ecmaVersion": 2020,
+    "sourceType": "module"
   },
   "plugins": ["@typescript-eslint", "unused-imports"],
   "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
@@ -20,10 +20,10 @@
       {
         "prefer": "type-imports",
         "disallowTypeAnnotations": true,
-        "fixStyle": "separate-type-imports",
-      },
+        "fixStyle": "separate-type-imports"
+      }
     ],
-    "unused-imports/no-unused-imports": "warn",
+    "unused-imports/no-unused-imports": "warn"
   },
-  "ignorePatterns": ["out", "dist", "**/*.d.ts", "webview-ui/**"],
+  "ignorePatterns": ["out", "dist", "**/*.d.ts", "webview-ui/**"]
 }
