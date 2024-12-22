@@ -12,7 +12,7 @@ describe('Utils 🛜  Holesky', () => {
     const { deposit_data } = await createValidatorKeys({
       count: 1,
       chain: 'holesky',
-      withdrawal: sdk.core.walletClient.account!.address,
+      withdrawal: sdk.config.walletClient.account!.address,
       password: '123123123',
     })
     await expect(sdk.utils.activateValidator(deposit_data[0])).resolves.not.toThrow()

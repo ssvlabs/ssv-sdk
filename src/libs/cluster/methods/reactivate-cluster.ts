@@ -1,14 +1,15 @@
 import type { ConfigReturnType } from '@/config/create'
+import type { SmartFnWriteOptions } from '@/contract-interactions/types'
 import { getClusterSnapshot } from '@/utils/cluster'
 
-type ReactivateClusterProps = {
+type ReactivateClusterProps = SmartFnWriteOptions<{
   id: string
   amount: bigint
-}
+}>
 
 export const reactivateCluster = async (
   config: ConfigReturnType,
-  { id, amount }: ReactivateClusterProps,
+  { args: { id, amount }, ...writeOptions }: ReactivateClusterProps,
 ) => {
   const cluster = await config.api.getCluster({ id })
 
@@ -22,5 +23,6 @@ export const reactivateCluster = async (
       amount,
       operatorIds: cluster.operatorIds.map(BigInt),
     },
+    ...writeOptions,
   })
 } 

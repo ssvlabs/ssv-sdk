@@ -1,36 +1,17 @@
-import { chains } from '@/config/chains'
-import type { Hex, WalletClient } from 'viem'
-import { isHex } from 'viem'
+import { chains, type SupportedChains } from '@/config/chains'
+import type { WalletClient } from 'viem'
 import { z } from 'zod'
 
-// Create a type for the chain keys
-export type ChainKey = keyof typeof chains
+type ZodConfigArgs = {
+  chain: z.ZodEnum<[SupportedChains, ...SupportedChains[]]>
+  rpc_endpoint: z.ZodOptional<z.ZodString>
+  wallet_client: z.ZodType<WalletClient>
+}
 
-// Update the BaseConfigSchema
-export const baseConfigArgsSchema = z.object({
-  chain: z.enum(Object.keys(chains) as [ChainKey, ...ChainKey[]]),
+export const configArgsSchema = z.object<ZodConfigArgs>({
+  chain: z.enum(Object.keys(chains) as [SupportedChains, ...SupportedChains[]]),
   rpc_endpoint: z.string().url().optional(),
+  wallet_client: z.custom<WalletClient>((val) => typeof val === 'object' && val !== null, {}),
 })
 
-export const configArgsSchema = baseConfigArgsSchema.and(
-  z.union([
-    z.object({
-      private_key: z.custom<Hex>(isHex, {
-        message: 'Invalid private key',
-      }),
-      wallet_client: z.undefined(),
-    }),
-    z.object({
-      private_key: z.undefined(),
-      wallet_client: z.custom<WalletClient>((val) => typeof val === 'object' && val !== null, {
-        message: 'Invalid wallet client',
-      }),
-    }),
-  ]),
-) as z.ZodType<ConfigArgs>
-
-export type ConfigArgs = z.infer<typeof baseConfigArgsSchema> &
-  (
-    | { private_key: Hex; wallet_client?: undefined }
-    | { private_key?: undefined; wallet_client: WalletClient }
-  )
+export type ConfigArgs = z.infer<z.ZodObject<ZodConfigArgs>>

@@ -1,4 +1,4 @@
-import type { Chain, Hex, Transport } from 'viem';
+import type { Chain, Hex, Transport } from 'viem'
 import { createWalletClient } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 

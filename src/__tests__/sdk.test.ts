@@ -13,7 +13,7 @@ describe('SSVSDK 🛜  Holesky', () => {
       })
 
       const balance = await sdk.contract.token.read.balanceOf({
-        account: sdk.core.walletClient.account!.address,
+        account: sdk.config.walletClient.account!.address,
       })
       expect(balance).toBeTruthy()
 
@@ -38,7 +38,7 @@ describe('SSVSDK 🛜  Holesky', () => {
       private_key: process.env.PRIVATE_KEY,
     })
 
-    expect(sdk.core.walletClient.account?.address).toBe(process.env.OWNER_ADDRESS)
+    expect(sdk.config.walletClient.account?.address).toBe(process.env.OWNER_ADDRESS)
   })
 
   it('should have the right rpc endpoint', () => {
@@ -49,7 +49,7 @@ describe('SSVSDK 🛜  Holesky', () => {
       rpc_endpoint: rpcEndpoint,
     })
 
-    expect(sdk.core.publicClient.transport.url).toBe(rpcEndpoint)
+    expect(sdk.config.publicClient.transport.url).toBe(rpcEndpoint)
   })
   it('can read contract without setting an rpc', async () => {
     const sdk = new SSVSDK({
@@ -57,7 +57,7 @@ describe('SSVSDK 🛜  Holesky', () => {
       private_key: process.env.PRIVATE_KEY,
     })
 
-    const data = await sdk.core.publicClient.readContract({
+    const data = await sdk.config.publicClient.readContract({
       address: '0x656d5cC4e7d49EaCC063cBB8D3e072F2841D68b4',
       abi: HoleskyV4GetterABI,
       functionName: 'ssvNetwork',
@@ -73,13 +73,13 @@ describe('SSVSDK 🛜  Holesky', () => {
       private_key: process.env.PRIVATE_KEY,
     })
 
-    const signature = await sdk.core.walletClient.signMessage({
+    const signature = await sdk.config.walletClient.signMessage({
       message: 'Hello',
-      account: sdk.core.walletClient.account!,
+      account: sdk.config.walletClient.account!,
     })
 
     const verify = await verifyMessage({
-      address: sdk.core.walletClient.account!.address,
+      address: sdk.config.walletClient.account!.address,
       message: 'Hello',
       signature,
     })

@@ -18,15 +18,12 @@ export const rest_endpoints = {
   holesky: 'https://api.ssv.network/api/v4/holesky',
 }
 
-export const contracts: Record<
-  ConfigArgs['chain'],
-  {
-    setter: Address
-    getter: Address
-    token: Address
-    deposit: Address
-  }
-> = {
+export type ContractAddresses = {
+  setter: Address
+  getter: Address
+  token: Address
+}
+export const contracts: Record<ConfigArgs['chain'], ContractAddresses> = {
   mainnet: {
     setter: '0xDD9BC35aE942eF0cFa76930954a156B3fF30a4E1',
     getter: '0xafE830B6Ee262ba11cce5F32fDCd760FFE6a66e4',

@@ -77,7 +77,7 @@ describe('Keyshares', async () => {
 
   it('can validate keyshares with event', async () => {
     const result = await validateEvent(
-      sdk.core,
+      sdk.config,
       '0xa05e43f754661d7a58e17e0bdc55756a421ad2df991633ad02fd48513cb44630',
     )
     expect(result).toBeTruthy()

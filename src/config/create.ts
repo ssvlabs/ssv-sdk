@@ -9,12 +9,12 @@ import type {
   WriterFunctions,
 } from '@/contract-interactions/types'
 import { createQueries, createSSVAPI } from '@/libs/api'
-import { createWalletFromPrivateKey } from '@/utils/viem'
 import type { ConfigArgs } from '@/utils/zod/config'
 import { configArgsSchema } from '@/utils/zod/config'
 import { GraphQLClient } from 'graphql-request'
 import type { Address, Chain, PublicClient, WalletClient } from 'viem'
 import { createPublicClient, http } from 'viem'
+import type { ContractAddresses } from './chains'
 import { chains, contracts, graph_endpoints, rest_endpoints } from './chains'
 
 export type ConfigReturnType = {
@@ -27,7 +27,6 @@ export type ConfigReturnType = {
     setter: Address
     getter: Address
     token: Address
-    deposit: Address
   }
   contract: {
     ssv: {
@@ -41,18 +40,33 @@ export type ConfigReturnType = {
   restEndpoint: string
 }
 
+export const isConfig = (props: unknown): props is ConfigReturnType => {
+  return (
+    typeof props === 'object' &&
+    props !== null &&
+    'publicClient' in props &&
+    'walletClient' in props &&
+    'chain' in props &&
+    'api' in props &&
+    'graphQLClient' in props &&
+    'contractAddresses' in props &&
+    'contract' in props &&
+    'graphEndpoint' in props &&
+    'restEndpoint' in props
+  )
+}
+
 type CreateContractInteractionsArgs = {
   walletClient: WalletClient
   publicClient: PublicClient
-  chain: keyof typeof contracts
+  addresses: ContractAddresses
 }
 
-const createContractInteractions = ({
+export const createContractInteractions = ({
   walletClient,
   publicClient,
-  chain,
+  addresses,
 }: CreateContractInteractionsArgs) => {
-  const addresses = contracts[chain]
   return {
     ssv: {
       write: createWriter<'setter'>({
@@ -107,18 +121,12 @@ export const createConfig = (props: ConfigArgs): ConfigReturnType => {
     transport: transport,
   })
 
-  const walletClient = parsed.private_key
-    ? createWalletFromPrivateKey({
-        privateKey: parsed.private_key,
-        chain,
-        transport,
-      }).client
-    : parsed.wallet_client
+  const walletClient = parsed.wallet_client
 
   const contract = createContractInteractions({
     walletClient,
     publicClient,
-    chain: parsed.chain,
+    addresses: contracts[parsed.chain],
   })
 
   const graphEndpoint = graph_endpoints[parsed.chain]
