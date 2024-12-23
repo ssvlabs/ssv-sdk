@@ -20,11 +20,24 @@ export interface Types256$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "Types256",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<Types256$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/libraries/Types.sol:Types256",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<Types256$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "Types256",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<Types256$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/libraries/Types.sol:Types256",
     constructorArgs?: [],
@@ -34,6 +47,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "Types256",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<Types256$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/libraries/Types.sol:Types256",
     address: Address,

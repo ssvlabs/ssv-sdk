@@ -20,11 +20,24 @@ export interface Types64$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "Types64",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<Types64$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/libraries/Types.sol:Types64",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<Types64$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "Types64",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<Types64$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/libraries/Types.sol:Types64",
     constructorArgs?: [],
@@ -34,6 +47,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "Types64",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<Types64$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/libraries/Types.sol:Types64",
     address: Address,

@@ -419,11 +419,24 @@ export interface ISSVOperatorsWhitelist$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "ISSVOperatorsWhitelist",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<ISSVOperatorsWhitelist$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/interfaces/ISSVOperatorsWhitelist.sol:ISSVOperatorsWhitelist",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<ISSVOperatorsWhitelist$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "ISSVOperatorsWhitelist",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<ISSVOperatorsWhitelist$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/interfaces/ISSVOperatorsWhitelist.sol:ISSVOperatorsWhitelist",
     constructorArgs?: [],
@@ -433,6 +446,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "ISSVOperatorsWhitelist",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<ISSVOperatorsWhitelist$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/interfaces/ISSVOperatorsWhitelist.sol:ISSVOperatorsWhitelist",
     address: Address,

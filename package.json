@@ -25,7 +25,7 @@
   },
   "private": false,
   "version": "0.2.0",
-  "type": "commonjs",
+  "type": "module",
   "files": [
     "dist"
   ],
@@ -51,8 +51,8 @@
     "build:vite": "vite build",
     "codegen": "graphql-codegen",
     "test": "vitest",
+    "test:coverage": "vitest run --coverage",
     "test:prod": "vitest run",
-    "prepare": "npm run build:vite",
     "v-pub-tarball": "npm publish --dry-run",
     "type-check": "tsc -b",
     "type:perf": "tsc --extendedDiagnostics",
@@ -87,7 +87,7 @@
     "@types/node": "^20.12.7",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "@typescript-eslint/parser": "^7.7.0",
-    "@vitest/coverage-v8": "^2.1.8",
+    "@vitest/coverage-v8": "^1.5.0",
     "@vitest/ui": "^1.5.0",
     "commitizen": "^4.3.0",
     "concurrently": "^9.0.1",

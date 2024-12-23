@@ -866,11 +866,24 @@ export interface SSVViews$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "SSVViews",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<SSVViews$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/modules/SSVViews.sol:SSVViews",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<SSVViews$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "SSVViews",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<SSVViews$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/modules/SSVViews.sol:SSVViews",
     constructorArgs?: [],
@@ -880,6 +893,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "SSVViews",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<SSVViews$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/modules/SSVViews.sol:SSVViews",
     address: Address,

@@ -20,11 +20,24 @@ export interface SSVProxy$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "SSVProxy",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<SSVProxy$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/SSVProxy.sol:SSVProxy",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<SSVProxy$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "SSVProxy",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<SSVProxy$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/SSVProxy.sol:SSVProxy",
     constructorArgs?: [],
@@ -34,6 +47,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "SSVProxy",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<SSVProxy$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/SSVProxy.sol:SSVProxy",
     address: Address,

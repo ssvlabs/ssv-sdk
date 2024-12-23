@@ -2152,11 +2152,24 @@ export interface SSVNetworkValidatorsPerOperatorUpgrade$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "SSVNetworkValidatorsPerOperatorUpgrade",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<SSVNetworkValidatorsPerOperatorUpgrade$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/test/SSVNetworkValidatorsPerOperator.sol:SSVNetworkValidatorsPerOperatorUpgrade",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<SSVNetworkValidatorsPerOperatorUpgrade$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "SSVNetworkValidatorsPerOperatorUpgrade",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<SSVNetworkValidatorsPerOperatorUpgrade$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/test/SSVNetworkValidatorsPerOperator.sol:SSVNetworkValidatorsPerOperatorUpgrade",
     constructorArgs?: [],
@@ -2166,6 +2179,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "SSVNetworkValidatorsPerOperatorUpgrade",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<SSVNetworkValidatorsPerOperatorUpgrade$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/test/SSVNetworkValidatorsPerOperator.sol:SSVNetworkValidatorsPerOperatorUpgrade",
     address: Address,

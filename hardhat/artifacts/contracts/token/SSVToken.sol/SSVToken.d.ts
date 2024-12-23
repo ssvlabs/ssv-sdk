@@ -397,11 +397,24 @@ export interface SSVToken$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "SSVToken",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<SSVToken$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/token/SSVToken.sol:SSVToken",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<SSVToken$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "SSVToken",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<SSVToken$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/token/SSVToken.sol:SSVToken",
     constructorArgs?: [],
@@ -411,6 +424,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "SSVToken",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<SSVToken$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/token/SSVToken.sol:SSVToken",
     address: Address,

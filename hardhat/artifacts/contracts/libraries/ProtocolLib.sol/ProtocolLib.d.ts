@@ -20,11 +20,24 @@ export interface ProtocolLib$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "ProtocolLib",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<ProtocolLib$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/libraries/ProtocolLib.sol:ProtocolLib",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<ProtocolLib$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "ProtocolLib",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<ProtocolLib$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/libraries/ProtocolLib.sol:ProtocolLib",
     constructorArgs?: [],
@@ -34,6 +47,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "ProtocolLib",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<ProtocolLib$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/libraries/ProtocolLib.sol:ProtocolLib",
     address: Address,

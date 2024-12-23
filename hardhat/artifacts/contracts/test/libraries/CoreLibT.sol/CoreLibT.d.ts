@@ -20,11 +20,24 @@ export interface CoreLibT$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "CoreLibT",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<CoreLibT$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/test/libraries/CoreLibT.sol:CoreLibT",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<CoreLibT$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "CoreLibT",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<CoreLibT$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/test/libraries/CoreLibT.sol:CoreLibT",
     constructorArgs?: [],
@@ -34,6 +47,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "CoreLibT",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<CoreLibT$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/test/libraries/CoreLibT.sol:CoreLibT",
     address: Address,

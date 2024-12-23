@@ -515,11 +515,24 @@ export interface ISSVDAO$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "ISSVDAO",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<ISSVDAO$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/interfaces/ISSVDAO.sol:ISSVDAO",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<ISSVDAO$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "ISSVDAO",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<ISSVDAO$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/interfaces/ISSVDAO.sol:ISSVDAO",
     constructorArgs?: [],
@@ -529,6 +542,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "ISSVDAO",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<ISSVDAO$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/interfaces/ISSVDAO.sol:ISSVDAO",
     address: Address,

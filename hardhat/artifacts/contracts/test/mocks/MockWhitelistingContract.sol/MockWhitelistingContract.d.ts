@@ -88,11 +88,24 @@ export interface MockWhitelistingContract$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "MockWhitelistingContract",
+    constructorArgs: [whitelistedAddresses: AbiParameterToPrimitiveType<{"name":"whitelistedAddresses","type":"address[]"}>],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<MockWhitelistingContract$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/test/mocks/MockWhitelistingContract.sol:MockWhitelistingContract",
     constructorArgs: [whitelistedAddresses: AbiParameterToPrimitiveType<{"name":"whitelistedAddresses","type":"address[]"}>],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<MockWhitelistingContract$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "MockWhitelistingContract",
+    constructorArgs: [whitelistedAddresses: AbiParameterToPrimitiveType<{"name":"whitelistedAddresses","type":"address[]"}>],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<MockWhitelistingContract$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/test/mocks/MockWhitelistingContract.sol:MockWhitelistingContract",
     constructorArgs: [whitelistedAddresses: AbiParameterToPrimitiveType<{"name":"whitelistedAddresses","type":"address[]"}>],
@@ -102,6 +115,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "MockWhitelistingContract",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<MockWhitelistingContract$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/test/mocks/MockWhitelistingContract.sol:MockWhitelistingContract",
     address: Address,

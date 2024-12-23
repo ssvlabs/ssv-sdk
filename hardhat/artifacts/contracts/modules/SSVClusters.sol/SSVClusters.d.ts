@@ -1123,11 +1123,24 @@ export interface SSVClusters$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "SSVClusters",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<SSVClusters$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/modules/SSVClusters.sol:SSVClusters",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<SSVClusters$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "SSVClusters",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<SSVClusters$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/modules/SSVClusters.sol:SSVClusters",
     constructorArgs?: [],
@@ -1137,6 +1150,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "SSVClusters",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<SSVClusters$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/modules/SSVClusters.sol:SSVClusters",
     address: Address,

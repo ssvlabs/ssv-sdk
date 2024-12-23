@@ -866,11 +866,24 @@ export interface ISSVViews$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "ISSVViews",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<ISSVViews$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/interfaces/ISSVViews.sol:ISSVViews",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<ISSVViews$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "ISSVViews",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<ISSVViews$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/interfaces/ISSVViews.sol:ISSVViews",
     constructorArgs?: [],
@@ -880,6 +893,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "ISSVViews",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<ISSVViews$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/interfaces/ISSVViews.sol:ISSVViews",
     address: Address,

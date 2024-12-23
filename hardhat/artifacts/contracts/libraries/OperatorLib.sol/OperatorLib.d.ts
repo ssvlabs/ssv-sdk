@@ -20,11 +20,24 @@ export interface OperatorLib$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "OperatorLib",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<OperatorLib$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/libraries/OperatorLib.sol:OperatorLib",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<OperatorLib$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "OperatorLib",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<OperatorLib$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/libraries/OperatorLib.sol:OperatorLib",
     constructorArgs?: [],
@@ -34,6 +47,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "OperatorLib",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<OperatorLib$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/libraries/OperatorLib.sol:OperatorLib",
     address: Address,

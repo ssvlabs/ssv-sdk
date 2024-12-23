@@ -115,11 +115,24 @@ export interface FakeWhitelistingContract$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "FakeWhitelistingContract",
+    constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<FakeWhitelistingContract$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/test/mocks/FakeWhitelistingContract.sol:FakeWhitelistingContract",
     constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<FakeWhitelistingContract$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "FakeWhitelistingContract",
+    constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<FakeWhitelistingContract$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/test/mocks/FakeWhitelistingContract.sol:FakeWhitelistingContract",
     constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>],
@@ -129,6 +142,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "FakeWhitelistingContract",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<FakeWhitelistingContract$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/test/mocks/FakeWhitelistingContract.sol:FakeWhitelistingContract",
     address: Address,

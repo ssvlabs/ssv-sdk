@@ -1123,11 +1123,24 @@ export interface ISSVClusters$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "ISSVClusters",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<ISSVClusters$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/interfaces/ISSVClusters.sol:ISSVClusters",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<ISSVClusters$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "ISSVClusters",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<ISSVClusters$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/interfaces/ISSVClusters.sol:ISSVClusters",
     constructorArgs?: [],
@@ -1137,6 +1150,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "ISSVClusters",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<ISSVClusters$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/interfaces/ISSVClusters.sol:ISSVClusters",
     address: Address,

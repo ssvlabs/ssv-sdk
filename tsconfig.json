@@ -30,6 +30,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "hardhat/**/*", "examples/**/*", "hardhat.types.d.ts"],
+  "include": ["src/**/*", "examples/**/*", "hardhat.types.d.ts"],
   "exclude": ["node_modules", "dist", "src/graphql/**/*"]
 }

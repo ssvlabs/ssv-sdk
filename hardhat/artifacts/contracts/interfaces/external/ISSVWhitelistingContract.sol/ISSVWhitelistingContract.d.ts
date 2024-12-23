@@ -45,11 +45,24 @@ export interface ISSVWhitelistingContract$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "ISSVWhitelistingContract",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<ISSVWhitelistingContract$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/interfaces/external/ISSVWhitelistingContract.sol:ISSVWhitelistingContract",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<ISSVWhitelistingContract$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "ISSVWhitelistingContract",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<ISSVWhitelistingContract$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/interfaces/external/ISSVWhitelistingContract.sol:ISSVWhitelistingContract",
     constructorArgs?: [],
@@ -59,6 +72,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "ISSVWhitelistingContract",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<ISSVWhitelistingContract$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/interfaces/external/ISSVWhitelistingContract.sol:ISSVWhitelistingContract",
     address: Address,

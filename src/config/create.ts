@@ -1,4 +1,3 @@
-import { DepositABI } from '@/abi/deposit'
 import { MainnetV4GetterABI } from '@/abi/mainnet/v4/getter'
 import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
 import { TokenABI } from '@/abi/token'
@@ -13,9 +12,8 @@ import type { ConfigArgs } from '@/utils/zod/config'
 import { configArgsSchema } from '@/utils/zod/config'
 import { GraphQLClient } from 'graphql-request'
 import type { Address, Chain, PublicClient, WalletClient } from 'viem'
-import { createPublicClient, http } from 'viem'
-import type { ContractAddresses } from './chains'
-import { chains, contracts, graph_endpoints, rest_endpoints } from './chains'
+import type { ContractAddresses, SupportedChainsIDs } from './chains'
+import { chainIds, contracts, graph_endpoints, rest_endpoints } from './chains'
 
 export type ConfigReturnType = {
   publicClient: PublicClient
@@ -34,7 +32,6 @@ export type ConfigReturnType = {
       read: ReaderFunctions<'getter'>
     }
     token: ContractInteractions<'token'>
-    deposit: ContractInteractions<'deposit'>
   }
   graphEndpoint: string
   restEndpoint: string
@@ -94,49 +91,36 @@ export const createContractInteractions = ({
         contractAddress: addresses.token,
       }),
     },
-    deposit: {
-      write: createWriter<'deposit'>({
-        abi: DepositABI,
-        walletClient,
-        publicClient,
-        contractAddress: addresses.deposit,
-      }),
-      read: createReader<'deposit'>({
-        abi: DepositABI,
-        publicClient,
-        contractAddress: addresses.deposit,
-      }),
-    },
   }
 }
 
 export const createConfig = (props: ConfigArgs): ConfigReturnType => {
   const parsed = configArgsSchema.parse(props)
+  const { walletClient, publicClient } = parsed
+  if (
+    !walletClient.chain ||
+    !publicClient.chain ||
+    !chainIds.includes(walletClient.chain?.id as SupportedChainsIDs) ||
+    !chainIds.includes(publicClient.chain?.id as SupportedChainsIDs)
+  )
+    throw new Error(`Chain must be one of ${chainIds.join(', ')}`)
 
-  const chain = chains[parsed.chain]
-  const transport = http(parsed.rpc_endpoint)
-
-  const publicClient = createPublicClient({
-    chain,
-    transport: transport,
-  })
-
-  const walletClient = parsed.wallet_client
+  const chainId = walletClient.chain.id as SupportedChainsIDs
 
   const contract = createContractInteractions({
     walletClient,
     publicClient,
-    addresses: contracts[parsed.chain],
+    addresses: contracts[chainId],
   })
 
-  const graphEndpoint = graph_endpoints[parsed.chain]
-  const restEndpoint = rest_endpoints[parsed.chain]
+  const graphEndpoint = graph_endpoints[chainId]
+  const restEndpoint = rest_endpoints[chainId]
   const graphQLClient = new GraphQLClient(graphEndpoint)
 
   return {
     publicClient,
     walletClient,
-    chain,
+    chain: walletClient.chain,
     graphEndpoint,
     restEndpoint,
     api: {
@@ -144,7 +128,7 @@ export const createConfig = (props: ConfigArgs): ConfigReturnType => {
       ...createSSVAPI(restEndpoint),
     },
     graphQLClient,
-    contractAddresses: contracts[parsed.chain],
+    contractAddresses: contracts[chainId],
     contract,
   }
 }

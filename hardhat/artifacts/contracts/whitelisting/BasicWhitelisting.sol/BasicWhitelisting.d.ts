@@ -168,11 +168,24 @@ export interface BasicWhitelisting$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "BasicWhitelisting",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<BasicWhitelisting$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/whitelisting/BasicWhitelisting.sol:BasicWhitelisting",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<BasicWhitelisting$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "BasicWhitelisting",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<BasicWhitelisting$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/whitelisting/BasicWhitelisting.sol:BasicWhitelisting",
     constructorArgs?: [],
@@ -182,6 +195,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "BasicWhitelisting",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<BasicWhitelisting$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/whitelisting/BasicWhitelisting.sol:BasicWhitelisting",
     address: Address,

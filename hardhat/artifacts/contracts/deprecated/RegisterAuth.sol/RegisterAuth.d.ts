@@ -20,11 +20,24 @@ export interface RegisterAuth$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "RegisterAuth",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<RegisterAuth$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/deprecated/RegisterAuth.sol:RegisterAuth",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<RegisterAuth$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "RegisterAuth",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<RegisterAuth$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/deprecated/RegisterAuth.sol:RegisterAuth",
     constructorArgs?: [],
@@ -34,6 +47,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "RegisterAuth",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<RegisterAuth$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/deprecated/RegisterAuth.sol:RegisterAuth",
     address: Address,

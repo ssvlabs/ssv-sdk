@@ -2144,11 +2144,24 @@ export interface SSVNetwork$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "SSVNetwork",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<SSVNetwork$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/SSVNetwork.sol:SSVNetwork",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<SSVNetwork$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "SSVNetwork",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<SSVNetwork$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/SSVNetwork.sol:SSVNetwork",
     constructorArgs?: [],
@@ -2158,6 +2171,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "SSVNetwork",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<SSVNetwork$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/SSVNetwork.sol:SSVNetwork",
     address: Address,

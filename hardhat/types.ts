@@ -15,19 +15,19 @@ export type SSVConfig = {
   operatorMaxFeeIncrease: number,
   declareOperatorFeePeriod: number,
   executeOperatorFeePeriod: number,
-  minimalOperatorFee: BigInt,
+  minimalOperatorFee: bigint,
   minimalBlocksBeforeLiquidation: number,
   minimumLiquidationCollateral: number,
   validatorsPerOperatorLimit: number,
-  maximumOperatorFee: BigInt,
+  maximumOperatorFee: bigint,
 };
 
 export type Cluster = {
   validatorCount: number,
   networkFeeIndex: number,
   index: number,
-  active: bool,
-  balance: BigInt
+  active: boolean,
+  balance: bigint
 }
 
 export enum SSVModules {

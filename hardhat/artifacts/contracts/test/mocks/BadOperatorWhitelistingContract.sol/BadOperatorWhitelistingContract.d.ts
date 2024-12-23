@@ -55,11 +55,24 @@ export interface BadOperatorWhitelistingContract$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "BadOperatorWhitelistingContract",
+    constructorArgs: [_beneficiaryContract: AbiParameterToPrimitiveType<{"name":"_beneficiaryContract","type":"address"}>],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<BadOperatorWhitelistingContract$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/test/mocks/BadOperatorWhitelistingContract.sol:BadOperatorWhitelistingContract",
     constructorArgs: [_beneficiaryContract: AbiParameterToPrimitiveType<{"name":"_beneficiaryContract","type":"address"}>],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<BadOperatorWhitelistingContract$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "BadOperatorWhitelistingContract",
+    constructorArgs: [_beneficiaryContract: AbiParameterToPrimitiveType<{"name":"_beneficiaryContract","type":"address"}>],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<BadOperatorWhitelistingContract$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/test/mocks/BadOperatorWhitelistingContract.sol:BadOperatorWhitelistingContract",
     constructorArgs: [_beneficiaryContract: AbiParameterToPrimitiveType<{"name":"_beneficiaryContract","type":"address"}>],
@@ -69,6 +82,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "BadOperatorWhitelistingContract",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<BadOperatorWhitelistingContract$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/test/mocks/BadOperatorWhitelistingContract.sol:BadOperatorWhitelistingContract",
     address: Address,

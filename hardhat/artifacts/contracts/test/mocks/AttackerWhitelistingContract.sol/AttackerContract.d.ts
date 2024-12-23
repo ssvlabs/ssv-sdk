@@ -92,11 +92,24 @@ export interface AttackerContract$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "AttackerContract",
+    constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<AttackerContract$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/test/mocks/AttackerWhitelistingContract.sol:AttackerContract",
     constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<AttackerContract$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "AttackerContract",
+    constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<AttackerContract$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/test/mocks/AttackerWhitelistingContract.sol:AttackerContract",
     constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>],
@@ -106,6 +119,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "AttackerContract",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<AttackerContract$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/test/mocks/AttackerWhitelistingContract.sol:AttackerContract",
     address: Address,

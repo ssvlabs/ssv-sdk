@@ -97,11 +97,24 @@ export interface ISSVNetworkT$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "ISSVNetworkT",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<ISSVNetworkT$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/test/interfaces/ISSVNetworkT.sol:ISSVNetworkT",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<ISSVNetworkT$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "ISSVNetworkT",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<ISSVNetworkT$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/test/interfaces/ISSVNetworkT.sol:ISSVNetworkT",
     constructorArgs?: [],
@@ -111,6 +124,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "ISSVNetworkT",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<ISSVNetworkT$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/test/interfaces/ISSVNetworkT.sol:ISSVNetworkT",
     address: Address,

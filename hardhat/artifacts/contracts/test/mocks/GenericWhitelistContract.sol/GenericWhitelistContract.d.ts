@@ -97,11 +97,24 @@ export interface GenericWhitelistContract$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "GenericWhitelistContract",
+    constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>, _ssvToken: AbiParameterToPrimitiveType<{"name":"_ssvToken","type":"address"}>],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<GenericWhitelistContract$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/test/mocks/GenericWhitelistContract.sol:GenericWhitelistContract",
     constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>, _ssvToken: AbiParameterToPrimitiveType<{"name":"_ssvToken","type":"address"}>],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<GenericWhitelistContract$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "GenericWhitelistContract",
+    constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>, _ssvToken: AbiParameterToPrimitiveType<{"name":"_ssvToken","type":"address"}>],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<GenericWhitelistContract$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/test/mocks/GenericWhitelistContract.sol:GenericWhitelistContract",
     constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>, _ssvToken: AbiParameterToPrimitiveType<{"name":"_ssvToken","type":"address"}>],
@@ -111,6 +124,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "GenericWhitelistContract",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<GenericWhitelistContract$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/test/mocks/GenericWhitelistContract.sol:GenericWhitelistContract",
     address: Address,

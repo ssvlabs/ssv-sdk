@@ -71,11 +71,24 @@ export interface BeneficiaryContract$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "BeneficiaryContract",
+    constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<BeneficiaryContract$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/test/mocks/BeneficiaryContract.sol:BeneficiaryContract",
     constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<BeneficiaryContract$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "BeneficiaryContract",
+    constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<BeneficiaryContract$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/test/mocks/BeneficiaryContract.sol:BeneficiaryContract",
     constructorArgs: [_ssvContract: AbiParameterToPrimitiveType<{"name":"_ssvContract","type":"address"}>],
@@ -85,6 +98,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "BeneficiaryContract",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<BeneficiaryContract$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/test/mocks/BeneficiaryContract.sol:BeneficiaryContract",
     address: Address,

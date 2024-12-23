@@ -2002,11 +2002,24 @@ export interface SSVNetworkUpgrade$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "SSVNetworkUpgrade",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<SSVNetworkUpgrade$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/test/SSVNetworkUpgrade.sol:SSVNetworkUpgrade",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<SSVNetworkUpgrade$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "SSVNetworkUpgrade",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<SSVNetworkUpgrade$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/test/SSVNetworkUpgrade.sol:SSVNetworkUpgrade",
     constructorArgs?: [],
@@ -2016,6 +2029,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "SSVNetworkUpgrade",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<SSVNetworkUpgrade$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/test/SSVNetworkUpgrade.sol:SSVNetworkUpgrade",
     address: Address,

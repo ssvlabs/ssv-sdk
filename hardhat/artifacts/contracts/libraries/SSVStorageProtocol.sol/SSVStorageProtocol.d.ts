@@ -20,11 +20,24 @@ export interface SSVStorageProtocol$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "SSVStorageProtocol",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<SSVStorageProtocol$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/libraries/SSVStorageProtocol.sol:SSVStorageProtocol",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<SSVStorageProtocol$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "SSVStorageProtocol",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<SSVStorageProtocol$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/libraries/SSVStorageProtocol.sol:SSVStorageProtocol",
     constructorArgs?: [],
@@ -34,6 +47,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "SSVStorageProtocol",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<SSVStorageProtocol$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/libraries/SSVStorageProtocol.sol:SSVStorageProtocol",
     address: Address,

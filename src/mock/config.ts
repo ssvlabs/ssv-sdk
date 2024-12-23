@@ -17,7 +17,7 @@ export const createMockConfig = (args: MockConfigArgs): ConfigReturnType => {
     walletClient: args.walletClient,
     contract,
     api: {
-      getOwnerNonce: vi.fn().mockImplementation(() => Promise.resolve(1)),
+      getOwnerNonce: vi.fn().mockImplementation(({ owner }) => Promise.resolve(1)),
       getClusterSnapshot: vi.fn().mockImplementation(() => Promise.resolve(1)),
       getCluster: vi.fn().mockImplementation(() => Promise.resolve(1)),
       getClusters: vi.fn().mockImplementation(() => Promise.resolve(1)),

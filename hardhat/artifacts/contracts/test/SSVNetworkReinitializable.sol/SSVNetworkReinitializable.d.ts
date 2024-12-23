@@ -2152,11 +2152,24 @@ export interface SSVNetworkReinitializable$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "SSVNetworkReinitializable",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<SSVNetworkReinitializable$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/test/SSVNetworkReinitializable.sol:SSVNetworkReinitializable",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<SSVNetworkReinitializable$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "SSVNetworkReinitializable",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<SSVNetworkReinitializable$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/test/SSVNetworkReinitializable.sol:SSVNetworkReinitializable",
     constructorArgs?: [],
@@ -2166,6 +2179,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "SSVNetworkReinitializable",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<SSVNetworkReinitializable$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/test/SSVNetworkReinitializable.sol:SSVNetworkReinitializable",
     address: Address,

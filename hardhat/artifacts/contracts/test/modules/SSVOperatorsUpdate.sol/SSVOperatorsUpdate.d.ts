@@ -644,11 +644,24 @@ export interface SSVOperatorsUpdate$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "SSVOperatorsUpdate",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<SSVOperatorsUpdate$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/test/modules/SSVOperatorsUpdate.sol:SSVOperatorsUpdate",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<SSVOperatorsUpdate$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "SSVOperatorsUpdate",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<SSVOperatorsUpdate$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/test/modules/SSVOperatorsUpdate.sol:SSVOperatorsUpdate",
     constructorArgs?: [],
@@ -658,6 +671,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "SSVOperatorsUpdate",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<SSVOperatorsUpdate$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/test/modules/SSVOperatorsUpdate.sol:SSVOperatorsUpdate",
     address: Address,

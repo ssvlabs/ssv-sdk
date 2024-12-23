@@ -2152,11 +2152,24 @@ export interface SSVNetworkBasicUpgrade$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "SSVNetworkBasicUpgrade",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<SSVNetworkBasicUpgrade$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/test/SSVNetworkBasicUpgrade.sol:SSVNetworkBasicUpgrade",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<SSVNetworkBasicUpgrade$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "SSVNetworkBasicUpgrade",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<SSVNetworkBasicUpgrade$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/test/SSVNetworkBasicUpgrade.sol:SSVNetworkBasicUpgrade",
     constructorArgs?: [],
@@ -2166,6 +2179,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "SSVNetworkBasicUpgrade",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<SSVNetworkBasicUpgrade$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/test/SSVNetworkBasicUpgrade.sol:SSVNetworkBasicUpgrade",
     address: Address,

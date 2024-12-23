@@ -515,11 +515,24 @@ export interface SSVDAO$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "SSVDAO",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<SSVDAO$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/modules/SSVDAO.sol:SSVDAO",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<SSVDAO$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "SSVDAO",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<SSVDAO$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/modules/SSVDAO.sol:SSVDAO",
     constructorArgs?: [],
@@ -529,6 +542,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "SSVDAO",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<SSVDAO$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/modules/SSVDAO.sol:SSVDAO",
     address: Address,

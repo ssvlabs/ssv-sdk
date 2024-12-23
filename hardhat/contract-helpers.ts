@@ -3,7 +3,6 @@ import type { Address } from 'viem'
 
 import type { SSVConfig } from './types'
 
-const nonces = new Map()
 
 export const CONFIG: SSVConfig = {
   initialVersion: 'v1.1.0',
@@ -25,9 +24,6 @@ export const DEFAULT_OPERATOR_IDS = {
 }
 
 export const initializeContract = async function () {
-  const publicClient = await hre.viem.getPublicClient()
-  const wallets = await hre.viem.getWalletClients()
-
   const ssvToken = await hre.viem.deployContract('SSVToken')
   const ssvOperatorsMod = await hre.viem.deployContract('SSVOperators')
   const ssvClustersMod = await hre.viem.deployContract('SSVClusters')
@@ -80,6 +76,9 @@ export const initializeContract = async function () {
 
   ssvNetwork.write.updateModule([4, await ssvWhitelistMod.address])
 
+  const publicClient = await hre.viem.getPublicClient()
+  const wallets = await hre.viem.getWalletClients()
+
   for (let i = 1; i < 7; i++) {
     await ssvToken.write.mint([wallets[i].account.address, 10000000000000000000n])
   }
@@ -93,4 +92,3 @@ export const initializeContract = async function () {
     ssvToken,
   }
 }
-

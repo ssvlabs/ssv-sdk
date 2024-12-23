@@ -1,4 +1,4 @@
-const fetchedOperators = [
+export const mockFetchedOperators = [
   {
     id: '5',
     publicKey: 'LS0tLS1CRUdJTiBSU0EgUFVCTElDIEtFWS0tLS0tCk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBMS93RkNBYlVSNEhNcWRDeDY2L0oKdDV2K000U0d0NksrSi9GaXpMcGptUUpocXc2L0ZrWmdDcjJBSzNkWlpmRDkrMDFGWXhmcG0xYzB1U20rQ1E1UApDUDBNRDY4czJHQnR0eVROeE8vaHdObkREYXRTbnlSNDE4YWp1eUM5UmoxaVZ2WlRlR3Q4ZnFycHA0WjFZMmxQCjlXenFZemgwSlZxUjB1MEhyay9SdElIaUxvOE9INCtkR1Zjb1hydy9mdXpCZ0xPb0RKVFRocW5CNHIydHZwTTEKSTNEM0h2ZEtwTmY2UkM0Y2RUQ1YwOFVRQkE2bU11YnB2dVM3dFVMOVZoalJmMUJkb09wMFd6NWdrdWFIRkJGcQo0RnprNTRONXRzb1pRZDR6Zzd2UmhVUCt0dW1qNzZjMW9wc2pEakVOWjUzdWkxeUwvN2N3Rk5xS2xMNG1TemIvCnZ3SURBUUFCCi0tLS0tRU5EIFJTQSBQVUJMSUMgS0VZLS0tLS0K'
@@ -18,6 +18,6 @@ const fetchedOperators = [
 ]
 
 export const operators = {
-  keys: fetchedOperators.map((o) => o.publicKey),
-  ids: fetchedOperators.map((o) => o.id),
+  keys: mockFetchedOperators.map((o) => o.publicKey),
+  ids: mockFetchedOperators.map((o) => o.id),
 }

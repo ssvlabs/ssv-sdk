@@ -20,11 +20,24 @@ export interface ValidatorLib$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "ValidatorLib",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<ValidatorLib$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/libraries/ValidatorLib.sol:ValidatorLib",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<ValidatorLib$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "ValidatorLib",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<ValidatorLib$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/libraries/ValidatorLib.sol:ValidatorLib",
     constructorArgs?: [],
@@ -34,6 +47,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "ValidatorLib",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<ValidatorLib$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/libraries/ValidatorLib.sol:ValidatorLib",
     address: Address,

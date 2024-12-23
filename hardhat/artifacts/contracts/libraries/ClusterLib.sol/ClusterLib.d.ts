@@ -20,11 +20,24 @@ export interface ClusterLib$Type {
 
 declare module "@nomicfoundation/hardhat-viem/types" {
   export function deployContract(
+    contractName: "ClusterLib",
+    constructorArgs?: [],
+    config?: DeployContractConfig
+  ): Promise<GetContractReturnType<ClusterLib$Type["abi"]>>;
+  export function deployContract(
     contractName: "contracts/libraries/ClusterLib.sol:ClusterLib",
     constructorArgs?: [],
     config?: DeployContractConfig
   ): Promise<GetContractReturnType<ClusterLib$Type["abi"]>>;
 
+  export function sendDeploymentTransaction(
+    contractName: "ClusterLib",
+    constructorArgs?: [],
+    config?: SendDeploymentTransactionConfig
+  ): Promise<{
+    contract: GetContractReturnType<ClusterLib$Type["abi"]>;
+    deploymentTransaction: GetTransactionReturnType;
+  }>;
   export function sendDeploymentTransaction(
     contractName: "contracts/libraries/ClusterLib.sol:ClusterLib",
     constructorArgs?: [],
@@ -34,6 +47,11 @@ declare module "@nomicfoundation/hardhat-viem/types" {
     deploymentTransaction: GetTransactionReturnType;
   }>;
 
+  export function getContractAt(
+    contractName: "ClusterLib",
+    address: Address,
+    config?: GetContractAtConfig
+  ): Promise<GetContractReturnType<ClusterLib$Type["abi"]>>;
   export function getContractAt(
     contractName: "contracts/libraries/ClusterLib.sol:ClusterLib",
     address: Address,
