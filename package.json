@@ -66,6 +66,11 @@
       "git add"
     ]
   },
+  "husky": {
+    "hooks": {
+      "prepare-commit-msg": "exec < /dev/tty && npx cz --hook || true"
+    }
+  },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.12.16",
     "@commitlint/cli": "^19.2.2",
