@@ -4,7 +4,7 @@ import { parseUnits } from 'viem'
 export const bigintMax = (...args: bigint[]): bigint => {
   return args
     .filter((x) => !isUndefined(x))
-    .reduce((max, cur) => (cur > max ? cur : max), BigInt(0))
+    .reduce((max, cur) => (cur > max ? cur : max))
 }
 
 export const bigintMin = (...args: bigint[]): bigint => {
