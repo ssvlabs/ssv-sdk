@@ -31,17 +31,17 @@ jobs:
     - name: Setup pnpm cache
       uses: actions/cache@v4
       with:
-        path: ${{ env.STORE_PATH }}
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store-
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
     - name: Type check
       run: pnpm type-check
-      
+
     - name: Run tests with coverage
       run: pnpm test:coverage
 
