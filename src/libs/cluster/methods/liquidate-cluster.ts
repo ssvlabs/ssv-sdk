@@ -1,11 +1,15 @@
 import type { ConfigReturnType } from '@/config/create'
+import type { SmartFnWriteOptions } from '@/contract-interactions/types'
 import { getClusterSnapshot } from '@/utils/cluster'
 
-type LiquidateClusterProps = {
+type LiquidateClusterProps = SmartFnWriteOptions<{
   id: string
-}
+}>
 
-export const liquidateCluster = async (config: ConfigReturnType, { id }: LiquidateClusterProps) => {
+export const liquidateCluster = async (
+  config: ConfigReturnType,
+  { args: { id }, ...writeOptions }: LiquidateClusterProps,
+) => {
   const cluster = await config.api.getCluster({ id })
 
   if (!cluster) {
@@ -18,5 +22,6 @@ export const liquidateCluster = async (config: ConfigReturnType, { id }: Liquida
       clusterOwner: config.walletClient.account!.address,
       operatorIds: cluster.operatorIds.map(BigInt),
     },
+    ...writeOptions,
   })
-} 
+}

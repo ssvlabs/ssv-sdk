@@ -21,7 +21,6 @@ export default defineConfig({
       entry: {
         main: resolve(__dirname, 'src/main.ts'),
         utils: resolve(__dirname, 'src/utils/index.ts'),
-        chainsafe: resolve(__dirname, 'src/libs/utils/methods/create-validator-keys.ts'),
       },
       formats: ['es', 'cjs'],
     },

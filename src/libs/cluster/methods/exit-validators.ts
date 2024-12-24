@@ -1,14 +1,15 @@
 import type { ConfigReturnType } from '@/config/create'
+import type { SmartFnWriteOptions } from '@/contract-interactions/types'
 import type { Hex } from 'viem'
 
-type ExitValidatorsProps = {
+type ExitValidatorsProps = SmartFnWriteOptions<{
   publicKeys: Hex[]
   operatorIds: bigint[]
-}
+}>
 
 export const exitValidators = async (
   config: ConfigReturnType,
-  { publicKeys, operatorIds }: ExitValidatorsProps,
+  { args: { publicKeys, operatorIds }, ...writeOptions }: ExitValidatorsProps,
 ) => {
   if (publicKeys.length === 1) {
     return config.contract.ssv.write.exitValidator({
@@ -16,6 +17,7 @@ export const exitValidators = async (
         publicKey: publicKeys[0],
         operatorIds: [operatorIds[0]],
       },
+      ...writeOptions,
     })
   }
 
@@ -24,5 +26,6 @@ export const exitValidators = async (
       publicKeys,
       operatorIds,
     },
+    ...writeOptions,
   })
-} 
+}

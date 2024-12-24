@@ -1,7 +1,8 @@
 import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
-import { registerValidatorsByClusterSizeLimits } from '@/config'
 import type { ClusterSize } from '@/config'
+import { registerValidatorsByClusterSizeLimits } from '@/config'
 import type { ConfigReturnType } from '@/config/create'
+import type { SmartFnWriteOptions } from '@/contract-interactions/types'
 import { isKeySharesItem } from '@/utils'
 import { createClusterId, createEmptyCluster, getClusterSnapshot } from '@/utils/cluster'
 import { isUndefined } from 'lodash-es'
@@ -9,14 +10,14 @@ import { SSVKeys, type KeySharesItem } from 'ssv-keys'
 
 import type { Hex } from 'viem'
 
-type RegisterValidatorsProps = {
+type RegisterValidatorsProps = SmartFnWriteOptions<{
   keyshares: KeySharesItem[] | KeySharesItem['payload'][]
   depositAmount?: bigint
-}
+}>
 
 export const registerValidators = async (
   config: ConfigReturnType,
-  { keyshares, depositAmount = 0n }: RegisterValidatorsProps,
+  { args: { keyshares, depositAmount = 0n }, ...writeOptions }: RegisterValidatorsProps,
 ) => {
   const shares = keyshares.map((share) => {
     return isKeySharesItem(share) ? share.payload : share
@@ -45,15 +46,18 @@ export const registerValidators = async (
   const snapshot = cluster ? getClusterSnapshot(cluster) : createEmptyCluster()
 
   if (shares.length === 1) {
-    return config.contract.ssv.write.registerValidator({
-      args: {
-        amount: depositAmount,
-        cluster: snapshot,
-        operatorIds: operatorIds.map(BigInt),
-        publicKey: shares[0].publicKey as Hex,
-        sharesData: shares[0].sharesData as Hex,
+    return config.contract.ssv.write.registerValidator(
+      {
+        args: {
+          amount: depositAmount,
+          cluster: snapshot,
+          operatorIds: operatorIds.map(BigInt),
+          publicKey: shares[0].publicKey as Hex,
+          sharesData: shares[0].sharesData as Hex,
+        },
+        ...writeOptions,
       },
-    })
+    )
   }
 
   return config.contract.ssv.write.bulkRegisterValidator({
@@ -64,6 +68,7 @@ export const registerValidators = async (
       publicKeys: shares.map((share) => share.publicKey as Hex),
       sharesData: shares.map((share) => share.sharesData as Hex),
     },
+    ...writeOptions,
   })
 }
 

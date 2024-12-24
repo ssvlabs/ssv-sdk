@@ -23,12 +23,13 @@
     "noFallthroughCasesInSwitch": true,
     "declaration": true,
     "declarationDir": "./dist/types",
+    "forceConsistentCasingInFileNames": true,
     "emitDeclarationOnly": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "examples/**/*"],
+  "include": ["src/**/*", "examples/**/*", "hardhat.types.d.ts"],
   "exclude": ["node_modules", "dist", "src/graphql/**/*"]
 }

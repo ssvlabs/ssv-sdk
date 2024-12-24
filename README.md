@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/ssvlabs/ssv-sdk/graph/badge.svg?token=2j2HCF1fSb)](https://codecov.io/gh/ssvlabs/ssv-sdk)
+
 **⚠ READ BEFORE USING: This SDK is Under Heavy Development**
 
 > This repository is still under active development and testing. It is **not recommended for use** in production or live environments at this time.
