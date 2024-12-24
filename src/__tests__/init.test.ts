@@ -11,7 +11,7 @@ describe('SDK Initiation', () => {
   })
 
   it(
-    'can interact with the contract',
+    'unsupported chain should throw an error',
     async () => {
       const { wallets } = await initializeContract()
       expect(
@@ -24,9 +24,6 @@ describe('SDK Initiation', () => {
             walletClient: wallets[0],
           }),
       ).toThrowError()
-    },
-    {
-      timeout: 1000000,
     },
   )
 })

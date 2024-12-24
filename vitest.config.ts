@@ -5,6 +5,7 @@ dotenv.config() // This line loads the .env file
 
 export default defineConfig({
   test: {
+    testTimeout: 60000,
     include: ['**/*.test.ts'],
     env: process.env as Record<string, string>, // This line makes environment variables available in tests
     coverage: {

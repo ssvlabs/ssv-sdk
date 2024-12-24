@@ -75,7 +75,6 @@ describe('Keyshares', async () => {
 
   it('should throw an error when operator is not found', async () => {
     const invalidOperators = mockFetchedOperators.slice(0, 3)
-    
 
     await expect(
       sdk.utils.validateKeysharesJSON({

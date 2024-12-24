@@ -12,7 +12,8 @@ describe('SSV Keys', () => {
   })
 
   beforeEach(async () => {
-    const { ssvNetwork, ssvNetworkViews, ssvToken, wallets, publicClient } = await initializeContract()
+    const { ssvNetwork, ssvNetworkViews, ssvToken, wallets, publicClient } =
+      await initializeContract()
 
     sdk = new SSVSDK(
       createMockConfig({
@@ -46,4 +47,17 @@ describe('SSV Keys', () => {
       timeout: 1000000,
     },
   )
+
+  it('can register operator', async () => {
+    const receipt = await sdk.operators
+      .registerOperator({
+        args: {
+          publicKey: '0x1',
+          fee: CONFIG.minimalOperatorFee,
+          setPrivate: true,
+        },
+      })
+      .then((tx) => tx.wait())
+    expect(receipt).toBeDefined()
+  })
 })

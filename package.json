@@ -119,6 +119,12 @@
       "path": "node_modules/cz-git"
     }
   },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "pnpm type-check"
+    ]
+  },
   "engines": {
     "node": ">=16.0.0"
   },
