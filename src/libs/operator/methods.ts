@@ -1,9 +1,11 @@
+import { Hello } from '@/abi'
 import type { getOperator } from '@/api/subgraph'
 import type { ConfigReturnType } from '@/config/create'
 import type { SmartFnWriteOptions } from '@/contract-interactions/types'
 import type { Address } from 'abitype'
 import { isAddressEqual, zeroAddress } from 'viem'
 
+console.log(Hello)
 type WithdrawArgs = SmartFnWriteOptions<{
   operatorId: string
   amount: bigint

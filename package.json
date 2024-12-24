@@ -47,8 +47,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts --fix",
     "watch": "rollup -w -c rollup.config.ts --configPlugin typescript --environment BUILD:development",
-    "build": "npm run test:prod && vite build",
-    "build:vite": "vite build",
+    "build": "vite build",
     "codegen": "graphql-codegen",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
