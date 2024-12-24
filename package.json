@@ -56,7 +56,15 @@
     "type-check": "tsc -b",
     "type:perf": "tsc --extendedDiagnostics",
     "release": "release-it",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "lint-staged": "pnpm run type-check && lint-staged"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx,js,json}": [
+      "prettier --write --log-level silent",
+      "eslint --fix",
+      "git add"
+    ]
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.12.16",
@@ -117,12 +125,6 @@
     "commitizen": {
       "path": "node_modules/cz-git"
     }
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "pnpm type-check"
-    ]
   },
   "engines": {
     "node": ">=16.0.0"

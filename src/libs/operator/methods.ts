@@ -5,7 +5,7 @@ import type { SmartFnWriteOptions } from '@/contract-interactions/types'
 import type { Address } from 'abitype'
 import { isAddressEqual, zeroAddress } from 'viem'
 
-console.log(Hello)
+console.log(Hello, 1)
 type WithdrawArgs = SmartFnWriteOptions<{
   operatorId: string
   amount: bigint
