@@ -57,7 +57,8 @@
     "type:perf": "tsc --extendedDiagnostics",
     "release": "release-it",
     "commit": "git-cz",
-    "lint-staged": "pnpm run type-check && lint-staged"
+    "lint-staged": "pnpm run type-check && lint-staged",
+    "prepare": "husky"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,json}": [
@@ -65,11 +66,6 @@
       "eslint --fix",
       "git add"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "prepare-commit-msg": "exec < /dev/tty && npx cz --hook || true"
-    }
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.12.16",
