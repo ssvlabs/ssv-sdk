@@ -7,6 +7,7 @@ export const getOperatorCapacity = async (config: ConfigReturnType, operatorId: 
     }),
     config.contract.ssv.read.getValidatorsPerOperatorLimit(),
   ])
-  if (!operator) return 0n
+  console.log('operator:', operator)
+  if (!operator) return 0
   return limit - Number(operator.validatorCount)
 }

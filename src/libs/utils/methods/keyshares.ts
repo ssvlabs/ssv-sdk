@@ -54,6 +54,7 @@ export const createShares = async (
       return Number(nonce)
     })
 
+
   let i = 0
 
   const sharesWithStatuses = statuses.reduce(

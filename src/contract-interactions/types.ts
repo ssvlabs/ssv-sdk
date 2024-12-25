@@ -1,4 +1,3 @@
-import type { DepositABI } from '@/abi/deposit'
 import type { MainnetV4GetterABI } from '@/abi/mainnet/v4/getter'
 import type { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
 import type { TokenABI } from '@/abi/token'
@@ -19,15 +18,13 @@ import type {
 } from 'viem'
 
 export type SupportedAbis =
-  | typeof DepositABI
   | typeof TokenABI
   | typeof MainnetV4GetterABI
   | typeof MainnetV4SetterABI
 
 export type TokenEvents = DecodeEventLogReturnType<typeof TokenABI>
 export type MainnetEvents = DecodeEventLogReturnType<typeof MainnetV4SetterABI>
-export type DepositEvents = DecodeEventLogReturnType<typeof DepositABI>
-export type SupportedEvents = TokenEvents | MainnetEvents | DepositEvents
+export type SupportedEvents = TokenEvents | MainnetEvents
 
 export type Contracts = {
   setter: {
@@ -46,14 +43,7 @@ export type Contracts = {
     readFnNames: ContractFunctionName<typeof MainnetV4GetterABI, 'view' | 'pure'>
     readFunctions: ExtractAbiFunctions<typeof MainnetV4GetterABI, 'view' | 'pure'>
   }
-  deposit: {
-    events: DepositEvents
-    abi: typeof DepositABI
-    writeFnNames: ContractFunctionName<typeof DepositABI, 'nonpayable' | 'payable'>
-    writeFunctions: ExtractAbiFunctions<typeof DepositABI, 'nonpayable' | 'payable'>
-    readFnNames: ContractFunctionName<typeof DepositABI, 'view' | 'pure'>
-    readFunctions: ExtractAbiFunctions<typeof DepositABI, 'view' | 'pure'>
-  }
+
   token: {
     events: TokenEvents
     abi: typeof TokenABI
