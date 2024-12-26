@@ -1,4 +1,5 @@
 import type { ConfigReturnType } from '@/config'
+import { createShares } from '@/libs/utils/methods'
 import { mockFetchedOperators, operators as mockOperators } from '@/mock'
 import { createMockConfig } from '@/mock/config'
 import inconsistent_operator_ids_keyshares from '@/mock/keyshares/inconsistent_operator_ids_keyshares.json'
@@ -125,7 +126,7 @@ describe('Keyshares', async () => {
         ...mockConfig.api,
         getOwnerNonce: vi.fn().mockResolvedValue(833),
         getValidator: vi.fn().mockImplementation(({ id }) => {
-          // return true for the last validator ( like it is registered )
+          // return true for the last validator as if it is registered
           return Promise.resolve(id === valid_keyshares.shares.at(-1)?.data.publicKey)
         }),
       },
@@ -135,8 +136,31 @@ describe('Keyshares', async () => {
       operatorIds: mockOperators.ids.map(String),
       keyshares: valid_keyshares,
     })
-    console.log('result:', result)
+    expect(result).toBeDefined()
+    expect(result.available.length).toBe(8)
+    expect(result.incorrect.length).toBe(0)
+    expect(result.registered.length).toBe(1)
   })
+
+  it('should throw if every validator is registered', async () => {
+    const { createShares } = await import('../libs/utils/methods')
+
+    const registeredValidatorsConfig = merge({}, mockConfig, {
+      api: {
+        ...mockConfig.api,
+        getOwnerNonce: vi.fn().mockResolvedValue(833),
+        getValidator: vi.fn().mockResolvedValue(true),
+      },
+    } satisfies Partial<ConfigReturnType>)
+
+    await expect(
+      createShares(registeredValidatorsConfig, {
+        operatorIds: mockOperators.ids.map(String),
+        keyshares: valid_keyshares,
+      }),
+    ).rejects.toThrow()
+  })
+
 
   it('should throw for invalid operator key', async () => {
     await expect(
@@ -180,11 +204,61 @@ describe('Keyshares', async () => {
     ).rejects.toThrow(KeysharesValidationError)
   })
 
-  // it('can validate keyshares with event', async () => {
-  //   const result = await validateEvent(
-  //     sdk.config,
-  //     '0xa05e43f754661d7a58e17e0bdc55756a421ad2df991633ad02fd48513cb44630',
-  //   )
-  //   expect(result).toBeTruthy()
-  // })
+  it('should throw when operator is private and account is not whitelisted', async () => {
+    const { createShares } = await import('../libs/utils/methods')
+
+    const privateOperatorConfig = merge({}, mockConfig, {
+      api: {
+        ...mockConfig.api,
+        getOperators: vi.fn().mockResolvedValue(
+          mockFetchedOperators.map(
+            (o) =>
+              ({
+                id: String(o.id),
+                publicKey: o.publicKey,
+                validatorCount: '5',
+                isPrivate: true,
+                whitelisted: ['0x1234567890123456789012345678901234567890'],
+                whitelistedContract: zeroAddress,
+              }) satisfies Operator,
+          ),
+        ),
+      },
+    } satisfies Partial<ConfigReturnType>)
+
+    await expect(
+      createShares(privateOperatorConfig, {
+        operatorIds: mockOperators.ids.map(String),
+        keyshares: valid_keyshares,
+      }),
+    ).rejects.toThrow()
+  })
+
+  it('should throw when operator has reached max validator count', async () => {
+    const maxedOutOperators = merge({}, mockConfig, {
+      api: {
+        ...mockConfig.api,
+        getOperators: vi.fn().mockResolvedValue(
+          mockFetchedOperators.map(
+            (o) =>
+              ({
+                id: String(o.id),
+                publicKey: o.publicKey,
+                validatorCount: '500',
+                isPrivate: false,
+                whitelisted: [],
+                whitelistedContract: zeroAddress,
+              }) satisfies Operator,
+          ),
+        ),
+      },
+    } satisfies Partial<ConfigReturnType>)
+
+    await expect(
+      createShares(maxedOutOperators, {
+        operatorIds: mockOperators.ids.map(String),
+        keyshares: valid_keyshares,
+      }),
+    ).rejects.toThrow()
+  })
 })

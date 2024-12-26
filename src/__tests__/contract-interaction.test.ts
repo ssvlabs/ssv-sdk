@@ -2,7 +2,7 @@ import { createMockConfig } from '@/mock/config'
 import { SSVSDK } from '@/sdk'
 import hre from 'hardhat'
 import { CONFIG, initializeContract } from 'hardhat/contract-helpers'
-import { getAddress } from 'viem'
+import { getAddress, parseEther } from 'viem'
 import { describe, expect, it } from 'vitest'
 
 describe('SSV Keys', async () => {
@@ -23,7 +23,7 @@ describe('SSV Keys', async () => {
     }),
   )
 
-  it('can interact with the contract', async () => {
+  it('can write to the SSVNetwork contract', async () => {
     const receipt = await sdk.operators
       .registerOperator({
         args: {
@@ -35,10 +35,14 @@ describe('SSV Keys', async () => {
       .then((tx) => tx.wait())
     expect(receipt).toBeDefined()
 
-    const operatorAddedEvent = receipt.events.find((event): event is typeof event & {
-      eventName: 'OperatorAdded';
-      args: { operatorId: bigint; publicKey: string; fee: bigint; owner: string };
-    } => event.eventName === 'OperatorAdded')
+    const operatorAddedEvent = receipt.events.find(
+      (
+        event,
+      ): event is typeof event & {
+        eventName: 'OperatorAdded'
+        args: { operatorId: bigint; publicKey: string; fee: bigint; owner: string }
+      } => event.eventName === 'OperatorAdded',
+    )
     expect(operatorAddedEvent).toBeDefined()
     expect(operatorAddedEvent?.args.operatorId).toBe(1n)
     expect(operatorAddedEvent?.args.publicKey).toBe('0x10')
@@ -46,5 +50,24 @@ describe('SSV Keys', async () => {
     expect(operatorAddedEvent?.args.owner).toBe(
       getAddress(sdk.config.walletClient.account!.address),
     )
+  })
+
+  it('can read from SSVNetworkViews contract', async () => {
+    const limit = await sdk.contract.ssv.read.getValidatorsPerOperatorLimit()
+    expect(limit).toBe(500)
+
+    const ssvBalance = await sdk.contract.token.read.balanceOf({
+      account: wallets[0].account.address,
+    })
+    expect(ssvBalance).toBe(parseEther('1000'))
+  })
+  it('can read from SSVToken contract', async () => {
+    const limit = await sdk.contract.ssv.read.getValidatorsPerOperatorLimit()
+    expect(limit).toBe(500)
+
+    const ssvBalance = await sdk.contract.token.read.balanceOf({
+      account: wallets[0].account.address,
+    })
+    expect(ssvBalance).toBe(parseEther('1000'))
   })
 })

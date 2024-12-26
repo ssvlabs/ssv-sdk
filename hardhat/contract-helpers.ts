@@ -1,8 +1,7 @@
 import hre, { ethers, upgrades } from 'hardhat'
-import type { Address } from 'viem'
+import { parseEther, type Address } from 'viem'
 
 import type { SSVConfig } from './types'
-
 
 export const CONFIG: SSVConfig = {
   initialVersion: 'v1.1.0',
@@ -23,6 +22,7 @@ export const DEFAULT_OPERATOR_IDS = {
   13: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
 }
 
+export const initialBalance = parseEther('1000')
 export const initializeContract = async function () {
   const ssvToken = await hre.viem.deployContract('SSVToken')
   const ssvOperatorsMod = await hre.viem.deployContract('SSVOperators')
@@ -80,7 +80,7 @@ export const initializeContract = async function () {
   const wallets = await hre.viem.getWalletClients()
 
   for (let i = 1; i < 7; i++) {
-    await ssvToken.write.mint([wallets[i].account.address, 10000000000000000000n])
+    await ssvToken.write.mint([wallets[i].account.address, initialBalance])
   }
 
   return {
@@ -90,5 +90,6 @@ export const initializeContract = async function () {
     ssvNetwork,
     ssvNetworkViews,
     ssvToken,
+    initialBalance,
   }
 }
