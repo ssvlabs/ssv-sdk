@@ -51,13 +51,12 @@
     "codegen": "graphql-codegen",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:prod": "vitest run",
     "v-pub-tarball": "npm publish --dry-run",
     "type-check": "tsc -b",
     "type:perf": "tsc --extendedDiagnostics",
     "release": "release-it",
     "commit": "git-cz",
-    "lint-staged": "pnpm run type-check && pnpm test && lint-staged",
+    "lint-staged": "pnpm run type-check && pnpm vitest run && lint-staged",
     "prepare": "husky"
   },
   "lint-staged": {
