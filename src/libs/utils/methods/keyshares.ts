@@ -4,12 +4,12 @@ import { canAccountUseOperator } from '@/libs/operator/methods'
 import type { MainnetEvent, ValidatorAddedEvent } from '@/types/contract-interactions'
 import type { Operator } from '@/types/operator'
 import {
-  KeysharesValidationError,
-  KeysharesValidationErrors,
-  ensureNoKeysharesErrors,
-  ensureValidatorsUniqueness,
-  validateConsistentOperatorIds,
-  validateConsistentOperatorPublicKeys,
+    KeysharesValidationError,
+    KeysharesValidationErrors,
+    ensureNoKeysharesErrors,
+    ensureValidatorsUniqueness,
+    validateConsistentOperatorIds,
+    validateConsistentOperatorPublicKeys,
 } from '@/utils/keyshares'
 import { sortNumbers } from '@/utils/number'
 import { isEqual } from 'lodash-es'
@@ -22,7 +22,7 @@ type ValidatedKeysharesArgs = {
   operatorIds: string[]
 }
 
-export const createShares = async (
+export const validateSharesPreRegistration = async (
   config: ConfigReturnType,
   { keyshares, operatorIds }: ValidatedKeysharesArgs,
 ) => {

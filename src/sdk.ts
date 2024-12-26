@@ -22,3 +22,4 @@ export class SSVSDK {
     this.utils = createUtils(this.config)
   }
 }
+

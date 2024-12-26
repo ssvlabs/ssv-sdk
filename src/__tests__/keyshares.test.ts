@@ -1,5 +1,5 @@
 import type { ConfigReturnType } from '@/config'
-import { createShares } from '@/libs/utils/methods'
+import { validateSharesPreRegistration } from '@/libs/utils/methods'
 import { mockFetchedOperators, operators as mockOperators } from '@/mock'
 import { createMockConfig } from '@/mock/config'
 import inconsistent_operator_ids_keyshares from '@/mock/keyshares/inconsistent_operator_ids_keyshares.json'
@@ -70,9 +70,9 @@ describe('Keyshares', async () => {
   })
 
   it('can validate valid keyshares', async () => {
-    const { createShares } = await import('../libs/utils/methods')
+    const { validateSharesPreRegistration } = await import('../libs/utils/methods')
 
-    const result = await createShares(mockConfig, {
+    const result = await validateSharesPreRegistration(mockConfig, {
       operatorIds: mockOperators.ids.map(String),
       keyshares: valid_keyshares,
     })
@@ -83,7 +83,7 @@ describe('Keyshares', async () => {
   })
 
   it('should throw for invalid nonce', async () => {
-    const { createShares } = await import('../libs/utils/methods')
+    const { validateSharesPreRegistration } = await import('../libs/utils/methods')
 
     const invalidNonceConfig = merge({}, mockConfig, {
       api: {
@@ -93,7 +93,7 @@ describe('Keyshares', async () => {
     } satisfies Partial<ConfigReturnType>)
 
     await expect(
-      createShares(invalidNonceConfig, {
+      validateSharesPreRegistration(invalidNonceConfig, {
         operatorIds: mockOperators.ids.map(String),
         keyshares: valid_keyshares,
       }),
@@ -101,7 +101,7 @@ describe('Keyshares', async () => {
   })
 
   it('should throw for no nonce', async () => {
-    const { createShares } = await import('../libs/utils/methods')
+    const { validateSharesPreRegistration } = await import('../libs/utils/methods')
 
     const noNonceConfig = merge({}, mockConfig, {
       api: {
@@ -111,7 +111,7 @@ describe('Keyshares', async () => {
     } satisfies Partial<ConfigReturnType>)
 
     await expect(
-      createShares(noNonceConfig, {
+      validateSharesPreRegistration(noNonceConfig, {
         operatorIds: mockOperators.ids.map(String),
         keyshares: valid_keyshares,
       }),
@@ -119,7 +119,7 @@ describe('Keyshares', async () => {
   })
 
   it('should take into account registered validators', async () => {
-    const { createShares } = await import('../libs/utils/methods')
+    const { validateSharesPreRegistration } = await import('../libs/utils/methods')
 
     const registeredValidatorsConfig = merge({}, mockConfig, {
       api: {
@@ -132,7 +132,7 @@ describe('Keyshares', async () => {
       },
     } satisfies Partial<ConfigReturnType>)
 
-    const result = await createShares(registeredValidatorsConfig, {
+    const result = await validateSharesPreRegistration(registeredValidatorsConfig, {
       operatorIds: mockOperators.ids.map(String),
       keyshares: valid_keyshares,
     })
@@ -143,7 +143,7 @@ describe('Keyshares', async () => {
   })
 
   it('should throw if every validator is registered', async () => {
-    const { createShares } = await import('../libs/utils/methods')
+    const { validateSharesPreRegistration } = await import('../libs/utils/methods')
 
     const registeredValidatorsConfig = merge({}, mockConfig, {
       api: {
@@ -154,7 +154,7 @@ describe('Keyshares', async () => {
     } satisfies Partial<ConfigReturnType>)
 
     await expect(
-      createShares(registeredValidatorsConfig, {
+      validateSharesPreRegistration(registeredValidatorsConfig, {
         operatorIds: mockOperators.ids.map(String),
         keyshares: valid_keyshares,
       }),
@@ -205,7 +205,7 @@ describe('Keyshares', async () => {
   })
 
   it('should throw when operator is private and account is not whitelisted', async () => {
-    const { createShares } = await import('../libs/utils/methods')
+    const { validateSharesPreRegistration } = await import('../libs/utils/methods')
 
     const privateOperatorConfig = merge({}, mockConfig, {
       api: {
@@ -227,7 +227,7 @@ describe('Keyshares', async () => {
     } satisfies Partial<ConfigReturnType>)
 
     await expect(
-      createShares(privateOperatorConfig, {
+      validateSharesPreRegistration(privateOperatorConfig, {
         operatorIds: mockOperators.ids.map(String),
         keyshares: valid_keyshares,
       }),
@@ -255,7 +255,7 @@ describe('Keyshares', async () => {
     } satisfies Partial<ConfigReturnType>)
 
     await expect(
-      createShares(maxedOutOperators, {
+      validateSharesPreRegistration(maxedOutOperators, {
         operatorIds: mockOperators.ids.map(String),
         keyshares: valid_keyshares,
       }),
