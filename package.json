@@ -57,7 +57,7 @@
     "type:perf": "tsc --extendedDiagnostics",
     "release": "release-it",
     "commit": "git-cz",
-    "lint-staged": "pnpm run type-check && lint-staged",
+    "lint-staged": "pnpm run type-check && pnpm test && lint-staged",
     "prepare": "husky"
   },
   "lint-staged": {
