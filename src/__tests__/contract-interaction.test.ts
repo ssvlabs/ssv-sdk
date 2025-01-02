@@ -1,7 +1,10 @@
+import { globals } from '@/config'
+import { mockFetchedOperators } from '@/mock'
 import { createMockConfig } from '@/mock/config'
 import { SSVSDK } from '@/sdk'
+import { decodeOperatorPublicKey, roundOperatorFee } from '@/utils'
 import hre from 'hardhat'
-import { CONFIG, initializeContract } from 'hardhat/contract-helpers'
+import { initializeContract } from 'hardhat/contract-helpers'
 import { getAddress, parseEther } from 'viem'
 import { describe, expect, it } from 'vitest'
 
@@ -24,15 +27,19 @@ describe('SSV Keys', async () => {
   )
 
   it('can write to the SSVNetwork contract', async () => {
+    const yearlyFee = parseEther('1')
+    const blockFee = roundOperatorFee(yearlyFee / globals.BLOCKS_PER_YEAR)
+
     const receipt = await sdk.operators
       .registerOperator({
         args: {
-          publicKey: '0x10',
-          fee: CONFIG.minimalOperatorFee,
-          setPrivate: true,
+          publicKey: mockFetchedOperators[0].publicKey, // LS0tLS1CRUdJTiBSU0EgUFVCTElDIE....
+          yearlyFee, // 1 ssv
+          isPrivate: true,
         },
       })
       .then((tx) => tx.wait())
+
     expect(receipt).toBeDefined()
 
     const operatorAddedEvent = receipt.events.find(
@@ -44,9 +51,11 @@ describe('SSV Keys', async () => {
       } => event.eventName === 'OperatorAdded',
     )
     expect(operatorAddedEvent).toBeDefined()
-    expect(operatorAddedEvent?.args.operatorId).toBe(1n)
-    expect(operatorAddedEvent?.args.publicKey).toBe('0x10')
-    expect(operatorAddedEvent?.args.fee).toBe(CONFIG.minimalOperatorFee)
+    expect(operatorAddedEvent!.args.operatorId).toBe(1n)
+    expect(decodeOperatorPublicKey(operatorAddedEvent!.args.publicKey)).toBe(
+      mockFetchedOperators[0].publicKey,
+    )
+    expect(operatorAddedEvent?.args.fee).toBe(blockFee)
     expect(operatorAddedEvent?.args.owner).toBe(
       getAddress(sdk.config.walletClient.account!.address),
     )

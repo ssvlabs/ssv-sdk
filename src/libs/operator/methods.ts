@@ -1,8 +1,10 @@
 import type { getOperator } from '@/api/subgraph'
+import { globals } from '@/config'
 import type { ConfigReturnType } from '@/config/create'
 import type { SmartFnWriteOptions } from '@/contract-interactions/types'
+import { roundOperatorFee } from '@/utils'
 import type { Address } from 'abitype'
-import { isAddressEqual, zeroAddress } from 'viem'
+import { encodeAbiParameters, isAddressEqual, parseAbiParameters, zeroAddress } from 'viem'
 
 type WithdrawArgs = SmartFnWriteOptions<{
   operatorId: string
@@ -31,6 +33,26 @@ export const withdraw = async (
     args: {
       operatorId: BigInt(operatorId),
       amount,
+    },
+    ...writeOptions,
+  })
+}
+
+type RegisterOperatorArgs = SmartFnWriteOptions<{
+  isPrivate: boolean
+  yearlyFee: bigint
+  publicKey: string
+}>
+
+export const registerOperator = async (
+  config: ConfigReturnType,
+  { args: { isPrivate, yearlyFee, publicKey }, ...writeOptions }: RegisterOperatorArgs,
+) => {
+  return config.contract.ssv.write.registerOperator({
+    args: {
+      publicKey: encodeAbiParameters(parseAbiParameters('string'), [publicKey]),
+      fee: roundOperatorFee(yearlyFee / globals.BLOCKS_PER_YEAR),
+      setPrivate: isPrivate,
     },
     ...writeOptions,
   })
