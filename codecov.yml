@@ -1,3 +1,8 @@
+codecov:
+  require_ci_to_pass: yes
+  notify:
+    wait_for_ci: yes
+
 coverage:
   status:
     project:
@@ -6,8 +11,10 @@ coverage:
         target: 94%
         threshold: 0%
         # advanced settings
-        if_ci_failed: error #success, failure, error, ignore
+        if_ci_failed: error
         informational: false
+        paths:
+          - "src"
     patch:
       default:
         # basic
@@ -16,3 +23,9 @@ coverage:
         # advanced settings
         if_ci_failed: error
         informational: false
+        paths:
+          - "src"
+
+  precision: 2
+  round: down
+  range: "90...100"
