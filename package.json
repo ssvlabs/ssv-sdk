@@ -154,7 +154,7 @@
     "dotenv": "^16.4.5",
     "graphql-request": "^7.1.0",
     "lodash-es": "^4.17.21",
-    "ssv-keys": "github:ssvlabs/ssv-keys#fix-utility-func-usage",
+    "ssv-keys": "^1.2.1",
     "viem": "^2.21.30",
     "zod": "^3.23.8"
   }
