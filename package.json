@@ -57,7 +57,8 @@
     "release": "release-it",
     "commit": "git-cz",
     "lint-staged": "pnpm run type-check && pnpm vitest run && lint-staged",
-    "prepare": "husky"
+    "prepare": "husky",
+    "postinstall": "pnpm run build"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,json}": [
