@@ -27,7 +27,8 @@
     "emitDeclarationOnly": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "ssv-sdk": ["./dist/*"]
     }
   },
   "include": ["src/**/*", "examples/**/*", "hardhat.types.d.ts"],
