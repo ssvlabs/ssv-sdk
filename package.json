@@ -1,5 +1,5 @@
 {
-  "name": "ssv-sdk",
+  "name": "@ssv-labs/ssv-sdk",
   "version": "0.0.1",
   "author": "SSV.Labs",
   "description": "ssv labs sdk",
@@ -7,16 +7,7 @@
     "ssv",
     "sdk"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/crper/rollup-typescript-lib-boilerplate.git"
-  },
-  "homepage": "https://github.com/crper/rollup-typescript-lib-boilerplate#readme",
-  "bugs": {
-    "url": "https://github.com/crper/rollup-typescript-lib-boilerplate/issues",
-    "email": "crper@outlook.com"
-  },
-  "private": false,
+  "repository": "https://github.com/ssvlabs/ssv-sdk",
   "files": [
     "dist"
   ],
@@ -121,14 +112,6 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
-  "licenses": [
-    {
-      "GNU": "SEE LICENSE IN LICENCE FILE"
-    }
-  ],
   "dependencies": {
     "@chainsafe/bls": "^8.1.0",
     "@chainsafe/bls-keygen": "^0.4.0",
@@ -148,5 +131,6 @@
     "ssv-keys": "^1.2.1",
     "viem": "^2.21.30",
     "zod": "^3.23.8"
-  }
+  },
+  "license": "SEE LICENSE IN LICENCE FILE"
 }
