@@ -29,13 +29,13 @@ The SDK consists of four main modules:
 
 ```bash
 # Using npm
-npm install ssv-sdk ssv-keys viem
+npm i @ssv-labs/ssv-sdk
 
 # Using yarn
-yarn add ssv-sdk ssv-keys viem
+yarn add @ssv-labs/ssv-sdk
 
 # Using pnpm
-pnpm install ssv-sdk ssv-keys viem
+pnpm install @ssv-labs/ssv-sdk
 ```
 
 ## Quick Start
@@ -43,7 +43,7 @@ pnpm install ssv-sdk ssv-keys viem
 ### Initialize the SDK
 
 ```typescript
-import { SSVSDK, chains } from 'ssv-sdk'
+import { SSVSDK, chains } from '@ssv-labs/ssv-sdk'
 import { createPublicClient, createWalletClient, http } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 
