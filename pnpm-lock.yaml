@@ -8,36 +8,9 @@ importers:
 
   .:
     dependencies:
-      '@chainsafe/bls':
-        specifier: ^8.1.0
-        version: 8.1.0(@chainsafe/blst@2.2.0)
-      '@chainsafe/bls-keygen':
-        specifier: ^0.4.0
-        version: 0.4.0
-      '@chainsafe/bls-keystore':
-        specifier: ^3.1.0
-        version: 3.1.0
-      '@chainsafe/blst':
-        specifier: ^2.2.0
-        version: 2.2.0
-      '@chainsafe/ssz':
-        specifier: ^0.18.0
-        version: 0.18.0
       '@graphql-typed-document-node/core':
         specifier: ^3.2.0
         version: 3.2.0(graphql@16.9.0)
-      '@lodestar/config':
-        specifier: ^1.22.0
-        version: 1.22.0
-      '@lodestar/params':
-        specifier: ^1.22.0
-        version: 1.22.0
-      '@lodestar/state-transition':
-        specifier: ^1.22.0
-        version: 1.22.0
-      '@lodestar/types':
-        specifier: ^1.22.0
-        version: 1.22.0
       '@safe-global/protocol-kit':
         specifier: ^5.0.3
         version: 5.0.3(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -565,107 +538,6 @@ packages:
 
   '@bytecodealliance/preview2-shim@0.17.0':
     resolution: {integrity: sha512-JorcEwe4ud0x5BS/Ar2aQWOQoFzjq/7jcnxYXCvSMh0oRm0dQXzOA+hqLDBnOMks1LLBA7dmiLLsEBl09Yd6iQ==}
-
-  '@chainsafe/as-sha256@0.5.0':
-    resolution: {integrity: sha512-dTIY6oUZNdC5yDTVP5Qc9hAlKAsn0QTQ2DnQvvsbTnKSTbYs3p5RPN0aIUqN0liXei/9h24c7V0dkV44cnWIQA==}
-
-  '@chainsafe/bls-hd-key@0.3.0':
-    resolution: {integrity: sha512-LsYYnfBEEmqGFPDm8hQN3Kc+v9wPFnhn+CToD403KEynUiUSHKLAf5B6UCY5eooShDOcaGCUgAUhIw1CmpEf3Q==}
-
-  '@chainsafe/bls-keygen@0.4.0':
-    resolution: {integrity: sha512-wqtuj4G/sWpIugJW1mb/nSTwcTuZKqB3DS3ANUIOn7pva8EB6LfxgIL34o4qk3lti/8Mdxqtqc2n4xRszrNdzA==}
-
-  '@chainsafe/bls-keystore@3.1.0':
-    resolution: {integrity: sha512-OR9hV9N53woNc6R2d08O3Oi3Ykx7uZARMx51W+WFP1fDaFSA/QaMraPGGA8tSx7livkb/Scwe3Basj9Pib67HA==}
-
-  '@chainsafe/bls@8.1.0':
-    resolution: {integrity: sha512-C4a1gUpFHYzJG7aaik4w+7QTeJ4pGCDTZ28YUwAWOFaWgAJSK+769ib6CNBu5Txb3PpvcC5GuhICQaDopIgEHg==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@chainsafe/blst': ^1.0.0
-    peerDependenciesMeta:
-      '@chainsafe/blst':
-        optional: true
-
-  '@chainsafe/blst-darwin-arm64@2.2.0':
-    resolution: {integrity: sha512-BOOy2KHbV028cioPWaAMqHdLRKd6/3XyEmUEcQC2E/SpyYLdNcaKiBUYIU4pT9CrWBbJJxX68UI+3vZVg0M8/w==}
-    engines: {node: '>= 16'}
-    cpu: [arm64]
-    os: [darwin]
-
-  '@chainsafe/blst-darwin-x64@2.2.0':
-    resolution: {integrity: sha512-jG64cwIdPT7u/haRrW26tWCpfMfHBQCfGY169mFQifCwO4VEwvaiVBPOh5olFis6LjpcmD+O0jpM8GqrnsmUHQ==}
-    engines: {node: '>= 16'}
-    cpu: [x64]
-    os: [darwin]
-
-  '@chainsafe/blst-linux-arm64-gnu@2.2.0':
-    resolution: {integrity: sha512-L8xV2uuLn8we76vdzfryS9ePdheuZrmY6yArGUFaF1Uzcwml6V1/VvyPl9/uooo/YfVRIrvF/D+lQfI2GFAnhw==}
-    engines: {node: '>= 16'}
-    cpu: [arm64]
-    os: [linux]
-
-  '@chainsafe/blst-linux-arm64-musl@2.2.0':
-    resolution: {integrity: sha512-0Vn0luxLYVgC3lvWT1MapFHSAoz99PldqjhilXTGv0AcAk/X5LXPH2RC9Dp2KJGqthyUkpbk1j47jUBfBI+BIg==}
-    engines: {node: '>= 16'}
-    cpu: [arm64]
-    os: [linux]
-
-  '@chainsafe/blst-linux-x64-gnu@2.2.0':
-    resolution: {integrity: sha512-gEY/z2SDBA7kXtFEI9VNhWTJAIjx16jdeAyCaS2k4ACGurWZaWk+Ee4KniTsr4WieSqeuNTUr7Pdja0Sr4EKNQ==}
-    engines: {node: '>= 16'}
-    cpu: [x64]
-    os: [linux]
-
-  '@chainsafe/blst-linux-x64-musl@2.2.0':
-    resolution: {integrity: sha512-58GKtiUmtVSuerRzPEcMNQZpICPboBKFnL7+1Wo+PSuajkvbae7tEFrFTtWeMoKIPgOEsPMnk96LF+0yNgavUg==}
-    engines: {node: '>= 16'}
-    cpu: [x64]
-    os: [linux]
-
-  '@chainsafe/blst-win32-x64-msvc@2.2.0':
-    resolution: {integrity: sha512-UFrZshl4dfX5Uh2zeKXAZtrkQ+otczHMON2tsrapQNICWmfHZrzE6pKuBL+9QeGAbgflwpbz7+D5nQRDpiuHxQ==}
-    engines: {node: '>= 16'}
-    cpu: [x64]
-    os: [win32]
-
-  '@chainsafe/blst@2.2.0':
-    resolution: {integrity: sha512-VBaQoNE2a9d9+skAjQKv3Suk0yGKqp3mZM0YWYJNPj/Ae/f6lAyeVSgKqo2LrsNQBzD/LqrJLKUY8rJT3vDKLA==}
-    engines: {node: '>= 16'}
-
-  '@chainsafe/hashtree-darwin-arm64@1.0.1':
-    resolution: {integrity: sha512-+KmEgQMpO7FDL3klAcpXbQ4DPZvfCe0qSaBBrtT4vLF8V1JGm3sp+j7oibtxtOsLKz7nJMiK1pZExi7vjXu8og==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [darwin]
-
-  '@chainsafe/hashtree-linux-arm64-gnu@1.0.1':
-    resolution: {integrity: sha512-p1hnhGq2aFY+Zhdn1Q6L/6yLYNKjqXfn/Pc8jiM0e3+Lf/hB+yCdqYVu1pto26BrZjugCFZfupHaL4DjUTDttw==}
-    engines: {node: '>= 10'}
-    cpu: [arm64]
-    os: [linux]
-
-  '@chainsafe/hashtree-linux-x64-gnu@1.0.1':
-    resolution: {integrity: sha512-uCIGuUWuWV0LiB4KLMy6JFa7Jp6NmPl3hKF5BYWu8TzUBe7vSXMZfqTzGxXPggFYN2/0KymfRdG9iDCOJfGRqg==}
-    engines: {node: '>= 10'}
-    cpu: [x64]
-    os: [linux]
-
-  '@chainsafe/hashtree@1.0.1':
-    resolution: {integrity: sha512-bleu9FjqBeR/l6W1u2Lz+HsS0b0LLJX2eUt3hOPBN7VqOhidx8wzkVh2S7YurS+iTQtfdK4K5QU9tcTGNrGwDg==}
-    engines: {node: '>= 18'}
-
-  '@chainsafe/persistent-merkle-tree@0.8.0':
-    resolution: {integrity: sha512-hh6C1JO6SKlr0QGNTNtTLqgGVMA/Bc20wD6CeMHp+wqbFKCULRJuBUxhF4WDx/7mX8QlqF3nFriF/Eo8oYJ4/A==}
-
-  '@chainsafe/persistent-ts@0.19.1':
-    resolution: {integrity: sha512-fUFFFFxdcpYkMAHnjm83EYL/R/smtVmEkJr3FGSI6dwPk4ue9rXjEHf7FTd3V8AbVOcTJGriN4cYf2V+HOYkjQ==}
-
-  '@chainsafe/ssz@0.17.1':
-    resolution: {integrity: sha512-1ay46QqYcVTBvUnDXTPTi5WTiENu7tIxpZGMDpUWps1/nYBmh/We/UoCF/jO+o/fkcDD3p8xQPlHbcCfy+jyjA==}
-
-  '@chainsafe/ssz@0.18.0':
-    resolution: {integrity: sha512-1ikTjk3JK6+fsGWiT5IvQU0AP6gF3fDzGmPfkKthbcbgTUR8fjB83Ywp9ko/ZoiDGfrSFkATgT4hvRzclu0IAA==}
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
@@ -1331,21 +1203,6 @@ packages:
     resolution: {integrity: sha512-/gKJun8NNiWGZJkGzI/Ragc53cOdcLNdzjLaIa+GEjguQs0ulsurx8WN0jijdK9yPqDvziX995sMRLyLt1uZMQ==}
     engines: {node: '>= 0.4'}
 
-  '@lodestar/config@1.22.0':
-    resolution: {integrity: sha512-WgjR8oceKKuWU3EwU8+m5KMGGhIUJGTqDiVH8rZTS4L9ZS5OKbTbvKMdsi9hVXq8SWgukF7x2JfqPd4jdPSA1g==}
-
-  '@lodestar/params@1.22.0':
-    resolution: {integrity: sha512-wbbeQAG+4YOl1ATsSDJnx7wBk5FXsRl2OrmLkMnJXI67wqvRwWk8WQBx7wjx2hnWWrk0in4/8bTtHz3At1GydQ==}
-
-  '@lodestar/state-transition@1.22.0':
-    resolution: {integrity: sha512-2c8LaxYBaWMf0UsR5pzzL8RWZiwmYfucnjFvTEOMGTWVAjcAwfVO+jKboUy71H8OJWZ27eqKlkptPSF94H6cgw==}
-
-  '@lodestar/types@1.22.0':
-    resolution: {integrity: sha512-BB0zgiqmIYmpg1ifDJ4VW0Ka2vkdmM7ju7lAQLk1O666iGWLObhfrLzQ+LbZ8/0h+PnjpDMB55MJSffmnqCkGg==}
-
-  '@lodestar/utils@1.22.0':
-    resolution: {integrity: sha512-d+FBMBST8p+vfdHDtbSXQ3KU4vSgQJcbrGMAeBb9VkwFr4nvV1PyUbfe+9g4YiUzZlGXmPRrPI4t2hJUGk0o1A==}
-
   '@metamask/eth-sig-util@4.0.1':
     resolution: {integrity: sha512-tghyZKLHZjcdlDqCA3gNZmLeR0XvOE9U1qoQO9ohyAZT6Pya+H9vkBPcsyXytmYLNgVoin7CKCmweo/R43V+tQ==}
     engines: {node: '>=12.0.0'}
@@ -1932,7 +1789,6 @@ packages:
 
   '@rollup/rollup-darwin-x64@4.30.1':
     resolution: {integrity: sha512-x78BavIwSH6sqfP2xeI1hd1GpHL8J4W2BXcVM/5KYKoAD3nNsfitQhvWSw+TFtQTLZ9OmlF+FEInEHyubut2OA==}
-    cpu: [x64]
     os: [darwin]
 
   '@rollup/rollup-freebsd-x64@4.24.1':
@@ -2632,9 +2488,6 @@ packages:
   any-promise@1.3.0:
     resolution: {integrity: sha512-7UvmKalWRt1wgjL1RrGxoSJW/0QZFIegpeGvZG9kjp8vrRu55XTHbwnqq2GpXm9uLbcuhxm3IqX9OB4MZR1b2A==}
 
-  any-signal@3.0.1:
-    resolution: {integrity: sha512-xgZgJtKEa9YmDqXodIgl7Fl1C8yNXr8w6gXjqK3LW4GcEiYT+6AQfJSE/8SPsEpLLmcvbv8YU+qet94UewHxqg==}
-
   anymatch@3.1.3:
     resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
     engines: {node: '>= 8'}
@@ -2765,16 +2618,9 @@ packages:
   before-after-hook@3.0.2:
     resolution: {integrity: sha512-Nik3Sc0ncrMK4UUdXQmAnRtzmNQTAAXmXIopizwZ1W1t8QmfJj+zL4OA2I7XPTPW5z5TDqv4hRo/JzouDJnX3A==}
 
-  bigint-buffer@1.1.5:
-    resolution: {integrity: sha512-trfYco6AoZ+rKhKnxA0hgX0HAbVP/s808/EuDSe2JDzUnCp/xAsli35Orvk67UrTEcwuxZqYZDmfA2RXJgxVvA==}
-    engines: {node: '>= 10.0.0'}
-
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
-
-  bindings@1.5.0:
-    resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==}
 
   bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
@@ -2953,10 +2799,6 @@ packages:
 
   capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
-
-  case@1.6.3:
-    resolution: {integrity: sha512-mzDSXIPaFwVDvZAHqZ9VlbyF4yyXRuX6IvB06WvPYkqJVO24kX1PPhv9bfpKNFZyxYFmmgo03HUiD8iklmJYRQ==}
-    engines: {node: '>= 0.8.0'}
 
   caseless@0.12.0:
     resolution: {integrity: sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw==}
@@ -3928,9 +3770,6 @@ packages:
   file-entry-cache@6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
     engines: {node: ^10.12.0 || >=12.0.0}
-
-  file-uri-to-path@1.0.0:
-    resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
 
   fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
@@ -7041,10 +6880,6 @@ packages:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
 
-  uuid@9.0.1:
-    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
-    hasBin: true
-
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
 
@@ -7793,94 +7628,6 @@ snapshots:
   '@bcoe/v8-coverage@0.2.3': {}
 
   '@bytecodealliance/preview2-shim@0.17.0': {}
-
-  '@chainsafe/as-sha256@0.5.0': {}
-
-  '@chainsafe/bls-hd-key@0.3.0':
-    dependencies:
-      '@noble/hashes': 1.5.0
-
-  '@chainsafe/bls-keygen@0.4.0':
-    dependencies:
-      '@chainsafe/bls-hd-key': 0.3.0
-      '@noble/hashes': 1.5.0
-      '@scure/bip39': 1.4.0
-
-  '@chainsafe/bls-keystore@3.1.0':
-    dependencies:
-      ethereum-cryptography: 2.2.1
-      uuid: 9.0.1
-
-  '@chainsafe/bls@8.1.0(@chainsafe/blst@2.2.0)':
-    dependencies:
-      '@chainsafe/bls-keygen': 0.4.0
-      bls-eth-wasm: 1.4.0
-    optionalDependencies:
-      '@chainsafe/blst': 2.2.0
-
-  '@chainsafe/blst-darwin-arm64@2.2.0':
-    optional: true
-
-  '@chainsafe/blst-darwin-x64@2.2.0':
-    optional: true
-
-  '@chainsafe/blst-linux-arm64-gnu@2.2.0':
-    optional: true
-
-  '@chainsafe/blst-linux-arm64-musl@2.2.0':
-    optional: true
-
-  '@chainsafe/blst-linux-x64-gnu@2.2.0':
-    optional: true
-
-  '@chainsafe/blst-linux-x64-musl@2.2.0':
-    optional: true
-
-  '@chainsafe/blst-win32-x64-msvc@2.2.0':
-    optional: true
-
-  '@chainsafe/blst@2.2.0':
-    optionalDependencies:
-      '@chainsafe/blst-darwin-arm64': 2.2.0
-      '@chainsafe/blst-darwin-x64': 2.2.0
-      '@chainsafe/blst-linux-arm64-gnu': 2.2.0
-      '@chainsafe/blst-linux-arm64-musl': 2.2.0
-      '@chainsafe/blst-linux-x64-gnu': 2.2.0
-      '@chainsafe/blst-linux-x64-musl': 2.2.0
-      '@chainsafe/blst-win32-x64-msvc': 2.2.0
-
-  '@chainsafe/hashtree-darwin-arm64@1.0.1':
-    optional: true
-
-  '@chainsafe/hashtree-linux-arm64-gnu@1.0.1':
-    optional: true
-
-  '@chainsafe/hashtree-linux-x64-gnu@1.0.1':
-    optional: true
-
-  '@chainsafe/hashtree@1.0.1':
-    optionalDependencies:
-      '@chainsafe/hashtree-darwin-arm64': 1.0.1
-      '@chainsafe/hashtree-linux-arm64-gnu': 1.0.1
-      '@chainsafe/hashtree-linux-x64-gnu': 1.0.1
-
-  '@chainsafe/persistent-merkle-tree@0.8.0':
-    dependencies:
-      '@chainsafe/as-sha256': 0.5.0
-      '@chainsafe/hashtree': 1.0.1
-      '@noble/hashes': 1.5.0
-
-  '@chainsafe/persistent-ts@0.19.1': {}
-
-  '@chainsafe/ssz@0.17.1':
-    dependencies:
-      '@chainsafe/as-sha256': 0.5.0
-      '@chainsafe/persistent-merkle-tree': 0.8.0
-
-  '@chainsafe/ssz@0.18.0':
-    dependencies:
-      '@chainsafe/as-sha256': 0.5.0
-      '@chainsafe/persistent-merkle-tree': 0.8.0
 
   '@colors/colors@1.5.0':
     optional: true
@@ -8932,42 +8679,6 @@ snapshots:
   '@ljharb/through@2.3.13':
     dependencies:
       call-bind: 1.0.7
-
-  '@lodestar/config@1.22.0':
-    dependencies:
-      '@chainsafe/ssz': 0.17.1
-      '@lodestar/params': 1.22.0
-      '@lodestar/types': 1.22.0
-
-  '@lodestar/params@1.22.0': {}
-
-  '@lodestar/state-transition@1.22.0':
-    dependencies:
-      '@chainsafe/as-sha256': 0.5.0
-      '@chainsafe/blst': 2.2.0
-      '@chainsafe/persistent-merkle-tree': 0.8.0
-      '@chainsafe/persistent-ts': 0.19.1
-      '@chainsafe/ssz': 0.17.1
-      '@lodestar/config': 1.22.0
-      '@lodestar/params': 1.22.0
-      '@lodestar/types': 1.22.0
-      '@lodestar/utils': 1.22.0
-      bigint-buffer: 1.1.5
-      immutable: 4.3.7
-
-  '@lodestar/types@1.22.0':
-    dependencies:
-      '@chainsafe/ssz': 0.17.1
-      '@lodestar/params': 1.22.0
-      ethereum-cryptography: 2.2.1
-
-  '@lodestar/utils@1.22.0':
-    dependencies:
-      '@chainsafe/as-sha256': 0.5.0
-      any-signal: 3.0.1
-      bigint-buffer: 1.1.5
-      case: 1.6.3
-      js-yaml: 4.1.0
 
   '@metamask/eth-sig-util@4.0.1':
     dependencies:
@@ -10422,8 +10133,6 @@ snapshots:
 
   any-promise@1.3.0: {}
 
-  any-signal@3.0.1: {}
-
   anymatch@3.1.3:
     dependencies:
       normalize-path: 3.0.0
@@ -10577,15 +10286,7 @@ snapshots:
 
   before-after-hook@3.0.2: {}
 
-  bigint-buffer@1.1.5:
-    dependencies:
-      bindings: 1.5.0
-
   binary-extensions@2.3.0: {}
-
-  bindings@1.5.0:
-    dependencies:
-      file-uri-to-path: 1.0.0
 
   bl@4.1.0:
     dependencies:
@@ -10802,8 +10503,6 @@ snapshots:
       no-case: 3.0.4
       tslib: 2.8.0
       upper-case-first: 2.0.2
-
-  case@1.6.3: {}
 
   caseless@0.12.0: {}
 
@@ -12077,8 +11776,6 @@ snapshots:
   file-entry-cache@6.0.1:
     dependencies:
       flat-cache: 3.2.0
-
-  file-uri-to-path@1.0.0: {}
 
   fill-range@7.1.1:
     dependencies:
@@ -15407,8 +15104,6 @@ snapshots:
       which-typed-array: 1.1.15
 
   uuid@8.3.2: {}
-
-  uuid@9.0.1: {}
 
   v8-compile-cache-lib@3.0.1: {}
 

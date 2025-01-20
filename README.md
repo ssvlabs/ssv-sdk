@@ -14,7 +14,7 @@
 
 ## Overview
 
-The SSV SDK is a TypeScript library for interacting with the SSV (Secret Shared Validator) network, enabling distributed validator operations on Ethereum.
+The SSV SDK is a TypeScript library for interacting with the SSV network, enabling distributed validator operations on Ethereum.
 
 ## Core Modules
 
