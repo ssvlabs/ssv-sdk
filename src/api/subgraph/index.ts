@@ -27,7 +27,10 @@ import {
 export const getOwnerNonce = (client: GraphQLClient, args: GetOwnerNonceByBlockQueryVariables) => {
   const document =
     typeof args.block === 'number' ? GetOwnerNonceByBlockDocument : GetOwnerNonceDocument
-  return client.request(document, args).then((r) => r.account?.nonce)
+  return client
+    .request(document, args)
+    .then((r) => r.account?.nonce || '0')
+    .catch(() => '0')
 }
 
 export const getClusterSnapshot = (client: GraphQLClient, args: GetClusterSnapshotQueryVariables) =>
