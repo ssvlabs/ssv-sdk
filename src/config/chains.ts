@@ -37,7 +37,7 @@ export const graph_endpoints: Record<SupportedChainsIDs, string> = {
     'https://api.studio.thegraph.com/query/71118/ssv-network-holesky/version/latest',
   [hoodi.id]:
     import.meta.env.VITE_GRAPH_ENDPOINT ||
-    'https://graph-node-hoodi.stage.ops.ssvlabsinternal.com/subgraphs/name/ssv-bapps-hoodi/graphql',
+    'https://graph-node-hoodi.stage.ops.ssvlabsinternal.com/subgraphs/name/ssv-bapps-hoodi',
 }
 
 export const rest_endpoints: Record<SupportedChainsIDs, string> = {
