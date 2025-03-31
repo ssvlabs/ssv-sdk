@@ -1,8 +1,8 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\deprecated\\RegisterAuth.sol": {
-      "lastModificationDate": 1736163363076,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\deprecated\\RegisterAuth.sol": {
+      "lastModificationDate": 1743432513783,
       "contentHash": "f4d39e992bd59bf400a07167b7a8ffc2",
       "sourceName": "contracts/deprecated/RegisterAuth.sol",
       "solcConfig": {
@@ -22,23 +22,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "0.8.18"
-      ],
-      "artifacts": [
-        "RegisterAuth"
-      ]
+      "versionPragmas": ["0.8.18"],
+      "artifacts": ["RegisterAuth"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\interfaces\\external\\ISSVWhitelistingContract.sol": {
-      "lastModificationDate": 1736163363088,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\interfaces\\external\\ISSVWhitelistingContract.sol": {
+      "lastModificationDate": 1743432513788,
       "contentHash": "ab1d3fb7baab24cd581b61df8553d642",
       "sourceName": "contracts/interfaces/external/ISSVWhitelistingContract.sol",
       "solcConfig": {
@@ -59,23 +53,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "ISSVWhitelistingContract"
-      ]
+      "versionPragmas": ["^0.8.20"],
+      "artifacts": ["ISSVWhitelistingContract"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\whitelisting\\BasicWhitelisting.sol": {
-      "lastModificationDate": 1736163363123,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\whitelisting\\BasicWhitelisting.sol": {
+      "lastModificationDate": 1743432513807,
       "contentHash": "aa543140e34e31714817bf2c7632cf34",
       "sourceName": "contracts/whitelisting/BasicWhitelisting.sol",
       "solcConfig": {
@@ -96,9 +84,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -108,15 +94,11 @@
         "@openzeppelin/contracts/utils/introspection/ERC165.sol",
         "../interfaces/external/ISSVWhitelistingContract.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "BasicWhitelisting"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["BasicWhitelisting"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\access\\Ownable.sol": {
-      "lastModificationDate": 1734966075929,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\access\\Ownable.sol": {
+      "lastModificationDate": 1743432598276,
       "contentHash": "5a20b2cad87ddb61c7a3a6af21289e28",
       "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
       "solcConfig": {
@@ -137,25 +119,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "../utils/Context.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "Ownable"
-      ]
+      "imports": ["../utils/Context.sol"],
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["Ownable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\ERC165.sol": {
-      "lastModificationDate": 1734966076564,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\ERC165.sol": {
+      "lastModificationDate": 1743432597068,
       "contentHash": "0e7db055ce108f9da7bb6686a00287c0",
       "sourceName": "@openzeppelin/contracts/utils/introspection/ERC165.sol",
       "solcConfig": {
@@ -176,25 +150,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "./IERC165.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "ERC165"
-      ]
+      "imports": ["./IERC165.sol"],
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["ERC165"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\utils\\Context.sol": {
-      "lastModificationDate": 1734966076556,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\utils\\Context.sol": {
+      "lastModificationDate": 1743432597001,
       "contentHash": "f07feb4a44b1a4872370da5aa70e8e46",
       "sourceName": "@openzeppelin/contracts/utils/Context.sol",
       "solcConfig": {
@@ -215,23 +181,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "Context"
-      ]
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["Context"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\IERC165.sol": {
-      "lastModificationDate": 1734966076566,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\IERC165.sol": {
+      "lastModificationDate": 1743432597656,
       "contentHash": "03e6768535ac4da0e9756f1d8a4a018a",
       "sourceName": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
       "solcConfig": {
@@ -252,23 +212,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IERC165"
-      ]
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["IERC165"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\ERC165Checker.sol": {
-      "lastModificationDate": 1734966076564,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\ERC165Checker.sol": {
+      "lastModificationDate": 1743432597070,
       "contentHash": "0a66857c4a2223ad54b814ea56470c97",
       "sourceName": "@openzeppelin/contracts/utils/introspection/ERC165Checker.sol",
       "solcConfig": {
@@ -289,25 +243,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "./IERC165.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "ERC165Checker"
-      ]
+      "imports": ["./IERC165.sol"],
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["ERC165Checker"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\libraries\\OperatorLib.sol": {
-      "lastModificationDate": 1736163363092,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\libraries\\OperatorLib.sol": {
+      "lastModificationDate": 1743432513790,
       "contentHash": "7d7e6c49929feb54c892bcd4d3300431",
       "sourceName": "contracts/libraries/OperatorLib.sol",
       "solcConfig": {
@@ -328,9 +274,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -343,15 +287,11 @@
         "./Types.sol",
         "@openzeppelin/contracts/utils/introspection/ERC165Checker.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "OperatorLib"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["OperatorLib"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVNetworkCore.sol": {
-      "lastModificationDate": 1736163363083,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVNetworkCore.sol": {
+      "lastModificationDate": 1743432513786,
       "contentHash": "c7f8a5c6be7f9347fa54f1741a1a2fb5",
       "sourceName": "contracts/interfaces/ISSVNetworkCore.sol",
       "solcConfig": {
@@ -372,60 +312,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "ISSVNetworkCore"
-      ]
+      "versionPragmas": ["^0.8.20"],
+      "artifacts": ["ISSVNetworkCore"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\libraries\\SSVStorageProtocol.sol": {
-      "lastModificationDate": 1736163363094,
-      "contentHash": "bcf113cd4c7956d8d2714d61fe2e2c63",
-      "sourceName": "contracts/libraries/SSVStorageProtocol.sol",
-      "solcConfig": {
-        "version": "0.8.24",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 10000
-          },
-          "evmVersion": "cancun",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVStorageProtocol"
-      ]
-    },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\libraries\\SSVStorage.sol": {
-      "lastModificationDate": 1736163363094,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\libraries\\SSVStorage.sol": {
+      "lastModificationDate": 1743432513791,
       "contentHash": "5d7c58816a6a4bca2baa4a0c62812724",
       "sourceName": "contracts/libraries/SSVStorage.sol",
       "solcConfig": {
@@ -446,9 +343,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -458,15 +353,42 @@
         "@openzeppelin/contracts/utils/Counters.sol",
         "@openzeppelin/contracts/token/ERC20/IERC20.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVStorage"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVStorage"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\libraries\\Types.sol": {
-      "lastModificationDate": 1736163363094,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\libraries\\SSVStorageProtocol.sol": {
+      "lastModificationDate": 1743432513791,
+      "contentHash": "bcf113cd4c7956d8d2714d61fe2e2c63",
+      "sourceName": "contracts/libraries/SSVStorageProtocol.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 10000
+          },
+          "evmVersion": "cancun",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": ["ast"]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVStorageProtocol"]
+    },
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\libraries\\Types.sol": {
+      "lastModificationDate": 1743432513791,
       "contentHash": "bace5a23857e4ec418612ecda6bc4f9e",
       "sourceName": "contracts/libraries/Types.sol",
       "solcConfig": {
@@ -487,24 +409,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "Types256",
-        "Types64"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["Types256", "Types64"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\utils\\Counters.sol": {
-      "lastModificationDate": 1734966076557,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\utils\\Counters.sol": {
+      "lastModificationDate": 1743432597003,
       "contentHash": "74654e3ae5d7f39555055dfe244dab7a",
       "sourceName": "@openzeppelin/contracts/utils/Counters.sol",
       "solcConfig": {
@@ -525,23 +440,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "Counters"
-      ]
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["Counters"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\IERC20.sol": {
-      "lastModificationDate": 1734966076516,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\IERC20.sol": {
+      "lastModificationDate": 1743432597673,
       "contentHash": "df36f7051335cd1e748b1b6463b7fdd3",
       "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
       "solcConfig": {
@@ -562,23 +471,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IERC20"
-      ]
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["IERC20"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\SSVNetworkUpgrade.sol": {
-      "lastModificationDate": 1736163363103,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\SSVNetworkUpgrade.sol": {
+      "lastModificationDate": 1743432513798,
       "contentHash": "52c4110db457e15970c501a704ba2f7c",
       "sourceName": "contracts/test/SSVNetworkUpgrade.sol",
       "solcConfig": {
@@ -599,9 +502,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -623,15 +524,11 @@
         "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol",
         "@openzeppelin/contracts-upgradeable/access/Ownable2StepUpgradeable.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVNetworkUpgrade"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVNetworkUpgrade"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\interfaces\\ISSVNetworkT.sol": {
-      "lastModificationDate": 1736163363104,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\interfaces\\ISSVNetworkT.sol": {
+      "lastModificationDate": 1743432513799,
       "contentHash": "e97b58e457d20348251871d4d270d535",
       "sourceName": "contracts/test/interfaces/ISSVNetworkT.sol",
       "solcConfig": {
@@ -652,9 +549,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -667,132 +562,11 @@
         "../../interfaces/ISSVViews.sol",
         "@openzeppelin/contracts/token/ERC20/IERC20.sol"
       ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "ISSVNetworkT"
-      ]
+      "versionPragmas": ["^0.8.20"],
+      "artifacts": ["ISSVNetworkT"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVClusters.sol": {
-      "lastModificationDate": 1736163363082,
-      "contentHash": "57891e7530c64c652c62123aab7918b5",
-      "sourceName": "contracts/interfaces/ISSVClusters.sol",
-      "solcConfig": {
-        "version": "0.8.24",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 10000
-          },
-          "evmVersion": "cancun",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./ISSVNetworkCore.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "ISSVClusters"
-      ]
-    },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVOperators.sol": {
-      "lastModificationDate": 1736163363084,
-      "contentHash": "d09c164497d4a4daa57d4e657acf9c3a",
-      "sourceName": "contracts/interfaces/ISSVOperators.sol",
-      "solcConfig": {
-        "version": "0.8.24",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 10000
-          },
-          "evmVersion": "cancun",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./ISSVNetworkCore.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "ISSVOperators"
-      ]
-    },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVViews.sol": {
-      "lastModificationDate": 1736163363086,
-      "contentHash": "6b87350dcac0c84b758688da100229e8",
-      "sourceName": "contracts/interfaces/ISSVViews.sol",
-      "solcConfig": {
-        "version": "0.8.24",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 10000
-          },
-          "evmVersion": "cancun",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./ISSVNetworkCore.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "ISSVViews"
-      ]
-    },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVDAO.sol": {
-      "lastModificationDate": 1736163363082,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVDAO.sol": {
+      "lastModificationDate": 1743432513785,
       "contentHash": "d3847f15c76356a05893a63323e4ef4d",
       "sourceName": "contracts/interfaces/ISSVDAO.sol",
       "solcConfig": {
@@ -813,25 +587,110 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "./ISSVNetworkCore.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "ISSVDAO"
-      ]
+      "imports": ["./ISSVNetworkCore.sol"],
+      "versionPragmas": ["^0.8.20"],
+      "artifacts": ["ISSVDAO"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\libraries\\CoreLib.sol": {
-      "lastModificationDate": 1736163363091,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVClusters.sol": {
+      "lastModificationDate": 1743432513784,
+      "contentHash": "57891e7530c64c652c62123aab7918b5",
+      "sourceName": "contracts/interfaces/ISSVClusters.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 10000
+          },
+          "evmVersion": "cancun",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": ["ast"]
+            }
+          }
+        }
+      },
+      "imports": ["./ISSVNetworkCore.sol"],
+      "versionPragmas": ["^0.8.20"],
+      "artifacts": ["ISSVClusters"]
+    },
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVOperators.sol": {
+      "lastModificationDate": 1743432513786,
+      "contentHash": "d09c164497d4a4daa57d4e657acf9c3a",
+      "sourceName": "contracts/interfaces/ISSVOperators.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 10000
+          },
+          "evmVersion": "cancun",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": ["ast"]
+            }
+          }
+        }
+      },
+      "imports": ["./ISSVNetworkCore.sol"],
+      "versionPragmas": ["^0.8.20"],
+      "artifacts": ["ISSVOperators"]
+    },
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVViews.sol": {
+      "lastModificationDate": 1743432513787,
+      "contentHash": "6b87350dcac0c84b758688da100229e8",
+      "sourceName": "contracts/interfaces/ISSVViews.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 10000
+          },
+          "evmVersion": "cancun",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": ["ast"]
+            }
+          }
+        }
+      },
+      "imports": ["./ISSVNetworkCore.sol"],
+      "versionPragmas": ["^0.8.20"],
+      "artifacts": ["ISSVViews"]
+    },
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\libraries\\CoreLib.sol": {
+      "lastModificationDate": 1743432513789,
       "contentHash": "5cd039838d1d94018a879ee54c3a81a5",
       "sourceName": "contracts/libraries/CoreLib.sol",
       "solcConfig": {
@@ -852,25 +711,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "./SSVStorage.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "CoreLib"
-      ]
+      "imports": ["./SSVStorage.sol"],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["CoreLib"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\libraries\\ClusterLib.sol": {
-      "lastModificationDate": 1736163363088,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\libraries\\ClusterLib.sol": {
+      "lastModificationDate": 1743432513789,
       "contentHash": "1d7ba94ff8d9d9b436d761ed16aadab6",
       "sourceName": "contracts/libraries/ClusterLib.sol",
       "solcConfig": {
@@ -891,9 +742,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -906,15 +755,11 @@
         "./ProtocolLib.sol",
         "./Types.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "ClusterLib"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["ClusterLib"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\access\\Ownable2StepUpgradeable.sol": {
-      "lastModificationDate": 1734966075972,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\access\\Ownable2StepUpgradeable.sol": {
+      "lastModificationDate": 1743432598352,
       "contentHash": "212659f25732330cbea9e2da4b7d5bbb",
       "sourceName": "@openzeppelin/contracts-upgradeable/access/Ownable2StepUpgradeable.sol",
       "solcConfig": {
@@ -935,26 +780,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "./OwnableUpgradeable.sol",
-        "../proxy/utils/Initializable.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "Ownable2StepUpgradeable"
-      ]
+      "imports": ["./OwnableUpgradeable.sol", "../proxy/utils/Initializable.sol"],
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["Ownable2StepUpgradeable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol": {
-      "lastModificationDate": 1734966076528,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\proxy\\utils\\UUPSUpgradeable.sol": {
+      "lastModificationDate": 1743432598401,
       "contentHash": "c50df4f62eb9ef48d89b3a48a57e3bf5",
       "sourceName": "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol",
       "solcConfig": {
@@ -975,9 +811,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -987,15 +821,11 @@
         "../ERC1967/ERC1967UpgradeUpgradeable.sol",
         "./Initializable.sol"
       ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "UUPSUpgradeable"
-      ]
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["UUPSUpgradeable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\libraries\\ProtocolLib.sol": {
-      "lastModificationDate": 1736163363093,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\libraries\\ProtocolLib.sol": {
+      "lastModificationDate": 1743432513790,
       "contentHash": "33f9b8d83534ebab0e2f3cde94da037c",
       "sourceName": "contracts/libraries/ProtocolLib.sol",
       "solcConfig": {
@@ -1016,27 +846,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "../interfaces/ISSVNetworkCore.sol",
-        "./Types.sol",
-        "./SSVStorageProtocol.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "ProtocolLib"
-      ]
+      "imports": ["../interfaces/ISSVNetworkCore.sol", "./Types.sol", "./SSVStorageProtocol.sol"],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["ProtocolLib"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol": {
-      "lastModificationDate": 1734966075973,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\access\\OwnableUpgradeable.sol": {
+      "lastModificationDate": 1743432598355,
       "contentHash": "a70d53f7e468306c02c529ecaa1d59c5",
       "sourceName": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol",
       "solcConfig": {
@@ -1057,26 +877,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "../utils/ContextUpgradeable.sol",
-        "../proxy/utils/Initializable.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "OwnableUpgradeable"
-      ]
+      "imports": ["../utils/ContextUpgradeable.sol", "../proxy/utils/Initializable.sol"],
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["OwnableUpgradeable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol": {
-      "lastModificationDate": 1734966076528,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\proxy\\utils\\Initializable.sol": {
+      "lastModificationDate": 1743432598324,
       "contentHash": "b0970a564d121abf9adfff8d1a01eb16",
       "sourceName": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
       "solcConfig": {
@@ -1097,25 +908,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "../../utils/AddressUpgradeable.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.2"
-      ],
-      "artifacts": [
-        "Initializable"
-      ]
+      "imports": ["../../utils/AddressUpgradeable.sol"],
+      "versionPragmas": ["^0.8.2"],
+      "artifacts": ["Initializable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol": {
-      "lastModificationDate": 1734966076601,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\utils\\ContextUpgradeable.sol": {
+      "lastModificationDate": 1743432597065,
       "contentHash": "b6dfb72ff1fd764f725ec4db364b1b20",
       "sourceName": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol",
       "solcConfig": {
@@ -1136,25 +939,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "../proxy/utils/Initializable.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "ContextUpgradeable"
-      ]
+      "imports": ["../proxy/utils/Initializable.sol"],
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["ContextUpgradeable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\utils\\AddressUpgradeable.sol": {
-      "lastModificationDate": 1734966076600,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\utils\\AddressUpgradeable.sol": {
+      "lastModificationDate": 1743432597049,
       "contentHash": "c30c805386fda8a42ff515da963d3a95",
       "sourceName": "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol",
       "solcConfig": {
@@ -1175,23 +970,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.1"
-      ],
-      "artifacts": [
-        "AddressUpgradeable"
-      ]
+      "versionPragmas": ["^0.8.1"],
+      "artifacts": ["AddressUpgradeable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\interfaces\\draft-IERC1822Upgradeable.sol": {
-      "lastModificationDate": 1734966076501,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\interfaces\\draft-IERC1822Upgradeable.sol": {
+      "lastModificationDate": 1743432597097,
       "contentHash": "a6883cfd85607b16c121a02728369eb3",
       "sourceName": "@openzeppelin/contracts-upgradeable/interfaces/draft-IERC1822Upgradeable.sol",
       "solcConfig": {
@@ -1212,23 +1001,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IERC1822ProxiableUpgradeable"
-      ]
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["IERC1822ProxiableUpgradeable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol": {
-      "lastModificationDate": 1734966076521,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\proxy\\ERC1967\\ERC1967UpgradeUpgradeable.sol": {
+      "lastModificationDate": 1743432597564,
       "contentHash": "e186f91201ca317278fffbf1ea60cea0",
       "sourceName": "@openzeppelin/contracts-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol",
       "solcConfig": {
@@ -1249,9 +1032,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -1264,15 +1045,11 @@
         "../../utils/StorageSlotUpgradeable.sol",
         "../utils/Initializable.sol"
       ],
-      "versionPragmas": [
-        "^0.8.2"
-      ],
-      "artifacts": [
-        "ERC1967UpgradeUpgradeable"
-      ]
+      "versionPragmas": ["^0.8.2"],
+      "artifacts": ["ERC1967UpgradeUpgradeable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\interfaces\\IERC1967Upgradeable.sol": {
-      "lastModificationDate": 1734966076507,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\interfaces\\IERC1967Upgradeable.sol": {
+      "lastModificationDate": 1743432597738,
       "contentHash": "a5421a5e611067b9202e83329fbf6fc7",
       "sourceName": "@openzeppelin/contracts-upgradeable/interfaces/IERC1967Upgradeable.sol",
       "solcConfig": {
@@ -1293,23 +1070,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IERC1967Upgradeable"
-      ]
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["IERC1967Upgradeable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\utils\\StorageSlotUpgradeable.sol": {
-      "lastModificationDate": 1734966076632,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\utils\\StorageSlotUpgradeable.sol": {
+      "lastModificationDate": 1743432598388,
       "contentHash": "02cf959b00ba5c650708472f195f8b29",
       "sourceName": "@openzeppelin/contracts-upgradeable/utils/StorageSlotUpgradeable.sol",
       "solcConfig": {
@@ -1330,23 +1101,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "StorageSlotUpgradeable"
-      ]
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["StorageSlotUpgradeable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\proxy\\beacon\\IBeaconUpgradeable.sol": {
-      "lastModificationDate": 1734966076521,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts-upgradeable@4.9.6\\node_modules\\@openzeppelin\\contracts-upgradeable\\proxy\\beacon\\IBeaconUpgradeable.sol": {
+      "lastModificationDate": 1743432597686,
       "contentHash": "21bffd733b4ca013e125a0ffe2e52254",
       "sourceName": "@openzeppelin/contracts-upgradeable/proxy/beacon/IBeaconUpgradeable.sol",
       "solcConfig": {
@@ -1367,23 +1132,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
       "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IBeaconUpgradeable"
-      ]
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["IBeaconUpgradeable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\SSVNetworkViews.sol": {
-      "lastModificationDate": 1736163362923,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\SSVNetworkViews.sol": {
+      "lastModificationDate": 1743432513743,
       "contentHash": "58e2a0ea78667d56c7c3b04d1e8c8cc8",
       "sourceName": "contracts/SSVNetworkViews.sol",
       "solcConfig": {
@@ -1404,9 +1163,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -1420,15 +1177,11 @@
         "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol",
         "@openzeppelin/contracts-upgradeable/access/Ownable2StepUpgradeable.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVNetworkViews"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVNetworkViews"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\modules\\SSVViews.sol": {
-      "lastModificationDate": 1736163363100,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\modules\\SSVViews.sol": {
+      "lastModificationDate": 1743432513795,
       "contentHash": "e206f84d7d686b6493710d787558c3b5",
       "sourceName": "contracts/modules/SSVViews.sol",
       "solcConfig": {
@@ -1449,9 +1202,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -1467,15 +1218,11 @@
         "../libraries/SSVStorage.sol",
         "../libraries/SSVStorageProtocol.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVViews"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVViews"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\modules\\SSVOperatorsUpdate.sol": {
-      "lastModificationDate": 1736163363115,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\modules\\SSVOperatorsUpdate.sol": {
+      "lastModificationDate": 1743432513806,
       "contentHash": "f92a0cb8434eb1d47c67cd2299c617ed",
       "sourceName": "contracts/test/modules/SSVOperatorsUpdate.sol",
       "solcConfig": {
@@ -1496,9 +1243,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -1512,15 +1257,11 @@
         "../../libraries/CoreLib.sol",
         "@openzeppelin/contracts/utils/Counters.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVOperatorsUpdate"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVOperatorsUpdate"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\libraries\\SSVStorageT.sol": {
-      "lastModificationDate": 1736163363106,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\libraries\\SSVStorageT.sol": {
+      "lastModificationDate": 1743432513801,
       "contentHash": "2d8ff4336b021570b71cf2508326f6eb",
       "sourceName": "contracts/test/libraries/SSVStorageT.sol",
       "solcConfig": {
@@ -1541,9 +1282,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -1554,15 +1293,11 @@
         "@openzeppelin/contracts/utils/Counters.sol",
         "@openzeppelin/contracts/token/ERC20/IERC20.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVStorageT"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVStorageT"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\SSVNetworkReinitializable.sol": {
-      "lastModificationDate": 1736163363102,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\SSVNetworkReinitializable.sol": {
+      "lastModificationDate": 1743432513797,
       "contentHash": "73cf50184b1b6cc254dbe04bf322935e",
       "sourceName": "contracts/test/SSVNetworkReinitializable.sol",
       "solcConfig": {
@@ -1583,26 +1318,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "../SSVNetwork.sol",
-        "./libraries/SSVStorageT.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVNetworkReinitializable"
-      ]
+      "imports": ["../SSVNetwork.sol", "./libraries/SSVStorageT.sol"],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVNetworkReinitializable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\SSVNetwork.sol": {
-      "lastModificationDate": 1736163362923,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\SSVNetwork.sol": {
+      "lastModificationDate": 1743432513743,
       "contentHash": "9476ede4cf159a48936e7f959c389bfc",
       "sourceName": "contracts/SSVNetwork.sol",
       "solcConfig": {
@@ -1623,9 +1349,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -1648,15 +1372,11 @@
         "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol",
         "@openzeppelin/contracts-upgradeable/access/Ownable2StepUpgradeable.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVNetwork"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVNetwork"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVNetwork.sol": {
-      "lastModificationDate": 1736163363082,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVNetwork.sol": {
+      "lastModificationDate": 1743432513785,
       "contentHash": "6115a519a6f1336a8305ffd70d89ba9f",
       "sourceName": "contracts/interfaces/ISSVNetwork.sol",
       "solcConfig": {
@@ -1677,9 +1397,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -1693,15 +1411,11 @@
         "../libraries/SSVStorage.sol",
         "@openzeppelin/contracts/token/ERC20/IERC20.sol"
       ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "ISSVNetwork"
-      ]
+      "versionPragmas": ["^0.8.20"],
+      "artifacts": ["ISSVNetwork"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVOperatorsWhitelist.sol": {
-      "lastModificationDate": 1736163363086,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\interfaces\\ISSVOperatorsWhitelist.sol": {
+      "lastModificationDate": 1743432513787,
       "contentHash": "19f043598e3245dc8a8d983b19e5a9c2",
       "sourceName": "contracts/interfaces/ISSVOperatorsWhitelist.sol",
       "solcConfig": {
@@ -1722,26 +1436,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "./ISSVNetworkCore.sol",
-        "./external/ISSVWhitelistingContract.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.20"
-      ],
-      "artifacts": [
-        "ISSVOperatorsWhitelist"
-      ]
+      "imports": ["./ISSVNetworkCore.sol", "./external/ISSVWhitelistingContract.sol"],
+      "versionPragmas": ["^0.8.20"],
+      "artifacts": ["ISSVOperatorsWhitelist"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\SSVProxy.sol": {
-      "lastModificationDate": 1736163362925,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\SSVProxy.sol": {
+      "lastModificationDate": 1743432513744,
       "contentHash": "ed174351b4318253a3fc7bead5235311",
       "sourceName": "contracts/SSVProxy.sol",
       "solcConfig": {
@@ -1762,25 +1467,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "./libraries/SSVStorage.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVProxy"
-      ]
+      "imports": ["./libraries/SSVStorage.sol"],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVProxy"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\upgrades\\stage\\holesky\\SSVNetworkUpgradeValidatorsPerOperator.sol": {
-      "lastModificationDate": 1736163363120,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\upgrades\\stage\\holesky\\SSVNetworkUpgradeValidatorsPerOperator.sol": {
+      "lastModificationDate": 1743432513807,
       "contentHash": "928c35e53050e734121f7c549dbbd2ca",
       "sourceName": "contracts/upgrades/stage/holesky/SSVNetworkUpgradeValidatorsPerOperator.sol",
       "solcConfig": {
@@ -1801,25 +1498,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "../../../SSVNetwork.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVNetworkUpgradeValidatorsPerOperator"
-      ]
+      "imports": ["../../../SSVNetwork.sol"],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVNetworkUpgradeValidatorsPerOperator"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\upgrades\\stage\\goerli\\SSVNetworkValidatorsPerOperator.sol": {
-      "lastModificationDate": 1736163363119,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\upgrades\\stage\\goerli\\SSVNetworkValidatorsPerOperator.sol": {
+      "lastModificationDate": 1743432513806,
       "contentHash": "f1fde6583aac6dba52e097fec95f26b2",
       "sourceName": "contracts/upgrades/stage/goerli/SSVNetworkValidatorsPerOperator.sol",
       "solcConfig": {
@@ -1840,25 +1529,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "../../../SSVNetwork.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVNetworkValidatorsPerOperator"
-      ]
+      "imports": ["../../../SSVNetwork.sol"],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVNetworkValidatorsPerOperator"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\SSVNetworkValidatorsPerOperator.sol": {
-      "lastModificationDate": 1736163363104,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\SSVNetworkValidatorsPerOperator.sol": {
+      "lastModificationDate": 1743432513798,
       "contentHash": "e8b62d93f3907e8d69d8fa0de133eb2e",
       "sourceName": "contracts/test/SSVNetworkValidatorsPerOperator.sol",
       "solcConfig": {
@@ -1879,25 +1560,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "../SSVNetwork.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVNetworkValidatorsPerOperatorUpgrade"
-      ]
+      "imports": ["../SSVNetwork.sol"],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVNetworkValidatorsPerOperatorUpgrade"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\SSVNetworkBasicUpgrade.sol": {
-      "lastModificationDate": 1736163363101,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\SSVNetworkBasicUpgrade.sol": {
+      "lastModificationDate": 1743432513796,
       "contentHash": "01e85f524e615f767d261bafae96dfe0",
       "sourceName": "contracts/test/SSVNetworkBasicUpgrade.sol",
       "solcConfig": {
@@ -1918,25 +1591,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "../SSVNetwork.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVNetworkBasicUpgrade"
-      ]
+      "imports": ["../SSVNetwork.sol"],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVNetworkBasicUpgrade"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\extensions\\IERC20Metadata.sol": {
-      "lastModificationDate": 1734966076514,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\extensions\\IERC20Metadata.sol": {
+      "lastModificationDate": 1743432597678,
       "contentHash": "909ab67fc5c25033fe6cd364f8c056f9",
       "sourceName": "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol",
       "solcConfig": {
@@ -1957,25 +1622,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "../IERC20.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IERC20Metadata"
-      ]
+      "imports": ["../IERC20.sol"],
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["IERC20Metadata"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\ERC20.sol": {
-      "lastModificationDate": 1734966076507,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\ERC20.sol": {
+      "lastModificationDate": 1743432597081,
       "contentHash": "3ae5166c6827a9cf1a7a462d1632b464",
       "sourceName": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
       "solcConfig": {
@@ -1996,27 +1653,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "./IERC20.sol",
-        "./extensions/IERC20Metadata.sol",
-        "../../utils/Context.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "ERC20"
-      ]
+      "imports": ["./IERC20.sol", "./extensions/IERC20Metadata.sol", "../../utils/Context.sol"],
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["ERC20"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\extensions\\ERC20Burnable.sol": {
-      "lastModificationDate": 1734966076509,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\node_modules\\.pnpm\\@openzeppelin+contracts@4.9.6\\node_modules\\@openzeppelin\\contracts\\token\\ERC20\\extensions\\ERC20Burnable.sol": {
+      "lastModificationDate": 1743432597083,
       "contentHash": "a1c7f80ae26f5b2d7d563475627fbf25",
       "sourceName": "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol",
       "solcConfig": {
@@ -2037,26 +1684,17 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
       },
-      "imports": [
-        "../ERC20.sol",
-        "../../../utils/Context.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "ERC20Burnable"
-      ]
+      "imports": ["../ERC20.sol", "../../../utils/Context.sol"],
+      "versionPragmas": ["^0.8.0"],
+      "artifacts": ["ERC20Burnable"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\mocks\\GenericWhitelistContract.sol": {
-      "lastModificationDate": 1736163363112,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\mocks\\GenericWhitelistContract.sol": {
+      "lastModificationDate": 1743432513805,
       "contentHash": "b2c81cdd6c3376ef6e00a25acfc7fb70",
       "sourceName": "contracts/test/mocks/GenericWhitelistContract.sol",
       "solcConfig": {
@@ -2077,9 +1715,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -2089,271 +1725,11 @@
         "../../interfaces/ISSVNetworkCore.sol",
         "@openzeppelin/contracts/token/ERC20/IERC20.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "GenericWhitelistContract"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["GenericWhitelistContract"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\modules\\SSVDAO.sol": {
-      "lastModificationDate": 1736163363098,
-      "contentHash": "99c4205213588548a2e244e3b50935e5",
-      "sourceName": "contracts/modules/SSVDAO.sol",
-      "solcConfig": {
-        "version": "0.8.24",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 10000
-          },
-          "evmVersion": "cancun",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../interfaces/ISSVDAO.sol",
-        "../libraries/Types.sol",
-        "../libraries/ProtocolLib.sol",
-        "../libraries/CoreLib.sol",
-        "../libraries/SSVStorageProtocol.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVDAO"
-      ]
-    },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\modules\\SSVOperators.sol": {
-      "lastModificationDate": 1736163363098,
-      "contentHash": "9ba76c078d6ca9e22b6854e85b83afcc",
-      "sourceName": "contracts/modules/SSVOperators.sol",
-      "solcConfig": {
-        "version": "0.8.24",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 10000
-          },
-          "evmVersion": "cancun",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../interfaces/ISSVOperators.sol",
-        "../libraries/Types.sol",
-        "../libraries/SSVStorage.sol",
-        "../libraries/SSVStorageProtocol.sol",
-        "../libraries/OperatorLib.sol",
-        "../libraries/CoreLib.sol",
-        "@openzeppelin/contracts/utils/Counters.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVOperators"
-      ]
-    },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\modules\\SSVOperatorsWhitelist.sol": {
-      "lastModificationDate": 1736163363099,
-      "contentHash": "34d7ccb4ecd4676d207d05b15ddc99db",
-      "sourceName": "contracts/modules/SSVOperatorsWhitelist.sol",
-      "solcConfig": {
-        "version": "0.8.24",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 10000
-          },
-          "evmVersion": "cancun",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../interfaces/ISSVOperatorsWhitelist.sol",
-        "../interfaces/external/ISSVWhitelistingContract.sol",
-        "../libraries/Types.sol",
-        "../libraries/SSVStorage.sol",
-        "../libraries/OperatorLib.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVOperatorsWhitelist"
-      ]
-    },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\libraries\\CoreLibT.sol": {
-      "lastModificationDate": 1736163363105,
-      "contentHash": "c6df6195a6820b9b6d2ad8b85ef5d80f",
-      "sourceName": "contracts/test/libraries/CoreLibT.sol",
-      "solcConfig": {
-        "version": "0.8.24",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 10000
-          },
-          "evmVersion": "cancun",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../../libraries/SSVStorage.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "CoreLibT"
-      ]
-    },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\modules\\SSVClusters.sol": {
-      "lastModificationDate": 1736163363097,
-      "contentHash": "69254537063b7caad7f007a0b95f90b0",
-      "sourceName": "contracts/modules/SSVClusters.sol",
-      "solcConfig": {
-        "version": "0.8.24",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 10000
-          },
-          "evmVersion": "cancun",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../interfaces/ISSVClusters.sol",
-        "../libraries/ClusterLib.sol",
-        "../libraries/OperatorLib.sol",
-        "../libraries/ProtocolLib.sol",
-        "../libraries/CoreLib.sol",
-        "../libraries/ValidatorLib.sol",
-        "../libraries/SSVStorage.sol",
-        "../libraries/SSVStorageProtocol.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "SSVClusters"
-      ]
-    },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\libraries\\ValidatorLib.sol": {
-      "lastModificationDate": 1736163363094,
-      "contentHash": "080503cf8ed51cb671f387c4f16cd537",
-      "sourceName": "contracts/libraries/ValidatorLib.sol",
-      "solcConfig": {
-        "version": "0.8.24",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 10000
-          },
-          "evmVersion": "cancun",
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "storageLayout"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../interfaces/ISSVNetworkCore.sol",
-        "./SSVStorage.sol"
-      ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "ValidatorLib"
-      ]
-    },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\mocks\\BadOperatorWhitelistingContract.sol": {
-      "lastModificationDate": 1736163363108,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\mocks\\BadOperatorWhitelistingContract.sol": {
+      "lastModificationDate": 1743432513803,
       "contentHash": "23e9acbc9cfd3e419d80cf19aca235ea",
       "sourceName": "contracts/test/mocks/BadOperatorWhitelistingContract.sol",
       "solcConfig": {
@@ -2374,9 +1750,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -2387,15 +1761,11 @@
         "./BeneficiaryContract.sol",
         "@openzeppelin/contracts/utils/introspection/ERC165.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "BadOperatorWhitelistingContract"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["BadOperatorWhitelistingContract"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\mocks\\BeneficiaryContract.sol": {
-      "lastModificationDate": 1736163363111,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\mocks\\BeneficiaryContract.sol": {
+      "lastModificationDate": 1743432513804,
       "contentHash": "919e2673930a16ade69ab530ddea77af",
       "sourceName": "contracts/test/mocks/BeneficiaryContract.sol",
       "solcConfig": {
@@ -2416,9 +1786,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -2428,15 +1796,226 @@
         "../../interfaces/ISSVOperators.sol",
         "@openzeppelin/contracts/utils/introspection/ERC165.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "BeneficiaryContract"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["BeneficiaryContract"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\mocks\\AttackerWhitelistingContract.sol": {
-      "lastModificationDate": 1736163363108,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\libraries\\ValidatorLib.sol": {
+      "lastModificationDate": 1743432513792,
+      "contentHash": "080503cf8ed51cb671f387c4f16cd537",
+      "sourceName": "contracts/libraries/ValidatorLib.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 10000
+          },
+          "evmVersion": "cancun",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": ["ast"]
+            }
+          }
+        }
+      },
+      "imports": ["../interfaces/ISSVNetworkCore.sol", "./SSVStorage.sol"],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["ValidatorLib"]
+    },
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\modules\\SSVClusters.sol": {
+      "lastModificationDate": 1743432513793,
+      "contentHash": "69254537063b7caad7f007a0b95f90b0",
+      "sourceName": "contracts/modules/SSVClusters.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 10000
+          },
+          "evmVersion": "cancun",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": ["ast"]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/ISSVClusters.sol",
+        "../libraries/ClusterLib.sol",
+        "../libraries/OperatorLib.sol",
+        "../libraries/ProtocolLib.sol",
+        "../libraries/CoreLib.sol",
+        "../libraries/ValidatorLib.sol",
+        "../libraries/SSVStorage.sol",
+        "../libraries/SSVStorageProtocol.sol"
+      ],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVClusters"]
+    },
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\libraries\\CoreLibT.sol": {
+      "lastModificationDate": 1743432513801,
+      "contentHash": "c6df6195a6820b9b6d2ad8b85ef5d80f",
+      "sourceName": "contracts/test/libraries/CoreLibT.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 10000
+          },
+          "evmVersion": "cancun",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": ["ast"]
+            }
+          }
+        }
+      },
+      "imports": ["../../libraries/SSVStorage.sol"],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["CoreLibT"]
+    },
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\modules\\SSVOperatorsWhitelist.sol": {
+      "lastModificationDate": 1743432513795,
+      "contentHash": "34d7ccb4ecd4676d207d05b15ddc99db",
+      "sourceName": "contracts/modules/SSVOperatorsWhitelist.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 10000
+          },
+          "evmVersion": "cancun",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": ["ast"]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/ISSVOperatorsWhitelist.sol",
+        "../interfaces/external/ISSVWhitelistingContract.sol",
+        "../libraries/Types.sol",
+        "../libraries/SSVStorage.sol",
+        "../libraries/OperatorLib.sol"
+      ],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVOperatorsWhitelist"]
+    },
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\modules\\SSVOperators.sol": {
+      "lastModificationDate": 1743432513794,
+      "contentHash": "9ba76c078d6ca9e22b6854e85b83afcc",
+      "sourceName": "contracts/modules/SSVOperators.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 10000
+          },
+          "evmVersion": "cancun",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": ["ast"]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/ISSVOperators.sol",
+        "../libraries/Types.sol",
+        "../libraries/SSVStorage.sol",
+        "../libraries/SSVStorageProtocol.sol",
+        "../libraries/OperatorLib.sol",
+        "../libraries/CoreLib.sol",
+        "@openzeppelin/contracts/utils/Counters.sol"
+      ],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVOperators"]
+    },
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\modules\\SSVDAO.sol": {
+      "lastModificationDate": 1743432513793,
+      "contentHash": "99c4205213588548a2e244e3b50935e5",
+      "sourceName": "contracts/modules/SSVDAO.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 10000
+          },
+          "evmVersion": "cancun",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": ["ast"]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../interfaces/ISSVDAO.sol",
+        "../libraries/Types.sol",
+        "../libraries/ProtocolLib.sol",
+        "../libraries/CoreLib.sol",
+        "../libraries/SSVStorageProtocol.sol"
+      ],
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["SSVDAO"]
+    },
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\mocks\\AttackerWhitelistingContract.sol": {
+      "lastModificationDate": 1743432513803,
       "contentHash": "c52335e8a593347528f196f4d1c9d1f3",
       "sourceName": "contracts/test/mocks/AttackerWhitelistingContract.sol",
       "solcConfig": {
@@ -2457,9 +2036,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -2470,15 +2047,11 @@
         "./BeneficiaryContract.sol",
         "@openzeppelin/contracts/utils/introspection/ERC165.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "AttackerContract"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["AttackerContract"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\mocks\\MockWhitelistingContract.sol": {
-      "lastModificationDate": 1736163363114,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\mocks\\MockWhitelistingContract.sol": {
+      "lastModificationDate": 1743432513805,
       "contentHash": "2ea1402f39b37ace92c0ba6fd0dec42e",
       "sourceName": "contracts/test/mocks/MockWhitelistingContract.sol",
       "solcConfig": {
@@ -2499,9 +2072,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -2510,15 +2081,11 @@
         "../../interfaces/external/ISSVWhitelistingContract.sol",
         "@openzeppelin/contracts/utils/introspection/ERC165.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "MockWhitelistingContract"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["MockWhitelistingContract"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\test\\mocks\\FakeWhitelistingContract.sol": {
-      "lastModificationDate": 1736163363112,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\test\\mocks\\FakeWhitelistingContract.sol": {
+      "lastModificationDate": 1743432513805,
       "contentHash": "c6368ceb37f29bb44b3d94bf954a761c",
       "sourceName": "contracts/test/mocks/FakeWhitelistingContract.sol",
       "solcConfig": {
@@ -2539,9 +2106,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -2550,15 +2115,11 @@
         "../../interfaces/external/ISSVWhitelistingContract.sol",
         "@openzeppelin/contracts/utils/introspection/ERC165.sol"
       ],
-      "versionPragmas": [
-        "0.8.24"
-      ],
-      "artifacts": [
-        "FakeWhitelistingContract"
-      ]
+      "versionPragmas": ["0.8.24"],
+      "artifacts": ["FakeWhitelistingContract"]
     },
-    "C:\\Users\\sumba\\Desktop\\DEV\\ssv-sdk\\hardhat\\contracts\\token\\SSVToken.sol": {
-      "lastModificationDate": 1736163363116,
+    "C:\\Users\\User\\Desktop\\SSV\\ssv-sdk\\hardhat\\contracts\\token\\SSVToken.sol": {
+      "lastModificationDate": 1743432513806,
       "contentHash": "036b5bdec35781a4e9c7bef8d5982d84",
       "sourceName": "contracts/token/SSVToken.sol",
       "solcConfig": {
@@ -2578,9 +2139,7 @@
                 "metadata",
                 "storageLayout"
               ],
-              "": [
-                "ast"
-              ]
+              "": ["ast"]
             }
           }
         }
@@ -2590,12 +2149,8 @@
         "@openzeppelin/contracts/access/Ownable.sol",
         "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol"
       ],
-      "versionPragmas": [
-        "0.8.4"
-      ],
-      "artifacts": [
-        "SSVToken"
-      ]
+      "versionPragmas": ["0.8.4"],
+      "artifacts": ["SSVToken"]
     }
   }
 }
