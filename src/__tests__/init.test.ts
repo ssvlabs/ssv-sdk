@@ -1,7 +1,7 @@
 import { SSVSDK } from '@/sdk'
 import hre from 'hardhat'
 import { initializeContract } from 'hardhat/contract-helpers'
-import { createPublicClient, createWalletClient, http } from 'viem'
+import { createPublicClient, createWalletClient, http, type PublicClient, type WalletClient } from 'viem'
 import { holesky } from 'viem/chains'
 import { describe, expect, it } from 'vitest'
 
@@ -80,5 +80,132 @@ describe('SDK Initiation', async () => {
     // Verify custom endpoints are used
     expect(sdk.config.graphEndpoint).toBe(customEndpoints.graphUrl)
     expect(sdk.config.restEndpoint).toBe(customEndpoints.restUrl)
+  })
+
+  describe('Client Validation', () => {
+    it('should throw error when publicClient is not provided', () => {
+      const transport = http(holesky.rpcUrls.default.http[0])
+      const walletClient = createWalletClient({
+        chain: holesky,
+        account: network.wallets[0].account,
+        transport,
+      })
+
+      expect(() => {
+        new SSVSDK({
+          publicClient: null as unknown as PublicClient,
+          walletClient,
+          _: {},
+        })
+      }).toThrowError('Public client must be provided')
+    })
+
+    it('should throw error when walletClient is not provided', () => {
+      const transport = http(holesky.rpcUrls.default.http[0])
+      const publicClient = createPublicClient({
+        chain: holesky,
+        transport,
+      })
+
+      expect(() => {
+        new SSVSDK({
+          publicClient,
+          walletClient: null as unknown as WalletClient,
+          _: {},
+        })
+      }).toThrowError('Wallet client must be provided')
+    })
+
+    it('should throw error when publicClient has no chain property', () => {
+      const transport = http(holesky.rpcUrls.default.http[0])
+      const walletClient = createWalletClient({
+        chain: holesky,
+        account: network.wallets[0].account,
+        transport,
+      })
+      const publicClient = createPublicClient({
+        chain: holesky,
+        transport,
+      })
+      // @ts-expect-error - intentionally removing chain property for test
+      delete publicClient.chain
+
+      expect(() => {
+        new SSVSDK({
+          publicClient,
+          walletClient,
+          _: {},
+        })
+      }).toThrowError('Public client must have a chain property')
+    })
+
+    it('should throw error when walletClient has no chain property', () => {
+      const transport = http(holesky.rpcUrls.default.http[0])
+      const walletClient = createWalletClient({
+        chain: holesky,
+        account: network.wallets[0].account,
+        transport,
+      })
+      const publicClient = createPublicClient({
+        chain: holesky,
+        transport,
+      })
+      // @ts-expect-error - intentionally removing chain property for test
+      delete walletClient.chain
+
+      expect(() => {
+        new SSVSDK({
+          publicClient,
+          walletClient,
+          _: {},
+        })
+      }).toThrowError('Wallet client must have a chain property')
+    })
+
+    it('should throw error when publicClient chain is not supported', () => {
+      const transport = http(holesky.rpcUrls.default.http[0])
+      const walletClient = createWalletClient({
+        chain: holesky,
+        account: network.wallets[0].account,
+        transport,
+      })
+      const publicClient = createPublicClient({
+        chain: holesky,
+        transport,
+      })
+      // @ts-expect-error - intentionally setting unsupported chain for test
+      publicClient.chain = { id: 999999 }
+
+      expect(() => {
+        new SSVSDK({
+          publicClient,
+          walletClient,
+          _: {},
+        })
+      }).toThrowError(/Public client chain must be one of/)
+    })
+
+    it('should throw error when walletClient chain is not supported', () => {
+      const transport = http(holesky.rpcUrls.default.http[0])
+      const walletClient = createWalletClient({
+        chain: holesky,
+        account: network.wallets[0].account,
+        transport,
+      })
+      const publicClient = createPublicClient({
+        chain: holesky,
+        transport,
+      })
+      // @ts-expect-error - intentionally setting unsupported chain for test
+      walletClient.chain = { id: 999999 }
+
+      expect(() => {
+        new SSVSDK({
+          publicClient,
+          walletClient,
+          _: {},
+        })
+      }).toThrowError(/Wallet client chain must be one of/)
+    })
   })
 })
