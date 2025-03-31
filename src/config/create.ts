@@ -96,31 +96,38 @@ export const createContractInteractions = ({
 
 export const createConfig = (props: ConfigArgs): ConfigReturnType => {
   const parsed = configArgsSchema.parse(props)
-  const { walletClient, publicClient } = parsed
   if (
-    !walletClient.chain ||
-    !publicClient.chain ||
-    !chainIds.includes(walletClient.chain?.id as SupportedChainsIDs) ||
-    !chainIds.includes(publicClient.chain?.id as SupportedChainsIDs)
+    !parsed.walletClient.chain ||
+    !parsed.publicClient.chain ||
+    !chainIds.includes(parsed.walletClient.chain?.id as SupportedChainsIDs) ||
+    !chainIds.includes(parsed.publicClient.chain?.id as SupportedChainsIDs)
   )
     throw new Error(`Chain must be one of ${chainIds.join(', ')}`)
 
-  const chainId = walletClient.chain.id as SupportedChainsIDs
+  const chainId = parsed.walletClient.chain.id as SupportedChainsIDs
+
+  const chainContracts = contracts[chainId]
+
+  const addresses = {
+    setter: parsed._?.contractAddresses?.setter || chainContracts.setter,
+    getter: parsed._?.contractAddresses?.getter || chainContracts.getter,
+    token: parsed._?.contractAddresses?.token || chainContracts.token,
+  }
 
   const contract = createContractInteractions({
-    walletClient,
-    publicClient,
-    addresses: contracts[chainId],
+    walletClient: parsed.walletClient,
+    publicClient: parsed.publicClient,
+    addresses,
   })
 
-  const graphEndpoint = graph_endpoints[chainId]
-  const restEndpoint = rest_endpoints[chainId]
+  const graphEndpoint = parsed._?.graphUrl || graph_endpoints[chainId]
+  const restEndpoint = parsed._?.restUrl || rest_endpoints[chainId]
   const graphQLClient = new GraphQLClient(graphEndpoint)
 
   return {
-    publicClient,
-    walletClient,
-    chain: walletClient.chain,
+    publicClient: parsed.publicClient,
+    walletClient: parsed.walletClient,
+    chain: parsed.walletClient.chain,
     graphEndpoint,
     restEndpoint,
     api: {
@@ -128,7 +135,7 @@ export const createConfig = (props: ConfigArgs): ConfigReturnType => {
       ...createSSVAPI(restEndpoint),
     },
     graphQLClient,
-    contractAddresses: contracts[chainId],
+    contractAddresses: addresses,
     contract,
   }
 }
