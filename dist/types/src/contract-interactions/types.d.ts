@@ -4,7 +4,7 @@ import type { TokenABI } from '@/abi/token';
 import type { AbiInputsToParams } from '@/types/contract-interactions';
 import type { Prettify } from '@/types/utils';
 import type { Abi, Address, ExtractAbiFunctions } from 'abitype';
-import type { ContractFunctionArgs, ContractFunctionName, DecodeEventLogReturnType, Hash, PublicClient, ReadContractReturnType, SimulateContractParameters, SimulateContractReturnType, WaitForTransactionReceiptReturnType, WalletClient } from 'viem';
+import type { ContractFunctionArgs, ContractFunctionName, DecodeEventLogReturnType, Hash, Hex, PublicClient, ReadContractReturnType, SimulateContractParameters, SimulateContractReturnType, WaitForTransactionReceiptReturnType, WalletClient } from 'viem';
 export type SupportedAbis = typeof TokenABI | typeof MainnetV4GetterABI | typeof MainnetV4SetterABI;
 export type TokenEvents = DecodeEventLogReturnType<typeof TokenABI>;
 export type MainnetEvents = DecodeEventLogReturnType<typeof MainnetV4SetterABI>;
@@ -67,6 +67,7 @@ export type WriterFunctions<ContractName extends ContractNames, Fns extends Cont
         simulate: (props?: Prettify<(K['stateMutability'] extends 'payable' ? {
             value?: bigint;
         } : object) & WriteOptions<K>>) => SimulateContractReturnType<SupportedAbis, K['name']>;
+        getTransactionData: () => Hex;
     } : {
         (props: Prettify<((K['stateMutability'] extends 'payable' ? {
             value?: bigint;
@@ -78,6 +79,7 @@ export type WriterFunctions<ContractName extends ContractNames, Fns extends Cont
         } : object) & (K['inputs'] extends readonly [] ? object : {
             args: Prettify<AbiInputsToParams<K['inputs']>>;
         })) & WriteOptions<K>>) => SimulateContractReturnType<SupportedAbis, K['name']>;
+        getTransactionData: (props: K['inputs'] extends readonly [] ? object : Prettify<AbiInputsToParams<K['inputs']>>) => Hex;
     };
 };
 export type ReaderFunctions<ContractName extends keyof Contracts, Fns extends Contracts[ContractName]['readFunctions'] = Contracts[ContractName]['readFunctions']> = {

@@ -10,10 +10,13 @@ import { SSVKeys, type KeySharesItem } from 'ssv-keys'
 
 import type { Hex } from 'viem'
 
-type RegisterValidatorsProps = SmartFnWriteOptions<{
-  keyshares: KeySharesItem[] | KeySharesItem['payload'][]
-  depositAmount?: bigint
-}>
+type RegisterValidatorsProps = Pick<
+  SmartFnWriteOptions<{
+    keyshares: KeySharesItem[] | KeySharesItem['payload'][]
+    depositAmount?: bigint
+  }>,
+  'args'
+>
 
 export const registerValidators = async (
   config: ConfigReturnType,
@@ -46,18 +49,16 @@ export const registerValidators = async (
   const snapshot = cluster ? getClusterSnapshot(cluster) : createEmptyCluster()
 
   if (shares.length === 1) {
-    return config.contract.ssv.write.registerValidator(
-      {
-        args: {
-          amount: depositAmount,
-          cluster: snapshot,
-          operatorIds: operatorIds.map(BigInt),
-          publicKey: shares[0].publicKey as Hex,
-          sharesData: shares[0].sharesData as Hex,
-        },
-        ...writeOptions,
+    return config.contract.ssv.write.registerValidator({
+      args: {
+        amount: depositAmount,
+        cluster: snapshot,
+        operatorIds: operatorIds.map(BigInt),
+        publicKey: shares[0].publicKey as Hex,
+        sharesData: shares[0].sharesData as Hex,
       },
-    )
+      ...writeOptions,
+    })
   }
 
   return config.contract.ssv.write.bulkRegisterValidator({
@@ -69,6 +70,54 @@ export const registerValidators = async (
       sharesData: shares.map((share) => share.sharesData as Hex),
     },
     ...writeOptions,
+  })
+}
+export const registerValidatorsRawData = async (
+  config: ConfigReturnType,
+  { args: { keyshares, depositAmount = 0n } }: RegisterValidatorsProps,
+) => {
+  const shares = keyshares.map((share) => {
+    return isKeySharesItem(share) ? share.payload : share
+  })
+
+  const operatorIds = shares[0].operatorIds
+  const clusterSize = operatorIds.length as ClusterSize
+
+  const limit = registerValidatorsByClusterSizeLimits[clusterSize]
+
+  if (!limit) {
+    throw new Error(
+      `Invalid number of operators in keyshares: ${clusterSize}, should be one of: ${Object.keys(registerValidatorsByClusterSizeLimits).join(', ')}`,
+    )
+  }
+
+  if (shares.length > limit) {
+    throw new Error(`You can't register more than ${limit} validators in a single transaction`)
+  }
+
+  const clusterId = createClusterId(config.walletClient.account!.address, operatorIds)
+  const cluster = await config.api.getCluster({
+    id: clusterId,
+  })
+
+  const snapshot = cluster ? getClusterSnapshot(cluster) : createEmptyCluster()
+
+  if (shares.length === 1) {
+    return config.contract.ssv.write.registerValidator.getTransactionData({
+      amount: depositAmount,
+      cluster: snapshot,
+      operatorIds: operatorIds.map(BigInt),
+      publicKey: shares[0].publicKey as Hex,
+      sharesData: shares[0].sharesData as Hex,
+    })
+  }
+
+  return config.contract.ssv.write.bulkRegisterValidator.getTransactionData({
+    cluster: snapshot,
+    amount: depositAmount,
+    operatorIds: operatorIds.map(BigInt),
+    publicKeys: shares.map((share) => share.publicKey as Hex),
+    sharesData: shares.map((share) => share.sharesData as Hex),
   })
 }
 

@@ -2,10 +2,10 @@ import type { ConfigReturnType } from '@/config/create';
 import type { SmartFnWriteOptions } from '@/contract-interactions/types';
 import { SSVKeys, type KeySharesItem } from 'ssv-keys';
 import type { Hex } from 'viem';
-type RegisterValidatorsProps = SmartFnWriteOptions<{
+type RegisterValidatorsProps = Pick<SmartFnWriteOptions<{
     keyshares: KeySharesItem[] | KeySharesItem['payload'][];
     depositAmount?: bigint;
-}>;
+}>, 'args'>;
 export declare const registerValidators: (config: ConfigReturnType, { args: { keyshares, depositAmount }, ...writeOptions }: RegisterValidatorsProps) => Promise<{
     hash: `0x${string}`;
     wait: () => Promise<import("viem").TransactionReceipt & {
@@ -281,6 +281,7 @@ export declare const registerValidators: (config: ConfigReturnType, { args: { ke
         })[];
     }>;
 }>;
+export declare const registerValidatorsRawData: (config: ConfigReturnType, { args: { keyshares, depositAmount } }: RegisterValidatorsProps) => Promise<`0x${string}`>;
 declare const ssvKeys: SSVKeys;
 export declare const validateSharesPostRegistration: (config: ConfigReturnType, args: {
     txHash: Hex;
