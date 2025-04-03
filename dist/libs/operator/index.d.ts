@@ -596,6 +596,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "removeOperator">;
+        getTransactionData: (props: {
+            operatorId: bigint;
+        }) => `0x${string}`;
     };
     withdraw: RemoveConfigArg<(config: ConfigReturnType, { args: { operatorId, amount }, ...writeOptions }: Omit<import('viem').SimulateContractParameters, "address" | "value" | "account" | "args" | "chain" | "abi" | "functionName"> & {
         args: {
@@ -1193,6 +1196,10 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "setOperatorsWhitelists">;
+        getTransactionData: (props: {
+            operatorIds: readonly bigint[];
+            whitelistAddresses: readonly `0x${string}`[];
+        }) => `0x${string}`;
     };
     removeOperatorWhitelists: {
         (props: {
@@ -1510,6 +1517,10 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "removeOperatorsWhitelists">;
+        getTransactionData: (props: {
+            operatorIds: readonly bigint[];
+            whitelistAddresses: readonly `0x${string}`[];
+        }) => `0x${string}`;
     };
     setOperatorsPrivate: {
         (props: {
@@ -1825,6 +1836,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "setOperatorsPrivateUnchecked">;
+        getTransactionData: (props: {
+            operatorIds: readonly bigint[];
+        }) => `0x${string}`;
     };
     setOperatorsPublic: {
         (props: {
@@ -2140,6 +2154,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "setOperatorsPublicUnchecked">;
+        getTransactionData: (props: {
+            operatorIds: readonly bigint[];
+        }) => `0x${string}`;
     };
     setOperatorWhitelistingContract: RemoveConfigArg<(config: ConfigReturnType, { args: { operatorIds, contractAddress }, ...writeOptions }: Omit<import('viem').SimulateContractParameters, "address" | "value" | "account" | "args" | "chain" | "abi" | "functionName"> & {
         args: {
@@ -2737,6 +2754,10 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "removeOperatorsWhitelists">;
+        getTransactionData: (props: {
+            operatorIds: readonly bigint[];
+            whitelistAddresses: readonly `0x${string}`[];
+        }) => `0x${string}`;
     };
     declareOperatorFee: {
         (props: {
@@ -3054,6 +3075,10 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "declareOperatorFee">;
+        getTransactionData: (props: {
+            operatorId: bigint;
+            fee: bigint;
+        }) => `0x${string}`;
     };
     executeOperatorFee: {
         (props: {
@@ -3369,6 +3394,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "executeOperatorFee">;
+        getTransactionData: (props: {
+            operatorId: bigint;
+        }) => `0x${string}`;
     };
     cancelDeclaredOperatorFee: {
         (props: {
@@ -3684,6 +3712,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "cancelDeclaredOperatorFee">;
+        getTransactionData: (props: {
+            operatorId: bigint;
+        }) => `0x${string}`;
     };
     reduceOperatorFee: {
         (props: {
@@ -4001,5 +4032,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "reduceOperatorFee">;
+        getTransactionData: (props: {
+            operatorId: bigint;
+            fee: bigint;
+        }) => `0x${string}`;
     };
 };

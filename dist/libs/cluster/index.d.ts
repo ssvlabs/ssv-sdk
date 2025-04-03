@@ -1964,7 +1964,7 @@ export declare const createClusterManager: (config: ConfigReturnType) => {
             })[];
         }>;
     }>>;
-    registerValidators: RemoveConfigArg<(config: ConfigReturnType, { args: { keyshares, depositAmount }, ...writeOptions }: Omit<import('viem').SimulateContractParameters, "address" | "value" | "account" | "args" | "chain" | "abi" | "functionName"> & {
+    registerValidators: RemoveConfigArg<(config: ConfigReturnType, { args: { keyshares, depositAmount }, ...writeOptions }: {
         args: {
             keyshares: import('ssv-keys').KeySharesItem[] | import('ssv-keys/dist/tsc/src/lib/KeyShares/KeySharesData/KeySharesPayload').KeySharesPayload[];
             depositAmount?: bigint | undefined;
@@ -2244,6 +2244,12 @@ export declare const createClusterManager: (config: ConfigReturnType) => {
             })[];
         }>;
     }>>;
+    registerValidatorsRawData: RemoveConfigArg<(config: ConfigReturnType, { args: { keyshares, depositAmount } }: {
+        args: {
+            keyshares: import('ssv-keys').KeySharesItem[] | import('ssv-keys/dist/tsc/src/lib/KeyShares/KeySharesData/KeySharesPayload').KeySharesPayload[];
+            depositAmount?: bigint | undefined;
+        };
+    }) => Promise<`0x${string}`>>;
     validateSharesPostRegistration: RemoveConfigArg<(config: ConfigReturnType, args: {
         txHash: `0x${string}`;
     }) => Promise<{
