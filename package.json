@@ -1,6 +1,6 @@
 {
   "name": "@ssv-labs/ssv-sdk",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "SSV.Labs",
   "description": "ssv labs sdk",
   "keywords": [
@@ -12,17 +12,17 @@
     "dist"
   ],
   "main": "./dist/main.js",
-  "module": "./dist/main.js",
+  "module": "./dist/main.mjs",
   "types": "./dist/main.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/main.js",
-      "require": "./dist/main.cjs",
+      "import": "./dist/main.mjs",
+      "require": "./dist/main.js",
       "types": "./dist/main.d.ts"
     },
     "./utils": {
-      "import": "./dist/utils.js",
-      "require": "./dist/utils.cjs",
+      "import": "./dist/utils.mjs",
+      "require": "./dist/utils.js",
       "types": "./dist/utils/index.d.ts"
     }
   },
