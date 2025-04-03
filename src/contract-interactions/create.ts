@@ -5,7 +5,7 @@ import { TokenABI } from '@/abi/token'
 import { paramsToArray } from '@/types/contract-interactions'
 import { tryCatch } from '@/utils'
 import type { AbiFunction, WriteContractParameters } from 'viem'
-import { decodeEventLog } from 'viem'
+import { decodeEventLog, encodeFunctionData } from 'viem'
 import type {
   ContractNames,
   Contracts,
@@ -41,6 +41,14 @@ export const createWriter = <T extends ContractNames>({
           args: paramsToArray({ params: options.args, abiFunction: fn }),
           account: walletClient.account!,
         })
+
+      const getTransactionData = (params: any) => {
+        return encodeFunctionData({
+          abi,
+          functionName: fn.name,
+          args: paramsToArray({ params, abiFunction: fn }),
+        })
+      }
 
       const func = async (options: any) => {
         const { request } = await simulate(options)
@@ -81,6 +89,7 @@ export const createWriter = <T extends ContractNames>({
         }
       }
       func.simulate = simulate
+      func.getTransactionData = getTransactionData
       return [fn.name, func]
     }),
   ) as any

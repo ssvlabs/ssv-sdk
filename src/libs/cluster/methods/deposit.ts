@@ -19,7 +19,6 @@ export const deposit = async (
 ) => {
   const cluster = await config.api.getCluster({ id })
 
-  console.log('cluster:', cluster)
   if (!cluster) {
     throw new Error('Cluster not found')
   }

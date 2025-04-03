@@ -9,6 +9,7 @@ import type {
   ContractFunctionName,
   DecodeEventLogReturnType,
   Hash,
+  Hex,
   PublicClient,
   ReadContractReturnType,
   SimulateContractParameters,
@@ -105,6 +106,7 @@ export type WriterFunctions<
             (K['stateMutability'] extends 'payable' ? { value?: bigint } : object) & WriteOptions<K>
           >,
         ) => SimulateContractReturnType<SupportedAbis, K['name']>
+        getTransactionData: () => Hex
       }
     : {
         (
@@ -125,6 +127,11 @@ export type WriterFunctions<
               WriteOptions<K>
           >,
         ) => SimulateContractReturnType<SupportedAbis, K['name']>
+        getTransactionData: (
+          props: K['inputs'] extends readonly []
+            ? object
+            : Prettify<AbiInputsToParams<K['inputs']>>,
+        ) => Hex
       }
 }
 
