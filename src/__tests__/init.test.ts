@@ -1,8 +1,15 @@
+import { hoodi, paid_graph_endpoints } from '@/config/chains'
 import { SSVSDK } from '@/sdk'
+import type { ConfigArgs } from '@/utils'
 import hre from 'hardhat'
 import { initializeContract } from 'hardhat/contract-helpers'
-import { createPublicClient, createWalletClient, http, type PublicClient, type WalletClient } from 'viem'
-import { holesky } from 'viem/chains'
+import {
+  createPublicClient,
+  createWalletClient,
+  http,
+  type PublicClient,
+  type WalletClient,
+} from 'viem'
 import { describe, expect, it } from 'vitest'
 
 describe('SDK Initiation', async () => {
@@ -11,24 +18,23 @@ describe('SDK Initiation', async () => {
 
   it('should initialize the SDK', async () => {
     expect(() => {
-      const transport = http(holesky.rpcUrls.default.http[0])
+      const transport = http(hoodi.rpcUrls.default.http[0])
       const walletClient = createWalletClient({
-        chain: holesky,
+        chain: hoodi,
         account: network.wallets[0].account,
         transport,
       })
       const publicClient = createPublicClient({
-        chain: holesky,
+        chain: hoodi,
         transport,
       })
       return new SSVSDK({
         publicClient,
         walletClient,
-        _: {},
       })
     }).not.toThrowError()
   })
-  
+
   it('unsupported chain should throw an error', async () => {
     const network = await initializeContract()
     // initializeContract returns a hardhat chain, which is not supported by the SDK
@@ -37,20 +43,19 @@ describe('SDK Initiation', async () => {
         new SSVSDK({
           publicClient: network.publicClient,
           walletClient: network.wallets[0],
-          _: {},
         }),
     ).toThrowError()
   })
 
   it('should initialize with custom contract addresses and endpoints', async () => {
-    const transport = http(holesky.rpcUrls.default.http[0])
+    const transport = http(hoodi.rpcUrls.default.http[0])
     const walletClient = createWalletClient({
-      chain: holesky,
+      chain: hoodi,
       account: network.wallets[0].account,
       transport,
     })
     const publicClient = createPublicClient({
-      chain: holesky,
+      chain: hoodi,
       transport,
     })
 
@@ -60,33 +65,68 @@ describe('SDK Initiation', async () => {
       token: '0xabcdef1234567890abcdef1234567890abcdef12' as const,
     }
 
-    const customEndpoints = {
-      graphUrl: 'https://custom-graph-endpoint.com/graphql',
-      restUrl: 'https://custom-rest-endpoint.com/api',
-    }
+    const extended = {
+      subgraph: {
+        endpoint: 'https://custom-graph-endpoint.com/graphql',
+      },
+      rest: {
+        endpoint: 'https://custom-rest-endpoint.com/api',
+      },
+      contracts: customAddresses,
+    } satisfies ConfigArgs['extendedConfig']
 
     const sdk = new SSVSDK({
       publicClient,
       walletClient,
-      _: {
-        contractAddresses: customAddresses,
-        ...customEndpoints,
-      },
+      extendedConfig: extended,
     })
 
     // Verify custom contract addresses are used
     expect(sdk.config.contractAddresses).toEqual(customAddresses)
-    
     // Verify custom endpoints are used
-    expect(sdk.config.graphEndpoint).toBe(customEndpoints.graphUrl)
-    expect(sdk.config.restEndpoint).toBe(customEndpoints.restUrl)
+    expect(sdk.config.subgraph.endpoint).toBe(extended.subgraph.endpoint)
+    expect(sdk.config.rest.endpoint).toBe(extended.rest.endpoint)
+  })
+  it('should initialize with paid subgraph', async () => {
+    const transport = http(hoodi.rpcUrls.default.http[0])
+    const walletClient = createWalletClient({
+      chain: hoodi,
+      account: network.wallets[0].account,
+      transport,
+    })
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    })
+
+    const extended = {
+      subgraph: {
+        apiKey: '1234567890',
+      },
+    } satisfies ConfigArgs['extendedConfig']
+
+    const sdk = new SSVSDK({
+      publicClient,
+      walletClient,
+      extendedConfig: extended,
+    })
+
+    const requestHeaders = sdk.config.subgraph.client.requestConfig.headers as Record<
+      string,
+      string
+    >
+
+    // Verify custom endpoints are used
+    expect(sdk.config.subgraph.endpoint).toBe(paid_graph_endpoints[hoodi.id])
+    expect(requestHeaders['Authorization']).toBe(`Bearer ${extended.subgraph.apiKey}`)
+
   })
 
   describe('Client Validation', () => {
     it('should throw error when publicClient is not provided', () => {
-      const transport = http(holesky.rpcUrls.default.http[0])
+      const transport = http(hoodi.rpcUrls.default.http[0])
       const walletClient = createWalletClient({
-        chain: holesky,
+        chain: hoodi,
         account: network.wallets[0].account,
         transport,
       })
@@ -95,15 +135,14 @@ describe('SDK Initiation', async () => {
         new SSVSDK({
           publicClient: null as unknown as PublicClient,
           walletClient,
-          _: {},
         })
       }).toThrowError('Public client must be provided')
     })
 
     it('should throw error when walletClient is not provided', () => {
-      const transport = http(holesky.rpcUrls.default.http[0])
+      const transport = http(hoodi.rpcUrls.default.http[0])
       const publicClient = createPublicClient({
-        chain: holesky,
+        chain: hoodi,
         transport,
       })
 
@@ -111,20 +150,19 @@ describe('SDK Initiation', async () => {
         new SSVSDK({
           publicClient,
           walletClient: null as unknown as WalletClient,
-          _: {},
         })
       }).toThrowError('Wallet client must be provided')
     })
 
     it('should throw error when publicClient has no chain property', () => {
-      const transport = http(holesky.rpcUrls.default.http[0])
+      const transport = http(hoodi.rpcUrls.default.http[0])
       const walletClient = createWalletClient({
-        chain: holesky,
+        chain: hoodi,
         account: network.wallets[0].account,
         transport,
       })
       const publicClient = createPublicClient({
-        chain: holesky,
+        chain: hoodi,
         transport,
       })
       // @ts-expect-error - intentionally removing chain property for test
@@ -134,20 +172,19 @@ describe('SDK Initiation', async () => {
         new SSVSDK({
           publicClient,
           walletClient,
-          _: {},
         })
       }).toThrowError('Public client must have a chain property')
     })
 
     it('should throw error when walletClient has no chain property', () => {
-      const transport = http(holesky.rpcUrls.default.http[0])
+      const transport = http(hoodi.rpcUrls.default.http[0])
       const walletClient = createWalletClient({
-        chain: holesky,
+        chain: hoodi,
         account: network.wallets[0].account,
         transport,
       })
       const publicClient = createPublicClient({
-        chain: holesky,
+        chain: hoodi,
         transport,
       })
       // @ts-expect-error - intentionally removing chain property for test
@@ -157,20 +194,19 @@ describe('SDK Initiation', async () => {
         new SSVSDK({
           publicClient,
           walletClient,
-          _: {},
         })
       }).toThrowError('Wallet client must have a chain property')
     })
 
     it('should throw error when publicClient chain is not supported', () => {
-      const transport = http(holesky.rpcUrls.default.http[0])
+      const transport = http(hoodi.rpcUrls.default.http[0])
       const walletClient = createWalletClient({
-        chain: holesky,
+        chain: hoodi,
         account: network.wallets[0].account,
         transport,
       })
       const publicClient = createPublicClient({
-        chain: holesky,
+        chain: hoodi,
         transport,
       })
       // @ts-expect-error - intentionally setting unsupported chain for test
@@ -180,20 +216,19 @@ describe('SDK Initiation', async () => {
         new SSVSDK({
           publicClient,
           walletClient,
-          _: {},
         })
       }).toThrowError(/Public client chain must be one of/)
     })
 
     it('should throw error when walletClient chain is not supported', () => {
-      const transport = http(holesky.rpcUrls.default.http[0])
+      const transport = http(hoodi.rpcUrls.default.http[0])
       const walletClient = createWalletClient({
-        chain: holesky,
+        chain: hoodi,
         account: network.wallets[0].account,
         transport,
       })
       const publicClient = createPublicClient({
-        chain: holesky,
+        chain: hoodi,
         transport,
       })
       // @ts-expect-error - intentionally setting unsupported chain for test
@@ -203,7 +238,6 @@ describe('SDK Initiation', async () => {
         new SSVSDK({
           publicClient,
           walletClient,
-          _: {},
         })
       }).toThrowError(/Wallet client chain must be one of/)
     })
