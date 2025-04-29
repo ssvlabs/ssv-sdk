@@ -30,6 +30,10 @@ export declare const initializeContract: () => Promise<{
         type: string;
         uid: string;
         call: (parameters: import("viem").CallParameters<import("viem").Chain>) => Promise<import("viem").CallReturnType>;
+        createAccessList: (parameters: import("viem").CreateAccessListParameters<import("viem").Chain>) => Promise<{
+            accessList: import("viem").AccessList;
+            gasUsed: bigint;
+        }>;
         createBlockFilter: () => Promise<{
             id: `0x${string}`;
             request: import("viem").EIP1193RequestFn<readonly [{
@@ -216,7 +220,7 @@ export declare const initializeContract: () => Promise<{
                 maxPriorityFeePerGas: bigint;
                 chainId: number;
                 accessList: import("viem").AccessList;
-                authorizationList: import("viem/experimental").SignedAuthorizationList;
+                authorizationList: import("viem").SignedAuthorizationList;
                 hash: `0x${string}`;
                 typeHex: `0x${string}` | null;
                 blockNumber: (blockTag extends "pending" ? true : false) extends infer T_13 ? T_13 extends (blockTag extends "pending" ? true : false) ? T_13 extends true ? null : bigint : never : never;
@@ -402,7 +406,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas: bigint;
             chainId: number;
             accessList: import("viem").AccessList;
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
             hash: `0x${string}`;
             typeHex: `0x${string}` | null;
             blockNumber: (blockTag_1 extends "pending" ? true : false) extends infer T_28 ? T_28 extends (blockTag_1 extends "pending" ? true : false) ? T_28 extends true ? null : bigint : never : never;
@@ -484,7 +488,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -494,7 +498,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -503,7 +507,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -565,7 +569,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -575,7 +579,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -584,7 +588,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_47 ? T_47 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -646,7 +650,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -656,7 +660,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -665,7 +669,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -727,7 +731,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -737,7 +741,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -746,7 +750,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_47 extends "legacy" ? import("viem").TransactionRequestLegacy : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -808,7 +812,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -818,7 +822,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -827,7 +831,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -889,7 +893,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -899,7 +903,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -908,7 +912,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_48 ? T_48 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -970,7 +974,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -980,7 +984,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -989,7 +993,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -1051,7 +1055,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1061,7 +1065,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1070,7 +1074,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_48 extends "eip1559" ? import("viem").TransactionRequestEIP1559 : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -1132,7 +1136,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1142,7 +1146,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1151,7 +1155,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -1213,7 +1217,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1223,7 +1227,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1232,7 +1236,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_49 ? T_49 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -1294,7 +1298,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1304,7 +1308,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1313,7 +1317,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -1375,7 +1379,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1385,7 +1389,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1394,7 +1398,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_49 extends "eip2930" ? import("viem").TransactionRequestEIP2930 : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -1456,7 +1460,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1466,7 +1470,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1475,7 +1479,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -1537,7 +1541,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1547,7 +1551,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1556,7 +1560,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_50 ? T_50 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -1618,7 +1622,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1628,7 +1632,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1637,7 +1641,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -1699,7 +1703,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1709,7 +1713,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1718,7 +1722,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_50 extends "eip4844" ? import("viem").TransactionRequestEIP4844 : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -1780,7 +1784,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1790,7 +1794,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1799,7 +1803,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -1861,7 +1865,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1871,7 +1875,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1880,7 +1884,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_51 ? T_51 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -1942,7 +1946,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1952,7 +1956,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -1961,7 +1965,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -2023,7 +2027,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2033,7 +2037,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2042,7 +2046,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_51 extends "eip7702" ? import("viem").TransactionRequestEIP7702 : never : never : never)> extends true ? unknown : import("viem").ExactPartial<((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -2104,7 +2108,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2114,7 +2118,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2123,7 +2127,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -2185,7 +2189,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2195,7 +2199,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2204,7 +2208,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_52 ? T_52 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -2266,7 +2270,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2276,7 +2280,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2285,7 +2289,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -2347,7 +2351,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2357,7 +2361,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2366,7 +2370,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_52 extends "legacy" ? import("viem").TransactionRequestLegacy : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -2428,7 +2432,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2438,7 +2442,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2447,7 +2451,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -2509,7 +2513,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2519,7 +2523,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2528,7 +2532,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_53 ? T_53 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -2590,7 +2594,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2600,7 +2604,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2609,7 +2613,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -2671,7 +2675,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2681,7 +2685,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2690,7 +2694,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_53 extends "eip1559" ? import("viem").TransactionRequestEIP1559 : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -2752,7 +2756,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2762,7 +2766,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2771,7 +2775,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -2833,7 +2837,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2843,7 +2847,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2852,7 +2856,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_54 ? T_54 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -2914,7 +2918,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2924,7 +2928,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -2933,7 +2937,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -2995,7 +2999,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3005,7 +3009,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3014,7 +3018,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_54 extends "eip2930" ? import("viem").TransactionRequestEIP2930 : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -3076,7 +3080,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3086,7 +3090,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3095,7 +3099,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -3157,7 +3161,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3167,7 +3171,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3176,7 +3180,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_55 ? T_55 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -3238,7 +3242,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3248,7 +3252,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3257,7 +3261,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -3319,7 +3323,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3329,7 +3333,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3338,7 +3342,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_55 extends "eip4844" ? import("viem").TransactionRequestEIP4844 : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -3400,7 +3404,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3410,7 +3414,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3419,7 +3423,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -3481,7 +3485,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3491,7 +3495,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3500,7 +3504,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_56 ? T_56 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -3562,7 +3566,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3572,7 +3576,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3581,7 +3585,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -3643,7 +3647,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3653,7 +3657,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3662,7 +3666,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_56 extends "eip7702" ? import("viem").TransactionRequestEIP7702 : never : never : never)>> & {
             chainId?: number | undefined;
         }, (request["parameters"] extends readonly import("viem").PrepareTransactionRequestParameterType[] ? request["parameters"][number] : "type" | "nonce" | "fees" | "gas" | "blobVersionedHashes" | "chainId") extends infer T_57 ? T_57 extends (request["parameters"] extends readonly import("viem").PrepareTransactionRequestParameterType[] ? request["parameters"][number] : "type" | "nonce" | "fees" | "gas" | "blobVersionedHashes" | "chainId") ? T_57 extends "fees" ? "gasPrice" | "maxFeePerGas" | "maxPriorityFeePerGas" : T_57 : never : never> & (unknown extends request["kzg"] ? {} : Pick<request, "kzg">) extends infer T_31 ? { [K_1 in keyof T_31]: (import("viem").UnionRequiredBy<Extract<import("viem").UnionOmit<import("viem").ExtractChainFormatterParameters<import("viem").DeriveChain<import("viem").Chain, chainOverride_2>, "transactionRequest", import("viem").TransactionRequest>, "from"> & (import("viem").DeriveChain<import("viem").Chain, chainOverride_2> extends infer T_32 ? T_32 extends import("viem").DeriveChain<import("viem").Chain, chainOverride_2> ? T_32 extends import("viem").Chain ? {
@@ -3736,7 +3740,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3746,7 +3750,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3755,7 +3759,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -3817,7 +3821,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3827,7 +3831,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3836,7 +3840,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_34 ? T_34 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -3898,7 +3902,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3908,7 +3912,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3917,7 +3921,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -3979,7 +3983,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3989,7 +3993,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -3998,7 +4002,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_34 extends "legacy" ? import("viem").TransactionRequestLegacy : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -4060,7 +4064,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4070,7 +4074,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4079,7 +4083,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -4141,7 +4145,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4151,7 +4155,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4160,7 +4164,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_35 ? T_35 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -4222,7 +4226,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4232,7 +4236,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4241,7 +4245,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -4303,7 +4307,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4313,7 +4317,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4322,7 +4326,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_35 extends "eip1559" ? import("viem").TransactionRequestEIP1559 : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -4384,7 +4388,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4394,7 +4398,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4403,7 +4407,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -4465,7 +4469,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4475,7 +4479,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4484,7 +4488,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_36 ? T_36 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -4546,7 +4550,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4556,7 +4560,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4565,7 +4569,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -4627,7 +4631,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4637,7 +4641,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4646,7 +4650,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_36 extends "eip2930" ? import("viem").TransactionRequestEIP2930 : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -4708,7 +4712,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4718,7 +4722,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4727,7 +4731,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -4789,7 +4793,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4799,7 +4803,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4808,7 +4812,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_37 ? T_37 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -4870,7 +4874,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4880,7 +4884,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4889,7 +4893,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -4951,7 +4955,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4961,7 +4965,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -4970,7 +4974,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_37 extends "eip4844" ? import("viem").TransactionRequestEIP4844 : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -5032,7 +5036,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5042,7 +5046,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5051,7 +5055,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -5113,7 +5117,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5123,7 +5127,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5132,7 +5136,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_38 ? T_38 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -5194,7 +5198,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5204,7 +5208,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5213,7 +5217,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -5275,7 +5279,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5285,7 +5289,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5294,7 +5298,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_38 extends "eip7702" ? import("viem").TransactionRequestEIP7702 : never : never : never)> extends true ? unknown : import("viem").ExactPartial<((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -5356,7 +5360,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5366,7 +5370,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5375,7 +5379,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -5437,7 +5441,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5447,7 +5451,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5456,7 +5460,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_39 ? T_39 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -5518,7 +5522,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5528,7 +5532,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5537,7 +5541,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -5599,7 +5603,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5609,7 +5613,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5618,7 +5622,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_39 extends "legacy" ? import("viem").TransactionRequestLegacy : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -5680,7 +5684,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5690,7 +5694,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5699,7 +5703,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -5761,7 +5765,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5771,7 +5775,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5780,7 +5784,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_40 ? T_40 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -5842,7 +5846,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5852,7 +5856,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5861,7 +5865,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -5923,7 +5927,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5933,7 +5937,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -5942,7 +5946,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_40 extends "eip1559" ? import("viem").TransactionRequestEIP1559 : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -6004,7 +6008,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6014,7 +6018,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6023,7 +6027,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -6085,7 +6089,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6095,7 +6099,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6104,7 +6108,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_41 ? T_41 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -6166,7 +6170,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6176,7 +6180,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6185,7 +6189,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -6247,7 +6251,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6257,7 +6261,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6266,7 +6270,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_41 extends "eip2930" ? import("viem").TransactionRequestEIP2930 : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -6328,7 +6332,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6338,7 +6342,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6347,7 +6351,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -6409,7 +6413,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6419,7 +6423,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6428,7 +6432,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_42 ? T_42 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -6490,7 +6494,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6500,7 +6504,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6509,7 +6513,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -6571,7 +6575,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6581,7 +6585,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6590,7 +6594,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_42 extends "eip4844" ? import("viem").TransactionRequestEIP4844 : never : never : never) | ((request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -6652,7 +6656,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6662,7 +6666,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6671,7 +6675,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -6733,7 +6737,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6743,7 +6747,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6752,7 +6756,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) extends infer T_43 ? T_43 extends (request["type"] extends string | undefined ? request["type"] : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -6814,7 +6818,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6824,7 +6828,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6833,7 +6837,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request, (request extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -6895,7 +6899,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6905,7 +6909,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -6914,13 +6918,16 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request["type"] extends string | undefined ? Extract<request["type"], string> : never)>) ? T_43 extends "eip7702" ? import("viem").TransactionRequestEIP7702 : never : never : never)>> & {
             chainId?: number | undefined;
         }, (request["parameters"] extends readonly import("viem").PrepareTransactionRequestParameterType[] ? request["parameters"][number] : "type" | "nonce" | "fees" | "gas" | "blobVersionedHashes" | "chainId") extends infer T_44 ? T_44 extends (request["parameters"] extends readonly import("viem").PrepareTransactionRequestParameterType[] ? request["parameters"][number] : "type" | "nonce" | "fees" | "gas" | "blobVersionedHashes" | "chainId") ? T_44 extends "fees" ? "gasPrice" | "maxFeePerGas" | "maxPriorityFeePerGas" : T_44 : never : never> & (unknown extends request["kzg"] ? {} : Pick<request, "kzg">))[K_1]; } : never>;
-        readContract: <const abi_5 extends readonly unknown[] | import("viem").Abi, functionName_1 extends import("viem").ContractFunctionName<abi_5, "view" | "pure">, args_2 extends import("viem").ContractFunctionArgs<abi_5, "view" | "pure", functionName_1>>(args: import("viem").ReadContractParameters<abi_5, functionName_1, args_2>) => Promise<import("viem").ReadContractReturnType<abi_5, functionName_1, args_2>>;
+        readContract: <const abi_5 extends readonly unknown[] | import("viem").Abi, functionName_1 extends import("viem").ContractFunctionName<abi_5, "view" | "pure">, const args_2 extends import("viem").ContractFunctionArgs<abi_5, "view" | "pure", functionName_1>>(args: import("viem").ReadContractParameters<abi_5, functionName_1, args_2>) => Promise<import("viem").ReadContractReturnType<abi_5, functionName_1, args_2>>;
         sendRawTransaction: (args: import("viem").SendRawTransactionParameters) => Promise<`0x${string}`>;
-        simulateContract: <const abi_6 extends readonly unknown[] | import("viem").Abi, functionName_2 extends import("viem").ContractFunctionName<abi_6, "nonpayable" | "payable">, args_3 extends import("viem").ContractFunctionArgs<abi_6, "nonpayable" | "payable", functionName_2>, chainOverride_3 extends import("viem").Chain | undefined, accountOverride_1 extends `0x${string}` | import("viem").Account | undefined = undefined>(args: import("viem").SimulateContractParameters<abi_6, functionName_2, args_3, import("viem").Chain, chainOverride_3, accountOverride_1>) => Promise<import("viem").SimulateContractReturnType<abi_6, functionName_2, args_3, import("viem").Chain, import("viem").Account | undefined, chainOverride_3, accountOverride_1>>;
+        simulate: <const calls extends readonly unknown[]>(args: import("viem").SimulateBlocksParameters<calls>) => Promise<import("viem").SimulateBlocksReturnType<calls>>;
+        simulateBlocks: <const calls_1 extends readonly unknown[]>(args: import("viem").SimulateBlocksParameters<calls_1>) => Promise<import("viem").SimulateBlocksReturnType<calls_1>>;
+        simulateCalls: <const calls_2 extends readonly unknown[]>(args: import("viem").SimulateCallsParameters<calls_2>) => Promise<import("viem").SimulateCallsReturnType<calls_2>>;
+        simulateContract: <const abi_6 extends readonly unknown[] | import("viem").Abi, functionName_2 extends import("viem").ContractFunctionName<abi_6, "nonpayable" | "payable">, const args_3 extends import("viem").ContractFunctionArgs<abi_6, "nonpayable" | "payable", functionName_2>, chainOverride_3 extends import("viem").Chain | undefined, accountOverride_1 extends `0x${string}` | import("viem").Account | undefined = undefined>(args: import("viem").SimulateContractParameters<abi_6, functionName_2, args_3, import("viem").Chain, chainOverride_3, accountOverride_1>) => Promise<import("viem").SimulateContractReturnType<abi_6, functionName_2, args_3, import("viem").Chain, import("viem").Account | undefined, chainOverride_3, accountOverride_1>>;
         verifyMessage: (args: {
             address: `0x${string}`;
             blockNumber?: bigint | undefined;
@@ -6989,8 +6996,22 @@ export declare const initializeContract: () => Promise<{
         addChain: (args: import("viem").AddChainParameters) => Promise<void>;
         deployContract: <const abi_8 extends readonly unknown[] | import("viem").Abi, chainOverride_4 extends import("viem").Chain | undefined>(args: import("viem").DeployContractParameters<abi_8, import("viem").Chain, import("viem").Account, chainOverride_4>) => Promise<`0x${string}`>;
         getAddresses: () => Promise<import("viem").GetAddressesReturnType>;
+        getCallsStatus: (parameters: import("viem").GetCallsStatusParameters) => Promise<{
+            id: string;
+            chainId: number;
+            version: string;
+            atomic: boolean;
+            capabilities?: import("viem").WalletCapabilities | undefined;
+            receipts?: import("viem").WalletCallReceipt<bigint, "success" | "reverted">[] | undefined;
+            statusCode: number;
+            status: "success" | "pending" | "failure" | undefined;
+        }>;
+        getCapabilities: (parameters?: import("viem").GetCapabilitiesParameters | undefined) => Promise<{
+            [x: number]: import("viem").WalletCapabilities;
+        }>;
         getChainId: () => Promise<number>;
         getPermissions: () => Promise<import("viem").GetPermissionsReturnType>;
+        prepareAuthorization: (parameters: import("node_modules/viem/_types/actions/wallet/prepareAuthorization").PrepareAuthorizationParameters<import("viem").Account>) => Promise<import("node_modules/viem/_types/actions/wallet/prepareAuthorization").PrepareAuthorizationReturnType>;
         prepareTransactionRequest: <const request_1 extends import("viem").PrepareTransactionRequestRequest<import("viem").Chain, chainOverride_5>, chainOverride_5 extends import("viem").Chain | undefined = undefined, accountOverride_2 extends `0x${string}` | import("viem").Account | undefined = undefined>(args: import("viem").PrepareTransactionRequestParameters<import("viem").Chain, import("viem").Account, chainOverride_5, accountOverride_2, request_1>) => Promise<import("viem").UnionRequiredBy<Extract<import("viem").UnionOmit<import("viem").ExtractChainFormatterParameters<import("viem").DeriveChain<import("viem").Chain, chainOverride_5>, "transactionRequest", import("viem").TransactionRequest>, "from"> & (import("viem").DeriveChain<import("viem").Chain, chainOverride_5> extends infer T_72 ? T_72 extends import("viem").DeriveChain<import("viem").Chain, chainOverride_5> ? T_72 extends import("viem").Chain ? {
             chain: T_72;
         } : {
@@ -7062,7 +7083,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7072,7 +7093,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7081,7 +7102,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -7143,7 +7164,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7153,7 +7174,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7162,7 +7183,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_74 ? T_74 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -7224,7 +7245,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7234,7 +7255,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7243,7 +7264,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -7305,7 +7326,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7315,7 +7336,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7324,7 +7345,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_74 extends "legacy" ? import("viem").TransactionRequestLegacy : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -7386,7 +7407,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7396,7 +7417,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7405,7 +7426,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -7467,7 +7488,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7477,7 +7498,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7486,7 +7507,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_75 ? T_75 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -7548,7 +7569,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7558,7 +7579,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7567,7 +7588,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -7629,7 +7650,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7639,7 +7660,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7648,7 +7669,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_75 extends "eip1559" ? import("viem").TransactionRequestEIP1559 : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -7710,7 +7731,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7720,7 +7741,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7729,7 +7750,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -7791,7 +7812,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7801,7 +7822,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7810,7 +7831,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_76 ? T_76 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -7872,7 +7893,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7882,7 +7903,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7891,7 +7912,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -7953,7 +7974,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7963,7 +7984,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -7972,7 +7993,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_76 extends "eip2930" ? import("viem").TransactionRequestEIP2930 : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -8034,7 +8055,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8044,7 +8065,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8053,7 +8074,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -8115,7 +8136,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8125,7 +8146,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8134,7 +8155,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_77 ? T_77 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -8196,7 +8217,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8206,7 +8227,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8215,7 +8236,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -8277,7 +8298,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8287,7 +8308,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8296,7 +8317,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_77 extends "eip4844" ? import("viem").TransactionRequestEIP4844 : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -8358,7 +8379,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8368,7 +8389,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8377,7 +8398,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -8439,7 +8460,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8449,7 +8470,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8458,7 +8479,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_78 ? T_78 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -8520,7 +8541,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8530,7 +8551,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8539,7 +8560,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -8601,7 +8622,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8611,7 +8632,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8620,7 +8641,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_78 extends "eip7702" ? import("viem").TransactionRequestEIP7702 : never : never : never)> extends true ? unknown : import("viem").ExactPartial<((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -8682,7 +8703,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8692,7 +8713,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8701,7 +8722,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -8763,7 +8784,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8773,7 +8794,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8782,7 +8803,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_79 ? T_79 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -8844,7 +8865,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8854,7 +8875,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8863,7 +8884,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -8925,7 +8946,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8935,7 +8956,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -8944,7 +8965,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_79 extends "legacy" ? import("viem").TransactionRequestLegacy : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -9006,7 +9027,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9016,7 +9037,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9025,7 +9046,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -9087,7 +9108,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9097,7 +9118,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9106,7 +9127,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_80 ? T_80 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -9168,7 +9189,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9178,7 +9199,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9187,7 +9208,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -9249,7 +9270,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9259,7 +9280,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9268,7 +9289,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_80 extends "eip1559" ? import("viem").TransactionRequestEIP1559 : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -9330,7 +9351,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9340,7 +9361,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9349,7 +9370,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -9411,7 +9432,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9421,7 +9442,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9430,7 +9451,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_81 ? T_81 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -9492,7 +9513,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9502,7 +9523,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9511,7 +9532,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -9573,7 +9594,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9583,7 +9604,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9592,7 +9613,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_81 extends "eip2930" ? import("viem").TransactionRequestEIP2930 : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -9654,7 +9675,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9664,7 +9685,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9673,7 +9694,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -9735,7 +9756,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9745,7 +9766,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9754,7 +9775,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_82 ? T_82 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -9816,7 +9837,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9826,7 +9847,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9835,7 +9856,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -9897,7 +9918,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9907,7 +9928,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9916,7 +9937,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_82 extends "eip4844" ? import("viem").TransactionRequestEIP4844 : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -9978,7 +9999,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9988,7 +10009,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -9997,7 +10018,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -10059,7 +10080,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10069,7 +10090,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10078,7 +10099,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_83 ? T_83 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -10140,7 +10161,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10150,7 +10171,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10159,7 +10180,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -10221,7 +10242,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10231,7 +10252,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10240,7 +10261,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_83 extends "eip7702" ? import("viem").TransactionRequestEIP7702 : never : never : never)>> & {
             chainId?: number | undefined;
         }, (request_1["parameters"] extends readonly import("viem").PrepareTransactionRequestParameterType[] ? request_1["parameters"][number] : "type" | "nonce" | "fees" | "gas" | "blobVersionedHashes" | "chainId") extends infer T_84 ? T_84 extends (request_1["parameters"] extends readonly import("viem").PrepareTransactionRequestParameterType[] ? request_1["parameters"][number] : "type" | "nonce" | "fees" | "gas" | "blobVersionedHashes" | "chainId") ? T_84 extends "fees" ? "gasPrice" | "maxFeePerGas" | "maxPriorityFeePerGas" : T_84 : never : never> & (unknown extends request_1["kzg"] ? {} : Pick<request_1, "kzg">) extends infer T_58 ? { [K_3 in keyof T_58]: (import("viem").UnionRequiredBy<Extract<import("viem").UnionOmit<import("viem").ExtractChainFormatterParameters<import("viem").DeriveChain<import("viem").Chain, chainOverride_5>, "transactionRequest", import("viem").TransactionRequest>, "from"> & (import("viem").DeriveChain<import("viem").Chain, chainOverride_5> extends infer T_59 ? T_59 extends import("viem").DeriveChain<import("viem").Chain, chainOverride_5> ? T_59 extends import("viem").Chain ? {
@@ -10314,7 +10335,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10324,7 +10345,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10333,7 +10354,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -10395,7 +10416,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10405,7 +10426,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10414,7 +10435,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_61 ? T_61 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -10476,7 +10497,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10486,7 +10507,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10495,7 +10516,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -10557,7 +10578,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10567,7 +10588,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10576,7 +10597,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_61 extends "legacy" ? import("viem").TransactionRequestLegacy : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -10638,7 +10659,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10648,7 +10669,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10657,7 +10678,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -10719,7 +10740,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10729,7 +10750,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10738,7 +10759,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_62 ? T_62 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -10800,7 +10821,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10810,7 +10831,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10819,7 +10840,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -10881,7 +10902,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10891,7 +10912,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10900,7 +10921,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_62 extends "eip1559" ? import("viem").TransactionRequestEIP1559 : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -10962,7 +10983,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10972,7 +10993,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -10981,7 +11002,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -11043,7 +11064,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11053,7 +11074,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11062,7 +11083,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_63 ? T_63 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -11124,7 +11145,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11134,7 +11155,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11143,7 +11164,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -11205,7 +11226,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11215,7 +11236,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11224,7 +11245,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_63 extends "eip2930" ? import("viem").TransactionRequestEIP2930 : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -11286,7 +11307,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11296,7 +11317,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11305,7 +11326,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -11367,7 +11388,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11377,7 +11398,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11386,7 +11407,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_64 ? T_64 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -11448,7 +11469,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11458,7 +11479,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11467,7 +11488,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -11529,7 +11550,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11539,7 +11560,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11548,7 +11569,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_64 extends "eip4844" ? import("viem").TransactionRequestEIP4844 : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -11610,7 +11631,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11620,7 +11641,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11629,7 +11650,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -11691,7 +11712,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11701,7 +11722,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11710,7 +11731,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_65 ? T_65 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -11772,7 +11793,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11782,7 +11803,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11791,7 +11812,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -11853,7 +11874,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11863,7 +11884,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11872,7 +11893,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_65 extends "eip7702" ? import("viem").TransactionRequestEIP7702 : never : never : never)> extends true ? unknown : import("viem").ExactPartial<((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -11934,7 +11955,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11944,7 +11965,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -11953,7 +11974,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -12015,7 +12036,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12025,7 +12046,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12034,7 +12055,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_66 ? T_66 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -12096,7 +12117,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12106,7 +12127,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12115,7 +12136,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -12177,7 +12198,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12187,7 +12208,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12196,7 +12217,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_66 extends "legacy" ? import("viem").TransactionRequestLegacy : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -12258,7 +12279,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12268,7 +12289,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12277,7 +12298,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -12339,7 +12360,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12349,7 +12370,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12358,7 +12379,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_67 ? T_67 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -12420,7 +12441,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12430,7 +12451,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12439,7 +12460,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -12501,7 +12522,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12511,7 +12532,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12520,7 +12541,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_67 extends "eip1559" ? import("viem").TransactionRequestEIP1559 : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -12582,7 +12603,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12592,7 +12613,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12601,7 +12622,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -12663,7 +12684,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12673,7 +12694,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12682,7 +12703,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_68 ? T_68 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -12744,7 +12765,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12754,7 +12775,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12763,7 +12784,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -12825,7 +12846,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12835,7 +12856,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12844,7 +12865,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_68 extends "eip2930" ? import("viem").TransactionRequestEIP2930 : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -12906,7 +12927,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12916,7 +12937,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12925,7 +12946,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -12987,7 +13008,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -12997,7 +13018,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13006,7 +13027,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_69 ? T_69 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -13068,7 +13089,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13078,7 +13099,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13087,7 +13108,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -13149,7 +13170,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13159,7 +13180,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13168,7 +13189,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_69 extends "eip4844" ? import("viem").TransactionRequestEIP4844 : never : never : never) | ((request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -13230,7 +13251,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13240,7 +13261,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13249,7 +13270,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -13311,7 +13332,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13321,7 +13342,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13330,7 +13351,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) extends infer T_70 ? T_70 extends (request_1["type"] extends string | undefined ? request_1["type"] : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -13392,7 +13413,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13402,7 +13423,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13411,7 +13432,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)> extends "legacy" ? unknown : import("viem").GetTransactionType<request_1, (request_1 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -13473,7 +13494,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_1 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13483,7 +13504,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13492,7 +13513,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_1["type"] extends string | undefined ? Extract<request_1["type"], string> : never)>) ? T_70 extends "eip7702" ? import("viem").TransactionRequestEIP7702 : never : never : never)>> & {
             chainId?: number | undefined;
         }, (request_1["parameters"] extends readonly import("viem").PrepareTransactionRequestParameterType[] ? request_1["parameters"][number] : "type" | "nonce" | "fees" | "gas" | "blobVersionedHashes" | "chainId") extends infer T_71 ? T_71 extends (request_1["parameters"] extends readonly import("viem").PrepareTransactionRequestParameterType[] ? request_1["parameters"][number] : "type" | "nonce" | "fees" | "gas" | "blobVersionedHashes" | "chainId") ? T_71 extends "fees" ? "gasPrice" | "maxFeePerGas" | "maxPriorityFeePerGas" : T_71 : never : never> & (unknown extends request_1["kzg"] ? {} : Pick<request_1, "kzg">))[K_3]; } : never>;
@@ -13501,10 +13522,13 @@ export declare const initializeContract: () => Promise<{
             [x: string]: Record<string, any>;
             eth_accounts: Record<string, any>;
         }) => Promise<import("viem").RequestPermissionsReturnType>;
+        sendCalls: <const calls_3 extends readonly unknown[], chainOverride_6 extends import("viem").Chain | undefined = undefined>(parameters: import("viem").SendCallsParameters<import("viem").Chain, import("viem").Account, chainOverride_6, calls_3>) => Promise<import("viem").SendCallsReturnType>;
         sendRawTransaction: (args: import("viem").SendRawTransactionParameters) => Promise<`0x${string}`>;
-        sendTransaction: <const request_2 extends import("viem").SendTransactionRequest<import("viem").Chain, chainOverride_6>, chainOverride_6 extends import("viem").Chain | undefined = undefined>(args: import("viem").SendTransactionParameters<import("viem").Chain, import("viem").Account, chainOverride_6, request_2>) => Promise<`0x${string}`>;
+        sendTransaction: <const request_2 extends import("viem").SendTransactionRequest<import("viem").Chain, chainOverride_7>, chainOverride_7 extends import("viem").Chain | undefined = undefined>(args: import("viem").SendTransactionParameters<import("viem").Chain, import("viem").Account, chainOverride_7, request_2>) => Promise<`0x${string}`>;
+        showCallsStatus: (parameters: import("viem").ShowCallsStatusParameters) => Promise<void>;
+        signAuthorization: (parameters: import("node_modules/viem/_types/actions/wallet/signAuthorization").SignAuthorizationParameters<import("viem").Account>) => Promise<import("node_modules/viem/_types/actions/wallet/signAuthorization").SignAuthorizationReturnType>;
         signMessage: (args: import("viem").SignMessageParameters<import("viem").Account>) => Promise<`0x${string}`>;
-        signTransaction: <chainOverride_7 extends import("viem").Chain | undefined, const request_3 extends import("viem").UnionOmit<import("viem").ExtractChainFormatterParameters<import("viem").DeriveChain<import("viem").Chain, chainOverride_7>, "transactionRequest", import("viem").TransactionRequest>, "from"> = import("viem").UnionOmit<import("viem").ExtractChainFormatterParameters<import("viem").DeriveChain<import("viem").Chain, chainOverride_7>, "transactionRequest", import("viem").TransactionRequest>, "from">>(args: import("viem").SignTransactionParameters<import("viem").Chain, import("viem").Account, chainOverride_7, request_3>) => Promise<import("viem").TransactionSerialized<import("viem").GetTransactionType<request_3, (request_3 extends {
+        signTransaction: <chainOverride_8 extends import("viem").Chain | undefined, const request_3 extends import("viem").UnionOmit<import("viem").ExtractChainFormatterParameters<import("viem").DeriveChain<import("viem").Chain, chainOverride_8>, "transactionRequest", import("viem").TransactionRequest>, "from"> = import("viem").UnionOmit<import("viem").ExtractChainFormatterParameters<import("viem").DeriveChain<import("viem").Chain, chainOverride_8>, "transactionRequest", import("viem").TransactionRequest>, "from">>(args: import("viem").SignTransactionParameters<import("viem").Chain, import("viem").Account, chainOverride_8, request_3>) => Promise<import("viem").TransactionSerialized<import("viem").GetTransactionType<request_3, (request_3 extends {
             accessList?: undefined;
             authorizationList?: undefined;
             blobs?: undefined;
@@ -13565,7 +13589,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_3 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13575,7 +13599,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13584,7 +13608,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_3["type"] extends string | undefined ? Extract<request_3["type"], string> : never)>, (import("viem").GetTransactionType<request_3, (request_3 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -13646,7 +13670,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_3 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13656,7 +13680,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13665,7 +13689,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_3["type"] extends string | undefined ? Extract<request_3["type"], string> : never)> extends infer T_85 ? T_85 extends import("viem").GetTransactionType<request_3, (request_3 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -13727,7 +13751,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_3 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13737,7 +13761,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13746,7 +13770,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_3["type"] extends string | undefined ? Extract<request_3["type"], string> : never)> ? T_85 extends "eip1559" ? `0x02${string}` : never : never : never) | (import("viem").GetTransactionType<request_3, (request_3 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -13808,7 +13832,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_3 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13818,7 +13842,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13827,7 +13851,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_3["type"] extends string | undefined ? Extract<request_3["type"], string> : never)> extends infer T_86 ? T_86 extends import("viem").GetTransactionType<request_3, (request_3 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -13889,7 +13913,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_3 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13899,7 +13923,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13908,7 +13932,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_3["type"] extends string | undefined ? Extract<request_3["type"], string> : never)> ? T_86 extends "eip2930" ? `0x01${string}` : never : never : never) | (import("viem").GetTransactionType<request_3, (request_3 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -13970,7 +13994,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_3 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13980,7 +14004,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -13989,7 +14013,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_3["type"] extends string | undefined ? Extract<request_3["type"], string> : never)> extends infer T_87 ? T_87 extends import("viem").GetTransactionType<request_3, (request_3 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -14051,7 +14075,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_3 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -14061,7 +14085,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -14070,7 +14094,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_3["type"] extends string | undefined ? Extract<request_3["type"], string> : never)> ? T_87 extends "eip4844" ? `0x03${string}` : never : never : never) | (import("viem").GetTransactionType<request_3, (request_3 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -14132,7 +14156,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_3 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -14142,7 +14166,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -14151,7 +14175,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_3["type"] extends string | undefined ? Extract<request_3["type"], string> : never)> extends infer T_88 ? T_88 extends import("viem").GetTransactionType<request_3, (request_3 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -14213,7 +14237,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_3 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -14223,7 +14247,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -14232,7 +14256,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_3["type"] extends string | undefined ? Extract<request_3["type"], string> : never)> ? T_88 extends "eip7702" ? `0x04${string}` : never : never : never) | (import("viem").GetTransactionType<request_3, (request_3 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -14294,7 +14318,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_3 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -14304,7 +14328,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -14313,7 +14337,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_3["type"] extends string | undefined ? Extract<request_3["type"], string> : never)> extends infer T_89 ? T_89 extends import("viem").GetTransactionType<request_3, (request_3 extends {
             accessList?: undefined;
             authorizationList?: undefined;
@@ -14375,7 +14399,7 @@ export declare const initializeContract: () => Promise<{
             sidecars: false | readonly import("viem").BlobSidecar<`0x${string}`>[] | undefined;
         }, import("viem").TransactionSerializableEIP4844>) ? "eip4844" : never) | (request_3 extends ({
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -14385,7 +14409,7 @@ export declare const initializeContract: () => Promise<{
             sidecars?: undefined;
         } | {
             accessList?: import("viem").AccessList | undefined;
-            authorizationList?: import("viem/experimental").SignedAuthorizationList | undefined;
+            authorizationList?: import("viem").SignedAuthorizationList | undefined;
             blobs?: undefined;
             blobVersionedHashes?: undefined;
             gasPrice?: undefined;
@@ -14394,7 +14418,7 @@ export declare const initializeContract: () => Promise<{
             maxPriorityFeePerGas?: bigint | undefined;
             sidecars?: undefined;
         }) & {
-            authorizationList: import("viem/experimental").SignedAuthorizationList;
+            authorizationList: import("viem").SignedAuthorizationList;
         } ? "eip7702" : never) | (request_3["type"] extends string | undefined ? Extract<request_3["type"], string> : never)> ? T_89 extends "legacy" ? import("viem").TransactionSerializedLegacy : never : never : never)>>;
         signTypedData: <const typedData extends {
             [x: string]: readonly import("viem").TypedDataParameter[];
@@ -14605,8 +14629,18 @@ export declare const initializeContract: () => Promise<{
             [key: string]: unknown;
         }, primaryType extends string>(args: import("viem").SignTypedDataParameters<typedData, primaryType, import("viem").Account>) => Promise<`0x${string}`>;
         switchChain: (args: import("viem").SwitchChainParameters) => Promise<void>;
+        waitForCallsStatus: (parameters: import("viem").WaitForCallsStatusParameters) => Promise<{
+            id: string;
+            chainId: number;
+            version: string;
+            atomic: boolean;
+            capabilities?: import("viem").WalletCapabilities | undefined;
+            receipts?: import("viem").WalletCallReceipt<bigint, "success" | "reverted">[] | undefined;
+            statusCode: number;
+            status: "success" | "pending" | "failure" | undefined;
+        }>;
         watchAsset: (args: import("viem").WatchAssetParams) => Promise<boolean>;
-        writeContract: <const abi_9 extends readonly unknown[] | import("viem").Abi, functionName_3 extends import("viem").ContractFunctionName<abi_9, "nonpayable" | "payable">, args_4 extends import("viem").ContractFunctionArgs<abi_9, "nonpayable" | "payable", functionName_3>, chainOverride_8 extends import("viem").Chain | undefined = undefined>(args: import("viem").WriteContractParameters<abi_9, functionName_3, args_4, import("viem").Chain, import("viem").Account, chainOverride_8>) => Promise<`0x${string}`>;
+        writeContract: <const abi_9 extends readonly unknown[] | import("viem").Abi, functionName_3 extends import("viem").ContractFunctionName<abi_9, "nonpayable" | "payable">, args_4 extends import("viem").ContractFunctionArgs<abi_9, "nonpayable" | "payable", functionName_3>, chainOverride_9 extends import("viem").Chain | undefined = undefined>(args: import("viem").WriteContractParameters<abi_9, functionName_3, args_4, import("viem").Chain, import("viem").Account, chainOverride_9>) => Promise<`0x${string}`>;
         extend: <const client_1 extends {
             [x: string]: unknown;
             account?: undefined;
@@ -14633,7 +14667,7 @@ export declare const initializeContract: () => Promise<{
             [x: string]: (...parameters: [options?: import("viem").Prettify<import("viem").UnionOmit<import("viem").EstimateContractGasParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain>, "address" | "args" | "abi" | "functionName">> | undefined] | [args: readonly unknown[], options?: import("viem").Prettify<import("viem").UnionOmit<import("viem").EstimateContractGasParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain>, "address" | "args" | "abi" | "functionName">> | undefined]) => Promise<bigint>;
         };
         simulate: {
-            [x: string]: <chainOverride_9 extends import("viem").Chain | undefined = undefined, accountOverride_3 extends `0x${string}` | import("viem").Account | undefined = undefined>(...parameters: [options?: Omit<import("viem").SimulateContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, chainOverride_9, accountOverride_3>, "address" | "args" | "abi" | "functionName"> | undefined] | [args: readonly unknown[], options?: Omit<import("viem").SimulateContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, chainOverride_9, accountOverride_3>, "address" | "args" | "abi" | "functionName"> | undefined]) => Promise<import("viem").SimulateContractReturnType>;
+            [x: string]: <chainOverride_10 extends import("viem").Chain | undefined = undefined, accountOverride_3 extends `0x${string}` | import("viem").Account | undefined = undefined>(...parameters: [options?: Omit<import("viem").SimulateContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, chainOverride_10, accountOverride_3>, "address" | "args" | "abi" | "functionName"> | undefined] | [args: readonly unknown[], options?: Omit<import("viem").SimulateContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, chainOverride_10, accountOverride_3>, "address" | "args" | "abi" | "functionName"> | undefined]) => Promise<import("viem").SimulateContractReturnType>;
         };
         createEventFilter: {
             [x: string]: <strict_8 extends boolean | undefined = undefined>(...parameters: [options?: ({
@@ -14716,7 +14750,7 @@ export declare const initializeContract: () => Promise<{
             } | undefined]) => import("viem").WatchContractEventReturnType;
         };
         write: {
-            [x: string]: <chainOverride_10 extends import("viem").Chain | undefined, options extends import("viem").UnionOmit<import("viem").WriteContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, import("viem").Account, chainOverride_10>, "address" | "args" | "abi" | "functionName"> extends infer T_90 ? { [K_5 in keyof T_90]: import("viem").UnionOmit<import("viem").WriteContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, import("viem").Account, chainOverride_10>, "address" | "args" | "abi" | "functionName">[K_5]; } : never, Rest extends unknown[] = [options?: options | undefined]>(...parameters: Rest | [args: readonly unknown[], ...parameters: Rest]) => Promise<`0x${string}`>;
+            [x: string]: <chainOverride_11 extends import("viem").Chain | undefined, options extends import("viem").UnionOmit<import("viem").WriteContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, import("viem").Account, chainOverride_11>, "address" | "args" | "abi" | "functionName"> extends infer T_90 ? { [K_5 in keyof T_90]: import("viem").UnionOmit<import("viem").WriteContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, import("viem").Account, chainOverride_11>, "address" | "args" | "abi" | "functionName">[K_5]; } : never, Rest extends unknown[] = [options?: options | undefined]>(...parameters: Rest | [args: readonly unknown[], ...parameters: Rest]) => Promise<`0x${string}`>;
         };
         address: `0x${string}`;
         abi: import("viem").Abi;
@@ -14731,7 +14765,7 @@ export declare const initializeContract: () => Promise<{
             [x: string]: (...parameters: [options?: import("viem").Prettify<import("viem").UnionOmit<import("viem").EstimateContractGasParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain>, "address" | "args" | "abi" | "functionName">> | undefined] | [args: readonly unknown[], options?: import("viem").Prettify<import("viem").UnionOmit<import("viem").EstimateContractGasParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain>, "address" | "args" | "abi" | "functionName">> | undefined]) => Promise<bigint>;
         };
         simulate: {
-            [x: string]: <chainOverride_9 extends import("viem").Chain | undefined = undefined, accountOverride_3 extends `0x${string}` | import("viem").Account | undefined = undefined>(...parameters: [options?: Omit<import("viem").SimulateContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, chainOverride_9, accountOverride_3>, "address" | "args" | "abi" | "functionName"> | undefined] | [args: readonly unknown[], options?: Omit<import("viem").SimulateContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, chainOverride_9, accountOverride_3>, "address" | "args" | "abi" | "functionName"> | undefined]) => Promise<import("viem").SimulateContractReturnType>;
+            [x: string]: <chainOverride_10 extends import("viem").Chain | undefined = undefined, accountOverride_3 extends `0x${string}` | import("viem").Account | undefined = undefined>(...parameters: [options?: Omit<import("viem").SimulateContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, chainOverride_10, accountOverride_3>, "address" | "args" | "abi" | "functionName"> | undefined] | [args: readonly unknown[], options?: Omit<import("viem").SimulateContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, chainOverride_10, accountOverride_3>, "address" | "args" | "abi" | "functionName"> | undefined]) => Promise<import("viem").SimulateContractReturnType>;
         };
         createEventFilter: {
             [x: string]: <strict_8 extends boolean | undefined = undefined>(...parameters: [options?: ({
@@ -14814,7 +14848,7 @@ export declare const initializeContract: () => Promise<{
             } | undefined]) => import("viem").WatchContractEventReturnType;
         };
         write: {
-            [x: string]: <chainOverride_10 extends import("viem").Chain | undefined, options extends import("viem").UnionOmit<import("viem").WriteContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, import("viem").Account, chainOverride_10>, "address" | "args" | "abi" | "functionName"> extends infer T_91 ? { [K_5 in keyof T_91]: import("viem").UnionOmit<import("viem").WriteContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, import("viem").Account, chainOverride_10>, "address" | "args" | "abi" | "functionName">[K_5]; } : never, Rest extends unknown[] = [options?: options | undefined]>(...parameters: Rest | [args: readonly unknown[], ...parameters: Rest]) => Promise<`0x${string}`>;
+            [x: string]: <chainOverride_11 extends import("viem").Chain | undefined, options extends import("viem").UnionOmit<import("viem").WriteContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, import("viem").Account, chainOverride_11>, "address" | "args" | "abi" | "functionName"> extends infer T_91 ? { [K_5 in keyof T_91]: import("viem").UnionOmit<import("viem").WriteContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, import("viem").Account, chainOverride_11>, "address" | "args" | "abi" | "functionName">[K_5]; } : never, Rest extends unknown[] = [options?: options | undefined]>(...parameters: Rest | [args: readonly unknown[], ...parameters: Rest]) => Promise<`0x${string}`>;
         };
         address: `0x${string}`;
         abi: import("viem").Abi;
@@ -14829,7 +14863,7 @@ export declare const initializeContract: () => Promise<{
             [x: string]: (...parameters: [options?: import("viem").Prettify<import("viem").UnionOmit<import("viem").EstimateContractGasParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain>, "address" | "args" | "abi" | "functionName">> | undefined] | [args: readonly unknown[], options?: import("viem").Prettify<import("viem").UnionOmit<import("viem").EstimateContractGasParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain>, "address" | "args" | "abi" | "functionName">> | undefined]) => Promise<bigint>;
         };
         simulate: {
-            [x: string]: <chainOverride_9 extends import("viem").Chain | undefined = undefined, accountOverride_3 extends `0x${string}` | import("viem").Account | undefined = undefined>(...parameters: [options?: Omit<import("viem").SimulateContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, chainOverride_9, accountOverride_3>, "address" | "args" | "abi" | "functionName"> | undefined] | [args: readonly unknown[], options?: Omit<import("viem").SimulateContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, chainOverride_9, accountOverride_3>, "address" | "args" | "abi" | "functionName"> | undefined]) => Promise<import("viem").SimulateContractReturnType>;
+            [x: string]: <chainOverride_10 extends import("viem").Chain | undefined = undefined, accountOverride_3 extends `0x${string}` | import("viem").Account | undefined = undefined>(...parameters: [options?: Omit<import("viem").SimulateContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, chainOverride_10, accountOverride_3>, "address" | "args" | "abi" | "functionName"> | undefined] | [args: readonly unknown[], options?: Omit<import("viem").SimulateContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, chainOverride_10, accountOverride_3>, "address" | "args" | "abi" | "functionName"> | undefined]) => Promise<import("viem").SimulateContractReturnType>;
         };
         createEventFilter: {
             [x: string]: <strict_8 extends boolean | undefined = undefined>(...parameters: [options?: ({
@@ -14912,7 +14946,7 @@ export declare const initializeContract: () => Promise<{
             } | undefined]) => import("viem").WatchContractEventReturnType;
         };
         write: {
-            [x: string]: <chainOverride_10 extends import("viem").Chain | undefined, options extends import("viem").UnionOmit<import("viem").WriteContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, import("viem").Account, chainOverride_10>, "address" | "args" | "abi" | "functionName"> extends infer T_92 ? { [K_5 in keyof T_92]: import("viem").UnionOmit<import("viem").WriteContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, import("viem").Account, chainOverride_10>, "address" | "args" | "abi" | "functionName">[K_5]; } : never, Rest extends unknown[] = [options?: options | undefined]>(...parameters: Rest | [args: readonly unknown[], ...parameters: Rest]) => Promise<`0x${string}`>;
+            [x: string]: <chainOverride_11 extends import("viem").Chain | undefined, options extends import("viem").UnionOmit<import("viem").WriteContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, import("viem").Account, chainOverride_11>, "address" | "args" | "abi" | "functionName"> extends infer T_92 ? { [K_5 in keyof T_92]: import("viem").UnionOmit<import("viem").WriteContractParameters<import("viem").Abi, string, readonly unknown[], import("viem").Chain, import("viem").Account, chainOverride_11>, "address" | "args" | "abi" | "functionName">[K_5]; } : never, Rest extends unknown[] = [options?: options | undefined]>(...parameters: Rest | [args: readonly unknown[], ...parameters: Rest]) => Promise<`0x${string}`>;
         };
         address: `0x${string}`;
         abi: import("viem").Abi;
