@@ -215,45 +215,13 @@ function defineChain(chain) {
     ...chain
   };
 }
-const holesky = /* @__PURE__ */ defineChain({
-  id: 17e3,
-  name: "Holesky",
-  nativeCurrency: { name: "Holesky Ether", symbol: "ETH", decimals: 18 },
-  rpcUrls: {
-    default: {
-      http: ["https://ethereum-holesky-rpc.publicnode.com"]
-    }
-  },
-  blockExplorers: {
-    default: {
-      name: "Etherscan",
-      url: "https://holesky.etherscan.io",
-      apiUrl: "https://api-holesky.etherscan.io/api"
-    }
-  },
-  contracts: {
-    multicall3: {
-      address: "0xca11bde05977b3631167028862be2a173976ca11",
-      blockCreated: 77
-    },
-    ensRegistry: {
-      address: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
-      blockCreated: 801613
-    },
-    ensUniversalResolver: {
-      address: "0xa6AC935D4971E3CD133b950aE053bECD16fE7f3b",
-      blockCreated: 973484
-    }
-  },
-  testnet: true
-});
 const mainnet = /* @__PURE__ */ defineChain({
   id: 1,
   name: "Ethereum",
   nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
   rpcUrls: {
     default: {
-      http: ["https://cloudflare-eth.com"]
+      http: ["https://eth.merkle.io"]
     }
   },
   blockExplorers: {
@@ -294,19 +262,20 @@ const hoodi = viem.defineChain({
 });
 const chains = {
   mainnet,
-  holesky,
   hoodi
 };
 const chainIds = Object.values(chains).map((chain) => chain.id);
 const networks = Object.values(chains).map((chain) => chain.name);
 const graph_endpoints = {
   [mainnet.id]: "https://api.studio.thegraph.com/query/71118/ssv-network-ethereum/version/latest",
-  [holesky.id]: "https://api.studio.thegraph.com/query/71118/ssv-network-holesky/version/latest",
-  [hoodi.id]: "https://graph-node-hoodi.stage.ops.ssvlabsinternal.com/subgraphs/name/ssv-bapps-hoodi"
+  [hoodi.id]: "https://api.studio.thegraph.com/query/71118/ssv-network-hoodi/version/latest"
+};
+const paid_graph_endpoints = {
+  [mainnet.id]: "https://gateway.thegraph.com/api/subgraphs/id/7V45fKPugp9psQjgrGsfif98gWzCyC6ChN7CW98VyQnr",
+  [hoodi.id]: "https://gateway.thegraph.com/api/subgraphs/id/F4AU5vPCuKfHvnLsusibxJEiTN7ELCoYTvnzg3YHGYbh"
 };
 const rest_endpoints = {
   [mainnet.id]: "https://api.ssv.network/api/v4/mainnet",
-  [holesky.id]: "https://api.ssv.network/api/v4/holesky",
   [hoodi.id]: "https://api.ssv.network/api/v4/hoodi"
 };
 const contracts = {
@@ -314,11 +283,6 @@ const contracts = {
     setter: "0xDD9BC35aE942eF0cFa76930954a156B3fF30a4E1",
     getter: "0xafE830B6Ee262ba11cce5F32fDCd760FFE6a66e4",
     token: "0x9D65fF81a3c488d585bBfb0Bfe3c7707c7917f54"
-  },
-  [holesky.id]: {
-    setter: "0x38A4794cCEd47d3baf7370CcC43B560D3a1beEFA",
-    getter: "0x352A18AEe90cdcd825d1E37d9939dCA86C00e281",
-    token: "0xad45A78180961079BFaeEe349704F411dfF947C6"
   },
   [hoodi.id]: {
     setter: "0x58410Bef803ECd7E63B23664C586A6DB72DAf59c",
@@ -5405,7 +5369,7 @@ const configArgsSchema = z.object({
       });
       return false;
     }
-    if (!chainIds.includes(client.chain?.id)) {
+    if (![...chainIds].includes(client.chain?.id)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: `Public client chain must be one of [${networks.join(", ")}]`
@@ -5430,7 +5394,7 @@ const configArgsSchema = z.object({
       });
       return false;
     }
-    if (!chainIds.includes(client.chain?.id)) {
+    if (![...chainIds].includes(client.chain?.id)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: `Wallet client chain must be one of [${networks.join(", ")}]`
@@ -5439,16 +5403,30 @@ const configArgsSchema = z.object({
     }
     return true;
   }),
-  _: z.object({
-    graphUrl: z.string().url().optional(),
-    restUrl: z.string().url().optional(),
-    contractAddresses: z.object({
+  extendedConfig: z.object({
+    subgraph: z.object({
+      endpoint: z.string().url().optional(),
+      apiKey: z.string().optional()
+    }).optional(),
+    rest: z.object({
+      endpoint: z.string().url().optional()
+    }).optional(),
+    contracts: z.object({
       setter: z.string().optional(),
       getter: z.string().optional(),
       token: z.string().optional()
     }).optional()
   }).optional()
-});
+}).refine(
+  (val) => {
+    const publicClient = val.publicClient;
+    const walletClient = val.walletClient;
+    return publicClient?.chain?.id === walletClient?.chain?.id;
+  },
+  {
+    message: "Public and wallet client chains must be the same"
+  }
+);
 const globals = {
   MAX_WEI_AMOUNT: 115792089237316195423570985008687907853269984665640564039457584007913129639935n,
   CLUSTER_SIZES: {
@@ -5527,6 +5505,7 @@ exports.isUndefined = isUndefined;
 exports.ms = ms;
 exports.networks = networks;
 exports.numberFormatter = numberFormatter;
+exports.paid_graph_endpoints = paid_graph_endpoints;
 exports.percentageFormatter = percentageFormatter;
 exports.process$1 = process$1;
 exports.registerValidatorsByClusterSizeLimits = registerValidatorsByClusterSizeLimits;
