@@ -21,12 +21,8 @@ const mockConfig = {
     ssv: {
       read: {
         getOperatorEarnings: vi.fn().mockResolvedValue(2000n),
-        isWhitelistingContract: vi.fn<[{ contractAddress: Address }], Promise<boolean>>(),
-        isAddressWhitelistedInWhitelistingContract: vi.fn<[{
-          addressToCheck: Address
-          operatorId: bigint
-          whitelistingContract: Address
-        }], Promise<boolean>>(),
+        isWhitelistingContract: vi.fn(),
+        isAddressWhitelistedInWhitelistingContract: vi.fn(),
       },
       write: {
         withdrawOperatorEarnings: vi.fn().mockResolvedValue({ hash: '0x123' }),
@@ -207,4 +203,4 @@ describe('Operator Methods', () => {
       expect(result).toBe(false)
     })
   })
-}) 
+})

@@ -7,7 +7,7 @@ type RegisterValidatorsProps = Pick<SmartFnWriteOptions<{
     depositAmount?: bigint;
 }>, 'args'>;
 export declare const registerValidators: (config: ConfigReturnType, { args: { keyshares, depositAmount }, ...writeOptions }: RegisterValidatorsProps) => Promise<{
-    hash: `0x${string}`;
+    hash: import("viem").Hash;
     wait: () => Promise<import("viem").TransactionReceipt & {
         events: ({
             eventName: "AdminChanged";

@@ -11,7 +11,7 @@ export declare const hoodi: {
             url: string;
             apiUrl?: string | undefined;
         };
-    } | undefined;
+    } | undefined | undefined;
     contracts?: {
         [x: string]: import('viem').ChainContract | {
             [sourceId: number]: import('viem').ChainContract | undefined;
@@ -21,6 +21,7 @@ export declare const hoodi: {
         multicall3?: import('viem').ChainContract | undefined;
         universalSignatureVerifier?: import('viem').ChainContract | undefined;
     } | undefined;
+    ensTlds?: readonly string[] | undefined;
     id: 560048;
     name: "Hoodi";
     nativeCurrency: {
@@ -33,7 +34,7 @@ export declare const hoodi: {
             readonly http: readonly ["https://rpc.hoodi.ethpandaops.io"];
         };
     };
-    sourceId?: number | undefined;
+    sourceId?: number | undefined | undefined;
     testnet: true;
     custom?: Record<string, unknown> | undefined;
     fees?: import('viem').ChainFees<undefined> | undefined;
@@ -62,6 +63,7 @@ export declare const chains: {
                 readonly blockCreated: 14353601;
             };
         };
+        ensTlds?: readonly string[] | undefined;
         id: 1;
         name: "Ethereum";
         nativeCurrency: {
@@ -71,56 +73,15 @@ export declare const chains: {
         };
         rpcUrls: {
             readonly default: {
-                readonly http: readonly ["https://cloudflare-eth.com"];
+                readonly http: readonly ["https://eth.merkle.io"];
             };
         };
-        sourceId?: number | undefined;
-        testnet?: boolean | undefined;
+        sourceId?: number | undefined | undefined;
+        testnet?: boolean | undefined | undefined;
         custom?: Record<string, unknown> | undefined;
         fees?: import('viem').ChainFees<undefined> | undefined;
         formatters?: undefined;
-        serializers?: import('viem').ChainSerializers<undefined, import('viem').TransactionSerializable<bigint, number>> | undefined;
-    };
-    readonly holesky: {
-        blockExplorers: {
-            readonly default: {
-                readonly name: "Etherscan";
-                readonly url: "https://holesky.etherscan.io";
-                readonly apiUrl: "https://api-holesky.etherscan.io/api";
-            };
-        };
-        contracts: {
-            readonly multicall3: {
-                readonly address: "0xca11bde05977b3631167028862be2a173976ca11";
-                readonly blockCreated: 77;
-            };
-            readonly ensRegistry: {
-                readonly address: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e";
-                readonly blockCreated: 801613;
-            };
-            readonly ensUniversalResolver: {
-                readonly address: "0xa6AC935D4971E3CD133b950aE053bECD16fE7f3b";
-                readonly blockCreated: 973484;
-            };
-        };
-        id: 17000;
-        name: "Holesky";
-        nativeCurrency: {
-            readonly name: "Holesky Ether";
-            readonly symbol: "ETH";
-            readonly decimals: 18;
-        };
-        rpcUrls: {
-            readonly default: {
-                readonly http: readonly ["https://ethereum-holesky-rpc.publicnode.com"];
-            };
-        };
-        sourceId?: number | undefined;
-        testnet: true;
-        custom?: Record<string, unknown> | undefined;
-        fees?: import('viem').ChainFees<undefined> | undefined;
-        formatters?: undefined;
-        serializers?: import('viem').ChainSerializers<undefined, import('viem').TransactionSerializable<bigint, number>> | undefined;
+        serializers?: import('viem').ChainSerializers<undefined, import('viem').TransactionSerializable> | undefined;
     };
     readonly hoodi: {
         blockExplorers?: {
@@ -134,7 +95,7 @@ export declare const chains: {
                 url: string;
                 apiUrl?: string | undefined;
             };
-        } | undefined;
+        } | undefined | undefined;
         contracts?: {
             [x: string]: import('viem').ChainContract | {
                 [sourceId: number]: import('viem').ChainContract | undefined;
@@ -144,6 +105,7 @@ export declare const chains: {
             multicall3?: import('viem').ChainContract | undefined;
             universalSignatureVerifier?: import('viem').ChainContract | undefined;
         } | undefined;
+        ensTlds?: readonly string[] | undefined;
         id: 560048;
         name: "Hoodi";
         nativeCurrency: {
@@ -156,7 +118,7 @@ export declare const chains: {
                 readonly http: readonly ["https://rpc.hoodi.ethpandaops.io"];
             };
         };
-        sourceId?: number | undefined;
+        sourceId?: number | undefined | undefined;
         testnet: true;
         custom?: Record<string, unknown> | undefined;
         fees?: import('viem').ChainFees<undefined> | undefined;
@@ -164,10 +126,11 @@ export declare const chains: {
         serializers?: import('viem').ChainSerializers<undefined, import('viem').TransactionSerializable> | undefined;
     };
 };
-export declare const chainIds: (1 | 560048 | 17000)[];
-export declare const networks: ("Hoodi" | "Ethereum" | "Holesky")[];
+export declare const chainIds: (1 | 560048)[];
+export declare const networks: ("Hoodi" | "Ethereum")[];
 export type SupportedChainsIDs = (typeof chainIds)[number];
 export declare const graph_endpoints: Record<SupportedChainsIDs, string>;
+export declare const paid_graph_endpoints: Record<SupportedChainsIDs, string>;
 export declare const rest_endpoints: Record<SupportedChainsIDs, string>;
 export type ContractAddresses = {
     setter: Address;

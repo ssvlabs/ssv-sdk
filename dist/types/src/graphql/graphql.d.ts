@@ -3214,36 +3214,13 @@ export type GetClusterBalanceQuery = {
         balance: string;
     } | null;
 };
-export declare const GetClusterSnapshotDocument: DocumentNode<GetClusterSnapshotQuery, Exact<{
-    id: Scalars['ID']['input'];
-}>>;
-export declare const GetClusterDocument: DocumentNode<GetClusterQuery, Exact<{
-    id: Scalars['ID']['input'];
-}>>;
-export declare const GetClustersDocument: DocumentNode<GetClustersQuery, Exact<{
-    owner: Scalars['String']['input'];
-}>>;
-export declare const GetOwnerNonceDocument: DocumentNode<GetOwnerNonceQuery, Exact<{
-    owner: Scalars['ID']['input'];
-}>>;
-export declare const GetOwnerNonceByBlockDocument: DocumentNode<GetOwnerNonceByBlockQuery, Exact<{
-    owner: Scalars['ID']['input'];
-    block?: InputMaybe<number> | undefined;
-}>>;
-export declare const GetOperatorDocument: DocumentNode<GetOperatorQuery, Exact<{
-    id: Scalars['ID']['input'];
-}>>;
-export declare const GetOperatorsDocument: DocumentNode<GetOperatorsQuery, Exact<{
-    operatorIds: Array<Scalars['String']['input']> | Scalars['String']['input'];
-}>>;
-export declare const GetValidatorsDocument: DocumentNode<GetValidatorsQuery, Exact<{
-    ids: Array<Scalars['Bytes']['input']> | Scalars['Bytes']['input'];
-}>>;
-export declare const GetValidatorDocument: DocumentNode<GetValidatorQuery, Exact<{
-    id: Scalars['ID']['input'];
-}>>;
-export declare const GetClusterBalanceDocument: DocumentNode<GetClusterBalanceQuery, Exact<{
-    clusterId: Scalars['ID']['input'];
-    daoAddress: Scalars['ID']['input'];
-    operatorIds: Array<Scalars['String']['input']> | Scalars['String']['input'];
-}>>;
+export declare const GetClusterSnapshotDocument: DocumentNode<GetClusterSnapshotQuery, GetClusterSnapshotQueryVariables>;
+export declare const GetClusterDocument: DocumentNode<GetClusterQuery, GetClusterQueryVariables>;
+export declare const GetClustersDocument: DocumentNode<GetClustersQuery, GetClustersQueryVariables>;
+export declare const GetOwnerNonceDocument: DocumentNode<GetOwnerNonceQuery, GetOwnerNonceQueryVariables>;
+export declare const GetOwnerNonceByBlockDocument: DocumentNode<GetOwnerNonceByBlockQuery, GetOwnerNonceByBlockQueryVariables>;
+export declare const GetOperatorDocument: DocumentNode<GetOperatorQuery, GetOperatorQueryVariables>;
+export declare const GetOperatorsDocument: DocumentNode<GetOperatorsQuery, GetOperatorsQueryVariables>;
+export declare const GetValidatorsDocument: DocumentNode<GetValidatorsQuery, GetValidatorsQueryVariables>;
+export declare const GetValidatorDocument: DocumentNode<GetValidatorQuery, GetValidatorQueryVariables>;
+export declare const GetClusterBalanceDocument: DocumentNode<GetClusterBalanceQuery, GetClusterBalanceQueryVariables>;

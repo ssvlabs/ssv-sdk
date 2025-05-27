@@ -1,6 +1,6 @@
 {
   "name": "@ssv-labs/ssv-sdk",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "author": "SSV.Labs",
   "description": "ssv labs sdk",
   "keywords": [
@@ -16,14 +16,10 @@
   "types": "./dist/main.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/main.mjs",
-      "require": "./dist/main.js",
-      "types": "./dist/main.d.ts"
+      "import": "./dist/main.mjs"
     },
     "./utils": {
-      "import": "./dist/utils.mjs",
-      "require": "./dist/utils.js",
-      "types": "./dist/utils/index.d.ts"
+      "import": "./dist/utils.mjs"
     }
   },
   "scripts": {
@@ -39,7 +35,7 @@
     "release": "release-it",
     "commit": "git-cz",
     "lint-staged": "pnpm run type-check && pnpm vitest run && lint-staged",
-    "prepare": "husky && pnpm run build"
+    "prepare": "pnpm run build"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx,js,json}": [
@@ -52,6 +48,7 @@
     "@0no-co/graphqlsp": "^1.12.16",
     "@commitlint/cli": "^19.2.2",
     "@commitlint/config-conventional": "^19.2.2",
+    "@esbuild/darwin-x64": "^0.21.5",
     "@graphql-codegen/cli": "^5.0.3",
     "@graphql-codegen/schema-ast": "^4.1.0",
     "@graphql-codegen/typed-document-node": "^5.0.10",
@@ -120,7 +117,7 @@
     "graphql-request": "^7.1.0",
     "lodash-es": "^4.17.21",
     "ssv-keys": "^1.2.1",
-    "viem": "^2.21.30",
+    "viem": "^2.30.1",
     "zod": "^3.23.8"
   },
   "license": "SEE LICENSE IN LICENCE FILE"

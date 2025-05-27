@@ -13,14 +13,13 @@ import { configArgsSchema } from '@/utils/zod/config'
 import { GraphQLClient } from 'graphql-request'
 import type { Address, Chain, PublicClient, WalletClient } from 'viem'
 import type { ContractAddresses, SupportedChainsIDs } from './chains'
-import { chainIds, contracts, graph_endpoints, rest_endpoints } from './chains'
+import { contracts, graph_endpoints, paid_graph_endpoints, rest_endpoints } from './chains'
 
 export type ConfigReturnType = {
   publicClient: PublicClient
   walletClient: WalletClient
   chain: Chain
   api: ReturnType<typeof createQueries> & ReturnType<typeof createSSVAPI>
-  graphQLClient: GraphQLClient
   contractAddresses: {
     setter: Address
     getter: Address
@@ -33,8 +32,13 @@ export type ConfigReturnType = {
     }
     token: ContractInteractions<'token'>
   }
-  graphEndpoint: string
-  restEndpoint: string
+  subgraph: {
+    client: GraphQLClient
+    endpoint: string
+  }
+  rest: {
+    endpoint: string
+  }
 }
 
 export const isConfig = (props: unknown): props is ConfigReturnType => {
@@ -45,11 +49,10 @@ export const isConfig = (props: unknown): props is ConfigReturnType => {
     'walletClient' in props &&
     'chain' in props &&
     'api' in props &&
-    'graphQLClient' in props &&
     'contractAddresses' in props &&
     'contract' in props &&
-    'graphEndpoint' in props &&
-    'restEndpoint' in props
+    'subgraph' in props &&
+    'rest' in props
   )
 }
 
@@ -60,10 +63,10 @@ type CreateContractInteractionsArgs = {
 }
 
 export const createContractInteractions = ({
-  walletClient,
-  publicClient,
-  addresses,
-}: CreateContractInteractionsArgs) => {
+                                             walletClient,
+                                             publicClient,
+                                             addresses,
+                                           }: CreateContractInteractionsArgs) => {
   return {
     ssv: {
       write: createWriter<'setter'>({
@@ -95,46 +98,52 @@ export const createContractInteractions = ({
 }
 
 export const createConfig = (props: ConfigArgs): ConfigReturnType => {
-  const parsed = configArgsSchema.parse(props)
-  if (
-    !parsed.walletClient.chain ||
-    !parsed.publicClient.chain ||
-    !chainIds.includes(parsed.walletClient.chain?.id as SupportedChainsIDs) ||
-    !chainIds.includes(parsed.publicClient.chain?.id as SupportedChainsIDs)
-  )
-    throw new Error(`Chain must be one of ${chainIds.join(', ')}`)
+  const { walletClient, publicClient, extendedConfig } = configArgsSchema.parse(props)
 
-  const chainId = parsed.walletClient.chain.id as SupportedChainsIDs
-
+  const hasAPIKey = Boolean(extendedConfig?.subgraph?.apiKey)
+  const chainId = walletClient.chain!.id as SupportedChainsIDs
   const chainContracts = contracts[chainId]
 
   const addresses = {
-    setter: parsed._?.contractAddresses?.setter || chainContracts.setter,
-    getter: parsed._?.contractAddresses?.getter || chainContracts.getter,
-    token: parsed._?.contractAddresses?.token || chainContracts.token,
+    setter: extendedConfig?.contracts?.setter || chainContracts.setter,
+    getter: extendedConfig?.contracts?.getter || chainContracts.getter,
+    token: extendedConfig?.contracts?.token || chainContracts.token,
   }
 
   const contract = createContractInteractions({
-    walletClient: parsed.walletClient,
-    publicClient: parsed.publicClient,
+    walletClient: walletClient,
+    publicClient: publicClient,
     addresses,
   })
 
-  const graphEndpoint = parsed._?.graphUrl || graph_endpoints[chainId]
-  const restEndpoint = parsed._?.restUrl || rest_endpoints[chainId]
-  const graphQLClient = new GraphQLClient(graphEndpoint)
+  const graphEndpoint =
+    extendedConfig?.subgraph?.endpoint ||
+    (hasAPIKey ? paid_graph_endpoints[chainId] : graph_endpoints[chainId])
+
+  const restEndpoint = extendedConfig?.rest?.endpoint || rest_endpoints[chainId]
+
+  const graphQLClient = new GraphQLClient(
+    graphEndpoint,
+    hasAPIKey
+      ? { headers: { Authorization: `Bearer ${extendedConfig?.subgraph?.apiKey}` } }
+      : undefined,
+  )
 
   return {
-    publicClient: parsed.publicClient,
-    walletClient: parsed.walletClient,
-    chain: parsed.walletClient.chain,
-    graphEndpoint,
-    restEndpoint,
+    publicClient: publicClient,
+    walletClient: walletClient,
+    chain: walletClient.chain!,
     api: {
       ...createQueries(graphQLClient),
       ...createSSVAPI(restEndpoint),
     },
-    graphQLClient,
+    subgraph: {
+      client: graphQLClient,
+      endpoint: graphEndpoint,
+    },
+    rest: {
+      endpoint: restEndpoint,
+    },
     contractAddresses: addresses,
     contract,
   }
