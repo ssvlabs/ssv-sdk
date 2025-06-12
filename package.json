@@ -1,68 +1,52 @@
 {
-  "name": "ssv-sdk",
-  "description": "A starter project that makes creating a TypeScript library extremely easy.",
+  "name": "@ssv-labs/ssv-sdk",
+  "version": "0.0.7",
+  "author": "SSV.Labs",
+  "description": "ssv labs sdk",
   "keywords": [
-    "typescript",
-    "library",
-    "starter",
-    "boilerplate",
-    "rollup",
-    "vitest"
+    "ssv",
+    "sdk"
   ],
-  "author": {
-    "name": "crper",
-    "email": "crper@outlook.com",
-    "url": "https://github.com/crper"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/crper/rollup-typescript-lib-boilerplate.git"
-  },
-  "homepage": "https://github.com/crper/rollup-typescript-lib-boilerplate#readme",
-  "bugs": {
-    "url": "https://github.com/crper/rollup-typescript-lib-boilerplate/issues",
-    "email": "crper@outlook.com"
-  },
-  "private": false,
-  "version": "0.2.0",
-  "type": "module",
+  "repository": "https://github.com/ssvlabs/ssv-sdk",
   "files": [
     "dist"
   ],
   "main": "./dist/main.js",
-  "module": "./dist/main.js",
+  "module": "./dist/main.mjs",
   "types": "./dist/main.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/main.js",
-      "require": "./dist/main.cjs",
+      "import": "./dist/main.mjs",
+      "require": "./dist/main.js",
       "types": "./dist/main.d.ts"
     },
     "./utils": {
-      "import": "./dist/utils.js",
-      "require": "./dist/utils.cjs",
+      "import": "./dist/utils.mjs",
+      "require": "./dist/utils.js",
       "types": "./dist/utils/index.d.ts"
-    },
-    "./chainsafe": {
-      "import": "./dist/chainsafe.js",
-      "require": "./dist/chainsafe.cjs",
-      "types": "./dist/libs/utils/methods/create-validator-keys.d.ts"
     }
   },
   "scripts": {
     "lint": "eslint . --ext .ts --fix",
     "watch": "rollup -w -c rollup.config.ts --configPlugin typescript --environment BUILD:development",
-    "build": "npm run test:prod && vite build",
-    "build:vite": "vite build",
+    "build": "vite build",
     "codegen": "graphql-codegen",
     "test": "vitest",
-    "test:prod": "vitest run",
-    "prepare": "npm run build:vite",
+    "test:coverage": "vitest run --coverage",
     "v-pub-tarball": "npm publish --dry-run",
     "type-check": "tsc -b",
     "type:perf": "tsc --extendedDiagnostics",
     "release": "release-it",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "lint-staged": "pnpm run type-check && pnpm vitest run && lint-staged",
+    "prepare": "husky && pnpm run build"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx,js,json}": [
+      "prettier --write --log-level silent",
+      "eslint --fix",
+      "git add"
+    ]
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1.12.16",
@@ -74,6 +58,11 @@
     "@graphql-codegen/typescript": "^4.1.0",
     "@graphql-codegen/typescript-graphql-request": "^6.2.0",
     "@graphql-codegen/typescript-operations": "^4.3.0",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-viem": "^2.0.6",
+    "@openzeppelin/contracts": "^4.9.6",
+    "@openzeppelin/contracts-upgradeable": "^4.9.6",
+    "@openzeppelin/hardhat-upgrades": "^3.0.5",
     "@parcel/watcher": "^2.4.1",
     "@release-it/conventional-changelog": "^8.0.1",
     "@rollup/plugin-alias": "^5.1.1",
@@ -82,11 +71,13 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
+    "@rollup/rollup-darwin-x64": "^4.30.1",
     "@types/eslint-plugin-prettier": "^3.1.3",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.12.7",
     "@typescript-eslint/eslint-plugin": "^7.7.0",
     "@typescript-eslint/parser": "^7.7.0",
+    "@vitest/coverage-v8": "^1.5.0",
     "@vitest/ui": "^1.5.0",
     "commitizen": "^4.3.0",
     "concurrently": "^9.0.1",
@@ -95,6 +86,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-unused-imports": "^4.1.4",
+    "hardhat": "^2.22.17",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
@@ -119,28 +111,10 @@
     }
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://www.opensource.org/licenses/mit-license.php"
-    }
-  ],
   "dependencies": {
-    "@chainsafe/bls": "^8.1.0",
-    "@chainsafe/bls-keygen": "^0.4.0",
-    "@chainsafe/bls-keystore": "^3.1.0",
-    "@chainsafe/blst": "^2.2.0",
-    "@chainsafe/ssz": "^0.18.0",
     "@graphql-typed-document-node/core": "^3.2.0",
-    "@lodestar/config": "^1.22.0",
-    "@lodestar/params": "^1.22.0",
-    "@lodestar/state-transition": "^1.22.0",
-    "@lodestar/types": "^1.22.0",
     "@safe-global/protocol-kit": "^5.0.3",
     "abitype": "^1.0.6",
     "bls-eth-wasm": "^1.4.0",
@@ -150,8 +124,9 @@
     "graphql-request": "^7.1.0",
     "js-base64": "^3.7.7",
     "lodash-es": "^4.17.21",
-    "ssv-keys": "github:ssvlabs/ssv-keys#fix-utility-func-usage",
+    "ssv-keys": "^1.2.1",
     "viem": "^2.21.30",
     "zod": "^3.23.8"
-  }
+  },
+  "license": "SEE LICENSE IN LICENCE FILE"
 }

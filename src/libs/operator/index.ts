@@ -1,9 +1,9 @@
 import type { ConfigReturnType } from '@/config/create'
-import { setOperatorWhitelists, withdraw } from '@/libs/operator/methods'
+import { registerOperator, setOperatorWhitelists, withdraw } from '@/libs/operator/methods'
 import type { RemoveConfigArg } from '@/types/methods'
 
 export const createOperatorManager = (config: ConfigReturnType) => ({
-  registerOperator: config.contract.ssv.write.registerOperator,
+  registerOperator: registerOperator.bind(null, config) as RemoveConfigArg<typeof registerOperator>,
   removeOperator: config.contract.ssv.write.removeOperator,
   withdraw: withdraw.bind(null, config) as RemoveConfigArg<typeof withdraw>,
   setOperatorWhitelists: config.contract.ssv.write.setOperatorsWhitelists,

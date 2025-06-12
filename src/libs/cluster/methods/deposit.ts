@@ -1,17 +1,22 @@
 import type { ConfigReturnType } from '@/config/create'
+import type { SmartFnWriteOptions } from '@/contract-interactions/types'
 import { getClusterSnapshot } from '@/utils/cluster'
 
-type DepositProps = {
+type DepositProps = SmartFnWriteOptions<{
   id: string
   amount: bigint
   options?: DepositOptions
-}
+}>
 
 type DepositOptions = {
   approve?: boolean
 }
 
-export const deposit = async (config: ConfigReturnType, { id, amount, options }: DepositProps) => {
+export const deposit = async (
+  config: ConfigReturnType,
+  { args: { id, amount }, ...writeOptions }: DepositProps,
+  options: DepositOptions = {},
+) => {
   const cluster = await config.api.getCluster({ id })
 
   if (!cluster) {
@@ -44,5 +49,6 @@ export const deposit = async (config: ConfigReturnType, { id, amount, options }:
       clusterOwner: process.env.OWNER_ADDRESS!,
       operatorIds: cluster.operatorIds.map(BigInt),
     },
+    ...writeOptions,
   })
 }

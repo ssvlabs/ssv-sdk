@@ -5,6 +5,7 @@ import {
   liquidateCluster,
   reactivateCluster,
   registerValidators,
+  registerValidatorsRawData,
   removeValidators,
   setFeeRecipient,
   validateSharesPostRegistration,
@@ -22,6 +23,9 @@ export const createClusterManager = (config: ConfigReturnType) => ({
   exitValidators: exitValidators.bind(null, config) as RemoveConfigArg<typeof exitValidators>,
   registerValidators: registerValidators.bind(null, config) as RemoveConfigArg<
     typeof registerValidators
+  >,
+  registerValidatorsRawData: registerValidatorsRawData.bind(null, config) as RemoveConfigArg<
+    typeof registerValidatorsRawData
   >,
   validateSharesPostRegistration: validateSharesPostRegistration.bind(
     null,

@@ -1,0 +1,43 @@
+{
+  "files.associations": {
+    ".eslintrc": "jsonc",
+    ".stylelintrc": "json",
+    ".dockerignore": "ignore",
+    ".eslintignore": "ignore"
+  },
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.validate.enable": false,
+  "javascript.format.enable": false,
+  "typescript.format.enable": false,
+
+  "search.exclude": {
+    ".eslintcache": true,
+    ".git": true,
+    "*.{css,sass,scss}.d.ts": true,
+    "node_modules": true,
+    "npm-debug.log.*": true,
+    "test/**/__snapshots__": true,
+    "yarn.lock": true,
+    "dist": true
+  },
+  "cSpell.words": [
+    "abitype",
+    "bigintify",
+    "daovalues",
+    "holesky",
+    "hoodi",
+    "keyshares",
+    "SSVAPI",
+    "SSVSDK",
+    "viem"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.ts": "explicit",
+    "source.organizeImports": "explicit",
+    "source.sortImports": "explicit"
+  },
+  "eslint.validate": ["javascript", "typescript"],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}

@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DepositABI } from '@/abi/deposit'
 import { HoleskyV4GetterABI } from '@/abi/holesky/v4/getter'
 import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter'
 import { TokenABI } from '@/abi/token'
 import { paramsToArray } from '@/types/contract-interactions'
 import { tryCatch } from '@/utils'
 import type { AbiFunction, WriteContractParameters } from 'viem'
-import { decodeEventLog } from 'viem'
+import { decodeEventLog, encodeFunctionData } from 'viem'
 import type {
   ContractNames,
   Contracts,
@@ -17,7 +16,7 @@ import type {
   WriterFunctions,
 } from './types'
 
-const ABIS = [TokenABI, MainnetV4SetterABI, DepositABI, HoleskyV4GetterABI]
+const ABIS = [TokenABI, MainnetV4SetterABI, HoleskyV4GetterABI]
 
 export const createWriter = <T extends ContractNames>({
   abi,
@@ -42,6 +41,14 @@ export const createWriter = <T extends ContractNames>({
           args: paramsToArray({ params: options.args, abiFunction: fn }),
           account: walletClient.account!,
         })
+
+      const getTransactionData = (params: any) => {
+        return encodeFunctionData({
+          abi,
+          functionName: fn.name,
+          args: paramsToArray({ params, abiFunction: fn }),
+        })
+      }
 
       const func = async (options: any) => {
         const { request } = await simulate(options)
@@ -82,6 +89,7 @@ export const createWriter = <T extends ContractNames>({
         }
       }
       func.simulate = simulate
+      func.getTransactionData = getTransactionData
       return [fn.name, func]
     }),
   ) as any
