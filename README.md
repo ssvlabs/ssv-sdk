@@ -1,46 +1,84 @@
-**⚠ READ BEFORE USING: This SDK is Under Heavy Development**
+<p align="center">
+  <img src="https://ssv.network/wp-content/uploads/2024/06/full_logo_white.svg" alt="SSV Network" width="300"/>
+</p>
 
-> This repository is still under active development and testing. It is **not recommended for use** in production or live environments at this time.
->
-> For updates on the progress and when this SDK will be ready for general use, please refer to our official [SSV documentation](https://docs.ssv.network) and follow along.
+<h1 align="center">SSV SDK</h1>
 
-# SSV SDK
+<p align="center">
+  <a href="https://codecov.io/gh/ssvlabs/ssv-sdk">
+    <img src="https://codecov.io/gh/ssvlabs/ssv-sdk/graph/badge.svg?token=2j2HCF1fSb" alt="codecov"/>
+  </a>
+</p>
 
-A TypeScript SDK for interacting with the SSV (Secret Shared Validator) network, enabling distributed validator operations on Ethereum.
+> **⚠️ Development Notice**: This SDK is currently under active development and testing. It is not recommended for production use at this time. For updates and documentation, please refer to our [official documentation](https://docs.ssv.network).
+
+## Overview
+
+The SSV SDK is a TypeScript library for interacting with the SSV network, enabling distributed validator operations on Ethereum.
+
+## Core Modules
+
+The SDK consists of four main modules:
+
+- **Clusters**: Manage validator clusters, handle deposits, and register validators
+- **Operators**: Interact with network operators and manage operator relationships
+- **API**: Access network data, query states, and retrieve operational information
+- **Utils**: Helper functions for keyshare validation, share generation, and other utilities
 
 ## Installation
 
 ```bash
-pnpm install ssv-sdk ssv-keys viem
-# or
-npm install ssv-sdk ssv-keys viem
-# or
-yarn add ssv-sdk ssv-keys viem
+# Using npm
+npm i @ssv-labs/ssv-sdk
+
+# Using yarn
+yarn add @ssv-labs/ssv-sdk
+
+# Using pnpm
+pnpm install @ssv-labs/ssv-sdk
 ```
 
-## Usage
+## Quick Start
 
 ### Initialize the SDK
 
 ```typescript
-import { SSVSDK } from 'ssv-sdk'
+import { SSVSDK, chains } from '@ssv-labs/ssv-sdk'
+import { createPublicClient, createWalletClient, http } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
 
-// Initialize with basic configuration
+const chain = chains.mainnet // or chains.holesky
+const transport = http()
+
+const publicClient = createPublicClient({
+  chain,
+  transport,
+})
+
+const account = privateKeyToAccount('0x...')
+const walletClient = createWalletClient({
+  account,
+  chain,
+  transport,
+})
+
 const sdk = new SSVSDK({
-  chain: 'mainnet', // or holesky
-  private_key: '0x.......',
+  publicClient,
+  walletClient,
 })
 ```
 
-### API Interactions
+### API Examples
 
 ```typescript
+// Query operators
 const operators = await sdk.api.getOperators({
   operatorIds: ['220', '221', '223', '224'],
 })
 
+// Get owner nonce
 const nonce = await sdk.api.getOwnerNonce({
-  owner: '0x',
+  owner: 'your_wallet_address',
 })
 ```
 
@@ -49,29 +87,50 @@ const nonce = await sdk.api.getOwnerNonce({
 ```typescript
 import { parseEther } from 'viem'
 
-await sdk.clusters.deposit({
-  id: '...',
-  amount: parseEther('1.5'),
-  options: {
-    approve: true, // Automatically triggers token approval transaction if the allowance is lower than the deposit amount
+// Deposit to cluster
+await sdk.clusters.deposit(
+  {
+    id: 'your_cluster_id',
+    amount: parseEther('30'),
   },
-})
+  {
+    approve: true, // Auto-approve token if needed
+  },
+)
 ```
 
-### Environment Setup for Testing
+### Register Validators
+To register validators, you'll need to:
 
-To run tests, you'll need to set up your environment variables. Create a `.env` file in the root directory of your project using the provided `.env.example` as a template:
-
-```bash
-# Copy the example env file
-cp .env.example .env
-```
-
-The `.env` file should contain the following variables:
-
+1. Create shares from your keyshares JSON file
+2. Register the validator using the created shares
 ```typescript
-PRIVATE_KEY = your_private_key_here
-OWNER_ADDRESS = your_owner_address_here
+import { parseEther } from 'viem'
+
+// Your keyshares JSON file containing the validator's data
+import keyshares from 'path/to/keyshares.json'
+
+// First, validate and create shares from your keyshares
+try {
+  const result = await sdk.utils.validateSharesPreRegistration({
+    operatorIds: ['220', '221', '223', '224'],
+    keyshares,
+  })
+
+  // Register validators using the clusters API
+  const receipt = await sdk.clusters
+    .registerValidators({
+      args: {
+        keyshares: result.available,
+        depositAmount: parseEther('2'),
+      },
+    })
+    .then((tx) => tx.wait())
+} catch (e) {
+  // something went wrong
+}
 ```
 
-Make sure to never commit your actual `.env` file to version control. The `.env.example` file serves as a template showing which variables are required.
+## Documentation
+
+For detailed documentation and examples, visit our [official documentation](https://docs.ssv.network).

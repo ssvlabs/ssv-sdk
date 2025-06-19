@@ -1,13 +1,19 @@
 import type { getOperator } from '@/api/subgraph'
+import { globals } from '@/config'
 import type { ConfigReturnType } from '@/config/create'
+import type { SmartFnWriteOptions } from '@/contract-interactions/types'
+import { roundOperatorFee } from '@/utils'
 import type { Address } from 'abitype'
-import { isAddressEqual, zeroAddress } from 'viem'
+import { encodeAbiParameters, isAddressEqual, parseAbiParameters, zeroAddress } from 'viem'
 
-type WithdrawArgs = {
+type WithdrawArgs = SmartFnWriteOptions<{
   operatorId: string
   amount: bigint
-}
-export const withdraw = async (config: ConfigReturnType, { operatorId, amount }: WithdrawArgs) => {
+}>
+export const withdraw = async (
+  config: ConfigReturnType,
+  { args: { operatorId, amount }, ...writeOptions }: WithdrawArgs,
+) => {
   const balance = await config.contract.ssv.read.getOperatorEarnings({
     id: BigInt(operatorId),
   })
@@ -19,6 +25,7 @@ export const withdraw = async (config: ConfigReturnType, { operatorId, amount }:
       args: {
         operatorId: BigInt(operatorId),
       },
+      ...writeOptions,
     })
   }
 
@@ -27,16 +34,37 @@ export const withdraw = async (config: ConfigReturnType, { operatorId, amount }:
       operatorId: BigInt(operatorId),
       amount,
     },
+    ...writeOptions,
   })
 }
 
-type SetOperatorWhitelistsArgs = {
+type RegisterOperatorArgs = SmartFnWriteOptions<{
+  isPrivate: boolean
+  yearlyFee: bigint
+  publicKey: string
+}>
+
+export const registerOperator = async (
+  config: ConfigReturnType,
+  { args: { isPrivate, yearlyFee, publicKey }, ...writeOptions }: RegisterOperatorArgs,
+) => {
+  return config.contract.ssv.write.registerOperator({
+    args: {
+      publicKey: encodeAbiParameters(parseAbiParameters('string'), [publicKey]),
+      fee: roundOperatorFee(yearlyFee / globals.BLOCKS_PER_YEAR),
+      setPrivate: isPrivate,
+    },
+    ...writeOptions,
+  })
+}
+
+type SetOperatorWhitelistsArgs = SmartFnWriteOptions<{
   operatorIds: string[]
   contractAddress: Address
-}
+}>
 export const setOperatorWhitelists = async (
   config: ConfigReturnType,
-  { operatorIds, contractAddress }: SetOperatorWhitelistsArgs,
+  { args: { operatorIds, contractAddress }, ...writeOptions }: SetOperatorWhitelistsArgs,
 ) => {
   const isWhitelistingContract = await config.contract.ssv.read.isWhitelistingContract({
     contractAddress,
@@ -51,6 +79,7 @@ export const setOperatorWhitelists = async (
       operatorIds: operatorIds.map(BigInt),
       whitelistAddresses: [contractAddress],
     },
+    ...writeOptions,
   })
 }
 

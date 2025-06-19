@@ -1,15 +1,16 @@
 import type { ConfigReturnType } from '@/config/create'
+import type { SmartFnWriteOptions } from '@/contract-interactions/types'
 import { getClusterSnapshot } from '@/utils/cluster'
 import type { Hex } from 'viem'
 
-type RemoveValidatorsProps = {
+type RemoveValidatorsProps = SmartFnWriteOptions<{
   id: string
   publicKeys: Hex[]
-}
+}>
 
 export const removeValidators = async (
   config: ConfigReturnType,
-  { id, publicKeys }: RemoveValidatorsProps,
+  { args: { id, publicKeys }, ...writeOptions }: RemoveValidatorsProps,
 ) => {
   const cluster = await config.api.getCluster({ id })
 
@@ -24,6 +25,7 @@ export const removeValidators = async (
         publicKey: publicKeys[0],
         operatorIds: cluster.operatorIds.map(BigInt),
       },
+      ...writeOptions,
     })
   }
 
@@ -33,5 +35,6 @@ export const removeValidators = async (
       publicKeys,
       operatorIds: cluster.operatorIds.map(BigInt),
     },
+    ...writeOptions,
   })
-} 
+}

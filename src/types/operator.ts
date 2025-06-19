@@ -1,4 +1,10 @@
+import type { Address } from "abitype"
+
 export type Operator = {
-  id: string
   publicKey: string
+  whitelisted: Address[]
+  id: string
+  validatorCount: string
+  isPrivate: boolean
+  whitelistedContract: Address
 }

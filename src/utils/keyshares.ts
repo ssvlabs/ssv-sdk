@@ -74,9 +74,11 @@ export const validateConsistentOperatorPublicKeys = (
   operators: Pick<Operator, 'id' | 'publicKey'>[],
 ) => {
   const operatorsMap = new Map(operators.map((o) => [o.id, o.publicKey]))
-  const valid = keyshares.every(({ data }) =>
-    data.operators?.every(({ id, operatorKey }) => operatorsMap.get(id.toString()) === operatorKey),
-  )
+  const valid = keyshares.every(({ data }) => {
+    return data.operators?.every(({ id, operatorKey }) => {
+      return operatorsMap.get(id.toString()) === operatorKey
+    })
+  })
 
   if (!valid) {
     throw new KeysharesValidationError(KeysharesValidationErrors.InconsistentOperatorPublicKeys)
