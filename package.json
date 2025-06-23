@@ -28,18 +28,17 @@
     "./keys": {
       "import": "./dist/keys.mjs",
       "require": "./dist/keys.js",
-      "types": "./dist/src/libs/ssv-keys"
+      "types": "./dist/libs/ssv-keys/SSVKeys.d.ts"
     }
   },
   "scripts": {
     "lint": "eslint . --ext .ts --fix",
-    "watch": "rollup -w -c rollup.config.ts --configPlugin typescript --environment BUILD:development",
     "build": "vite build",
     "codegen": "graphql-codegen",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "v-pub-tarball": "npm publish --dry-run",
-    "type-check": "tsc -b",
+    "type-check": "tsc --noEmit",
     "type:perf": "tsc --extendedDiagnostics",
     "release": "release-it",
     "commit": "git-cz",
