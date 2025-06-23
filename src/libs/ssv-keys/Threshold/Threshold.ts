@@ -1,9 +1,9 @@
-import type { SecretKeyType } from 'bls-eth-wasm';
 import bls from '@/libs/ssv-keys/BLS';
 import { SSVKeysException } from '@/libs/ssv-keys/exceptions/base';
 import { PrivateKeyFormatError } from '@/libs/ssv-keys/exceptions/keystore';
+import type { ISharesKeyPairs } from '@/libs/ssv-keys/interfaces';
 import { isOperatorsLengthValid } from '@/libs/ssv-keys/validators';
-import type { ISharesKeyPairs } from '@/libs/ssv-keys/interfaces'
+import type { SecretKeyType } from 'bls-eth-wasm';
 
 export class ThresholdInvalidOperatorsLengthError extends SSVKeysException {
   public operators: number[];

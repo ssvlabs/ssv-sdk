@@ -1,6 +1,6 @@
-import { IsDefined, IsInt, IsNotEmpty, IsString, validateSync } from 'class-validator';
 import type { IOperator, IOperatorData } from '@/libs/ssv-keys/interfaces';
-import { OperatorPublicKeyValidatorConstraint } from '@/libs/ssv-keys/KeyShares/KeySharesData/validators';
+import { OperatorPublicKeyValidator } from '@/libs/ssv-keys/KeyShares/KeySharesData/validators/operator-public-key';
+import { IsDefined, IsInt, IsNotEmpty, IsString, validateSync } from 'class-validator';
 
 export class OperatorData implements IOperatorData {
   @IsNotEmpty({ message: 'The operator id is null'})
@@ -11,7 +11,7 @@ export class OperatorData implements IOperatorData {
   @IsNotEmpty({ message: 'The operator public key is null'})
   @IsDefined({ message: 'The operator public key is undefined'})
   @IsString({ message: 'The operator public key must be a string'})
-  @OperatorPublicKeyValidatorConstraint()
+  @OperatorPublicKeyValidator()
   public operatorKey: string;
 
   constructor(data: IOperator) {

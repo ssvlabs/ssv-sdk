@@ -1,5 +1,6 @@
-import { KeySharesItem } from '../../../main';
+import { beforeAll, describe, expect, it } from 'vitest';
 
+import { KeySharesItem } from '@/libs/ssv-keys/KeyShares/KeySharesItem';
 import mockKeySharesItemWithOperators from './mock-key-shares/item-with-operators.json';
 
 let keySharesItem: KeySharesItem;

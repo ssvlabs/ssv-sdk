@@ -1,8 +1,8 @@
-import { describe, expect, it } from 'vitest';
+import Encryption from '@/libs/ssv-keys/Encryption/Encryption';
 import JSEncrypt from '@/libs/ssv-keys/JSEncrypt';
 import { Threshold } from '@/libs/ssv-keys/Threshold';
-import type { ISharesKeyPairs, IEncryptShare } from '@/libs/ssv-keys/interfaces'
-import Encryption from '@/libs/ssv-keys/Encryption/Encryption';
+import type { IEncryptShare, ISharesKeyPairs } from '@/libs/ssv-keys/interfaces';
+import { describe, expect, it } from 'vitest';
 import * as operatorKeys from './RsaKeys';
 
 describe('Check Encryption shares', () => {

@@ -1,4 +1,5 @@
 import type { ConfigReturnType } from '@/config'
+import { SSVKeysException } from '@/libs/ssv-keys/exceptions/base'
 import { validateSharesPreRegistration } from '@/libs/utils/methods'
 import { mockFetchedOperators, operators as mockOperators } from '@/mock'
 import { createMockConfig } from '@/mock/config'
@@ -12,7 +13,6 @@ import type { Operator } from '@/types/operator'
 import { KeysharesValidationError } from '@/utils/keyshares'
 import { initializeContract } from 'hardhat/contract-helpers'
 import { merge } from 'lodash-es'
-import { SSVKeysException } from 'ssv-keys'
 import { zeroAddress } from 'viem'
 import { describe, expect, it, vi } from 'vitest'
 

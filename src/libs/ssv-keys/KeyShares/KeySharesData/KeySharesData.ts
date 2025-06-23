@@ -1,8 +1,8 @@
-import { IsString, Length, ValidateNested, IsOptional, validateSync, IsNumber } from 'class-validator';
-import { OperatorData } from './OperatorData';
 import type { IKeySharesData, IKeySharesPartialData } from '@/libs/ssv-keys/interfaces';
-import { OpeatorsListValidator, PublicKeyValidator, OwnerAddressValidator, OwnerNonceValidator } from './validators';
+import type { OperatorData } from '@/libs/ssv-keys/KeyShares/KeySharesData/OperatorData';
+import { IsNumber, IsOptional, IsString, Length, ValidateNested, validateSync } from 'class-validator';
 import { operatorSortedList } from '../../helpers/operator.helper';
+import { OpeatorsListValidator, OwnerAddressValidator, OwnerNonceValidator, PublicKeyValidator } from './validators';
 
 export class KeySharesData implements IKeySharesData {
   @IsOptional()

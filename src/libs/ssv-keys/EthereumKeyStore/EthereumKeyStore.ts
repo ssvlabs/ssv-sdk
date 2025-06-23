@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import crypto from 'crypto';
-import { syncScrypt } from 'scrypt-js';
-import Wallet from 'ethereumjs-wallet';
 import { keccak256, sha256 } from 'ethereumjs-util';
+import Wallet from 'ethereumjs-wallet';
+import { syncScrypt } from 'scrypt-js';
 import { EthereumWalletError, KeyStoreDataFormatError, KeyStoreInvalidError, KeyStorePasswordError } from '../exceptions/keystore';
 
 interface V4Keystore {

@@ -1,6 +1,7 @@
-import { KeySharesItem, SSVKeys } from 'ssv-keys'
-import type { IOperator } from 'ssv-keys/dist/tsc/src/lib/KeyShares/KeySharesData/IOperator'
-import type { KeySharesPayload } from 'ssv-keys/dist/tsc/src/lib/KeyShares/KeySharesData/KeySharesPayload'
+import type { IOperator } from '@/libs/ssv-keys/interfaces'
+import type { KeySharesPayload } from '@/libs/ssv-keys/KeyShares/KeySharesData/KeySharesPayload'
+import { KeySharesItem } from '@/libs/ssv-keys/KeyShares/KeySharesItem'
+import { SSVKeys } from '@/libs/ssv-keys/SSVKeys'
 
 export const ssvKeys = new SSVKeys()
 

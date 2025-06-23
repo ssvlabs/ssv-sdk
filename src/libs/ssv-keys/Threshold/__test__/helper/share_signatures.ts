@@ -1,4 +1,5 @@
-import bls from '../../../BLS';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import bls from '@/libs/ssv-keys/BLS';
 import { Threshold } from '@/libs/ssv-keys/Threshold';
 import type { IShares } from '@/libs/ssv-keys/interfaces';
 

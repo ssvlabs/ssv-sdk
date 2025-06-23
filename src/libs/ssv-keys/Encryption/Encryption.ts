@@ -1,7 +1,7 @@
 import JSEncrypt from '@/libs/ssv-keys/JSEncrypt';
-import type { IShares, IEncryptShare } from '@/libs/ssv-keys/interfaces';
-import { OperatorPublicKeyValidator } from '@/libs/ssv-keys/validators';
 import { OperatorPublicKeyError } from '@/libs/ssv-keys/exceptions/operator';
+import type { IEncryptShare, IShares } from '@/libs/ssv-keys/interfaces';
+import { OperatorPublicKeyValidator } from '@/libs/ssv-keys/validators';
 
 export default class Encryption {
   private readonly operatorPublicKeys: string[];

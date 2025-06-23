@@ -17,6 +17,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     /* Linting */
+    "experimentalDecorators": true,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

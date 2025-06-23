@@ -3,10 +3,11 @@ import type { ClusterSize } from '@/config'
 import { registerValidatorsByClusterSizeLimits } from '@/config'
 import type { ConfigReturnType } from '@/config/create'
 import type { SmartFnWriteOptions } from '@/contract-interactions/types'
+import type { KeySharesItem } from '@/libs/ssv-keys/KeyShares/KeySharesItem'
+import { SSVKeys } from '@/libs/ssv-keys/SSVKeys'
 import { isKeySharesItem } from '@/utils'
 import { createClusterId, createEmptyCluster, getClusterSnapshot } from '@/utils/cluster'
 import { isUndefined } from 'lodash-es'
-import { SSVKeys, type KeySharesItem } from 'ssv-keys'
 
 import type { Hex } from 'viem'
 

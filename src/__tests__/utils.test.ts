@@ -1,3 +1,4 @@
+import type { KeySharesItem } from '@/libs/ssv-keys/KeyShares/KeySharesItem'
 import {
   bigintAbs,
   bigintFloor,
@@ -28,7 +29,6 @@ import { sortNumbers } from '@/utils/number'
 import { decodeOperatorPublicKey, getOperatorIds } from '@/utils/operator'
 import { tryCatch } from '@/utils/try-catch'
 import urlJoin from '@/utils/url-join'
-import type { KeySharesItem } from 'ssv-keys'
 import { encodeAbiParameters, parseEther } from 'viem'
 import { describe, expect, test, vi } from 'vitest'
 

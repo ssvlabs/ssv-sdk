@@ -1,25 +1,24 @@
-import { hexArrayToBytes } from '../../helpers/web3.helper';
+import { hexArrayToBytes } from '../../helpers/web3.helper'
 
-import { IsString, Length, validateSync, IsNumber } from 'class-validator';
-import { PublicKeyValidator } from './validators';
+import { IsNumber, IsString, Length, validateSync } from 'class-validator'
+import { PublicKeyValidator } from './validators'
 
-import type { IKeySharesPartialPayload, IKeySharesPayload } from '@/libs/ssv-keys/interfaces';
-import { EncryptShare } from '../../Encryption/Encryption';
+import type { IEncryptShare, IKeySharesPartialPayload, IKeySharesPayload } from '@/libs/ssv-keys/interfaces'
 
 /**
  * Key Shares Payload
  */
 export class KeySharesPayload implements IKeySharesPayload {
   @IsString()
-  public sharesData!: string;
+  public sharesData!: string
 
   @IsString()
   @Length(98, 98)
   @PublicKeyValidator()
-  public publicKey!: string;
+  public publicKey!: string
 
   @IsNumber({}, { each: true })
-  public operatorIds!: number[];
+  public operatorIds!: number[]
 
   /**
    * Converts arrays of public and private keys to a single hexadecimal string.
@@ -28,9 +27,11 @@ export class KeySharesPayload implements IKeySharesPayload {
    * @returns Hexadecimal string representation of keys.
    */
   private _sharesToBytes(publicKeys: string[], privateKeys: string[]) {
-    const encryptedShares = [...privateKeys].map(item => ('0x' + Buffer.from(item, 'base64').toString('hex')));
-    const pkPsBytes = hexArrayToBytes([...publicKeys, ...encryptedShares]);
-    return `0x${pkPsBytes.toString('hex')}`;
+    const encryptedShares = [...privateKeys].map(
+      (item) => '0x' + Buffer.from(item, 'base64').toString('hex'),
+    )
+    const pkPsBytes = hexArrayToBytes([...publicKeys, ...encryptedShares])
+    return `0x${pkPsBytes.toString('hex')}`
   }
 
   /**
@@ -38,10 +39,10 @@ export class KeySharesPayload implements IKeySharesPayload {
    * @param data Partial key shares payload to update.
    */
   update(data: IKeySharesPartialPayload): void {
-    this.publicKey = data.publicKey;
-    this.sharesData = data.sharesData;
-    this.operatorIds = data.operatorIds;
-    this.validate();
+    this.publicKey = data.publicKey
+    this.sharesData = data.sharesData
+    this.operatorIds = data.operatorIds
+    this.validate()
   }
 
   /**
@@ -49,7 +50,7 @@ export class KeySharesPayload implements IKeySharesPayload {
    * @returns {void | ValidationError[]} Validation errors if any, otherwise undefined.
    */
   validate(): any {
-    validateSync(this);
+    validateSync(this)
   }
 
   /**
@@ -58,13 +59,13 @@ export class KeySharesPayload implements IKeySharesPayload {
    * @returns {KeySharesPayload} The current instance for chaining.
    */
   build(data: any): KeySharesPayload {
-    this.publicKey = data.publicKey;
-    this.operatorIds = data.operatorIds;
+    this.publicKey = data.publicKey
+    this.operatorIds = data.operatorIds
     this.sharesData = this._sharesToBytes(
-      data.encryptedShares.map((share: EncryptShare) => share.publicKey),
-      data.encryptedShares.map((share: EncryptShare) => share.privateKey)
-    );
+      data.encryptedShares.map((share: IEncryptShare) => share.publicKey),
+      data.encryptedShares.map((share: IEncryptShare) => share.privateKey),
+    )
 
-    return this;
+    return this
   }
 }

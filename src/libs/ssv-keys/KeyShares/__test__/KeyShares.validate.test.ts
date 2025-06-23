@@ -1,5 +1,7 @@
-import { KeySharesItem, SSVKeysException } from '../../../main';
+import { beforeAll, describe, expect, it, } from 'vitest';
 
+import { SSVKeysException } from '@/libs/ssv-keys/exceptions/base';
+import { KeySharesItem } from '@/libs/ssv-keys/KeyShares/KeySharesItem';
 import mockKeySharesItemWithOperators from './mock-key-shares/item-with-operators.json';
 
 let keySharesItem: KeySharesItem;
@@ -50,13 +52,12 @@ describe('KeyShares.validateSingleShares', () => {
       ownerAddress: mockKeySharesItemWithOperators.data.ownerAddress,
     };
 
-    try {
-      await keySharesItem.validateSingleShares(signature, fromSignatureData);
-      fail('Expected method to throw SSVKeysException error');
-    } catch (error: any) {
-      expect(error).toBeInstanceOf(SSVKeysException);
-      expect(error.name).toBe('SingleSharesSignatureInvalid');
-      expect(error.message).toBe('Single shares signature is invalid');
-    }
+    await expect(keySharesItem.validateSingleShares(signature, fromSignatureData)).rejects.toMatchObject({
+      name: 'SingleSharesSignatureInvalid',
+      message: 'Single shares signature is invalid'
+    });
+    
+    // Also verify it's an instance of SSVKeysException
+    await expect(keySharesItem.validateSingleShares(signature, fromSignatureData)).rejects.toBeInstanceOf(SSVKeysException);
   });
 });

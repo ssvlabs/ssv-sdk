@@ -1,2 +1,3 @@
-export { OperatorPublicKeyValidator } from './operatorPublicKey.validator.ts';
-export { isOperatorsLengthValid } from './operatorsLength.validator.ts';
+export { OperatorPublicKeyValidator } from './operatorPublicKey.validator';
+export { isOperatorsLengthValid } from './operatorsLength.validator';
+

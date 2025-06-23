@@ -3,7 +3,7 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2020,
-    "sourceType": "module"
+    "sourceType": "module",
   },
   "plugins": ["@typescript-eslint", "unused-imports"],
   "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
@@ -15,15 +15,18 @@
     //     "format": ["camelCase", "PascalCase"]
     //   }
     // ],
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/consistent-type-imports": [
       "error",
       {
         "prefer": "type-imports",
         "disallowTypeAnnotations": true,
-        "fixStyle": "separate-type-imports"
-      }
+        "fixStyle": "separate-type-imports",
+      },
     ],
-    "unused-imports/no-unused-imports": "warn"
+    "unused-imports/no-unused-imports": "warn",
   },
-  "ignorePatterns": ["out", "dist", "**/*.d.ts", "webview-ui/**"]
+  "ignorePatterns": ["out", "dist", "**/*.d.ts", "webview-ui/**"],
 }
