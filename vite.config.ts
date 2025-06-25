@@ -5,7 +5,9 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 export default defineConfig({
   plugins: [
-    nodePolyfills(),
+    nodePolyfills({
+      include: ['crypto'],
+    }),
     dts({ include: ['src/**/*.ts'], exclude: ['src/**/*.spec.ts', 'src/**/*.test.ts'] }),
   ],
   resolve: {
@@ -26,9 +28,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: [
-        'viem',
-      ],
+      external: ['viem'],
     },
   },
   optimizeDeps: {
