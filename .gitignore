@@ -25,3 +25,7 @@ coverage
 
 # Environment files
 .env
+
+
+/hardhat/artifacts/
+/hardhat/cache/
