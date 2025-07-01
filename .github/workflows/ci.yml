@@ -87,6 +87,9 @@ jobs:
       - name: Type check
         run: pnpm type-check
 
+      - name: Compile hardhat artifacts
+        run: npx hardhat compile
+
       - name: Run tests with coverage
         run: pnpm test:coverage
 
