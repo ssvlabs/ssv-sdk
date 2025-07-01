@@ -1,7 +1,8 @@
-import { decode } from 'js-base64';
+// import { decode } from 'js-base64';
+import { util } from 'node-forge';
 import { registerDecorator, ValidatorConstraint } from 'class-validator';
 import type { ValidatorConstraintInterface, ValidationOptions } from 'class-validator';
-import { decodeParameter } from '@/libs/ssv-keys/helpers/web3.helper';
+import { decodeAbiParameters } from 'viem';
 import { KeySharesAbiDecodeError } from '@/libs/ssv-keys/exceptions/keyshares';
 
 /* Try to BLS deserialize validator public key. */
@@ -13,7 +14,7 @@ export class EncryptedKeyValidatorConstraint implements ValidatorConstraintInter
       const encryptedKeys = Array.isArray(value) ? value : [value];
       encryptedKeys.forEach((key: any) => {
         keyWithError = key;
-        decode(key.startsWith('0x') ? decodeParameter('string', key): key);
+        util.decode64(key.startsWith('0x') ? decodeAbiParameters([{ type: 'string' }], key)[0]: key);
       });
     } catch (e: any) {
       throw new KeySharesAbiDecodeError(keyWithError, `Filed ABI decode shares encrypted key. Error: ${e.message}`);

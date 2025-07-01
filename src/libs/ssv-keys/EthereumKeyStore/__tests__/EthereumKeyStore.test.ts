@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import EthereumKeyStore from 'eth2-keystore-js';
+//TODO: change this lib
 
 describe('Check private key decryption', () => {
   it('Should decrypt without error', async () => {

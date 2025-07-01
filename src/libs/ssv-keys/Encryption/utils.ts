@@ -5,8 +5,8 @@ import * as forge from 'node-forge'
  * Designed to match JSEncrypt's behavior exactly, including permissive key validation
  */
 export class ForgeEncrypt {
-  private publicKey: forge.pki.rsa.PublicKey | null = null
-  private privateKey: forge.pki.rsa.PrivateKey | null = null
+  private publicKey: forge.pki.rsa.PublicKey | null = null;
+  private privateKey: forge.pki.rsa.PrivateKey | null = null;
 
   constructor() {
     // Options are not used in this implementation but kept for API compatibility
@@ -18,11 +18,11 @@ export class ForgeEncrypt {
    */
   setPublicKey(publicKeyPem: string): void {
     try {
-      this.publicKey = forge.pki.publicKeyFromPem(publicKeyPem)
+      this.publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
     } catch (error) {
       // JSEncrypt doesn't throw on invalid keys, it just silently fails
       // We'll set the key to null and let encryption fail later
-      this.publicKey = null
+      this.publicKey = null;
     }
   }
 
@@ -32,11 +32,11 @@ export class ForgeEncrypt {
    */
   setPrivateKey(privateKeyPem: string): void {
     try {
-      this.privateKey = forge.pki.privateKeyFromPem(privateKeyPem)
+      this.privateKey = forge.pki.privateKeyFromPem(privateKeyPem);
     } catch (error) {
       // JSEncrypt doesn't throw on invalid keys, it just silently fails
       // We'll set the key to null and let decryption fail later
-      this.privateKey = null
+      this.privateKey = null;
     }
   }
 
@@ -47,15 +47,15 @@ export class ForgeEncrypt {
   encrypt(data: string): string | false {
     if (!this.publicKey) {
       // JSEncrypt returns false when no key is set or key is invalid
-      return false
+      return false;
     }
 
     try {
-      const encrypted = this.publicKey.encrypt(data, 'RSAES-PKCS1-V1_5')
-      return forge.util.encode64(encrypted)
+      const encrypted = this.publicKey.encrypt(data, 'RSAES-PKCS1-V1_5');
+      return forge.util.encode64(encrypted);
     } catch (error) {
       // JSEncrypt returns false on encryption failure
-      return false
+      return false;
     }
   }
 
@@ -66,16 +66,16 @@ export class ForgeEncrypt {
   decrypt(encryptedData: string): string | false {
     if (!this.privateKey) {
       // JSEncrypt returns false when no key is set or key is invalid
-      return false
+      return false;
     }
 
     try {
-      const encryptedBytes = forge.util.decode64(encryptedData)
-      const decrypted = this.privateKey.decrypt(encryptedBytes, 'RSAES-PKCS1-V1_5')
-      return decrypted
+      const encryptedBytes = forge.util.decode64(encryptedData);
+      const decrypted = this.privateKey.decrypt(encryptedBytes, 'RSAES-PKCS1-V1_5');
+      return decrypted;
     } catch (error) {
       // JSEncrypt returns false on decryption failure
-      return false
+      return false;
     }
   }
 
@@ -84,9 +84,9 @@ export class ForgeEncrypt {
    */
   getPublicKey(): string {
     if (!this.publicKey) {
-      throw new Error('Public key not set')
+      throw new Error('Public key not set');
     }
-    return forge.pki.publicKeyToPem(this.publicKey)
+    return forge.pki.publicKeyToPem(this.publicKey);
   }
 
   /**
@@ -94,9 +94,9 @@ export class ForgeEncrypt {
    */
   getPrivateKey(): string {
     if (!this.privateKey) {
-      throw new Error('Private key not set')
+      throw new Error('Private key not set');
     }
-    return forge.pki.privateKeyToPem(this.privateKey)
+    return forge.pki.privateKeyToPem(this.privateKey);
   }
 }
 
@@ -121,7 +121,7 @@ export function generateRsaKeyPair(keySize: number = 2048): {
   privateKey: string
 } {
   const keypair = forge.pki.rsa.generateKeyPair(keySize)
-  
+
   return {
     publicKey: forge.pki.publicKeyToPem(keypair.publicKey),
     privateKey: forge.pki.privateKeyToPem(keypair.privateKey)
@@ -137,4 +137,4 @@ export function pemToPublicKey(pem: string): forge.pki.rsa.PublicKey {
 
 export function pemToPrivateKey(pem: string): forge.pki.rsa.PrivateKey {
   return forge.pki.privateKeyFromPem(pem)
-} 
+}

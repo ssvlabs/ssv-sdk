@@ -1,11 +1,9 @@
-import { IsOptional, ValidateNested, validateSync } from 'class-validator'
+import { IsOptional, ValidateNested, validateSync } from 'class-validator';
+import { getAddress, toBytes, toHex } from 'viem';
 import {
-  arrayify,
   buildSignature,
   hexArrayToBytes,
-  hexlify,
   privateToPublicKey,
-  toChecksumAddress,
   validateSignature,
 } from '../helpers/web3.helper'
 
@@ -72,7 +70,7 @@ export class KeySharesItem {
 
     let address
     try {
-      address = toChecksumAddress(ownerAddress)
+      address = getAddress(ownerAddress)
     } catch {
       throw new OwnerAddressFormatError(
         ownerAddress,
@@ -111,7 +109,7 @@ export class KeySharesItem {
       throw new OwnerNonceFormatError(ownerNonce, 'Owner nonce is not positive integer')
     }
 
-    const address = toChecksumAddress(ownerAddress)
+    const address = getAddress(ownerAddress)
     const signaturePt = shares.replace('0x', '').substring(0, SIGNATURE_LENGTH)
 
     await validateSignature(`${address}:${ownerNonce}`, `0x${signaturePt}`, publicKey)
@@ -136,17 +134,18 @@ export class KeySharesItem {
       throw new SSVKeysException('Invalid operator count')
     }
 
-    const sharesPt = bytes.replace('0x', '').substring(SIGNATURE_LENGTH)
+    const sharesPt = bytes.slice(2 + SIGNATURE_LENGTH);
 
     const pkSplit = sharesPt.substring(0, operatorCount * PUBLIC_KEY_LENGTH)
-    const pkArray = arrayify('0x' + pkSplit)
-    const sharesPublicKeys = this.splitArray(operatorCount, pkArray).map((item) => hexlify(item))
+    const pkBytes = toBytes('0x' + pkSplit);
+    // const sharesPublicKeys = this.splitArray(operatorCount, pkArray).map((item) => hexlify(item))
+    const sharesPublicKeys = this.splitArray(operatorCount, pkBytes).map((item) => toHex(item));
 
     const eSplit = bytes.substring(operatorCount * PUBLIC_KEY_LENGTH)
-    const eArray = arrayify('0x' + eSplit)
-    const encryptedKeys = this.splitArray(operatorCount, eArray).map((item) =>
-      Buffer.from(hexlify(item).replace('0x', ''), 'hex').toString('base64'),
-    )
+    const eBytes = toBytes('0x' + eSplit);
+    const encryptedKeys = this.splitArray(operatorCount, eBytes).map((item) =>
+      Buffer.from(toHex(item).slice(2), 'hex').toString('base64'),
+    );
 
     return { sharesPublicKeys, encryptedKeys }
   }
@@ -188,7 +187,7 @@ export class KeySharesItem {
       const end = start + partLength
       partsArr.push(arr.slice(start, end))
     }
-    return partsArr
+    return partsArr;
   }
 
   /**

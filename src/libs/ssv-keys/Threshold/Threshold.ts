@@ -66,9 +66,9 @@ class Threshold {
     const msk = [];
     const mpk = [];
 
-    if (!bls.deserializeHexStrToSecretKey) {
-      await bls.init(bls.BLS12_381);
-    }
+    // if (!bls.deserializeHexStrToSecretKey) {
+    //   await bls.init(bls.BLS12_381);
+    // }
     // Master key Polynomial
     this.privateKey = bls.deserializeHexStrToSecretKey(privateKeyString.replace('0x', ''));
     this.publicKey = this.privateKey.getPublicKey();

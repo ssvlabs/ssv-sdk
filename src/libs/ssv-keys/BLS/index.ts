@@ -1,10 +1,18 @@
-let index: any;
+// let index: any;
+//
+// try {
+//   window.crypto;
+//   index = require('bls-eth-wasm/browser');
+// } catch {
+//   index = require('bls-eth-wasm');
+// }
+//
+// export default index;
 
-try {
-  window.crypto;
-  index = require('bls-eth-wasm/browser');
-} catch {
-  index = require('bls-eth-wasm');
-}
+import bls from 'bls-eth-wasm';
 
-export default index;
+(async () => {
+  await bls.init(bls.BLS12_381);
+})();
+
+export default bls;

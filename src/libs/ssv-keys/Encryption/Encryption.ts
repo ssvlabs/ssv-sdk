@@ -1,4 +1,5 @@
-import JSEncrypt from '@/libs/ssv-keys/JSEncrypt';
+// import JSEncrypt from '@/libs/ssv-keys/JSEncrypt';
+import { ForgeEncrypt }from '@/libs/ssv-keys/Encryption/utils';
 import { OperatorPublicKeyError } from '@/libs/ssv-keys/exceptions/operator';
 import type { IEncryptShare, IShares } from '@/libs/ssv-keys/interfaces';
 import { OperatorPublicKeyValidator } from '@/libs/ssv-keys/validators';
@@ -17,9 +18,9 @@ export default class Encryption {
     const encryptedShares: IEncryptShare[] = [];
     for (const [idx, operatorPublicKey] of this.operatorPublicKeys.entries()) {
       OperatorPublicKeyValidator(operatorPublicKey);
-      const jsEncrypt = new JSEncrypt({});
-      jsEncrypt.setPublicKey(operatorPublicKey)
-      const encryptedPrivateKey = jsEncrypt.encrypt(this.shares[idx].privateKey);
+      const forgeEncrypt = new ForgeEncrypt();
+      forgeEncrypt.setPublicKey(operatorPublicKey)
+      const encryptedPrivateKey = forgeEncrypt.encrypt(this.shares[idx].privateKey);
       if (!encryptedPrivateKey) {
         throw new OperatorPublicKeyError(
           {

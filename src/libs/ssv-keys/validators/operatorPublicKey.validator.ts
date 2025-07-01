@@ -1,5 +1,7 @@
-import { decode } from 'js-base64';
-import JSEncrypt from '@/libs/ssv-keys/JSEncrypt';
+// import { decode } from 'js-base64';
+import { util } from 'node-forge';
+// import JSEncrypt from '@/libs/ssv-keys/JSEncrypt';
+import { ForgeEncrypt }from '@/libs/ssv-keys/Encryption/utils';
 import { OperatorPublicKeyError } from '@/libs/ssv-keys/exceptions/operator';
 
 export const OperatorPublicKeyValidator = (publicKey: string): boolean => {
@@ -8,7 +10,7 @@ export const OperatorPublicKeyValidator = (publicKey: string): boolean => {
   const begin = '-----BEGIN RSA PUBLIC KEY-----';
   const end = '-----END RSA PUBLIC KEY-----';
 
-  const encrypt = new JSEncrypt({});
+  const encrypt = new ForgeEncrypt();
   let decodedOperator = '';
   try {
     let decodedPublicKey = '';
@@ -19,7 +21,7 @@ export const OperatorPublicKeyValidator = (publicKey: string): boolean => {
       }
 
       try {
-        decodedPublicKey = decode(publicKey).trim();
+        decodedPublicKey = util.decode64(publicKey).trim();
       } catch (error) {
         throw new Error("Failed to decode the operator public key. Ensure it's correctly base64 encoded.");
       }
@@ -38,7 +40,7 @@ export const OperatorPublicKeyValidator = (publicKey: string): boolean => {
     try {
       // Get the content without the header and footer
       const content = decodedPublicKey.slice(begin.length, publicKey.length - end.length).trim();
-      decodedOperator = decode(content);
+      decodedOperator = util.decode64(content);
     } catch {
       throw new Error("Failed to decode the RSA public key. Ensure it's correctly base64 encoded.");
     }

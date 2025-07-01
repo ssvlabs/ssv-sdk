@@ -1,41 +1,44 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import crypto from 'crypto';
-import { keccak256, sha256 } from 'ethereumjs-util';
-import Wallet from 'ethereumjs-wallet';
+// import { keccak256, sha256 } from 'ethereumjs-util';
+// import Wallet from 'ethereumjs-wallet';
+import { keccak256, sha256, toHex } from 'viem';
+// import { privateKeyToAccount } from 'viem/accounts';
 import { syncScrypt } from 'scrypt-js';
 import { EthereumWalletError, KeyStoreDataFormatError, KeyStoreInvalidError, KeyStorePasswordError } from '../exceptions/keystore';
 
 interface V4Keystore {
   crypto: {
     kdf: {
-      function: string,
+      function: string;
       params: {
-        dklen: number,
-        n: number,
-        r: number,
-        p: number,
-        salt: string
-      },
-      message: string
-    },
+        dklen: number;
+        n?: number;
+        r?: number;
+        p?: number;
+        salt: string;
+        c?: number;
+        prf?: string;
+      };
+      message: string;
+    };
     checksum: {
-      function: string,
-      params: any,
-      message: string
-    },
+      function: string;
+      params: any;
+      message: string;
+    };
     cipher: {
-      function: string,
+      function: string;
       params: {
-        iv: string
-      },
-      message: string
-    }
-  },
-  description: string,
-  pubkey: string,
-  path: string,
-  uuid: string
-  version: number
+        iv: string;
+      };
+      message: string;
+    };
+  };
+  description: string;
+  pubkey: string;
+  path: string;
+  uuid: string;
+  version: number;
 }
 
 /**
@@ -52,154 +55,137 @@ interface V4Keystore {
  *  console.log('Private Key:', await keyStore.getPrivateKey(password));
  */
 class EthereumKeyStore {
-  private readonly keyStoreData: any;
+  private readonly keyStoreData: V4Keystore;
   private privateKey = '';
-  private wallet: Wallet | undefined;
 
-  /**
-   * Receive key store data from string or parsed JSON
-   * @param keyStoreData
-   */
   constructor(keyStoreData: any) {
     if (!keyStoreData) {
       throw new KeyStoreDataFormatError(keyStoreData, 'Key store data should be JSON or string');
     }
-    if (typeof keyStoreData === 'string') {
-      this.keyStoreData = JSON.parse(keyStoreData);
-    } else {
-      this.keyStoreData = keyStoreData;
-    }
+    this.keyStoreData = typeof keyStoreData === 'string' ? JSON.parse(keyStoreData) : keyStoreData;
     if (!this.keyStoreData.version) {
       throw new KeyStoreInvalidError(this.keyStoreData, 'Invalid keystore file');
     }
   }
 
-  getPublicKey(): string {
-    if (this.keyStoreData) {
-      switch (this.keyStoreData.version ?? this.keyStoreData.Version) {
-        case 1:
-          return this.keyStoreData.Address;
-        case 3:
-          return this.keyStoreData.id;
-        case 4:
-          return this.keyStoreData.pubkey;
-      }
-    }
-    return '';
-  }
+  // getPublicKey(): string {
+  //   if (this.keyStoreData) {
+  //     switch (this.keyStoreData.version ?? this.keyStoreData.Version) {
+  //       case 1:
+  //         return this.keyStoreData.Address;
+  //       case 3:
+  //         return this.keyStoreData.id;
+  //       case 4:
+  //         return this.keyStoreData.pubkey;
+  //     }
+  //   }
+  //   return '';
+  // }
 
-  /**
-   * Decrypt private key using user password
-   * @param password
-   */
   async getPrivateKey(password = ''): Promise<string> {
-    // In case private key exist we return it
     if (this.privateKey) return this.privateKey;
+
     switch (this.keyStoreData.version) {
-      case 1:
-        this.wallet = await Wallet.fromV1(this.keyStoreData, password);
-        break;
       case 3:
-        this.wallet = await Wallet.fromV3(this.keyStoreData, password, true);
+        this.privateKey = await this.fromV3(this.keyStoreData, password);
         break;
       case 4:
-        this.wallet = await this.fromV4(this.keyStoreData, password);
+        this.privateKey = await this.fromCustomV4(this.keyStoreData, password);
         break;
+      default:
+        throw new EthereumWalletError('Unsupported keystore version');
     }
-    if (this.wallet) {
-      this.privateKey = this.wallet.getPrivateKey().toString('hex');
-      if (!this.privateKey) {
-        throw new KeyStorePasswordError('Invalid password');
-      }
+
+    if (!this.privateKey) {
+      throw new KeyStorePasswordError('Invalid password');
     }
+
     return this.privateKey;
   }
 
-  /**
-   * Import a wallet (Version 4 of the Ethereum wallet format).
-   *
-   * @param input A JSON serialized string, or an object representing V3 Keystore.
-   * @param password The keystore password.
-   */
-  public async fromV4(
-    input: string | V4Keystore,
-    password: string,
-  ): Promise<Wallet> {
-    const json: V4Keystore = typeof input === 'object' ? input : JSON.parse(input);
+  private async fromV3(json: any, password: string): Promise<string> {
+    if (!json.crypto && json.Crypto) json.crypto = json.Crypto;
+    const kdfparams = json.crypto.kdfparams;
+    const salt = Buffer.from(kdfparams.salt, 'hex');
+    const dklen = kdfparams.dklen;
 
-    if (json.version !== 4) {
-      throw new EthereumWalletError('Not a V4 wallet');
-    }
-
-    let derivedKey: Uint8Array;
-    let kdfParams: any;
-    if (json.crypto.kdf.function === 'scrypt') {
-      kdfParams = json.crypto.kdf.params;
-      derivedKey = syncScrypt(
-        Buffer.from(password),
-        Buffer.from(kdfParams.salt, 'hex'),
-        kdfParams.n,
-        kdfParams.r,
-        kdfParams.p,
-        kdfParams.dklen,
-      );
-    } else if (json.crypto.kdf.function === 'pbkdf2') {
-      kdfParams = json.crypto.kdf.params;
-
-      if (kdfParams.prf !== 'hmac-sha256') {
-        throw new EthereumWalletError('Unsupported parameters to PBKDF2');
-      }
-
-      derivedKey = crypto.pbkdf2Sync(
-        Buffer.from(password),
-        Buffer.from(kdfParams.salt, 'hex'),
-        kdfParams.c,
-        kdfParams.dklen,
-        'sha256',
-      );
+    let derivedKey;
+    if (json.crypto.kdf === 'scrypt') {
+      derivedKey = syncScrypt(Buffer.from(password), salt, kdfparams.n, kdfparams.r, kdfparams.p, dklen);
+    } else if (json.crypto.kdf === 'pbkdf2') {
+      if (kdfparams.prf !== 'hmac-sha256') throw new EthereumWalletError('Unsupported PBKDF2 params');
+      derivedKey = crypto.pbkdf2Sync(Buffer.from(password), salt, kdfparams.c, dklen, 'sha256');
     } else {
-      throw new EthereumWalletError('Unsupported key derivation scheme');
+      throw new EthereumWalletError('Unsupported kdf type');
     }
 
-    const ciphertext = Buffer.from(json.crypto.cipher.message, 'hex');
-    const checksumBuffer = Buffer.concat([Buffer.from(derivedKey.slice(16, 32)), ciphertext]);
-    const hashFunctions: Record<string, any> = {
-      keccak256,
-      sha256,
-    };
-    const hashFunction: any = hashFunctions[json.crypto.checksum.function];
-    const mac: Buffer = hashFunction(checksumBuffer);
-    if (mac.toString('hex') !== json.crypto.checksum.message) {
+    const ciphertext = Buffer.from(json.crypto.ciphertext, 'hex');
+    const macCheck = Buffer.concat([Buffer.from(derivedKey.slice(16, 32)), ciphertext]);
+    const mac = keccak256(toHex(macCheck)).replace(/^0x/, '');
+    if (mac !== json.crypto.mac.toLowerCase()) {
       throw new EthereumWalletError('Invalid password');
     }
 
     const decipher = crypto.createDecipheriv(
-      json.crypto.cipher.function,
-      derivedKey.slice(0, 16),
-      Buffer.from(json.crypto.cipher.params.iv, 'hex'),
+      json.crypto.cipher,
+      Buffer.from(derivedKey.slice(0, 16)),
+      Buffer.from(json.crypto.cipherparams.iv, 'hex')
     );
-    const seed: Buffer = this.runCipherBuffer(decipher, ciphertext);
-    return new Wallet(seed);
+    const seed = this.runCipherBuffer(decipher, ciphertext);
+    return seed.toString('hex');
   }
 
-  /**
-   * @param cipher
-   * @param data
-   */
-  protected runCipherBuffer(cipher: crypto.Cipher | crypto.Decipher, data: Buffer): Buffer {
+  private async fromCustomV4(input: V4Keystore, password: string): Promise<string> {
+    if (input.version !== 4) {
+      throw new EthereumWalletError('Not a V4 wallet');
+    }
+
+    let derivedKey: Uint8Array;
+    const { kdf, cipher, checksum } = input.crypto;
+
+    const salt = Buffer.from(kdf.params.salt, 'hex');
+    const dklen = kdf.params.dklen;
+
+    if (kdf.function === 'scrypt') {
+      const { n, r, p } = kdf.params;
+      derivedKey = syncScrypt(Buffer.from(password), salt, n!, r!, p!, dklen);
+    } else if (kdf.function === 'pbkdf2') {
+      const { c, prf } = kdf.params;
+      if (prf !== 'hmac-sha256') {
+        throw new EthereumWalletError('Unsupported parameters to PBKDF2');
+      }
+      derivedKey = crypto.pbkdf2Sync(Buffer.from(password), salt, c!, dklen, 'sha256');
+    } else {
+      throw new EthereumWalletError('Unsupported key derivation scheme');
+    }
+
+    const ciphertext = Buffer.from(cipher.message, 'hex');
+    const checksumBuffer = Buffer.concat([Buffer.from(derivedKey.slice(16, 32)), ciphertext]);
+
+    const hashFn = checksum.function === 'sha256' ? sha256 : keccak256;
+    const calculatedMac = hashFn(toHex(checksumBuffer));
+
+    if (calculatedMac.replace(/^0x/, '') !== checksum.message.toLowerCase()) {
+      throw new EthereumWalletError('Invalid password');
+    }
+
+    const decipher = crypto.createDecipheriv(
+      cipher.function,
+      Buffer.from(derivedKey.slice(0, 16)),
+      Buffer.from(cipher.params.iv, 'hex')
+    );
+    const seed = this.runCipherBuffer(decipher, ciphertext);
+    return seed.toString('hex');
+  }
+
+  private runCipherBuffer(cipher: crypto.Cipher | crypto.Decipher, data: Buffer): Buffer {
     return Buffer.concat([cipher.update(data), cipher.final()]);
   }
 
-  /**
-   * Convert byte array to string
-   * @param byteArray
-   */
-  static toHexString(byteArray: Uint8Array): string {
-    return Array.from(byteArray, (byte: number) => {
-      // eslint-disable-next-line no-bitwise
-      return (`0${(byte & 0xFF).toString(16)}`).slice(-2);
-    }).join('');
-  }
+  // getViemAccount() {
+  //   if (!this.privateKey) throw new Error('Private key not loaded yet');
+  //   return privateKeyToAccount(`0x${this.privateKey}`);
+  // }
 }
 
 export default EthereumKeyStore;

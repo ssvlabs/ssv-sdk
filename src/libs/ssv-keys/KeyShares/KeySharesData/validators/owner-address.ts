@@ -1,6 +1,6 @@
 import { registerDecorator, ValidatorConstraint } from 'class-validator';
 import type { ValidatorConstraintInterface, ValidationOptions } from 'class-validator';
-import { toChecksumAddress } from '../../../helpers/web3.helper';
+import { getAddress } from 'viem';
 
 import { OwnerAddressFormatError } from '../../../exceptions/keystore';
 
@@ -9,7 +9,7 @@ import { OwnerAddressFormatError } from '../../../exceptions/keystore';
 export class OwnerAddressValidatorConstraint implements ValidatorConstraintInterface {
   validate(value: any) {
     try {
-      toChecksumAddress(value);
+      getAddress(value);
     } catch {
       throw new OwnerAddressFormatError(value, 'Owner address is not a valid Ethereum address');
     }

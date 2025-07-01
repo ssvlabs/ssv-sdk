@@ -34,7 +34,7 @@ export class OperatorsCountsMismatchError extends SSVKeysException {
 export class OperatorPublicKeyError extends SSVKeysException {
   public operator: any;
 
-  constructor(operator: { rsa: string, base64: string }, message: string) {
+  constructor(operator: { rsa: string, base64: string | boolean }, message: string) {
     super(message);
     this.operator = operator;
   }
