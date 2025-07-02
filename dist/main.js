@@ -783,7 +783,7 @@ var dist = {};
       }
       return -1;
     }
-    Buffer3.prototype.includes = function includes2(val, byteOffset, encoding) {
+    Buffer3.prototype.includes = function includes(val, byteOffset, encoding) {
       return this.indexOf(val, byteOffset, encoding) !== -1;
     };
     Buffer3.prototype.indexOf = function indexOf3(val, byteOffset, encoding) {
@@ -2395,7 +2395,7 @@ function EventEmitter() {
   EventEmitter.init.call(this);
 }
 events.exports = EventEmitter;
-events.exports.once = once$2;
+events.exports.once = once;
 EventEmitter.EventEmitter = EventEmitter;
 EventEmitter.prototype._events = void 0;
 EventEmitter.prototype._eventsCount = 0;
@@ -2689,7 +2689,7 @@ function unwrapListeners(arr) {
   }
   return ret;
 }
-function once$2(emitter, name2) {
+function once(emitter, name2) {
   return new Promise(function(resolve2, reject) {
     function errorListener(err) {
       emitter.removeListener(name2, resolver);
@@ -2731,7 +2731,14 @@ function eventTargetAgnosticAddListener(emitter, name2, listener, flags) {
   }
 }
 var eventsExports = events.exports;
-var streamBrowser$1 = eventsExports.EventEmitter;
+var streamBrowser$1;
+var hasRequiredStreamBrowser;
+function requireStreamBrowser() {
+  if (hasRequiredStreamBrowser) return streamBrowser$1;
+  hasRequiredStreamBrowser = 1;
+  streamBrowser$1 = eventsExports.EventEmitter;
+  return streamBrowser$1;
+}
 var util$3 = {};
 var types$1 = {};
 var shams$1 = function hasSymbols2() {
@@ -2886,10 +2893,10 @@ var implementation$1 = function bind2(that) {
 };
 var implementation = implementation$1;
 var functionBind = Function.prototype.bind || implementation;
-var call$1 = Function.prototype.call;
+var call = Function.prototype.call;
 var $hasOwn = Object.prototype.hasOwnProperty;
 var bind$1 = functionBind;
-var hasown = bind$1.call(call$1, $hasOwn);
+var hasown = bind$1.call(call, $hasOwn);
 var undefined$1;
 var $Error = esErrors;
 var $EvalError = _eval;
@@ -4730,209 +4737,229 @@ function requireBuffer_list() {
   }();
   return buffer_list;
 }
-function destroy$1(err, cb) {
-  var _this = this;
-  var readableDestroyed = this._readableState && this._readableState.destroyed;
-  var writableDestroyed = this._writableState && this._writableState.destroyed;
-  if (readableDestroyed || writableDestroyed) {
-    if (cb) {
-      cb(err);
-    } else if (err) {
-      if (!this._writableState) {
-        globals.process$1.nextTick(emitErrorNT$1, this, err);
-      } else if (!this._writableState.errorEmitted) {
-        this._writableState.errorEmitted = true;
-        globals.process$1.nextTick(emitErrorNT$1, this, err);
+var destroy_1$1;
+var hasRequiredDestroy;
+function requireDestroy() {
+  if (hasRequiredDestroy) return destroy_1$1;
+  hasRequiredDestroy = 1;
+  function destroy2(err, cb) {
+    var _this = this;
+    var readableDestroyed = this._readableState && this._readableState.destroyed;
+    var writableDestroyed = this._writableState && this._writableState.destroyed;
+    if (readableDestroyed || writableDestroyed) {
+      if (cb) {
+        cb(err);
+      } else if (err) {
+        if (!this._writableState) {
+          globals.process$1.nextTick(emitErrorNT2, this, err);
+        } else if (!this._writableState.errorEmitted) {
+          this._writableState.errorEmitted = true;
+          globals.process$1.nextTick(emitErrorNT2, this, err);
+        }
       }
+      return this;
     }
-    return this;
-  }
-  if (this._readableState) {
-    this._readableState.destroyed = true;
-  }
-  if (this._writableState) {
-    this._writableState.destroyed = true;
-  }
-  this._destroy(err || null, function(err2) {
-    if (!cb && err2) {
-      if (!_this._writableState) {
-        globals.process$1.nextTick(emitErrorAndCloseNT, _this, err2);
-      } else if (!_this._writableState.errorEmitted) {
-        _this._writableState.errorEmitted = true;
-        globals.process$1.nextTick(emitErrorAndCloseNT, _this, err2);
+    if (this._readableState) {
+      this._readableState.destroyed = true;
+    }
+    if (this._writableState) {
+      this._writableState.destroyed = true;
+    }
+    this._destroy(err || null, function(err2) {
+      if (!cb && err2) {
+        if (!_this._writableState) {
+          globals.process$1.nextTick(emitErrorAndCloseNT, _this, err2);
+        } else if (!_this._writableState.errorEmitted) {
+          _this._writableState.errorEmitted = true;
+          globals.process$1.nextTick(emitErrorAndCloseNT, _this, err2);
+        } else {
+          globals.process$1.nextTick(emitCloseNT, _this);
+        }
+      } else if (cb) {
+        globals.process$1.nextTick(emitCloseNT, _this);
+        cb(err2);
       } else {
         globals.process$1.nextTick(emitCloseNT, _this);
       }
-    } else if (cb) {
-      globals.process$1.nextTick(emitCloseNT, _this);
-      cb(err2);
-    } else {
-      globals.process$1.nextTick(emitCloseNT, _this);
-    }
-  });
-  return this;
-}
-function emitErrorAndCloseNT(self2, err) {
-  emitErrorNT$1(self2, err);
-  emitCloseNT(self2);
-}
-function emitCloseNT(self2) {
-  if (self2._writableState && !self2._writableState.emitClose) return;
-  if (self2._readableState && !self2._readableState.emitClose) return;
-  self2.emit("close");
-}
-function undestroy$1() {
-  if (this._readableState) {
-    this._readableState.destroyed = false;
-    this._readableState.reading = false;
-    this._readableState.ended = false;
-    this._readableState.endEmitted = false;
-  }
-  if (this._writableState) {
-    this._writableState.destroyed = false;
-    this._writableState.ended = false;
-    this._writableState.ending = false;
-    this._writableState.finalCalled = false;
-    this._writableState.prefinished = false;
-    this._writableState.finished = false;
-    this._writableState.errorEmitted = false;
-  }
-}
-function emitErrorNT$1(self2, err) {
-  self2.emit("error", err);
-}
-function errorOrDestroy(stream, err) {
-  var rState = stream._readableState;
-  var wState = stream._writableState;
-  if (rState && rState.autoDestroy || wState && wState.autoDestroy) stream.destroy(err);
-  else stream.emit("error", err);
-}
-var destroy_1$1 = {
-  destroy: destroy$1,
-  undestroy: undestroy$1,
-  errorOrDestroy
-};
-var errorsBrowser = {};
-function _inheritsLoose(subClass, superClass) {
-  subClass.prototype = Object.create(superClass.prototype);
-  subClass.prototype.constructor = subClass;
-  subClass.__proto__ = superClass;
-}
-var codes = {};
-function createErrorType(code, message, Base2) {
-  if (!Base2) {
-    Base2 = Error;
-  }
-  function getMessage(arg1, arg2, arg3) {
-    if (typeof message === "string") {
-      return message;
-    } else {
-      return message(arg1, arg2, arg3);
-    }
-  }
-  var NodeError = /* @__PURE__ */ function(_Base) {
-    _inheritsLoose(NodeError2, _Base);
-    function NodeError2(arg1, arg2, arg3) {
-      return _Base.call(this, getMessage(arg1, arg2, arg3)) || this;
-    }
-    return NodeError2;
-  }(Base2);
-  NodeError.prototype.name = Base2.name;
-  NodeError.prototype.code = code;
-  codes[code] = NodeError;
-}
-function oneOf(expected, thing) {
-  if (Array.isArray(expected)) {
-    var len = expected.length;
-    expected = expected.map(function(i) {
-      return String(i);
     });
-    if (len > 2) {
-      return "one of ".concat(thing, " ").concat(expected.slice(0, len - 1).join(", "), ", or ") + expected[len - 1];
-    } else if (len === 2) {
-      return "one of ".concat(thing, " ").concat(expected[0], " or ").concat(expected[1]);
+    return this;
+  }
+  function emitErrorAndCloseNT(self2, err) {
+    emitErrorNT2(self2, err);
+    emitCloseNT(self2);
+  }
+  function emitCloseNT(self2) {
+    if (self2._writableState && !self2._writableState.emitClose) return;
+    if (self2._readableState && !self2._readableState.emitClose) return;
+    self2.emit("close");
+  }
+  function undestroy2() {
+    if (this._readableState) {
+      this._readableState.destroyed = false;
+      this._readableState.reading = false;
+      this._readableState.ended = false;
+      this._readableState.endEmitted = false;
+    }
+    if (this._writableState) {
+      this._writableState.destroyed = false;
+      this._writableState.ended = false;
+      this._writableState.ending = false;
+      this._writableState.finalCalled = false;
+      this._writableState.prefinished = false;
+      this._writableState.finished = false;
+      this._writableState.errorEmitted = false;
+    }
+  }
+  function emitErrorNT2(self2, err) {
+    self2.emit("error", err);
+  }
+  function errorOrDestroy(stream, err) {
+    var rState = stream._readableState;
+    var wState = stream._writableState;
+    if (rState && rState.autoDestroy || wState && wState.autoDestroy) stream.destroy(err);
+    else stream.emit("error", err);
+  }
+  destroy_1$1 = {
+    destroy: destroy2,
+    undestroy: undestroy2,
+    errorOrDestroy
+  };
+  return destroy_1$1;
+}
+var errorsBrowser = {};
+var hasRequiredErrorsBrowser;
+function requireErrorsBrowser() {
+  if (hasRequiredErrorsBrowser) return errorsBrowser;
+  hasRequiredErrorsBrowser = 1;
+  function _inheritsLoose(subClass, superClass) {
+    subClass.prototype = Object.create(superClass.prototype);
+    subClass.prototype.constructor = subClass;
+    subClass.__proto__ = superClass;
+  }
+  var codes = {};
+  function createErrorType(code, message, Base2) {
+    if (!Base2) {
+      Base2 = Error;
+    }
+    function getMessage(arg1, arg2, arg3) {
+      if (typeof message === "string") {
+        return message;
+      } else {
+        return message(arg1, arg2, arg3);
+      }
+    }
+    var NodeError = /* @__PURE__ */ function(_Base) {
+      _inheritsLoose(NodeError2, _Base);
+      function NodeError2(arg1, arg2, arg3) {
+        return _Base.call(this, getMessage(arg1, arg2, arg3)) || this;
+      }
+      return NodeError2;
+    }(Base2);
+    NodeError.prototype.name = Base2.name;
+    NodeError.prototype.code = code;
+    codes[code] = NodeError;
+  }
+  function oneOf(expected, thing) {
+    if (Array.isArray(expected)) {
+      var len = expected.length;
+      expected = expected.map(function(i) {
+        return String(i);
+      });
+      if (len > 2) {
+        return "one of ".concat(thing, " ").concat(expected.slice(0, len - 1).join(", "), ", or ") + expected[len - 1];
+      } else if (len === 2) {
+        return "one of ".concat(thing, " ").concat(expected[0], " or ").concat(expected[1]);
+      } else {
+        return "of ".concat(thing, " ").concat(expected[0]);
+      }
     } else {
-      return "of ".concat(thing, " ").concat(expected[0]);
+      return "of ".concat(thing, " ").concat(String(expected));
     }
-  } else {
-    return "of ".concat(thing, " ").concat(String(expected));
   }
-}
-function startsWith(str, search, pos) {
-  return str.substr(0, search.length) === search;
-}
-function endsWith(str, search, this_len) {
-  if (this_len === void 0 || this_len > str.length) {
-    this_len = str.length;
+  function startsWith(str, search, pos) {
+    return str.substr(0, search.length) === search;
   }
-  return str.substring(this_len - search.length, this_len) === search;
-}
-function includes(str, search, start) {
-  if (typeof start !== "number") {
-    start = 0;
-  }
-  if (start + search.length > str.length) {
-    return false;
-  } else {
-    return str.indexOf(search, start) !== -1;
-  }
-}
-createErrorType("ERR_INVALID_OPT_VALUE", function(name2, value) {
-  return 'The value "' + value + '" is invalid for option "' + name2 + '"';
-}, TypeError);
-createErrorType("ERR_INVALID_ARG_TYPE", function(name2, expected, actual) {
-  var determiner;
-  if (typeof expected === "string" && startsWith(expected, "not ")) {
-    determiner = "must not be";
-    expected = expected.replace(/^not /, "");
-  } else {
-    determiner = "must be";
-  }
-  var msg;
-  if (endsWith(name2, " argument")) {
-    msg = "The ".concat(name2, " ").concat(determiner, " ").concat(oneOf(expected, "type"));
-  } else {
-    var type2 = includes(name2, ".") ? "property" : "argument";
-    msg = 'The "'.concat(name2, '" ').concat(type2, " ").concat(determiner, " ").concat(oneOf(expected, "type"));
-  }
-  msg += ". Received type ".concat(typeof actual);
-  return msg;
-}, TypeError);
-createErrorType("ERR_STREAM_PUSH_AFTER_EOF", "stream.push() after EOF");
-createErrorType("ERR_METHOD_NOT_IMPLEMENTED", function(name2) {
-  return "The " + name2 + " method is not implemented";
-});
-createErrorType("ERR_STREAM_PREMATURE_CLOSE", "Premature close");
-createErrorType("ERR_STREAM_DESTROYED", function(name2) {
-  return "Cannot call " + name2 + " after a stream was destroyed";
-});
-createErrorType("ERR_MULTIPLE_CALLBACK", "Callback called multiple times");
-createErrorType("ERR_STREAM_CANNOT_PIPE", "Cannot pipe, not readable");
-createErrorType("ERR_STREAM_WRITE_AFTER_END", "write after end");
-createErrorType("ERR_STREAM_NULL_VALUES", "May not write null values to stream", TypeError);
-createErrorType("ERR_UNKNOWN_ENCODING", function(arg) {
-  return "Unknown encoding: " + arg;
-}, TypeError);
-createErrorType("ERR_STREAM_UNSHIFT_AFTER_END_EVENT", "stream.unshift() after end event");
-errorsBrowser.codes = codes;
-var ERR_INVALID_OPT_VALUE = errorsBrowser.codes.ERR_INVALID_OPT_VALUE;
-function highWaterMarkFrom(options2, isDuplex, duplexKey) {
-  return options2.highWaterMark != null ? options2.highWaterMark : isDuplex ? options2[duplexKey] : null;
-}
-function getHighWaterMark(state2, options2, duplexKey, isDuplex) {
-  var hwm = highWaterMarkFrom(options2, isDuplex, duplexKey);
-  if (hwm != null) {
-    if (!(isFinite(hwm) && Math.floor(hwm) === hwm) || hwm < 0) {
-      var name2 = isDuplex ? duplexKey : "highWaterMark";
-      throw new ERR_INVALID_OPT_VALUE(name2, hwm);
+  function endsWith(str, search, this_len) {
+    if (this_len === void 0 || this_len > str.length) {
+      this_len = str.length;
     }
-    return Math.floor(hwm);
+    return str.substring(this_len - search.length, this_len) === search;
   }
-  return state2.objectMode ? 16 : 16 * 1024;
+  function includes(str, search, start) {
+    if (typeof start !== "number") {
+      start = 0;
+    }
+    if (start + search.length > str.length) {
+      return false;
+    } else {
+      return str.indexOf(search, start) !== -1;
+    }
+  }
+  createErrorType("ERR_INVALID_OPT_VALUE", function(name2, value) {
+    return 'The value "' + value + '" is invalid for option "' + name2 + '"';
+  }, TypeError);
+  createErrorType("ERR_INVALID_ARG_TYPE", function(name2, expected, actual) {
+    var determiner;
+    if (typeof expected === "string" && startsWith(expected, "not ")) {
+      determiner = "must not be";
+      expected = expected.replace(/^not /, "");
+    } else {
+      determiner = "must be";
+    }
+    var msg;
+    if (endsWith(name2, " argument")) {
+      msg = "The ".concat(name2, " ").concat(determiner, " ").concat(oneOf(expected, "type"));
+    } else {
+      var type2 = includes(name2, ".") ? "property" : "argument";
+      msg = 'The "'.concat(name2, '" ').concat(type2, " ").concat(determiner, " ").concat(oneOf(expected, "type"));
+    }
+    msg += ". Received type ".concat(typeof actual);
+    return msg;
+  }, TypeError);
+  createErrorType("ERR_STREAM_PUSH_AFTER_EOF", "stream.push() after EOF");
+  createErrorType("ERR_METHOD_NOT_IMPLEMENTED", function(name2) {
+    return "The " + name2 + " method is not implemented";
+  });
+  createErrorType("ERR_STREAM_PREMATURE_CLOSE", "Premature close");
+  createErrorType("ERR_STREAM_DESTROYED", function(name2) {
+    return "Cannot call " + name2 + " after a stream was destroyed";
+  });
+  createErrorType("ERR_MULTIPLE_CALLBACK", "Callback called multiple times");
+  createErrorType("ERR_STREAM_CANNOT_PIPE", "Cannot pipe, not readable");
+  createErrorType("ERR_STREAM_WRITE_AFTER_END", "write after end");
+  createErrorType("ERR_STREAM_NULL_VALUES", "May not write null values to stream", TypeError);
+  createErrorType("ERR_UNKNOWN_ENCODING", function(arg) {
+    return "Unknown encoding: " + arg;
+  }, TypeError);
+  createErrorType("ERR_STREAM_UNSHIFT_AFTER_END_EVENT", "stream.unshift() after end event");
+  errorsBrowser.codes = codes;
+  return errorsBrowser;
 }
-var state = {
-  getHighWaterMark
-};
+var state;
+var hasRequiredState;
+function requireState() {
+  if (hasRequiredState) return state;
+  hasRequiredState = 1;
+  var ERR_INVALID_OPT_VALUE = requireErrorsBrowser().codes.ERR_INVALID_OPT_VALUE;
+  function highWaterMarkFrom(options2, isDuplex, duplexKey) {
+    return options2.highWaterMark != null ? options2.highWaterMark : isDuplex ? options2[duplexKey] : null;
+  }
+  function getHighWaterMark(state2, options2, duplexKey, isDuplex) {
+    var hwm = highWaterMarkFrom(options2, isDuplex, duplexKey);
+    if (hwm != null) {
+      if (!(isFinite(hwm) && Math.floor(hwm) === hwm) || hwm < 0) {
+        var name2 = isDuplex ? duplexKey : "highWaterMark";
+        throw new ERR_INVALID_OPT_VALUE(name2, hwm);
+      }
+      return Math.floor(hwm);
+    }
+    return state2.objectMode ? 16 : 16 * 1024;
+  }
+  state = {
+    getHighWaterMark
+  };
+  return state;
+}
 var browser$b = deprecate;
 function deprecate(fn, msg) {
   if (config$1("noDeprecation")) {
@@ -4983,7 +5010,7 @@ function require_stream_writable$1() {
   var internalUtil = {
     deprecate: browser$b
   };
-  var Stream2 = streamBrowser$1;
+  var Stream2 = requireStreamBrowser();
   var Buffer2 = dist.Buffer;
   var OurUint8Array = (typeof commonjsGlobal !== "undefined" ? commonjsGlobal : typeof window !== "undefined" ? window : typeof self !== "undefined" ? self : {}).Uint8Array || function() {
   };
@@ -4993,10 +5020,10 @@ function require_stream_writable$1() {
   function _isUint8Array(obj) {
     return Buffer2.isBuffer(obj) || obj instanceof OurUint8Array;
   }
-  var destroyImpl = destroy_1$1;
-  var _require = state, getHighWaterMark2 = _require.getHighWaterMark;
-  var _require$codes2 = errorsBrowser.codes, ERR_INVALID_ARG_TYPE = _require$codes2.ERR_INVALID_ARG_TYPE, ERR_METHOD_NOT_IMPLEMENTED2 = _require$codes2.ERR_METHOD_NOT_IMPLEMENTED, ERR_MULTIPLE_CALLBACK2 = _require$codes2.ERR_MULTIPLE_CALLBACK, ERR_STREAM_CANNOT_PIPE = _require$codes2.ERR_STREAM_CANNOT_PIPE, ERR_STREAM_DESTROYED2 = _require$codes2.ERR_STREAM_DESTROYED, ERR_STREAM_NULL_VALUES = _require$codes2.ERR_STREAM_NULL_VALUES, ERR_STREAM_WRITE_AFTER_END = _require$codes2.ERR_STREAM_WRITE_AFTER_END, ERR_UNKNOWN_ENCODING = _require$codes2.ERR_UNKNOWN_ENCODING;
-  var errorOrDestroy2 = destroyImpl.errorOrDestroy;
+  var destroyImpl = requireDestroy();
+  var _require = requireState(), getHighWaterMark = _require.getHighWaterMark;
+  var _require$codes = requireErrorsBrowser().codes, ERR_INVALID_ARG_TYPE = _require$codes.ERR_INVALID_ARG_TYPE, ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED, ERR_MULTIPLE_CALLBACK = _require$codes.ERR_MULTIPLE_CALLBACK, ERR_STREAM_CANNOT_PIPE = _require$codes.ERR_STREAM_CANNOT_PIPE, ERR_STREAM_DESTROYED = _require$codes.ERR_STREAM_DESTROYED, ERR_STREAM_NULL_VALUES = _require$codes.ERR_STREAM_NULL_VALUES, ERR_STREAM_WRITE_AFTER_END = _require$codes.ERR_STREAM_WRITE_AFTER_END, ERR_UNKNOWN_ENCODING = _require$codes.ERR_UNKNOWN_ENCODING;
+  var errorOrDestroy = destroyImpl.errorOrDestroy;
   inherits_browserExports(Writable, Stream2);
   function nop() {
   }
@@ -5006,7 +5033,7 @@ function require_stream_writable$1() {
     if (typeof isDuplex !== "boolean") isDuplex = stream instanceof Duplex2;
     this.objectMode = !!options2.objectMode;
     if (isDuplex) this.objectMode = this.objectMode || !!options2.writableObjectMode;
-    this.highWaterMark = getHighWaterMark2(this, options2, "writableHighWaterMark", isDuplex);
+    this.highWaterMark = getHighWaterMark(this, options2, "writableHighWaterMark", isDuplex);
     this.finalCalled = false;
     this.needDrain = false;
     this.ending = false;
@@ -5085,11 +5112,11 @@ function require_stream_writable$1() {
     Stream2.call(this);
   }
   Writable.prototype.pipe = function() {
-    errorOrDestroy2(this, new ERR_STREAM_CANNOT_PIPE());
+    errorOrDestroy(this, new ERR_STREAM_CANNOT_PIPE());
   };
   function writeAfterEnd(stream, cb) {
     var er = new ERR_STREAM_WRITE_AFTER_END();
-    errorOrDestroy2(stream, er);
+    errorOrDestroy(stream, er);
     globals.process$1.nextTick(cb, er);
   }
   function validChunk(stream, state2, chunk, cb) {
@@ -5100,7 +5127,7 @@ function require_stream_writable$1() {
       er = new ERR_INVALID_ARG_TYPE("chunk", ["string", "Buffer"], chunk);
     }
     if (er) {
-      errorOrDestroy2(stream, er);
+      errorOrDestroy(stream, er);
       globals.process$1.nextTick(cb, er);
       return false;
     }
@@ -5205,7 +5232,7 @@ function require_stream_writable$1() {
     state2.writecb = cb;
     state2.writing = true;
     state2.sync = true;
-    if (state2.destroyed) state2.onwrite(new ERR_STREAM_DESTROYED2("write"));
+    if (state2.destroyed) state2.onwrite(new ERR_STREAM_DESTROYED("write"));
     else if (writev) stream._writev(chunk, state2.onwrite);
     else stream._write(chunk, encoding, state2.onwrite);
     state2.sync = false;
@@ -5216,11 +5243,11 @@ function require_stream_writable$1() {
       globals.process$1.nextTick(cb, er);
       globals.process$1.nextTick(finishMaybe, stream, state2);
       stream._writableState.errorEmitted = true;
-      errorOrDestroy2(stream, er);
+      errorOrDestroy(stream, er);
     } else {
       cb(er);
       stream._writableState.errorEmitted = true;
-      errorOrDestroy2(stream, er);
+      errorOrDestroy(stream, er);
       finishMaybe(stream, state2);
     }
   }
@@ -5234,7 +5261,7 @@ function require_stream_writable$1() {
     var state2 = stream._writableState;
     var sync2 = state2.sync;
     var cb = state2.writecb;
-    if (typeof cb !== "function") throw new ERR_MULTIPLE_CALLBACK2();
+    if (typeof cb !== "function") throw new ERR_MULTIPLE_CALLBACK();
     onwriteStateUpdate(state2);
     if (er) onwriteError(stream, state2, sync2, er, cb);
     else {
@@ -5307,7 +5334,7 @@ function require_stream_writable$1() {
     state2.bufferProcessing = false;
   }
   Writable.prototype._write = function(chunk, encoding, cb) {
-    cb(new ERR_METHOD_NOT_IMPLEMENTED2("_write()"));
+    cb(new ERR_METHOD_NOT_IMPLEMENTED("_write()"));
   };
   Writable.prototype._writev = null;
   Writable.prototype.end = function(chunk, encoding, cb) {
@@ -5344,7 +5371,7 @@ function require_stream_writable$1() {
     stream._final(function(err) {
       state2.pendingcb--;
       if (err) {
-        errorOrDestroy2(stream, err);
+        errorOrDestroy(stream, err);
       }
       state2.prefinished = true;
       stream.emit("prefinish");
@@ -5748,88 +5775,95 @@ function simpleWrite(buf) {
 function simpleEnd(buf) {
   return buf && buf.length ? this.write(buf) : "";
 }
-var ERR_STREAM_PREMATURE_CLOSE = errorsBrowser.codes.ERR_STREAM_PREMATURE_CLOSE;
-function once$1(callback) {
-  var called = false;
-  return function() {
-    if (called) return;
-    called = true;
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-    callback.apply(this, args);
-  };
-}
-function noop$1() {
-}
-function isRequest$1(stream) {
-  return stream.setHeader && typeof stream.abort === "function";
-}
-function eos$1(stream, opts, callback) {
-  if (typeof opts === "function") return eos$1(stream, null, opts);
-  if (!opts) opts = {};
-  callback = once$1(callback || noop$1);
-  var readable = opts.readable || opts.readable !== false && stream.readable;
-  var writable = opts.writable || opts.writable !== false && stream.writable;
-  var onlegacyfinish = function onlegacyfinish2() {
-    if (!stream.writable) onfinish();
-  };
-  var writableEnded = stream._writableState && stream._writableState.finished;
-  var onfinish = function onfinish2() {
-    writable = false;
-    writableEnded = true;
-    if (!readable) callback.call(stream);
-  };
-  var readableEnded = stream._readableState && stream._readableState.endEmitted;
-  var onend = function onend2() {
-    readable = false;
-    readableEnded = true;
-    if (!writable) callback.call(stream);
-  };
-  var onerror = function onerror2(err) {
-    callback.call(stream, err);
-  };
-  var onclose = function onclose2() {
-    var err;
-    if (readable && !readableEnded) {
-      if (!stream._readableState || !stream._readableState.ended) err = new ERR_STREAM_PREMATURE_CLOSE();
-      return callback.call(stream, err);
-    }
-    if (writable && !writableEnded) {
-      if (!stream._writableState || !stream._writableState.ended) err = new ERR_STREAM_PREMATURE_CLOSE();
-      return callback.call(stream, err);
-    }
-  };
-  var onrequest = function onrequest2() {
-    stream.req.on("finish", onfinish);
-  };
-  if (isRequest$1(stream)) {
-    stream.on("complete", onfinish);
-    stream.on("abort", onclose);
-    if (stream.req) onrequest();
-    else stream.on("request", onrequest);
-  } else if (writable && !stream._writableState) {
-    stream.on("end", onlegacyfinish);
-    stream.on("close", onlegacyfinish);
+var endOfStream;
+var hasRequiredEndOfStream;
+function requireEndOfStream() {
+  if (hasRequiredEndOfStream) return endOfStream;
+  hasRequiredEndOfStream = 1;
+  var ERR_STREAM_PREMATURE_CLOSE = requireErrorsBrowser().codes.ERR_STREAM_PREMATURE_CLOSE;
+  function once3(callback) {
+    var called = false;
+    return function() {
+      if (called) return;
+      called = true;
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+      callback.apply(this, args);
+    };
   }
-  stream.on("end", onend);
-  stream.on("finish", onfinish);
-  if (opts.error !== false) stream.on("error", onerror);
-  stream.on("close", onclose);
-  return function() {
-    stream.removeListener("complete", onfinish);
-    stream.removeListener("abort", onclose);
-    stream.removeListener("request", onrequest);
-    if (stream.req) stream.req.removeListener("finish", onfinish);
-    stream.removeListener("end", onlegacyfinish);
-    stream.removeListener("close", onlegacyfinish);
-    stream.removeListener("finish", onfinish);
-    stream.removeListener("end", onend);
-    stream.removeListener("error", onerror);
-    stream.removeListener("close", onclose);
-  };
+  function noop() {
+  }
+  function isRequest(stream) {
+    return stream.setHeader && typeof stream.abort === "function";
+  }
+  function eos(stream, opts, callback) {
+    if (typeof opts === "function") return eos(stream, null, opts);
+    if (!opts) opts = {};
+    callback = once3(callback || noop);
+    var readable = opts.readable || opts.readable !== false && stream.readable;
+    var writable = opts.writable || opts.writable !== false && stream.writable;
+    var onlegacyfinish = function onlegacyfinish2() {
+      if (!stream.writable) onfinish();
+    };
+    var writableEnded = stream._writableState && stream._writableState.finished;
+    var onfinish = function onfinish2() {
+      writable = false;
+      writableEnded = true;
+      if (!readable) callback.call(stream);
+    };
+    var readableEnded = stream._readableState && stream._readableState.endEmitted;
+    var onend = function onend2() {
+      readable = false;
+      readableEnded = true;
+      if (!writable) callback.call(stream);
+    };
+    var onerror = function onerror2(err) {
+      callback.call(stream, err);
+    };
+    var onclose = function onclose2() {
+      var err;
+      if (readable && !readableEnded) {
+        if (!stream._readableState || !stream._readableState.ended) err = new ERR_STREAM_PREMATURE_CLOSE();
+        return callback.call(stream, err);
+      }
+      if (writable && !writableEnded) {
+        if (!stream._writableState || !stream._writableState.ended) err = new ERR_STREAM_PREMATURE_CLOSE();
+        return callback.call(stream, err);
+      }
+    };
+    var onrequest = function onrequest2() {
+      stream.req.on("finish", onfinish);
+    };
+    if (isRequest(stream)) {
+      stream.on("complete", onfinish);
+      stream.on("abort", onclose);
+      if (stream.req) onrequest();
+      else stream.on("request", onrequest);
+    } else if (writable && !stream._writableState) {
+      stream.on("end", onlegacyfinish);
+      stream.on("close", onlegacyfinish);
+    }
+    stream.on("end", onend);
+    stream.on("finish", onfinish);
+    if (opts.error !== false) stream.on("error", onerror);
+    stream.on("close", onclose);
+    return function() {
+      stream.removeListener("complete", onfinish);
+      stream.removeListener("abort", onclose);
+      stream.removeListener("request", onrequest);
+      if (stream.req) stream.req.removeListener("finish", onfinish);
+      stream.removeListener("end", onlegacyfinish);
+      stream.removeListener("close", onlegacyfinish);
+      stream.removeListener("finish", onfinish);
+      stream.removeListener("end", onend);
+      stream.removeListener("error", onerror);
+      stream.removeListener("close", onclose);
+    };
+  }
+  endOfStream = eos;
+  return endOfStream;
 }
-var endOfStream = eos$1;
 var async_iterator;
 var hasRequiredAsync_iterator;
 function requireAsync_iterator() {
@@ -5859,7 +5893,7 @@ function requireAsync_iterator() {
     }
     return (hint === "string" ? String : Number)(input);
   }
-  var finished = endOfStream;
+  var finished = requireEndOfStream();
   var kLastResolve = Symbol("lastResolve");
   var kLastReject = Symbol("lastReject");
   var kError = Symbol("error");
@@ -6035,7 +6069,7 @@ function require_stream_readable$1() {
   var EElistenerCount = function EElistenerCount2(emitter, type2) {
     return emitter.listeners(type2).length;
   };
-  var Stream2 = streamBrowser$1;
+  var Stream2 = requireStreamBrowser();
   var Buffer2 = dist.Buffer;
   var OurUint8Array = (typeof commonjsGlobal !== "undefined" ? commonjsGlobal : typeof window !== "undefined" ? window : typeof self !== "undefined" ? self : {}).Uint8Array || function() {
   };
@@ -6054,14 +6088,14 @@ function require_stream_readable$1() {
     };
   }
   var BufferList2 = requireBuffer_list();
-  var destroyImpl = destroy_1$1;
-  var _require = state, getHighWaterMark2 = _require.getHighWaterMark;
-  var _require$codes2 = errorsBrowser.codes, ERR_INVALID_ARG_TYPE = _require$codes2.ERR_INVALID_ARG_TYPE, ERR_STREAM_PUSH_AFTER_EOF = _require$codes2.ERR_STREAM_PUSH_AFTER_EOF, ERR_METHOD_NOT_IMPLEMENTED2 = _require$codes2.ERR_METHOD_NOT_IMPLEMENTED, ERR_STREAM_UNSHIFT_AFTER_END_EVENT = _require$codes2.ERR_STREAM_UNSHIFT_AFTER_END_EVENT;
+  var destroyImpl = requireDestroy();
+  var _require = requireState(), getHighWaterMark = _require.getHighWaterMark;
+  var _require$codes = requireErrorsBrowser().codes, ERR_INVALID_ARG_TYPE = _require$codes.ERR_INVALID_ARG_TYPE, ERR_STREAM_PUSH_AFTER_EOF = _require$codes.ERR_STREAM_PUSH_AFTER_EOF, ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED, ERR_STREAM_UNSHIFT_AFTER_END_EVENT = _require$codes.ERR_STREAM_UNSHIFT_AFTER_END_EVENT;
   var StringDecoder2;
   var createReadableStreamAsyncIterator;
   var from;
   inherits_browserExports(Readable, Stream2);
-  var errorOrDestroy2 = destroyImpl.errorOrDestroy;
+  var errorOrDestroy = destroyImpl.errorOrDestroy;
   var kProxyEvents = ["error", "close", "destroy", "pause", "resume"];
   function prependListener2(emitter, event, fn) {
     if (typeof emitter.prependListener === "function") return emitter.prependListener(event, fn);
@@ -6075,7 +6109,7 @@ function require_stream_readable$1() {
     if (typeof isDuplex !== "boolean") isDuplex = stream instanceof Duplex2;
     this.objectMode = !!options2.objectMode;
     if (isDuplex) this.objectMode = this.objectMode || !!options2.readableObjectMode;
-    this.highWaterMark = getHighWaterMark2(this, options2, "readableHighWaterMark", isDuplex);
+    this.highWaterMark = getHighWaterMark(this, options2, "readableHighWaterMark", isDuplex);
     this.buffer = new BufferList2();
     this.length = 0;
     this.pipes = null;
@@ -6169,16 +6203,16 @@ function require_stream_readable$1() {
       var er;
       if (!skipChunkCheck) er = chunkInvalid(state2, chunk);
       if (er) {
-        errorOrDestroy2(stream, er);
+        errorOrDestroy(stream, er);
       } else if (state2.objectMode || chunk && chunk.length > 0) {
         if (typeof chunk !== "string" && !state2.objectMode && Object.getPrototypeOf(chunk) !== Buffer2.prototype) {
           chunk = _uint8ArrayToBuffer(chunk);
         }
         if (addToFront) {
-          if (state2.endEmitted) errorOrDestroy2(stream, new ERR_STREAM_UNSHIFT_AFTER_END_EVENT());
+          if (state2.endEmitted) errorOrDestroy(stream, new ERR_STREAM_UNSHIFT_AFTER_END_EVENT());
           else addChunk(stream, state2, chunk, true);
         } else if (state2.ended) {
-          errorOrDestroy2(stream, new ERR_STREAM_PUSH_AFTER_EOF());
+          errorOrDestroy(stream, new ERR_STREAM_PUSH_AFTER_EOF());
         } else if (state2.destroyed) {
           return false;
         } else {
@@ -6376,7 +6410,7 @@ function require_stream_readable$1() {
     state2.readingMore = false;
   }
   Readable.prototype._read = function(n) {
-    errorOrDestroy2(this, new ERR_METHOD_NOT_IMPLEMENTED2("_read()"));
+    errorOrDestroy(this, new ERR_METHOD_NOT_IMPLEMENTED("_read()"));
   };
   Readable.prototype.pipe = function(dest, pipeOpts) {
     var src = this;
@@ -6445,7 +6479,7 @@ function require_stream_readable$1() {
       debug("onerror", er);
       unpipe();
       dest.removeListener("error", onerror);
-      if (EElistenerCount(dest, "error") === 0) errorOrDestroy2(dest, er);
+      if (EElistenerCount(dest, "error") === 0) errorOrDestroy(dest, er);
     }
     prependListener2(dest, "error", onerror);
     function onclose() {
@@ -6751,192 +6785,213 @@ function require_stream_readable$1() {
   }
   return _stream_readable$1;
 }
-var _stream_transform$1 = Transform$9;
-var _require$codes$1 = errorsBrowser.codes, ERR_METHOD_NOT_IMPLEMENTED = _require$codes$1.ERR_METHOD_NOT_IMPLEMENTED, ERR_MULTIPLE_CALLBACK = _require$codes$1.ERR_MULTIPLE_CALLBACK, ERR_TRANSFORM_ALREADY_TRANSFORMING = _require$codes$1.ERR_TRANSFORM_ALREADY_TRANSFORMING, ERR_TRANSFORM_WITH_LENGTH_0 = _require$codes$1.ERR_TRANSFORM_WITH_LENGTH_0;
-var Duplex$1 = require_stream_duplex$1();
-inherits_browserExports(Transform$9, Duplex$1);
-function afterTransform$1(er, data) {
-  var ts = this._transformState;
-  ts.transforming = false;
-  var cb = ts.writecb;
-  if (cb === null) {
-    return this.emit("error", new ERR_MULTIPLE_CALLBACK());
-  }
-  ts.writechunk = null;
-  ts.writecb = null;
-  if (data != null)
-    this.push(data);
-  cb(er);
-  var rs = this._readableState;
-  rs.reading = false;
-  if (rs.needReadable || rs.length < rs.highWaterMark) {
-    this._read(rs.highWaterMark);
-  }
-}
-function Transform$9(options2) {
-  if (!(this instanceof Transform$9)) return new Transform$9(options2);
-  Duplex$1.call(this, options2);
-  this._transformState = {
-    afterTransform: afterTransform$1.bind(this),
-    needTransform: false,
-    transforming: false,
-    writecb: null,
-    writechunk: null,
-    writeencoding: null
-  };
-  this._readableState.needReadable = true;
-  this._readableState.sync = false;
-  if (options2) {
-    if (typeof options2.transform === "function") this._transform = options2.transform;
-    if (typeof options2.flush === "function") this._flush = options2.flush;
-  }
-  this.on("prefinish", prefinish$1);
-}
-function prefinish$1() {
-  var _this = this;
-  if (typeof this._flush === "function" && !this._readableState.destroyed) {
-    this._flush(function(er, data) {
-      done$1(_this, er, data);
-    });
-  } else {
-    done$1(this, null, null);
-  }
-}
-Transform$9.prototype.push = function(chunk, encoding) {
-  this._transformState.needTransform = false;
-  return Duplex$1.prototype.push.call(this, chunk, encoding);
-};
-Transform$9.prototype._transform = function(chunk, encoding, cb) {
-  cb(new ERR_METHOD_NOT_IMPLEMENTED("_transform()"));
-};
-Transform$9.prototype._write = function(chunk, encoding, cb) {
-  var ts = this._transformState;
-  ts.writecb = cb;
-  ts.writechunk = chunk;
-  ts.writeencoding = encoding;
-  if (!ts.transforming) {
+var _stream_transform$1;
+var hasRequired_stream_transform;
+function require_stream_transform() {
+  if (hasRequired_stream_transform) return _stream_transform$1;
+  hasRequired_stream_transform = 1;
+  _stream_transform$1 = Transform2;
+  var _require$codes = requireErrorsBrowser().codes, ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED, ERR_MULTIPLE_CALLBACK = _require$codes.ERR_MULTIPLE_CALLBACK, ERR_TRANSFORM_ALREADY_TRANSFORMING = _require$codes.ERR_TRANSFORM_ALREADY_TRANSFORMING, ERR_TRANSFORM_WITH_LENGTH_0 = _require$codes.ERR_TRANSFORM_WITH_LENGTH_0;
+  var Duplex2 = require_stream_duplex$1();
+  inherits_browserExports(Transform2, Duplex2);
+  function afterTransform2(er, data) {
+    var ts = this._transformState;
+    ts.transforming = false;
+    var cb = ts.writecb;
+    if (cb === null) {
+      return this.emit("error", new ERR_MULTIPLE_CALLBACK());
+    }
+    ts.writechunk = null;
+    ts.writecb = null;
+    if (data != null)
+      this.push(data);
+    cb(er);
     var rs = this._readableState;
-    if (ts.needTransform || rs.needReadable || rs.length < rs.highWaterMark) this._read(rs.highWaterMark);
+    rs.reading = false;
+    if (rs.needReadable || rs.length < rs.highWaterMark) {
+      this._read(rs.highWaterMark);
+    }
   }
-};
-Transform$9.prototype._read = function(n) {
-  var ts = this._transformState;
-  if (ts.writechunk !== null && !ts.transforming) {
-    ts.transforming = true;
-    this._transform(ts.writechunk, ts.writeencoding, ts.afterTransform);
-  } else {
-    ts.needTransform = true;
+  function Transform2(options2) {
+    if (!(this instanceof Transform2)) return new Transform2(options2);
+    Duplex2.call(this, options2);
+    this._transformState = {
+      afterTransform: afterTransform2.bind(this),
+      needTransform: false,
+      transforming: false,
+      writecb: null,
+      writechunk: null,
+      writeencoding: null
+    };
+    this._readableState.needReadable = true;
+    this._readableState.sync = false;
+    if (options2) {
+      if (typeof options2.transform === "function") this._transform = options2.transform;
+      if (typeof options2.flush === "function") this._flush = options2.flush;
+    }
+    this.on("prefinish", prefinish2);
   }
-};
-Transform$9.prototype._destroy = function(err, cb) {
-  Duplex$1.prototype._destroy.call(this, err, function(err2) {
-    cb(err2);
-  });
-};
-function done$1(stream, er, data) {
-  if (er) return stream.emit("error", er);
-  if (data != null)
-    stream.push(data);
-  if (stream._writableState.length) throw new ERR_TRANSFORM_WITH_LENGTH_0();
-  if (stream._transformState.transforming) throw new ERR_TRANSFORM_ALREADY_TRANSFORMING();
-  return stream.push(null);
-}
-var _stream_passthrough$1 = PassThrough$1;
-var Transform$8 = _stream_transform$1;
-inherits_browserExports(PassThrough$1, Transform$8);
-function PassThrough$1(options2) {
-  if (!(this instanceof PassThrough$1)) return new PassThrough$1(options2);
-  Transform$8.call(this, options2);
-}
-PassThrough$1.prototype._transform = function(chunk, encoding, cb) {
-  cb(null, chunk);
-};
-var eos;
-function once(callback) {
-  var called = false;
-  return function() {
-    if (called) return;
-    called = true;
-    callback.apply(void 0, arguments);
+  function prefinish2() {
+    var _this = this;
+    if (typeof this._flush === "function" && !this._readableState.destroyed) {
+      this._flush(function(er, data) {
+        done2(_this, er, data);
+      });
+    } else {
+      done2(this, null, null);
+    }
+  }
+  Transform2.prototype.push = function(chunk, encoding) {
+    this._transformState.needTransform = false;
+    return Duplex2.prototype.push.call(this, chunk, encoding);
   };
-}
-var _require$codes = errorsBrowser.codes, ERR_MISSING_ARGS = _require$codes.ERR_MISSING_ARGS, ERR_STREAM_DESTROYED = _require$codes.ERR_STREAM_DESTROYED;
-function noop(err) {
-  if (err) throw err;
-}
-function isRequest(stream) {
-  return stream.setHeader && typeof stream.abort === "function";
-}
-function destroyer(stream, reading, writing, callback) {
-  callback = once(callback);
-  var closed = false;
-  stream.on("close", function() {
-    closed = true;
-  });
-  if (eos === void 0) eos = endOfStream;
-  eos(stream, {
-    readable: reading,
-    writable: writing
-  }, function(err) {
-    if (err) return callback(err);
-    closed = true;
-    callback();
-  });
-  var destroyed = false;
-  return function(err) {
-    if (closed) return;
-    if (destroyed) return;
-    destroyed = true;
-    if (isRequest(stream)) return stream.abort();
-    if (typeof stream.destroy === "function") return stream.destroy();
-    callback(err || new ERR_STREAM_DESTROYED("pipe"));
+  Transform2.prototype._transform = function(chunk, encoding, cb) {
+    cb(new ERR_METHOD_NOT_IMPLEMENTED("_transform()"));
   };
-}
-function call(fn) {
-  fn();
-}
-function pipe(from, to) {
-  return from.pipe(to);
-}
-function popCallback(streams) {
-  if (!streams.length) return noop;
-  if (typeof streams[streams.length - 1] !== "function") return noop;
-  return streams.pop();
-}
-function pipeline() {
-  for (var _len = arguments.length, streams = new Array(_len), _key = 0; _key < _len; _key++) {
-    streams[_key] = arguments[_key];
-  }
-  var callback = popCallback(streams);
-  if (Array.isArray(streams[0])) streams = streams[0];
-  if (streams.length < 2) {
-    throw new ERR_MISSING_ARGS("streams");
-  }
-  var error2;
-  var destroys = streams.map(function(stream, i) {
-    var reading = i < streams.length - 1;
-    var writing = i > 0;
-    return destroyer(stream, reading, writing, function(err) {
-      if (!error2) error2 = err;
-      if (err) destroys.forEach(call);
-      if (reading) return;
-      destroys.forEach(call);
-      callback(error2);
+  Transform2.prototype._write = function(chunk, encoding, cb) {
+    var ts = this._transformState;
+    ts.writecb = cb;
+    ts.writechunk = chunk;
+    ts.writeencoding = encoding;
+    if (!ts.transforming) {
+      var rs = this._readableState;
+      if (ts.needTransform || rs.needReadable || rs.length < rs.highWaterMark) this._read(rs.highWaterMark);
+    }
+  };
+  Transform2.prototype._read = function(n) {
+    var ts = this._transformState;
+    if (ts.writechunk !== null && !ts.transforming) {
+      ts.transforming = true;
+      this._transform(ts.writechunk, ts.writeencoding, ts.afterTransform);
+    } else {
+      ts.needTransform = true;
+    }
+  };
+  Transform2.prototype._destroy = function(err, cb) {
+    Duplex2.prototype._destroy.call(this, err, function(err2) {
+      cb(err2);
     });
-  });
-  return streams.reduce(pipe);
+  };
+  function done2(stream, er, data) {
+    if (er) return stream.emit("error", er);
+    if (data != null)
+      stream.push(data);
+    if (stream._writableState.length) throw new ERR_TRANSFORM_WITH_LENGTH_0();
+    if (stream._transformState.transforming) throw new ERR_TRANSFORM_ALREADY_TRANSFORMING();
+    return stream.push(null);
+  }
+  return _stream_transform$1;
 }
-var pipeline_1 = pipeline;
+var _stream_passthrough$1;
+var hasRequired_stream_passthrough;
+function require_stream_passthrough() {
+  if (hasRequired_stream_passthrough) return _stream_passthrough$1;
+  hasRequired_stream_passthrough = 1;
+  _stream_passthrough$1 = PassThrough2;
+  var Transform2 = require_stream_transform();
+  inherits_browserExports(PassThrough2, Transform2);
+  function PassThrough2(options2) {
+    if (!(this instanceof PassThrough2)) return new PassThrough2(options2);
+    Transform2.call(this, options2);
+  }
+  PassThrough2.prototype._transform = function(chunk, encoding, cb) {
+    cb(null, chunk);
+  };
+  return _stream_passthrough$1;
+}
+var pipeline_1;
+var hasRequiredPipeline;
+function requirePipeline() {
+  if (hasRequiredPipeline) return pipeline_1;
+  hasRequiredPipeline = 1;
+  var eos;
+  function once3(callback) {
+    var called = false;
+    return function() {
+      if (called) return;
+      called = true;
+      callback.apply(void 0, arguments);
+    };
+  }
+  var _require$codes = requireErrorsBrowser().codes, ERR_MISSING_ARGS = _require$codes.ERR_MISSING_ARGS, ERR_STREAM_DESTROYED = _require$codes.ERR_STREAM_DESTROYED;
+  function noop(err) {
+    if (err) throw err;
+  }
+  function isRequest(stream) {
+    return stream.setHeader && typeof stream.abort === "function";
+  }
+  function destroyer(stream, reading, writing, callback) {
+    callback = once3(callback);
+    var closed = false;
+    stream.on("close", function() {
+      closed = true;
+    });
+    if (eos === void 0) eos = requireEndOfStream();
+    eos(stream, {
+      readable: reading,
+      writable: writing
+    }, function(err) {
+      if (err) return callback(err);
+      closed = true;
+      callback();
+    });
+    var destroyed = false;
+    return function(err) {
+      if (closed) return;
+      if (destroyed) return;
+      destroyed = true;
+      if (isRequest(stream)) return stream.abort();
+      if (typeof stream.destroy === "function") return stream.destroy();
+      callback(err || new ERR_STREAM_DESTROYED("pipe"));
+    };
+  }
+  function call2(fn) {
+    fn();
+  }
+  function pipe(from, to) {
+    return from.pipe(to);
+  }
+  function popCallback(streams) {
+    if (!streams.length) return noop;
+    if (typeof streams[streams.length - 1] !== "function") return noop;
+    return streams.pop();
+  }
+  function pipeline() {
+    for (var _len = arguments.length, streams = new Array(_len), _key = 0; _key < _len; _key++) {
+      streams[_key] = arguments[_key];
+    }
+    var callback = popCallback(streams);
+    if (Array.isArray(streams[0])) streams = streams[0];
+    if (streams.length < 2) {
+      throw new ERR_MISSING_ARGS("streams");
+    }
+    var error2;
+    var destroys = streams.map(function(stream, i) {
+      var reading = i < streams.length - 1;
+      var writing = i > 0;
+      return destroyer(stream, reading, writing, function(err) {
+        if (!error2) error2 = err;
+        if (err) destroys.forEach(call2);
+        if (reading) return;
+        destroys.forEach(call2);
+        callback(error2);
+      });
+    });
+    return streams.reduce(pipe);
+  }
+  pipeline_1 = pipeline;
+  return pipeline_1;
+}
 (function(module2, exports2) {
   exports2 = module2.exports = require_stream_readable$1();
   exports2.Stream = exports2;
   exports2.Readable = exports2;
   exports2.Writable = require_stream_writable$1();
   exports2.Duplex = require_stream_duplex$1();
-  exports2.Transform = _stream_transform$1;
-  exports2.PassThrough = _stream_passthrough$1;
-  exports2.finished = endOfStream;
-  exports2.pipeline = pipeline_1;
+  exports2.Transform = require_stream_transform();
+  exports2.PassThrough = require_stream_passthrough();
+  exports2.finished = requireEndOfStream();
+  exports2.pipeline = requirePipeline();
 })(readableBrowser$1, readableBrowser$1.exports);
 var readableBrowserExports$1 = readableBrowser$1.exports;
 var Buffer$z = safeBufferExports$1.Buffer;
@@ -8347,10 +8402,10 @@ inherits$h(Stream, EE);
 Stream.Readable = require_stream_readable$1();
 Stream.Writable = require_stream_writable$1();
 Stream.Duplex = require_stream_duplex$1();
-Stream.Transform = _stream_transform$1;
-Stream.PassThrough = _stream_passthrough$1;
-Stream.finished = endOfStream;
-Stream.pipeline = pipeline_1;
+Stream.Transform = require_stream_transform();
+Stream.PassThrough = require_stream_passthrough();
+Stream.finished = requireEndOfStream();
+Stream.pipeline = requirePipeline();
 Stream.Stream = Stream;
 function Stream() {
   EE.call(this);
