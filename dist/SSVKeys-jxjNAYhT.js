@@ -1,5 +1,6 @@
-import { p as process$1, g as global$1 } from "./index-9cMbbYh7.mjs";
-import { keccak256, toHex as toHex$1, sha256 as sha256$3, toBytes, fromHex, getAddress } from "viem";
+"use strict";
+const index = require("./index-DX2HBHu2.js");
+const viem = require("viem");
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
@@ -3349,7 +3350,7 @@ ieee754.write = function(buffer2, value, offset, isLE, mLen, nBytes) {
   }();
 })(buffer$1);
 /*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
-(function(module, exports2) {
+(function(module2, exports2) {
   var buffer2 = buffer$1;
   var Buffer2 = buffer2.Buffer;
   function copyProps(src2, dst) {
@@ -3358,7 +3359,7 @@ ieee754.write = function(buffer2, value, offset, isLE, mLen, nBytes) {
     }
   }
   if (Buffer2.from && Buffer2.alloc && Buffer2.allocUnsafe && Buffer2.allocUnsafeSlow) {
-    module.exports = buffer2;
+    module2.exports = buffer2;
   } else {
     copyProps(buffer2, exports2);
     exports2.Buffer = SafeBuffer;
@@ -3429,7 +3430,7 @@ function randomBytes$2(size, cb) {
     }
   }
   if (typeof cb === "function") {
-    return process$1.nextTick(function() {
+    return index.process$1.nextTick(function() {
       cb(null, bytes);
     });
   }
@@ -3774,9 +3775,9 @@ function arrayClone(arr, n) {
     copy[i] = arr[i];
   return copy;
 }
-function spliceOne(list, index) {
-  for (; index + 1 < list.length; index++)
-    list[index] = list[index + 1];
+function spliceOne(list, index2) {
+  for (; index2 + 1 < list.length; index2++)
+    list[index2] = list[index2 + 1];
   list.pop();
 }
 function unwrapListeners(arr) {
@@ -4077,10 +4078,10 @@ function destroy$1(err, cb) {
       cb(err);
     } else if (err) {
       if (!this._writableState) {
-        process$1.nextTick(emitErrorNT$1, this, err);
+        index.process$1.nextTick(emitErrorNT$1, this, err);
       } else if (!this._writableState.errorEmitted) {
         this._writableState.errorEmitted = true;
-        process$1.nextTick(emitErrorNT$1, this, err);
+        index.process$1.nextTick(emitErrorNT$1, this, err);
       }
     }
     return this;
@@ -4094,18 +4095,18 @@ function destroy$1(err, cb) {
   this._destroy(err || null, function(err2) {
     if (!cb && err2) {
       if (!_this._writableState) {
-        process$1.nextTick(emitErrorAndCloseNT, _this, err2);
+        index.process$1.nextTick(emitErrorAndCloseNT, _this, err2);
       } else if (!_this._writableState.errorEmitted) {
         _this._writableState.errorEmitted = true;
-        process$1.nextTick(emitErrorAndCloseNT, _this, err2);
+        index.process$1.nextTick(emitErrorAndCloseNT, _this, err2);
       } else {
-        process$1.nextTick(emitCloseNT, _this);
+        index.process$1.nextTick(emitCloseNT, _this);
       }
     } else if (cb) {
-      process$1.nextTick(emitCloseNT, _this);
+      index.process$1.nextTick(emitCloseNT, _this);
       cb(err2);
     } else {
-      process$1.nextTick(emitCloseNT, _this);
+      index.process$1.nextTick(emitCloseNT, _this);
     }
   });
   return this;
@@ -4428,7 +4429,7 @@ function require_stream_writable$1() {
   function writeAfterEnd(stream, cb) {
     var er = new ERR_STREAM_WRITE_AFTER_END();
     errorOrDestroy2(stream, er);
-    process$1.nextTick(cb, er);
+    index.process$1.nextTick(cb, er);
   }
   function validChunk(stream, state2, chunk, cb) {
     var er;
@@ -4439,7 +4440,7 @@ function require_stream_writable$1() {
     }
     if (er) {
       errorOrDestroy2(stream, er);
-      process$1.nextTick(cb, er);
+      index.process$1.nextTick(cb, er);
       return false;
     }
     return true;
@@ -4551,8 +4552,8 @@ function require_stream_writable$1() {
   function onwriteError(stream, state2, sync2, er, cb) {
     --state2.pendingcb;
     if (sync2) {
-      process$1.nextTick(cb, er);
-      process$1.nextTick(finishMaybe, stream, state2);
+      index.process$1.nextTick(cb, er);
+      index.process$1.nextTick(finishMaybe, stream, state2);
       stream._writableState.errorEmitted = true;
       errorOrDestroy2(stream, er);
     } else {
@@ -4581,7 +4582,7 @@ function require_stream_writable$1() {
         clearBuffer(stream, state2);
       }
       if (sync2) {
-        process$1.nextTick(afterWrite, stream, state2, finished, cb);
+        index.process$1.nextTick(afterWrite, stream, state2, finished, cb);
       } else {
         afterWrite(stream, state2, finished, cb);
       }
@@ -4694,7 +4695,7 @@ function require_stream_writable$1() {
       if (typeof stream._final === "function" && !state2.destroyed) {
         state2.pendingcb++;
         state2.finalCalled = true;
-        process$1.nextTick(callFinal, stream, state2);
+        index.process$1.nextTick(callFinal, stream, state2);
       } else {
         state2.prefinished = true;
         stream.emit("prefinish");
@@ -4722,7 +4723,7 @@ function require_stream_writable$1() {
     state2.ending = true;
     finishMaybe(stream, state2);
     if (cb) {
-      if (state2.finished) process$1.nextTick(cb);
+      if (state2.finished) index.process$1.nextTick(cb);
       else stream.once("finish", cb);
     }
     state2.ended = true;
@@ -4828,7 +4829,7 @@ function require_stream_duplex$1() {
   });
   function onend() {
     if (this._writableState.ended) return;
-    process$1.nextTick(onEndNT, this);
+    index.process$1.nextTick(onEndNT, this);
   }
   function onEndNT(self2) {
     self2.end();
@@ -5224,7 +5225,7 @@ function requireAsync_iterator() {
     }
   }
   function onReadable(iter) {
-    process$1.nextTick(readAndResolve, iter);
+    index.process$1.nextTick(readAndResolve, iter);
   }
   function wrapForNext(lastPromise, iter) {
     return function(resolve, reject) {
@@ -5254,7 +5255,7 @@ function requireAsync_iterator() {
       }
       if (this[kStream].destroyed) {
         return new Promise(function(resolve, reject) {
-          process$1.nextTick(function() {
+          index.process$1.nextTick(function() {
             if (_this[kError]) {
               reject(_this[kError]);
             } else {
@@ -5684,7 +5685,7 @@ function require_stream_readable$1() {
     if (!state2.emittedReadable) {
       debug("emitReadable", state2.flowing);
       state2.emittedReadable = true;
-      process$1.nextTick(emitReadable_, stream);
+      index.process$1.nextTick(emitReadable_, stream);
     }
   }
   function emitReadable_(stream) {
@@ -5700,7 +5701,7 @@ function require_stream_readable$1() {
   function maybeReadMore(stream, state2) {
     if (!state2.readingMore) {
       state2.readingMore = true;
-      process$1.nextTick(maybeReadMore_, stream, state2);
+      index.process$1.nextTick(maybeReadMore_, stream, state2);
     }
   }
   function maybeReadMore_(stream, state2) {
@@ -5732,9 +5733,9 @@ function require_stream_readable$1() {
     }
     state2.pipesCount += 1;
     debug("pipe count=%d opts=%j", state2.pipesCount, pipeOpts);
-    var doEnd = (!pipeOpts || pipeOpts.end !== false) && dest !== process$1.stdout && dest !== process$1.stderr;
+    var doEnd = (!pipeOpts || pipeOpts.end !== false) && dest !== index.process$1.stdout && dest !== index.process$1.stderr;
     var endFn = doEnd ? onend : unpipe;
-    if (state2.endEmitted) process$1.nextTick(endFn);
+    if (state2.endEmitted) index.process$1.nextTick(endFn);
     else src2.once("end", endFn);
     dest.on("unpipe", onunpipe);
     function onunpipe(readable, unpipeInfo) {
@@ -5845,9 +5846,9 @@ function require_stream_readable$1() {
       });
       return this;
     }
-    var index = indexOf(state2.pipes, dest);
-    if (index === -1) return this;
-    state2.pipes.splice(index, 1);
+    var index2 = indexOf(state2.pipes, dest);
+    if (index2 === -1) return this;
+    state2.pipes.splice(index2, 1);
     state2.pipesCount -= 1;
     if (state2.pipesCount === 1) state2.pipes = state2.pipes[0];
     dest.emit("unpipe", this, unpipeInfo);
@@ -5868,7 +5869,7 @@ function require_stream_readable$1() {
         if (state2.length) {
           emitReadable(this);
         } else if (!state2.reading) {
-          process$1.nextTick(nReadingNextTick, this);
+          index.process$1.nextTick(nReadingNextTick, this);
         }
       }
     }
@@ -5878,14 +5879,14 @@ function require_stream_readable$1() {
   Readable.prototype.removeListener = function(ev, fn) {
     var res = Stream.prototype.removeListener.call(this, ev, fn);
     if (ev === "readable") {
-      process$1.nextTick(updateReadableListening, this);
+      index.process$1.nextTick(updateReadableListening, this);
     }
     return res;
   };
   Readable.prototype.removeAllListeners = function(ev) {
     var res = Stream.prototype.removeAllListeners.apply(this, arguments);
     if (ev === "readable" || ev === void 0) {
-      process$1.nextTick(updateReadableListening, this);
+      index.process$1.nextTick(updateReadableListening, this);
     }
     return res;
   };
@@ -5915,7 +5916,7 @@ function require_stream_readable$1() {
   function resume(stream, state2) {
     if (!state2.resumeScheduled) {
       state2.resumeScheduled = true;
-      process$1.nextTick(resume_, stream, state2);
+      index.process$1.nextTick(resume_, stream, state2);
     }
   }
   function resume_(stream, state2) {
@@ -6056,7 +6057,7 @@ function require_stream_readable$1() {
     debug("endReadable", state2.endEmitted);
     if (!state2.endEmitted) {
       state2.ended = true;
-      process$1.nextTick(endReadableNT, state2, stream);
+      index.process$1.nextTick(endReadableNT, state2, stream);
     }
   }
   function endReadableNT(state2, stream) {
@@ -6265,8 +6266,8 @@ function pipeline() {
   return streams.reduce(pipe);
 }
 var pipeline_1 = pipeline;
-(function(module, exports2) {
-  exports2 = module.exports = require_stream_readable$1();
+(function(module2, exports2) {
+  exports2 = module2.exports = require_stream_readable$1();
   exports2.Stream = exports2;
   exports2.Readable = exports2;
   exports2.Writable = require_stream_writable$1();
@@ -7665,18 +7666,18 @@ Sha384.prototype._hash = function() {
   return H;
 };
 var sha384$2 = Sha384;
-var exports = sha_js.exports = function SHA(algorithm) {
+var exports$1 = sha_js.exports = function SHA(algorithm) {
   algorithm = algorithm.toLowerCase();
-  var Algorithm = exports[algorithm];
+  var Algorithm = exports$1[algorithm];
   if (!Algorithm) throw new Error(algorithm + " is not supported (we accept pull requests)");
   return new Algorithm();
 };
-exports.sha = sha$4;
-exports.sha1 = sha1$1;
-exports.sha224 = sha224$1;
-exports.sha256 = sha256$2;
-exports.sha384 = sha384$2;
-exports.sha512 = sha512$3;
+exports$1.sha = sha$4;
+exports$1.sha1 = sha1$1;
+exports$1.sha224 = sha224$1;
+exports$1.sha256 = sha256$2;
+exports$1.sha384 = sha384$2;
+exports$1.sha512 = sha512$3;
 var sha_jsExports = sha_js.exports;
 var Buffer$q = safeBufferExports$1.Buffer;
 var Transform$7 = require$$2$1.Transform;
@@ -8085,7 +8086,7 @@ var defaultEncoding$2;
 if (commonjsGlobal.process && commonjsGlobal.process.browser) {
   defaultEncoding$2 = "utf-8";
 } else if (commonjsGlobal.process && commonjsGlobal.process.version) {
-  var pVersionMajor = parseInt(process$1.version.split(".")[0].slice(1), 10);
+  var pVersionMajor = parseInt(index.process$1.version.split(".")[0].slice(1), 10);
   defaultEncoding$2 = pVersionMajor >= 6 ? "utf-8" : "binary";
 } else {
   defaultEncoding$2 = "utf-8";
@@ -8892,10 +8893,17 @@ var implementation$1 = function bind(that) {
 var implementation = implementation$1;
 var functionBind = Function.prototype.bind || implementation;
 var functionCall = Function.prototype.call;
-var functionApply = Function.prototype.apply;
+var functionApply;
+var hasRequiredFunctionApply;
+function requireFunctionApply() {
+  if (hasRequiredFunctionApply) return functionApply;
+  hasRequiredFunctionApply = 1;
+  functionApply = Function.prototype.apply;
+  return functionApply;
+}
 var reflectApply = typeof Reflect !== "undefined" && Reflect && Reflect.apply;
 var bind$2 = functionBind;
-var $apply$1 = functionApply;
+var $apply$1 = requireFunctionApply();
 var $call$2 = functionCall;
 var $reflectApply = reflectApply;
 var actualApply = $reflectApply || bind$2.call($call$2, $apply$1);
@@ -9015,7 +9023,7 @@ var hasSymbols = requireHasSymbols()();
 var getProto = requireGetProto();
 var $ObjectGPO = requireObject_getPrototypeOf();
 var $ReflectGPO = requireReflect_getPrototypeOf();
-var $apply = functionApply;
+var $apply = requireFunctionApply();
 var $call = functionCall;
 var needsEval = {};
 var TypedArray = typeof Uint8Array === "undefined" || !getProto ? undefined$1 : getProto(Uint8Array);
@@ -9656,7 +9664,7 @@ function requireApplyBind() {
   if (hasRequiredApplyBind) return applyBind;
   hasRequiredApplyBind = 1;
   var bind3 = functionBind;
-  var $apply2 = functionApply;
+  var $apply2 = requireFunctionApply();
   var actualApply$1 = actualApply;
   applyBind = function applyBind2() {
     return actualApply$1(bind3, $apply2, arguments);
@@ -9667,12 +9675,12 @@ var hasRequiredCallBind;
 function requireCallBind() {
   if (hasRequiredCallBind) return callBind.exports;
   hasRequiredCallBind = 1;
-  (function(module) {
+  (function(module2) {
     var setFunctionLength2 = requireSetFunctionLength();
     var $defineProperty2 = esDefineProperty;
     var callBindBasic3 = callBindApplyHelpers;
     var applyBind2 = requireApplyBind();
-    module.exports = function callBind2(originalFunction) {
+    module2.exports = function callBind2(originalFunction) {
       var func = callBindBasic3(arguments);
       var adjustedLength = originalFunction.length - (arguments.length - 1);
       return setFunctionLength2(
@@ -9682,9 +9690,9 @@ function requireCallBind() {
       );
     };
     if ($defineProperty2) {
-      $defineProperty2(module.exports, "apply", { value: applyBind2 });
+      $defineProperty2(module2.exports, "apply", { value: applyBind2 });
     } else {
-      module.exports.apply = applyBind2;
+      module2.exports.apply = applyBind2;
     }
   })(callBind);
   return callBind.exports;
@@ -12323,8 +12331,8 @@ browser$6.listCiphers = browser$6.getCiphers = getCiphers;
 var browser$4 = {};
 var bn$1 = { exports: {} };
 bn$1.exports;
-(function(module) {
-  (function(module2, exports2) {
+(function(module2) {
+  (function(module3, exports2) {
     function assert2(val, msg) {
       if (!val) throw new Error(msg || "Assertion failed");
     }
@@ -12352,8 +12360,8 @@ bn$1.exports;
         this._init(number || 0, base2 || 10, endian || "be");
       }
     }
-    if (typeof module2 === "object") {
-      module2.exports = BN2;
+    if (typeof module3 === "object") {
+      module3.exports = BN2;
     } else {
       exports2.BN = BN2;
     }
@@ -12475,8 +12483,8 @@ bn$1.exports;
       }
       return this.strip();
     };
-    function parseHex4Bits(string, index) {
-      var c = string.charCodeAt(index);
+    function parseHex4Bits(string, index2) {
+      var c = string.charCodeAt(index2);
       if (c >= 65 && c <= 70) {
         return c - 55;
       } else if (c >= 97 && c <= 102) {
@@ -12485,10 +12493,10 @@ bn$1.exports;
         return c - 48 & 15;
       }
     }
-    function parseHexByte(string, lowerBound, index) {
-      var r2 = parseHex4Bits(string, index);
-      if (index - 1 >= lowerBound) {
-        r2 |= parseHex4Bits(string, index - 1) << 4;
+    function parseHexByte(string, lowerBound, index2) {
+      var r2 = parseHex4Bits(string, index2);
+      if (index2 - 1 >= lowerBound) {
+        r2 |= parseHex4Bits(string, index2 - 1) << 4;
       }
       return r2;
     }
@@ -15123,7 +15131,7 @@ bn$1.exports;
       var res = this.imod(a._invmp(this.m).mul(this.r2));
       return res._forceRed(this);
     };
-  })(module, commonjsGlobal);
+  })(module2, commonjsGlobal);
 })(bn$1);
 var bnExports$1 = bn$1.exports;
 var brorand = { exports: {} };
@@ -15602,10 +15610,10 @@ function requireBrowser$2() {
 }
 var readableBrowser = { exports: {} };
 var processNextickArgs = { exports: {} };
-if (typeof process$1 === "undefined" || !process$1.version || process$1.version.indexOf("v0.") === 0 || process$1.version.indexOf("v1.") === 0 && process$1.version.indexOf("v1.8.") !== 0) {
+if (typeof index.process$1 === "undefined" || !index.process$1.version || index.process$1.version.indexOf("v0.") === 0 || index.process$1.version.indexOf("v1.") === 0 && index.process$1.version.indexOf("v1.8.") !== 0) {
   processNextickArgs.exports = { nextTick };
 } else {
-  processNextickArgs.exports = process$1;
+  processNextickArgs.exports = index.process$1;
 }
 function nextTick(fn, arg1, arg2, arg3) {
   if (typeof fn !== "function") {
@@ -15616,17 +15624,17 @@ function nextTick(fn, arg1, arg2, arg3) {
   switch (len) {
     case 0:
     case 1:
-      return process$1.nextTick(fn);
+      return index.process$1.nextTick(fn);
     case 2:
-      return process$1.nextTick(function afterTickOne() {
+      return index.process$1.nextTick(function afterTickOne() {
         fn.call(null, arg1);
       });
     case 3:
-      return process$1.nextTick(function afterTickTwo() {
+      return index.process$1.nextTick(function afterTickTwo() {
         fn.call(null, arg1, arg2);
       });
     case 4:
-      return process$1.nextTick(function afterTickThree() {
+      return index.process$1.nextTick(function afterTickThree() {
         fn.call(null, arg1, arg2, arg3);
       });
     default:
@@ -15635,7 +15643,7 @@ function nextTick(fn, arg1, arg2, arg3) {
       while (i < args.length) {
         args[i++] = arguments[i];
       }
-      return process$1.nextTick(function afterTick() {
+      return index.process$1.nextTick(function afterTick() {
         fn.apply(null, args);
       });
   }
@@ -15647,7 +15655,7 @@ var isarray = Array.isArray || function(arr) {
 };
 var streamBrowser = eventsExports.EventEmitter;
 var safeBuffer$1 = { exports: {} };
-(function(module, exports2) {
+(function(module2, exports2) {
   var buffer2 = buffer$1;
   var Buffer2 = buffer2.Buffer;
   function copyProps(src2, dst) {
@@ -15656,7 +15664,7 @@ var safeBuffer$1 = { exports: {} };
     }
   }
   if (Buffer2.from && Buffer2.alloc && Buffer2.allocUnsafe && Buffer2.allocUnsafeSlow) {
-    module.exports = buffer2;
+    module2.exports = buffer2;
   } else {
     copyProps(buffer2, exports2);
     exports2.Buffer = SafeBuffer;
@@ -15771,7 +15779,7 @@ var hasRequiredBufferList;
 function requireBufferList() {
   if (hasRequiredBufferList) return BufferList.exports;
   hasRequiredBufferList = 1;
-  (function(module) {
+  (function(module2) {
     function _classCallCheck(instance, Constructor) {
       if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
@@ -15782,7 +15790,7 @@ function requireBufferList() {
     function copyBuffer(src2, target, offset) {
       src2.copy(target, offset);
     }
-    module.exports = function() {
+    module2.exports = function() {
       function BufferList2() {
         _classCallCheck(this, BufferList2);
         this.head = null;
@@ -15838,7 +15846,7 @@ function requireBufferList() {
       return BufferList2;
     }();
     if (util2 && util2.inspect && util2.inspect.custom) {
-      module.exports.prototype[util2.inspect.custom] = function() {
+      module2.exports.prototype[util2.inspect.custom] = function() {
         var obj = util2.inspect({ length: this.length });
         return this.constructor.name + " " + obj;
       };
@@ -15923,7 +15931,7 @@ function require_stream_writable() {
       onCorkedFinish(_this, state2);
     };
   }
-  var asyncWrite = !process$1.browser && ["v0.10", "v0.9."].indexOf(process$1.version.slice(0, 5)) > -1 ? setImmediate : pna2.nextTick;
+  var asyncWrite = !index.process$1.browser && ["v0.10", "v0.9."].indexOf(index.process$1.version.slice(0, 5)) > -1 ? setImmediate : pna2.nextTick;
   var Duplex2;
   Writable.WritableState = WritableState;
   var util2 = Object.create(util$4);
@@ -17004,7 +17012,7 @@ function require_stream_readable() {
     }
     state2.pipesCount += 1;
     debug("pipe count=%d opts=%j", state2.pipesCount, pipeOpts);
-    var doEnd = (!pipeOpts || pipeOpts.end !== false) && dest !== process$1.stdout && dest !== process$1.stderr;
+    var doEnd = (!pipeOpts || pipeOpts.end !== false) && dest !== index.process$1.stdout && dest !== index.process$1.stderr;
     var endFn = doEnd ? onend : unpipe;
     if (state2.endEmitted) pna2.nextTick(endFn);
     else src2.once("end", endFn);
@@ -17117,9 +17125,9 @@ function require_stream_readable() {
       }
       return this;
     }
-    var index = indexOf(state2.pipes, dest);
-    if (index === -1) return this;
-    state2.pipes.splice(index, 1);
+    var index2 = indexOf(state2.pipes, dest);
+    if (index2 === -1) return this;
+    state2.pipes.splice(index2, 1);
     state2.pipesCount -= 1;
     if (state2.pipesCount === 1) state2.pipes = state2.pipes[0];
     dest.emit("unpipe", this, unpipeInfo);
@@ -17451,8 +17459,8 @@ function PassThrough(options) {
 PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
-(function(module, exports2) {
-  exports2 = module.exports = require_stream_readable();
+(function(module2, exports2) {
+  exports2 = module2.exports = require_stream_readable();
   exports2.Stream = exports2;
   exports2.Readable = exports2;
   exports2.Writable = require_stream_writable();
@@ -17464,8 +17472,8 @@ var readableBrowserExports = readableBrowser.exports;
 var sign2 = { exports: {} };
 var bn = { exports: {} };
 bn.exports;
-(function(module) {
-  (function(module2, exports2) {
+(function(module2) {
+  (function(module3, exports2) {
     function assert2(val, msg) {
       if (!val) throw new Error(msg || "Assertion failed");
     }
@@ -17493,8 +17501,8 @@ bn.exports;
         this._init(number || 0, base2 || 10, endian || "be");
       }
     }
-    if (typeof module2 === "object") {
-      module2.exports = BN2;
+    if (typeof module3 === "object") {
+      module3.exports = BN2;
     } else {
       exports2.BN = BN2;
     }
@@ -17616,8 +17624,8 @@ bn.exports;
       }
       return this._strip();
     };
-    function parseHex4Bits(string, index) {
-      var c = string.charCodeAt(index);
+    function parseHex4Bits(string, index2) {
+      var c = string.charCodeAt(index2);
       if (c >= 48 && c <= 57) {
         return c - 48;
       } else if (c >= 65 && c <= 70) {
@@ -17628,10 +17636,10 @@ bn.exports;
         assert2(false, "Invalid character in " + string);
       }
     }
-    function parseHexByte(string, lowerBound, index) {
-      var r2 = parseHex4Bits(string, index);
-      if (index - 1 >= lowerBound) {
-        r2 |= parseHex4Bits(string, index - 1) << 4;
+    function parseHexByte(string, lowerBound, index2) {
+      var r2 = parseHex4Bits(string, index2);
+      if (index2 - 1 >= lowerBound) {
+        r2 |= parseHex4Bits(string, index2 - 1) << 4;
       }
       return r2;
     }
@@ -20203,7 +20211,7 @@ bn.exports;
       var res = this.imod(a._invmp(this.m).mul(this.r2));
       return res._forceRed(this);
     };
-  })(module, commonjsGlobal);
+  })(module2, commonjsGlobal);
 })(bn);
 var bnExports = bn.exports;
 var BN$a = bnExports;
@@ -20539,7 +20547,7 @@ BaseCurve.prototype._wnafMulAdd = function _wnafMulAdd(defW, points, coeffs, len
       comb[1] = points[a].toJ().mixedAdd(points[b]);
       comb[2] = points[a].toJ().mixedAdd(points[b].neg());
     }
-    var index = [
+    var index2 = [
       -3,
       /* -1 -1 */
       -1,
@@ -20566,7 +20574,7 @@ BaseCurve.prototype._wnafMulAdd = function _wnafMulAdd(defW, points, coeffs, len
     for (j = 0; j < max2; j++) {
       var ja = jsf[0][j] | 0;
       var jb = jsf[1][j] | 0;
-      naf[a][j] = index[(ja + 1) * 3 + (jb + 1)];
+      naf[a][j] = index2[(ja + 1) * 3 + (jb + 1)];
       naf[b][j] = 0;
       wnd[a] = comb;
     }
@@ -24969,7 +24977,7 @@ cachedProperty(Signature$1, "Rencoded", function Rencoded() {
 cachedProperty(Signature$1, "Sencoded", function Sencoded() {
   return this.eddsa.encodeInt(this.S());
 });
-Signature$1.prototype.toBytes = function toBytes2() {
+Signature$1.prototype.toBytes = function toBytes() {
   return this.Rencoded().concat(this.Sencoded());
 };
 Signature$1.prototype.toHex = function toHex2() {
@@ -25158,13 +25166,13 @@ Reporter.prototype.restore = function restore(data) {
 Reporter.prototype.enterKey = function enterKey(key) {
   return this._reporterState.path.push(key);
 };
-Reporter.prototype.exitKey = function exitKey(index) {
+Reporter.prototype.exitKey = function exitKey(index2) {
   var state2 = this._reporterState;
-  state2.path = state2.path.slice(0, index - 1);
+  state2.path = state2.path.slice(0, index2 - 1);
 };
-Reporter.prototype.leaveKey = function leaveKey(index, key, value) {
+Reporter.prototype.leaveKey = function leaveKey(index2, key, value) {
   var state2 = this._reporterState;
-  this.exitKey(index);
+  this.exitKey(index2);
   if (state2.obj !== null)
     state2.obj[key] = value;
 };
@@ -27588,7 +27596,7 @@ function assertSize(size, offset, length2) {
     throw new RangeError("buffer too small");
   }
 }
-if (crypto$3 && crypto$3.getRandomValues || !process$1.browser) {
+if (crypto$3 && crypto$3.getRandomValues || !index.process$1.browser) {
   browser.randomFill = randomFill;
   browser.randomFillSync = randomFillSync;
 } else {
@@ -27614,12 +27622,12 @@ function randomFill(buf, offset, size, cb) {
   return actualFill(buf, offset, size, cb);
 }
 function actualFill(buf, offset, size, cb) {
-  if (process$1.browser) {
+  if (index.process$1.browser) {
     var ourBuf = buf.buffer;
     var uint = new Uint8Array(ourBuf, offset, size);
     crypto$3.getRandomValues(uint);
     if (cb) {
-      process$1.nextTick(function() {
+      index.process$1.nextTick(function() {
         cb(null, buf);
       });
       return;
@@ -27730,7 +27738,7 @@ function requireCryptoBrowserify() {
   return cryptoBrowserify;
 }
 var bls_c = { exports: {} };
-(function(module, exports2) {
+(function(module2, exports2) {
   var Module = (() => {
     var _scriptName = typeof document != "undefined" ? document.currentScript?.src : void 0;
     if (typeof __filename != "undefined") _scriptName = _scriptName || __filename;
@@ -27744,7 +27752,7 @@ var bls_c = { exports: {} };
       });
       var ENVIRONMENT_IS_WEB = typeof window == "object";
       var ENVIRONMENT_IS_WORKER = typeof importScripts == "function";
-      var ENVIRONMENT_IS_NODE = typeof process$1 == "object" && typeof process$1.versions == "object" && typeof process$1.versions.node == "string";
+      var ENVIRONMENT_IS_NODE = typeof index.process$1 == "object" && typeof index.process$1.versions == "object" && typeof index.process$1.versions.node == "string";
       var moduleOverrides = Object.assign({}, Module2);
       var quit_ = (status, toThrow) => {
         throw toThrow;
@@ -27758,12 +27766,12 @@ var bls_c = { exports: {} };
           var ret = fs.readFileSync(filename);
           return ret;
         };
-        if (!Module2["thisProgram"] && process$1.argv.length > 1) {
-          process$1.argv[1].replace(/\\/g, "/");
+        if (!Module2["thisProgram"] && index.process$1.argv.length > 1) {
+          index.process$1.argv[1].replace(/\\/g, "/");
         }
-        process$1.argv.slice(2);
+        index.process$1.argv.slice(2);
         quit_ = (status, toThrow) => {
-          process$1.exitCode = status;
+          index.process$1.exitCode = status;
           throw toThrow;
         };
       } else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
@@ -27936,7 +27944,7 @@ var bls_c = { exports: {} };
       }
       function createWasm() {
         var info = getWasmImports();
-        function receiveInstance(instance, module2) {
+        function receiveInstance(instance, module3) {
           wasmExports = instance.exports;
           wasmMemory = wasmExports["g"];
           updateMemoryViews();
@@ -28380,7 +28388,7 @@ var bls_c = { exports: {} };
       return moduleRtn;
     };
   })();
-  module.exports = Module;
+  module2.exports = Module;
 })(bls_c);
 var bls_cExports = bls_c.exports;
 const ETH_MODE = true;
@@ -29322,8 +29330,8 @@ var forge$B = forge$C;
 var baseN = baseN$1;
 var util$1 = forge$B.util = forge$B.util || {};
 (function() {
-  if (typeof process$1 !== "undefined" && process$1.nextTick && !process$1.browser) {
-    util$1.nextTick = process$1.nextTick;
+  if (typeof index.process$1 !== "undefined" && index.process$1.nextTick && !index.process$1.browser) {
+    util$1.nextTick = index.process$1.nextTick;
     if (typeof setImmediate === "function") {
       util$1.setImmediate = setImmediate;
     } else {
@@ -29391,7 +29399,7 @@ var util$1 = forge$B.util = forge$B.util || {};
   }
   util$1.nextTick = util$1.setImmediate;
 })();
-util$1.isNodejs = typeof process$1 !== "undefined" && process$1.versions && process$1.versions.node;
+util$1.isNodejs = typeof index.process$1 !== "undefined" && index.process$1.versions && index.process$1.versions.node;
 util$1.globalScope = function() {
   if (util$1.isNodejs) {
     return commonjsGlobal;
@@ -33688,7 +33696,7 @@ function _update$2(s2, w, bytes) {
 }
 var forge$o = forge$C;
 var _crypto$1 = null;
-if (forge$o.util.isNodejs && !forge$o.options.usePureJavaScript && !process$1.versions["node-webkit"]) {
+if (forge$o.util.isNodejs && !forge$o.options.usePureJavaScript && !index.process$1.versions["node-webkit"]) {
   _crypto$1 = requireCryptoBrowserify();
 }
 var prng = forge$o.prng = forge$o.prng || {};
@@ -35937,19 +35945,19 @@ pkcs1.decode_rsa_oaep = function(key, em, options) {
     error2 |= lHash.charAt(i) !== lHashPrime.charAt(i);
   }
   var in_ps = 1;
-  var index = md.digestLength;
+  var index2 = md.digestLength;
   for (var j = md.digestLength; j < db.length; j++) {
     var code2 = db.charCodeAt(j);
     var is_0 = code2 & 1 ^ 1;
     var error_mask = in_ps ? 65534 : 0;
     error2 |= code2 & error_mask;
     in_ps = in_ps & is_0;
-    index += in_ps;
+    index2 += in_ps;
   }
-  if (error2 || db.charCodeAt(index) !== 1) {
+  if (error2 || db.charCodeAt(index2) !== 1) {
     throw new Error("Invalid RSAES-OAEP padding.");
   }
-  return db.substring(index + 1);
+  return db.substring(index2 + 1);
 };
 function rsa_mgf1(seed, maskLength, hash4) {
   if (!hash4) {
@@ -46750,7 +46758,7 @@ class Threshold {
 var cryptoBrowserifyExports = requireCryptoBrowserify();
 const crypto$1 = /* @__PURE__ */ getDefaultExportFromCjs(cryptoBrowserifyExports);
 var scrypt = { exports: {} };
-(function(module, exports2) {
+(function(module2, exports2) {
   (function(root) {
     const MAX_VALUE = 2147483647;
     function SHA2562(m) {
@@ -47202,7 +47210,7 @@ var scrypt = { exports: {} };
       }
     };
     {
-      module.exports = lib2;
+      module2.exports = lib2;
     }
   })();
 })(scrypt);
@@ -47265,7 +47273,7 @@ class EthereumKeyStore {
     }
     const ciphertext = Buffer$D.from(json.crypto.ciphertext, "hex");
     const macCheck = Buffer$D.concat([Buffer$D.from(derivedKey.slice(16, 32)), ciphertext]);
-    const mac = keccak256(toHex$1(macCheck)).replace(/^0x/, "");
+    const mac = viem.keccak256(viem.toHex(macCheck)).replace(/^0x/, "");
     if (mac !== json.crypto.mac.toLowerCase()) {
       throw new EthereumWalletError("Invalid password");
     }
@@ -47299,8 +47307,8 @@ class EthereumKeyStore {
     }
     const ciphertext = Buffer$D.from(cipher2.message, "hex");
     const checksumBuffer = Buffer$D.concat([Buffer$D.from(derivedKey.slice(16, 32)), ciphertext]);
-    const hashFn = checksum.function === "sha256" ? sha256$3 : keccak256;
-    const calculatedMac = hashFn(toHex$1(checksumBuffer));
+    const hashFn = checksum.function === "sha256" ? viem.sha256 : viem.keccak256;
+    const calculatedMac = hashFn(viem.toHex(checksumBuffer));
     if (calculatedMac.replace(/^0x/, "") !== checksum.message.toLowerCase()) {
       throw new EthereumWalletError("Invalid password");
     }
@@ -47420,8 +47428,8 @@ function getGlobal() {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }
-  if (typeof global$1 !== "undefined") {
-    return global$1;
+  if (typeof index.global !== "undefined") {
+    return index.global;
   }
   if (typeof window !== "undefined") {
     return window;
@@ -47690,8 +47698,8 @@ var ValidationUtils = (
         messageString = message;
       }
       if (messageString && Array.isArray(validationArguments.constraints)) {
-        validationArguments.constraints.forEach(function(constraint, index) {
-          messageString = messageString.replace(new RegExp("\\$constraint".concat(index + 1), "g"), constraintToString(constraint));
+        validationArguments.constraints.forEach(function(constraint, index2) {
+          messageString = messageString.replace(new RegExp("\\$constraint".concat(index2 + 1), "g"), constraintToString(constraint));
         });
       }
       if (messageString && validationArguments.value !== void 0 && validationArguments.value !== null && ["string", "boolean", "number"].includes(typeof validationArguments.value))
@@ -47956,8 +47964,8 @@ var ValidationExecutor = (
         }
         if (Array.isArray(value) || value instanceof Set || value instanceof Map) {
           var arrayLikeValue = value instanceof Set ? Array.from(value) : value;
-          arrayLikeValue.forEach(function(subValue, index) {
-            _this.performValidations(value, subValue, index.toString(), [], metadatas, error2.children);
+          arrayLikeValue.forEach(function(subValue, index2) {
+            _this.performValidations(value, subValue, index2.toString(), [], metadatas, error2.children);
           });
         } else if (value instanceof Object) {
           var targetSchema = typeof metadata.target === "string" ? metadata.target : metadata.target.name;
@@ -48339,7 +48347,7 @@ function ValidateNested(validationOptions) {
   };
 }
 var assertString = { exports: {} };
-(function(module, exports2) {
+(function(module2, exports2) {
   Object.defineProperty(exports2, "__esModule", {
     value: true
   });
@@ -48348,8 +48356,8 @@ var assertString = { exports: {} };
     if (input === void 0 || input === null) throw new TypeError("Expected a string but received a ".concat(input));
     if (input.constructor.name !== "String") throw new TypeError("Expected a string but received a ".concat(input.constructor.name));
   }
-  module.exports = exports2.default;
-  module.exports.default = exports2.default;
+  module2.exports = exports2.default;
+  module2.exports.default = exports2.default;
 })(assertString, assertString.exports);
 var assertStringExports = assertString.exports;
 var IS_NOT_EMPTY = "isNotEmpty";
@@ -48370,7 +48378,7 @@ function IsNotEmpty(validationOptions) {
   }, validationOptions);
 }
 var isLength = { exports: {} };
-(function(module, exports2) {
+(function(module2, exports2) {
   Object.defineProperty(exports2, "__esModule", {
     value: true
   });
@@ -48409,8 +48417,8 @@ var isLength = { exports: {} };
     }
     return isInsideRange;
   }
-  module.exports = exports2.default;
-  module.exports.default = exports2.default;
+  module2.exports = exports2.default;
+  module2.exports.default = exports2.default;
 })(isLength, isLength.exports);
 var isLengthExports = isLength.exports;
 const isLengthValidator = /* @__PURE__ */ getDefaultExportFromCjs(isLengthExports);
@@ -48618,13 +48626,13 @@ class SingleSharesSignatureInvalid extends SSVKeysException {
   }
 }
 const hexArrayToBytes = (hexArr) => {
-  const uint8Array = new Uint8Array(hexArr.flatMap((hex) => Array.from(toBytes(hex))));
+  const uint8Array = new Uint8Array(hexArr.flatMap((hex) => Array.from(viem.toBytes(hex))));
   return Buffer$D.from(uint8Array);
 };
 const buildSignature = async (dataToSign, privateKeyHex) => {
   const privateKey = bls$1.deserializeHexStrToSecretKey(privateKeyHex.replace("0x", ""));
-  const messageHash = keccak256(toBytes(dataToSign));
-  const messageBytes = fromHex(messageHash, "bytes");
+  const messageHash = viem.keccak256(viem.toBytes(dataToSign));
+  const messageBytes = viem.fromHex(messageHash, "bytes");
   const signature2 = privateKey.sign(messageBytes);
   const signatureHex = signature2.serializeToHexStr();
   return `0x${signatureHex}`;
@@ -48632,8 +48640,8 @@ const buildSignature = async (dataToSign, privateKeyHex) => {
 const validateSignature = async (signedData, signatureHex, publicKey) => {
   const blsPublicKey = bls$1.deserializeHexStrToPublicKey(publicKey.replace("0x", ""));
   const signature2 = bls$1.deserializeHexStrToSignature(signatureHex.replace("0x", ""));
-  const messageHashHex = keccak256(toBytes(signedData));
-  const messageHashBytes = fromHex(messageHashHex, "bytes");
+  const messageHashHex = viem.keccak256(viem.toBytes(signedData));
+  const messageHashBytes = viem.fromHex(messageHashHex, "bytes");
   if (!blsPublicKey.verify(signature2, messageHashBytes)) {
     throw new SingleSharesSignatureInvalid(signatureHex, "Single shares signature is invalid");
   }
@@ -48712,6 +48720,11 @@ PublicKeyValidatorConstraint = __decorateClass$6([
 ], PublicKeyValidatorConstraint);
 function PublicKeyValidator(validationOptions) {
   return function(object, propertyName) {
+    if (!object || typeof object !== "object") {
+      throw new Error(
+        `@PublicKeyValidator must be used on a class property — received ${typeof object} for ${propertyName}`
+      );
+    }
     registerDecorator({
       target: object.constructor,
       propertyName,
@@ -48732,7 +48745,7 @@ var __decorateClass$5 = (decorators, target, key, kind) => {
 let OwnerAddressValidatorConstraint = class {
   validate(value) {
     try {
-      getAddress(value);
+      viem.getAddress(value);
     } catch {
       throw new OwnerAddressFormatError(value, "Owner address is not a valid Ethereum address");
     }
@@ -48993,7 +49006,7 @@ const _KeySharesItem = class _KeySharesItem2 {
     }
     let address;
     try {
-      address = getAddress(ownerAddress);
+      address = viem.getAddress(ownerAddress);
     } catch {
       throw new OwnerAddressFormatError(
         ownerAddress,
@@ -49020,7 +49033,7 @@ const _KeySharesItem = class _KeySharesItem2 {
     if (!Number.isInteger(ownerNonce) || ownerNonce < 0) {
       throw new OwnerNonceFormatError(ownerNonce, "Owner nonce is not positive integer");
     }
-    const address = getAddress(ownerAddress);
+    const address = viem.getAddress(ownerAddress);
     const signaturePt = shares.replace("0x", "").substring(0, SIGNATURE_LENGTH);
     await validateSignature(`${address}:${ownerNonce}`, `0x${signaturePt}`, publicKey);
   }
@@ -49038,12 +49051,12 @@ const _KeySharesItem = class _KeySharesItem2 {
     }
     const sharesPt = bytes.slice(2 + SIGNATURE_LENGTH);
     const pkSplit = sharesPt.substring(0, operatorCount * PUBLIC_KEY_LENGTH);
-    const pkBytes = toBytes("0x" + pkSplit);
-    const sharesPublicKeys = this.splitArray(operatorCount, pkBytes).map((item) => toHex$1(item));
+    const pkBytes = viem.toBytes("0x" + pkSplit);
+    const sharesPublicKeys = this.splitArray(operatorCount, pkBytes).map((item) => viem.toHex(item));
     const eSplit = bytes.substring(operatorCount * PUBLIC_KEY_LENGTH);
-    const eBytes = toBytes("0x" + eSplit);
+    const eBytes = viem.toBytes("0x" + eSplit);
     const encryptedKeys = this.splitArray(operatorCount, eBytes).map(
-      (item) => Buffer$D.from(toHex$1(item).slice(2), "hex").toString("base64")
+      (item) => Buffer$D.from(viem.toHex(item).slice(2), "hex").toString("base64")
     );
     return { sharesPublicKeys, encryptedKeys };
   }
@@ -49226,15 +49239,13 @@ class SSVKeys {
     };
   }
 }
-export {
-  Buffer$D as B,
-  IsOptional as I,
-  KeySharesItem as K,
-  SSVKeys as S,
-  ValidateNested as V,
-  require$$2$1 as a,
-  SSVKeysException as b,
-  getDefaultExportFromCjs as g,
-  requireCryptoBrowserify as r,
-  validateSync as v
-};
+exports.Buffer = Buffer$D;
+exports.IsOptional = IsOptional;
+exports.KeySharesItem = KeySharesItem;
+exports.SSVKeys = SSVKeys;
+exports.SSVKeysException = SSVKeysException;
+exports.ValidateNested = ValidateNested;
+exports.getDefaultExportFromCjs = getDefaultExportFromCjs;
+exports.require$$2 = require$$2$1;
+exports.requireCryptoBrowserify = requireCryptoBrowserify;
+exports.validateSync = validateSync;

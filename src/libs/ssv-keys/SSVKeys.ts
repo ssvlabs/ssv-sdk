@@ -28,7 +28,7 @@ interface ISharesValidation {
  *  - creating final shares
  *  - building final payload which is ready to be used in web3 transaction
  */
-export class SSVKeys {
+class SSVKeys {
   protected threshold: ISharesKeyPairs | undefined;
 
   /**
@@ -152,3 +152,5 @@ export class SSVKeys {
     }
   }
 }
+
+export { SSVKeys };

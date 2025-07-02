@@ -9,7 +9,7 @@
     "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["ES2020"],
     "skipLibCheck": true,
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -17,6 +17,7 @@
     "isolatedModules": true,
     /* Linting */
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

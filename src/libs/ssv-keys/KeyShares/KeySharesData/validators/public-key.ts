@@ -26,6 +26,12 @@ export class PublicKeyValidatorConstraint implements ValidatorConstraintInterfac
 
 export function PublicKeyValidator(validationOptions?: ValidationOptions) {
   return function (object: any, propertyName: string) {
+    if (!object || typeof object !== 'object') {
+      throw new Error(
+        `@PublicKeyValidator must be used on a class property — received ${typeof object} for ${propertyName}`
+      );
+    }
+
     registerDecorator({
       target: object.constructor,
       propertyName,
