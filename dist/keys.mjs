@@ -1,4 +1,4 @@
-import { S } from "./SSVKeys-DIb4n67R.mjs";
+import { S } from "./SSVKeys-DP-HHvzJ.mjs";
 export {
   S as SSVKeys
 };

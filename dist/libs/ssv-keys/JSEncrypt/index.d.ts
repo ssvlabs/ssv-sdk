@@ -1,2 +1,2 @@
-declare let index: any;
+declare const index: any;
 export default index;
