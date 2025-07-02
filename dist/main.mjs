@@ -2936,12 +2936,12 @@ var functionBind = Function.prototype.bind || implementation;
 var functionCall = Function.prototype.call;
 var functionApply = Function.prototype.apply;
 var reflectApply$1 = typeof Reflect !== "undefined" && Reflect && Reflect.apply;
-var bind$4 = functionBind;
+var bind$3 = functionBind;
 var $apply$2 = functionApply;
 var $call$2 = functionCall;
 var $reflectApply = reflectApply$1;
-var actualApply$1 = $reflectApply || bind$4.call($call$2, $apply$2);
-var bind$3 = functionBind;
+var actualApply$1 = $reflectApply || bind$3.call($call$2, $apply$2);
+var bind$2 = functionBind;
 var $TypeError$5 = type;
 var $call$1 = functionCall;
 var $actualApply = actualApply$1;
@@ -2949,7 +2949,7 @@ var callBindApplyHelpers = function callBindBasic2(args) {
   if (args.length < 1 || typeof args[0] !== "function") {
     throw new $TypeError$5("a function is required");
   }
-  return $actualApply(bind$3, $call$1, args);
+  return $actualApply(bind$2, $call$1, args);
 };
 var callBind$2 = callBindApplyHelpers;
 var gOPD$3 = gopd$1;
@@ -2988,10 +2988,17 @@ var getProto$3 = reflectGetProto ? function getProto2(O) {
 } : getDunderProto ? function getProto4(O) {
   return getDunderProto(O);
 } : null;
-var call = Function.prototype.call;
-var $hasOwn = Object.prototype.hasOwnProperty;
-var bind$2 = functionBind;
-var hasown = bind$2.call(call, $hasOwn);
+var hasown;
+var hasRequiredHasown;
+function requireHasown() {
+  if (hasRequiredHasown) return hasown;
+  hasRequiredHasown = 1;
+  var call = Function.prototype.call;
+  var $hasOwn = Object.prototype.hasOwnProperty;
+  var bind3 = functionBind;
+  hasown = bind3.call(call, $hasOwn);
+  return hasown;
+}
 var undefined$1;
 var $Object = esObjectAtoms;
 var $Error = esErrors;
@@ -3209,7 +3216,7 @@ var LEGACY_ALIASES = {
   "%WeakSetPrototype%": ["WeakSet", "prototype"]
 };
 var bind$1 = functionBind;
-var hasOwn$1 = hasown;
+var hasOwn$1 = requireHasown();
 var $concat = bind$1.call($call, Array.prototype.concat);
 var $spliceApply = bind$1.call($apply$1, Array.prototype.splice);
 var $replace = bind$1.call($call, String.prototype.replace);
@@ -3353,7 +3360,7 @@ isStandardArguments.isLegacyArguments = isLegacyArguments;
 var isArguments = supportsStandardArguments ? isStandardArguments : isLegacyArguments;
 var callBound$4 = callBound$6;
 var hasToStringTag$3 = shams();
-var hasOwn = hasown;
+var hasOwn = requireHasown();
 var gOPD$2 = gopd$1;
 var fn;
 if (hasToStringTag$3) {
@@ -7111,7 +7118,7 @@ function requirePipeline() {
       callback(err || new ERR_STREAM_DESTROYED("pipe"));
     };
   }
-  function call2(fn6) {
+  function call(fn6) {
     fn6();
   }
   function pipe(from, to) {
@@ -7137,9 +7144,9 @@ function requirePipeline() {
       var writing = i > 0;
       return destroyer(stream, reading, writing, function(err) {
         if (!error2) error2 = err;
-        if (err) destroys.forEach(call2);
+        if (err) destroys.forEach(call);
         if (reading) return;
-        destroys.forEach(call2);
+        destroys.forEach(call);
         callback(error2);
       });
     });
