@@ -1,5 +1,6 @@
 import Encryption from '@/libs/ssv-keys/Encryption/Encryption';
-import JSEncrypt from '@/libs/ssv-keys/JSEncrypt';
+// import JSEncrypt from '@/libs/ssv-keys/JSEncrypt';
+import { ForgeEncrypt } from '../utils';
 import { Threshold } from '@/libs/ssv-keys/Threshold';
 import type { IEncryptShare, ISharesKeyPairs } from '@/libs/ssv-keys/interfaces';
 import { describe, expect, it } from 'vitest';
@@ -17,7 +18,7 @@ describe('Check Encryption shares', () => {
     ).encrypt();
 
     encryptedShares.forEach((share: IEncryptShare, index: number) => {
-      const decrypt = new JSEncrypt({});
+      const decrypt = new ForgeEncrypt();
       const privateKey = Buffer.from(operatorKeys.privateKeys[index], 'base64').toString();
       decrypt.setPrivateKey(privateKey);
       const decrypted = decrypt.decrypt(share.privateKey);

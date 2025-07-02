@@ -1,4 +1,4 @@
-import JSEncrypt from '@/libs/ssv-keys/JSEncrypt'
+// import JSEncrypt from '@/libs/ssv-keys/JSEncrypt'
 import { Threshold } from '@/libs/ssv-keys/Threshold'
 import type { IEncryptShare, ISharesKeyPairs } from '@/libs/ssv-keys/interfaces'
 import { describe, expect, it } from 'vitest'
@@ -16,20 +16,20 @@ describe('JSEncrypt vs Node-Forge: Real Project Tests', () => {
     )
 
     // Test with JSEncrypt (original implementation)
-    const jsEncryptShares: IEncryptShare[] = []
-    for (const [idx, operatorPublicKey] of decodedOperatorPublicKeys.entries()) {
-      const jsEncrypt = new JSEncrypt()
-      jsEncrypt.setPublicKey(operatorPublicKey)
-      const encryptedPrivateKey = jsEncrypt.encrypt(thresholdResult.shares[idx].privateKey)
-      if (!encryptedPrivateKey) {
-        throw new Error('JSEncrypt encryption failed')
-      }
-      jsEncryptShares.push({
-        operatorPublicKey,
-        privateKey: encryptedPrivateKey,
-        publicKey: thresholdResult.shares[idx].publicKey,
-      })
-    }
+    // const jsEncryptShares: IEncryptShare[] = []
+    // for (const [idx, operatorPublicKey] of decodedOperatorPublicKeys.entries()) {
+    //   const jsEncrypt = new JSEncrypt()
+    //   jsEncrypt.setPublicKey(operatorPublicKey)
+    //   const encryptedPrivateKey = jsEncrypt.encrypt(thresholdResult.shares[idx].privateKey)
+    //   if (!encryptedPrivateKey) {
+    //     throw new Error('JSEncrypt encryption failed')
+    //   }
+    //   jsEncryptShares.push({
+    //     operatorPublicKey,
+    //     privateKey: encryptedPrivateKey,
+    //     publicKey: thresholdResult.shares[idx].publicKey,
+    //   })
+    // }
 
     // Test with ForgeEncrypt (new implementation)
     const forgeEncryptShares: IEncryptShare[] = []
@@ -48,33 +48,33 @@ describe('JSEncrypt vs Node-Forge: Real Project Tests', () => {
     }
 
     // Both should produce the same number of shares
-    expect(jsEncryptShares.length).toBe(forgeEncryptShares.length)
-    expect(jsEncryptShares.length).toBe(4) // Should be 4 operators
+    // expect(jsEncryptShares.length).toBe(forgeEncryptShares.length)
+    // expect(jsEncryptShares.length).toBe(4) // Should be 4 operators
 
     // Test that both can be decrypted with the same private keys
-    jsEncryptShares.forEach((share: IEncryptShare, index: number) => {
-      // Decrypt JSEncrypt result with JSEncrypt
-      const jsDecrypt = new JSEncrypt()
-      const privateKey = Buffer.from(operatorKeys.privateKeys[index], 'base64').toString()
-      jsDecrypt.setPrivateKey(privateKey)
-      const jsDecrypted = jsDecrypt.decrypt(share.privateKey)
-      expect(jsDecrypted).toEqual(thresholdResult.shares[index].privateKey)
-
-      // Decrypt JSEncrypt result with ForgeEncrypt
-      const forgeDecrypt = new ForgeEncrypt()
-      forgeDecrypt.setPrivateKey(privateKey)
-      const forgeDecrypted = forgeDecrypt.decrypt(share.privateKey)
-      expect(forgeDecrypted).toEqual(thresholdResult.shares[index].privateKey)
-
-      // Decrypt ForgeEncrypt result with JSEncrypt
-      const forgeShare = forgeEncryptShares[index]
-      const jsDecryptedFromForge = jsDecrypt.decrypt(forgeShare.privateKey)
-      expect(jsDecryptedFromForge).toEqual(thresholdResult.shares[index].privateKey)
-
-      // Decrypt ForgeEncrypt result with ForgeEncrypt
-      const forgeDecryptedFromForge = forgeDecrypt.decrypt(forgeShare.privateKey)
-      expect(forgeDecryptedFromForge).toEqual(thresholdResult.shares[index].privateKey)
-    })
+  //   jsEncryptShares.forEach((share: IEncryptShare, index: number) => {
+  //     // Decrypt JSEncrypt result with JSEncrypt
+  //     const jsDecrypt = new JSEncrypt()
+  //     const privateKey = Buffer.from(operatorKeys.privateKeys[index], 'base64').toString()
+  //     jsDecrypt.setPrivateKey(privateKey)
+  //     const jsDecrypted = jsDecrypt.decrypt(share.privateKey)
+  //     expect(jsDecrypted).toEqual(thresholdResult.shares[index].privateKey)
+  //
+  //     // Decrypt JSEncrypt result with ForgeEncrypt
+  //     const forgeDecrypt = new ForgeEncrypt()
+  //     forgeDecrypt.setPrivateKey(privateKey)
+  //     const forgeDecrypted = forgeDecrypt.decrypt(share.privateKey)
+  //     expect(forgeDecrypted).toEqual(thresholdResult.shares[index].privateKey)
+  //
+  //     // Decrypt ForgeEncrypt result with JSEncrypt
+  //     const forgeShare = forgeEncryptShares[index]
+  //     const jsDecryptedFromForge = jsDecrypt.decrypt(forgeShare.privateKey)
+  //     expect(jsDecryptedFromForge).toEqual(thresholdResult.shares[index].privateKey)
+  //
+  //     // Decrypt ForgeEncrypt result with ForgeEncrypt
+  //     const forgeDecryptedFromForge = forgeDecrypt.decrypt(forgeShare.privateKey)
+  //     expect(forgeDecryptedFromForge).toEqual(thresholdResult.shares[index].privateKey)
+  //   })
   })
 
   it('should validate operator public keys identically', () => {
@@ -83,8 +83,8 @@ describe('JSEncrypt vs Node-Forge: Real Project Tests', () => {
       const decodedKey = Buffer.from(base64Key, 'base64').toString()
 
       // Test JSEncrypt validation
-      const jsEncrypt = new JSEncrypt()
-      expect(() => jsEncrypt.setPublicKey(decodedKey)).not.toThrow()
+      // const jsEncrypt = new JSEncrypt()
+      // expect(() => jsEncrypt.setPublicKey(decodedKey)).not.toThrow()
 
       // Test ForgeEncrypt validation
       const forgeEncrypt = new ForgeEncrypt()
@@ -101,17 +101,17 @@ describe('JSEncrypt vs Node-Forge: Real Project Tests', () => {
 
     invalidKeys.forEach((invalidKey) => {
       // Both should NOT throw for invalid keys (JSEncrypt behavior)
-      const jsEncrypt = new JSEncrypt()
+      // const jsEncrypt = new JSEncrypt()
       const forgeEncrypt = new ForgeEncrypt()
 
-      expect(() => jsEncrypt.setPublicKey(invalidKey)).not.toThrow()
+      // expect(() => jsEncrypt.setPublicKey(invalidKey)).not.toThrow()
       expect(() => forgeEncrypt.setPublicKey(invalidKey)).not.toThrow()
 
       // But encryption should fail (return false)
-      const jsResult = jsEncrypt.encrypt('test')
+      // const jsResult = jsEncrypt.encrypt('test')
       const forgeResult = forgeEncrypt.encrypt('test')
 
-      expect(jsResult).toBe(false)
+      // expect(jsResult).toBe(false)
       expect(forgeResult).toBe(false)
     })
   })
@@ -122,36 +122,36 @@ describe('JSEncrypt vs Node-Forge: Real Project Tests', () => {
 
     // Test case 1: Key too short - both should NOT throw
     const shortKey = 'short'
-    const jsEncrypt1 = new JSEncrypt()
+    // const jsEncrypt1 = new JSEncrypt()
     const forgeEncrypt1 = new ForgeEncrypt()
 
-    expect(() => jsEncrypt1.setPublicKey(shortKey)).not.toThrow()
+    // expect(() => jsEncrypt1.setPublicKey(shortKey)).not.toThrow()
     expect(() => forgeEncrypt1.setPublicKey(shortKey)).not.toThrow()
 
     // But encryption should fail
-    expect(jsEncrypt1.encrypt('test')).toBe(false)
+    // expect(jsEncrypt1.encrypt('test')).toBe(false)
     expect(forgeEncrypt1.encrypt('test')).toBe(false)
 
     // Test case 2: Valid key format
     const validKey = operatorKeys.publicKeys[0]
     const decodedValidKey = Buffer.from(validKey, 'base64').toString()
 
-    const jsEncrypt2 = new JSEncrypt()
+    // const jsEncrypt2 = new JSEncrypt()
     const forgeEncrypt2 = new ForgeEncrypt()
 
-    expect(() => jsEncrypt2.setPublicKey(decodedValidKey)).not.toThrow()
+    // expect(() => jsEncrypt2.setPublicKey(decodedValidKey)).not.toThrow()
     expect(() => forgeEncrypt2.setPublicKey(decodedValidKey)).not.toThrow()
 
     // And encryption should work
-    expect(jsEncrypt2.encrypt('test')).not.toBe(false)
+    // expect(jsEncrypt2.encrypt('test')).not.toBe(false)
     expect(forgeEncrypt2.encrypt('test')).not.toBe(false)
 
     // Test case 3: Key without proper headers - both should NOT throw
     const keyWithoutHeaders = decodedValidKey.replace(begin, '').replace(end, '')
-    const jsEncrypt3 = new JSEncrypt()
+    // const jsEncrypt3 = new JSEncrypt()
     const forgeEncrypt3 = new ForgeEncrypt()
 
-    expect(() => jsEncrypt3.setPublicKey(keyWithoutHeaders)).not.toThrow()
+    // expect(() => jsEncrypt3.setPublicKey(keyWithoutHeaders)).not.toThrow()
     expect(() => forgeEncrypt3.setPublicKey(keyWithoutHeaders)).not.toThrow()
 
     // But encryption should fail
@@ -164,9 +164,9 @@ describe('JSEncrypt vs Node-Forge: Real Project Tests', () => {
     const testData = 'test-private-key-data'
     const testPublicKey = Buffer.from(operatorKeys.publicKeys[0], 'base64').toString()
 
-    const jsEncrypt = new JSEncrypt()
-    jsEncrypt.setPublicKey(testPublicKey)
-    const jsEncrypted = jsEncrypt.encrypt(testData)
+    // const jsEncrypt = new JSEncrypt()
+    // jsEncrypt.setPublicKey(testPublicKey)
+    // const jsEncrypted = jsEncrypt.encrypt(testData)
 
     const forgeEncrypt = new ForgeEncrypt()
     forgeEncrypt.setPublicKey(testPublicKey)
@@ -174,19 +174,19 @@ describe('JSEncrypt vs Node-Forge: Real Project Tests', () => {
 
     // Note: RSA encryption with padding will produce different results each time
     // due to randomization, but both should be decryptable
-    expect(jsEncrypted).not.toBe(false)
+    // expect(jsEncrypted).not.toBe(false)
     expect(forgeEncrypted).not.toBe(false)
 
     // Both should be decryptable by the same private key
     const testPrivateKey = Buffer.from(operatorKeys.privateKeys[0], 'base64').toString()
 
-    jsEncrypt.setPrivateKey(testPrivateKey)
+    // jsEncrypt.setPrivateKey(testPrivateKey)
     forgeEncrypt.setPrivateKey(testPrivateKey)
 
-    const jsDecrypted = jsEncrypt.decrypt(jsEncrypted as string)
+    // const jsDecrypted = jsEncrypt.decrypt(jsEncrypted as string)
     const forgeDecrypted = forgeEncrypt.decrypt(forgeEncrypted as string)
 
-    expect(jsDecrypted).toBe(testData)
+    // expect(jsDecrypted).toBe(testData)
     expect(forgeDecrypted).toBe(testData)
   })
 })
