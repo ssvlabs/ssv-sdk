@@ -1,5 +1,5 @@
-import { p as process$1, d as decodeOperatorPublicKey, M as MapCache, S as Symbol$1, e as eq, U as Uint8Array$1, g as getAllKeys, a as getTag, i as isBuffer, b as Stack, c as isTypedArray$1, f as isArray$1, h as isObjectLike$1, s as stringifyBigints, j as isUndefined$1, t as tryCatch$1, k as configArgsSchema, l as chainIds, m as contracts, n as graph_endpoints, r as rest_endpoints, o as getClusterSnapshot$1, q as isKeySharesItem, u as registerValidatorsByClusterSizeLimits, v as createClusterId, w as createEmptyCluster, x as roundOperatorFee, y as globals, z as bigintMax, A as ensureNoKeysharesErrors, B as ensureValidatorsUniqueness, C as validateConsistentOperatorPublicKeys, D as validateConsistentOperatorIds, E as sortNumbers, K as KeysharesValidationError, F as KeysharesValidationErrors } from "./globals-DsbufPrE.mjs";
-import { H, G as G2, I } from "./globals-DsbufPrE.mjs";
+import { p as process$1, d as decodeOperatorPublicKey, M as MapCache, S as Symbol$1, e as eq, U as Uint8Array$1, g as getAllKeys, a as getTag, i as isBuffer, b as Stack, c as isTypedArray$1, f as isArray$1, h as isObjectLike$1, s as stringifyBigints, j as isUndefined$1, t as tryCatch$1, k as configArgsSchema, l as contracts, m as paid_graph_endpoints, n as graph_endpoints, r as rest_endpoints, o as getClusterSnapshot$1, q as isKeySharesItem, u as registerValidatorsByClusterSizeLimits, v as createClusterId, w as createEmptyCluster, x as roundOperatorFee, y as globals, z as bigintMax, A as ensureNoKeysharesErrors, B as ensureValidatorsUniqueness, C as validateConsistentOperatorPublicKeys, D as validateConsistentOperatorIds, E as sortNumbers, K as KeysharesValidationError, F as KeysharesValidationErrors } from "./globals-7R_00b4h.mjs";
+import { I, H, G as G2, J } from "./globals-7R_00b4h.mjs";
 import { encodeFunctionData, decodeEventLog, encodeAbiParameters, parseAbiParameters, isAddressEqual, zeroAddress } from "viem";
 import { SSVKeys, KeyShares, KeySharesItem } from "ssv-keys";
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
@@ -35571,7 +35571,7 @@ const parseRequestArgs = (documentOrOptions, variables, requestHeaders) => {
   };
 };
 const isConfig = (props) => {
-  return typeof props === "object" && props !== null && "publicClient" in props && "walletClient" in props && "chain" in props && "api" in props && "graphQLClient" in props && "contractAddresses" in props && "contract" in props && "graphEndpoint" in props && "restEndpoint" in props;
+  return typeof props === "object" && props !== null && "publicClient" in props && "walletClient" in props && "chain" in props && "api" in props && "contractAddresses" in props && "contract" in props && "subgraph" in props && "rest" in props;
 };
 const createContractInteractions = ({
   walletClient,
@@ -35608,35 +35608,41 @@ const createContractInteractions = ({
   };
 };
 const createConfig = (props) => {
-  const parsed = configArgsSchema.parse(props);
-  if (!parsed.walletClient.chain || !parsed.publicClient.chain || !chainIds.includes(parsed.walletClient.chain?.id) || !chainIds.includes(parsed.publicClient.chain?.id))
-    throw new Error(`Chain must be one of ${chainIds.join(", ")}`);
-  const chainId = parsed.walletClient.chain.id;
+  const { walletClient, publicClient, extendedConfig } = configArgsSchema.parse(props);
+  const hasAPIKey = Boolean(extendedConfig?.subgraph?.apiKey);
+  const chainId = walletClient.chain.id;
   const chainContracts = contracts[chainId];
   const addresses = {
-    setter: parsed._?.contractAddresses?.setter || chainContracts.setter,
-    getter: parsed._?.contractAddresses?.getter || chainContracts.getter,
-    token: parsed._?.contractAddresses?.token || chainContracts.token
+    setter: extendedConfig?.contracts?.setter || chainContracts.setter,
+    getter: extendedConfig?.contracts?.getter || chainContracts.getter,
+    token: extendedConfig?.contracts?.token || chainContracts.token
   };
   const contract = createContractInteractions({
-    walletClient: parsed.walletClient,
-    publicClient: parsed.publicClient,
+    walletClient,
+    publicClient,
     addresses
   });
-  const graphEndpoint = parsed._?.graphUrl || graph_endpoints[chainId];
-  const restEndpoint = parsed._?.restUrl || rest_endpoints[chainId];
-  const graphQLClient = new GraphQLClient(graphEndpoint);
-  return {
-    publicClient: parsed.publicClient,
-    walletClient: parsed.walletClient,
-    chain: parsed.walletClient.chain,
+  const graphEndpoint = extendedConfig?.subgraph?.endpoint || (hasAPIKey ? paid_graph_endpoints[chainId] : graph_endpoints[chainId]);
+  const restEndpoint = extendedConfig?.rest?.endpoint || rest_endpoints[chainId];
+  const graphQLClient = new GraphQLClient(
     graphEndpoint,
-    restEndpoint,
+    hasAPIKey ? { headers: { Authorization: `Bearer ${extendedConfig?.subgraph?.apiKey}` } } : void 0
+  );
+  return {
+    publicClient,
+    walletClient,
+    chain: walletClient.chain,
     api: {
       ...createQueries(graphQLClient),
       ...createSSVAPI(restEndpoint)
     },
-    graphQLClient,
+    subgraph: {
+      client: graphQLClient,
+      endpoint: graphEndpoint
+    },
+    rest: {
+      endpoint: restEndpoint
+    },
     contractAddresses: addresses,
     contract
   };
@@ -36167,7 +36173,7 @@ class SSVSDK {
 }
 export {
   SSVSDK,
-  chainIds,
+  I as chainIds,
   H as chains,
   contracts,
   createClusterManager,
@@ -36193,7 +36199,8 @@ export {
   graph_endpoints,
   G2 as hoodi,
   isConfig,
-  I as networks,
+  J as networks,
+  paid_graph_endpoints,
   registerValidatorsByClusterSizeLimits,
   rest_endpoints
 };

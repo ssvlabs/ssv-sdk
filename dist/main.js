@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const globals = require("./globals-fh7gkHKO.js");
+const globals = require("./globals-ChIV00Ul.js");
 const viem = require("viem");
 const ssvKeys$2 = require("ssv-keys");
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
@@ -35572,7 +35572,7 @@ const parseRequestArgs = (documentOrOptions, variables, requestHeaders) => {
   };
 };
 const isConfig = (props) => {
-  return typeof props === "object" && props !== null && "publicClient" in props && "walletClient" in props && "chain" in props && "api" in props && "graphQLClient" in props && "contractAddresses" in props && "contract" in props && "graphEndpoint" in props && "restEndpoint" in props;
+  return typeof props === "object" && props !== null && "publicClient" in props && "walletClient" in props && "chain" in props && "api" in props && "contractAddresses" in props && "contract" in props && "subgraph" in props && "rest" in props;
 };
 const createContractInteractions = ({
   walletClient,
@@ -35609,35 +35609,41 @@ const createContractInteractions = ({
   };
 };
 const createConfig = (props) => {
-  const parsed = globals.configArgsSchema.parse(props);
-  if (!parsed.walletClient.chain || !parsed.publicClient.chain || !globals.chainIds.includes(parsed.walletClient.chain?.id) || !globals.chainIds.includes(parsed.publicClient.chain?.id))
-    throw new Error(`Chain must be one of ${globals.chainIds.join(", ")}`);
-  const chainId = parsed.walletClient.chain.id;
+  const { walletClient, publicClient, extendedConfig } = globals.configArgsSchema.parse(props);
+  const hasAPIKey = Boolean(extendedConfig?.subgraph?.apiKey);
+  const chainId = walletClient.chain.id;
   const chainContracts = globals.contracts[chainId];
   const addresses = {
-    setter: parsed._?.contractAddresses?.setter || chainContracts.setter,
-    getter: parsed._?.contractAddresses?.getter || chainContracts.getter,
-    token: parsed._?.contractAddresses?.token || chainContracts.token
+    setter: extendedConfig?.contracts?.setter || chainContracts.setter,
+    getter: extendedConfig?.contracts?.getter || chainContracts.getter,
+    token: extendedConfig?.contracts?.token || chainContracts.token
   };
   const contract = createContractInteractions({
-    walletClient: parsed.walletClient,
-    publicClient: parsed.publicClient,
+    walletClient,
+    publicClient,
     addresses
   });
-  const graphEndpoint = parsed._?.graphUrl || globals.graph_endpoints[chainId];
-  const restEndpoint = parsed._?.restUrl || globals.rest_endpoints[chainId];
-  const graphQLClient = new GraphQLClient(graphEndpoint);
-  return {
-    publicClient: parsed.publicClient,
-    walletClient: parsed.walletClient,
-    chain: parsed.walletClient.chain,
+  const graphEndpoint = extendedConfig?.subgraph?.endpoint || (hasAPIKey ? globals.paid_graph_endpoints[chainId] : globals.graph_endpoints[chainId]);
+  const restEndpoint = extendedConfig?.rest?.endpoint || globals.rest_endpoints[chainId];
+  const graphQLClient = new GraphQLClient(
     graphEndpoint,
-    restEndpoint,
+    hasAPIKey ? { headers: { Authorization: `Bearer ${extendedConfig?.subgraph?.apiKey}` } } : void 0
+  );
+  return {
+    publicClient,
+    walletClient,
+    chain: walletClient.chain,
     api: {
       ...createQueries(graphQLClient),
       ...createSSVAPI(restEndpoint)
     },
-    graphQLClient,
+    subgraph: {
+      client: graphQLClient,
+      endpoint: graphEndpoint
+    },
+    rest: {
+      endpoint: restEndpoint
+    },
     contractAddresses: addresses,
     contract
   };
@@ -36173,6 +36179,7 @@ exports.globals = globals.globals;
 exports.graph_endpoints = globals.graph_endpoints;
 exports.hoodi = globals.hoodi;
 exports.networks = globals.networks;
+exports.paid_graph_endpoints = globals.paid_graph_endpoints;
 exports.registerValidatorsByClusterSizeLimits = globals.registerValidatorsByClusterSizeLimits;
 exports.rest_endpoints = globals.rest_endpoints;
 exports.SSVSDK = SSVSDK;

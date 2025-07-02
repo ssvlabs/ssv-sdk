@@ -300,7 +300,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -591,7 +591,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -899,7 +899,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -1191,7 +1191,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -1220,7 +1220,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -1512,7 +1512,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -1540,7 +1540,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -1831,7 +1831,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -1858,7 +1858,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -2149,7 +2149,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -2457,7 +2457,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -2749,7 +2749,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -2778,7 +2778,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -3070,7 +3070,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -3098,7 +3098,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -3389,7 +3389,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -3416,7 +3416,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -3707,7 +3707,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -3735,7 +3735,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;
@@ -4027,7 +4027,7 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             maxPriorityFeePerGas?: bigint | undefined;
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
-            authorizationList?: import('viem/experimental').AuthorizationList<number, boolean> | undefined;
+            authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
             dataSuffix?: `0x${string}` | undefined;

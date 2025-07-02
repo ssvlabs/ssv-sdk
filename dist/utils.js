@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const globals = require("./globals-fh7gkHKO.js");
+const globals = require("./globals-ChIV00Ul.js");
 const waitForTransaction = async (config, fn) => {
   const hash = await fn;
   return config.publicClient.waitForTransactionReceipt({ hash });
