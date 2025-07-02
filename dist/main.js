@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const index = require("./index-DX2HBHu2.js");
-const keys = require("./SSVKeys-jxjNAYhT.js");
+const keys = require("./SSVKeys-C22o0Fby.js");
 const globals = require("./globals-C3yvNxbY.js");
 const viem = require("viem");
 var main = { exports: {} };
