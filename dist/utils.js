@@ -1,12 +1,15 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const globals = require("./globals-C3yvNxbY.js");
+const globals = require("./globals-BPPTJ9ZU.js");
 const waitForTransaction = async (config, fn) => {
   const hash = await fn;
   return config.publicClient.waitForTransactionReceipt({ hash });
 };
 exports.KeysharesValidationError = globals.KeysharesValidationError;
-exports.KeysharesValidationErrors = globals.KeysharesValidationErrors;
+Object.defineProperty(exports, "KeysharesValidationErrors", {
+  enumerable: true,
+  get: () => globals.KeysharesValidationErrors
+});
 exports.KeysharesValidationErrorsMessages = globals.KeysharesValidationErrorsMessages;
 exports._percentageFormatter = globals._percentageFormatter;
 exports.add0x = globals.add0x;

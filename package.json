@@ -13,22 +13,22 @@
   ],
   "main": "./dist/main.js",
   "module": "./dist/main.mjs",
-  "types": "./dist/main.d.ts",
+  "types": "./dist/types/main.d.ts",
   "exports": {
     ".": {
       "import": "./dist/main.mjs",
       "require": "./dist/main.js",
-      "types": "./dist/main.d.ts"
+      "types": "./dist/types/main.d.ts"
     },
     "./utils": {
       "import": "./dist/utils.mjs",
       "require": "./dist/utils.js",
-      "types": "./dist/utils/index.d.ts"
+      "types": "./dist/types/utils/index.d.ts"
     },
     "./keys": {
       "import": "./dist/keys.mjs",
       "require": "./dist/keys.js",
-      "types": "./dist/libs/ssv-keys/SSVKeys.d.ts"
+      "types": "./dist/types/libs/ssv-keys/SSVKeys.d.ts"
     }
   },
   "scripts": {
@@ -129,7 +129,6 @@
     "dotenv": "^16.4.5",
     "eth2-keystore-js": "^1.0.8",
     "graphql-request": "^7.2.0",
-    "jsencrypt": "^3.3.2",
     "lodash-es": "^4.17.21",
     "node-forge": "^1.3.1",
     "scrypt-js": "^3.0.1",

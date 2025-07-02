@@ -1,2 +1,2 @@
-export { SSVKeys } from './SSVKeys';
-export { KeySharesItem } from './KeyShares/KeySharesItem';
+export * from './SSVKeys';
+export * from './KeyShares/KeySharesItem';

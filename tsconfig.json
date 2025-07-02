@@ -18,7 +18,7 @@
     /* Linting */
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "rootDir": ".",
+    "rootDir": "src",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -28,10 +28,10 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "ssv-sdk": ["./dist/*"]
+      "@/*": ["./src/*"]
+      //      "ssv-sdk": ["./dist/*"]
     }
   },
-  "include": ["src/**/*", "hardhat.types.d.ts"],
-  "exclude": ["node_modules", "dist", "src/graphql/**/*"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "src/graphql/**/*", "**/*.test.ts", "**/*.spec.ts"]
 }

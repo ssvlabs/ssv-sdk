@@ -1,14 +1,10 @@
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 export default defineConfig({
   plugins: [
-    nodePolyfills({
-      include: ['crypto'],
-    }),
-    dts({ include: ['src/**/*.ts'], exclude: ['src/**/*.spec.ts', 'src/**/*.test.ts'] }),
+    dts({ include: ['src'], exclude: ['src/**/*.spec.ts', 'src/**/*.test.ts'] }),
   ],
   resolve: {
     alias: {
@@ -17,7 +13,7 @@ export default defineConfig({
   },
 
   build: {
-    target: 'es2022',
+    target: 'node22',
     minify: false,
     lib: {
       entry: {
@@ -28,8 +24,30 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: ['viem'],
+      external: [
+        'viem',
+        'abitype',
+        'bls-eth-wasm',
+        'class-validator',
+        'dotenv',
+        'graphql-request',
+        'lodash-es',
+        'node-forge',
+        'scrypt-js',
+        'tslib',
+        'zod',
+
+        'fs',
+        'path',
+        'crypto',
+        'url',
+        'util',
+        'stream',
+        'buffer',
+        'os',
+      ],
     },
+    outDir: 'dist',
   },
   optimizeDeps: {
     include: ['src/graphql/graphql.ts'],
