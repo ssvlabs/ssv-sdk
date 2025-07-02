@@ -4,7 +4,7 @@ import dts from 'vite-plugin-dts'
 
 export default defineConfig({
   plugins: [
-    dts({ include: ['src'], exclude: ['src/**/*.spec.ts', 'src/**/*.test.ts'] }),
+    dts({ include: ['src/**/*.ts'], exclude: ['src/**/*.spec.ts', 'src/**/*.test.ts'] }),
   ],
   resolve: {
     alias: {
