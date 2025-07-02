@@ -1,0 +1,3 @@
+{
+  "extends": ["github>ssvlabs/shared-configs//renovate/renovate.json"]
+}
