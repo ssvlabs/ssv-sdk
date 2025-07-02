@@ -62,7 +62,7 @@
     "@nomicfoundation/hardhat-viem": "^2.0.6",
     "@openzeppelin/contracts": "^4.9.6",
     "@openzeppelin/contracts-upgradeable": "^4.9.6",
-    "@openzeppelin/hardhat-upgrades": "^3.0.5",
+    "@openzeppelin/hardhat-upgrades": "^3.8.0",
     "@parcel/watcher": "^2.4.1",
     "@release-it/conventional-changelog": "^8.0.1",
     "@rollup/plugin-alias": "^5.1.1",
