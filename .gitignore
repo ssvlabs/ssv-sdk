@@ -27,5 +27,5 @@ coverage
 .env
 
 
-/hardhat/artifacts/
-/hardhat/cache/
+/hardhat/artifacts/*
+/hardhat/cache/*
