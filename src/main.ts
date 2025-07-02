@@ -6,5 +6,6 @@ export * from '@/libs/api'
 export * from '@/libs/cluster'
 export * from '@/libs/operator'
 export * from '@/libs/utils'
+export * from '@/libs/ssv-keys'
 export * from '@/sdk'
 

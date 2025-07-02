@@ -10042,6 +10042,8 @@ class SSVSDK {
     this.utils = createUtils(this.config);
   }
 }
+exports.KeySharesItem = keys.KeySharesItem;
+exports.SSVKeys = keys.SSVKeys;
 exports.chainIds = globals.chainIds;
 exports.chains = globals.chains;
 exports.contracts = globals.contracts;

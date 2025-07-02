@@ -10042,6 +10042,8 @@ class SSVSDK {
   }
 }
 export {
+  KeySharesItem,
+  SSVKeys,
   SSVSDK,
   chainIds,
   G as chains,

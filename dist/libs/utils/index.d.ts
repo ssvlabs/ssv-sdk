@@ -15,7 +15,7 @@ export declare const createUtils: (config: ConfigReturnType) => {
         account: import('abitype').Address;
         operators: Pick<import('../../types/operator').Operator, "id" | "publicKey">[];
         keyshares: string | object;
-    }) => Promise<import('../ssv-keys/KeyShares/KeySharesItem').KeySharesItem[]>;
+    }) => Promise<import('../ssv-keys').KeySharesItem[]>;
     validateSharesPreRegistration: RemoveConfigArg<typeof validateSharesPreRegistration>;
     getOperatorCapacity: RemoveConfigArg<typeof getOperatorCapacity>;
     getClusterBalance: RemoveConfigArg<typeof getClusterBalance>;
