@@ -17,5 +17,5 @@ export type AbiInputsToParams<T extends readonly AbiParameter[]> = {
 export declare const paramsToArray: <Fn extends AbiFunction, Params extends Record<string, AbiTypeToPrimitiveType<AbiType>>>({ params, abiFunction, }: {
     params: Params;
     abiFunction: Fn;
-}) => (Fn["inputs"] extends infer T_2 extends readonly AbiParameter[] ? { [key_1 in keyof T_2]: AbiParameterToPrimitiveType<Fn["inputs"][key_1], import('abitype').AbiParameterKind>; } : never) extends infer T ? { [key in keyof T]: (Fn["inputs"] extends infer T_1 extends readonly AbiParameter[] ? { [key_1 in keyof T_1]: AbiParameterToPrimitiveType<Fn["inputs"][key_1], import('abitype').AbiParameterKind>; } : never)[key]; } : never;
+}) => (Fn["inputs"] extends infer T_2 extends readonly import('abitype').AbiParameter[] ? { [key_1 in keyof T_2]: import('abitype').AbiParameterToPrimitiveType<Fn["inputs"][key_1], import('abitype').AbiParameterKind>; } : never) extends infer T ? { [key in keyof T]: (Fn["inputs"] extends infer T_1 extends readonly import('abitype').AbiParameter[] ? { [key_1 in keyof T_1]: import('abitype').AbiParameterToPrimitiveType<Fn["inputs"][key_1], import('abitype').AbiParameterKind>; } : never)[key]; } : never;
 export {};
