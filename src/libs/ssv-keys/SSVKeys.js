@@ -28,9 +28,9 @@ export class SSVKeys {
      */
     async extractKeys(data, password) {
         const privateKey = await new EthereumKeyStore(data).getPrivateKey(password);
-        // if (!bls.deserializeHexStrToSecretKey) {
-        //   await bls.init(bls.BLS12_381);
-        // }
+        if (!bls.deserializeHexStrToSecretKey) {
+            await bls.init(bls.BLS12_381);
+        }
         return {
             privateKey: `0x${privateKey}`,
             publicKey: `0x${bls.deserializeHexStrToSecretKey(privateKey).getPublicKey().serializeToHexStr()}`

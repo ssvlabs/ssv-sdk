@@ -27,6 +27,9 @@ const hexArrayToBytes = (hexArr: string[]): Buffer => {
  * and returns the signature in hexadecimal format, prefixed with '0x'.
  */
 const buildSignature = async(dataToSign: string, privateKeyHex: string): Promise<string> => {
+  if (!bls.deserializeHexStrToSecretKey) {
+    await bls.init(bls.BLS12_381);
+  }
   const privateKey = bls.deserializeHexStrToSecretKey(privateKeyHex.replace('0x', ''));
 
   const messageHash = keccak256(toBytes(dataToSign));
@@ -61,6 +64,9 @@ const validateSignature = async(signedData: string, signatureHex: string, public
 }
 
 export const privateToPublicKey = async(privateKey: string): Promise<string> => {
+  if (!bls.deserializeHexStrToSecretKey) {
+    await bls.init(bls.BLS12_381);
+  }
   return `0x${bls.deserializeHexStrToSecretKey(privateKey.replace('0x', '')).getPublicKey().serializeToHexStr()}`;
 }
 

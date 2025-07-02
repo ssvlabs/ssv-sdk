@@ -2,9 +2,9 @@
 import bls from '@/libs/ssv-keys/BLS';
 import { Threshold } from '@/libs/ssv-keys/Threshold';
 export const sharesSignatures = async (_privateKey, operators, message, isThreshold) => {
-    // if (!bls.deserializeHexStrToSecretKey) {
-    //   await bls.init(bls.BLS12_381);
-    // }
+    if (!bls.deserializeHexStrToSecretKey) {
+        await bls.init(bls.BLS12_381);
+    }
     const threshold = await new Threshold().create(_privateKey, operators);
     const privateKey = bls.deserializeHexStrToSecretKey(_privateKey.replace('0x', ''));
     const publicKey = privateKey.getPublicKey();
