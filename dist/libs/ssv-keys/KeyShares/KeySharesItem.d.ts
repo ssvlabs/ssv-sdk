@@ -20,7 +20,7 @@ export interface IKeySharesFromSignatureData {
 /**
  * Key shares file data interface.
  */
-declare class KeySharesItem {
+export declare class KeySharesItem {
     data: KeySharesData;
     payload: KeySharesPayload;
     error: SSVKeysException | undefined;
@@ -57,5 +57,4 @@ declare class KeySharesItem {
      */
     static fromJson(content: string | unknown): Promise<KeySharesItem>;
 }
-export { KeySharesItem };
 export type IKeySharesItem = InstanceType<typeof KeySharesItem>;

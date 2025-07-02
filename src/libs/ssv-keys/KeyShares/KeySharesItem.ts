@@ -38,7 +38,7 @@ const PUBLIC_KEY_LENGTH = 96
 /**
  * Key shares file data interface.
  */
-class KeySharesItem {
+export class KeySharesItem {
   @IsOptional()
   @ValidateNested()
   public data: KeySharesData
@@ -212,7 +212,5 @@ class KeySharesItem {
     return instance
   }
 }
-
-export { KeySharesItem };
 
 export type IKeySharesItem = InstanceType<typeof KeySharesItem>
