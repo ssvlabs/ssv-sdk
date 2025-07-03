@@ -6,7 +6,7 @@ type RemoveValidatorsProps = SmartFnWriteOptions<{
     publicKeys: Hex[];
 }>;
 export declare const removeValidators: (config: ConfigReturnType, { args: { id, publicKeys }, ...writeOptions }: RemoveValidatorsProps) => Promise<{
-    hash: import('viem').Hash;
+    hash: `0x${string}`;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({
             eventName: "AdminChanged";

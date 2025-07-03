@@ -5,7 +5,7 @@ type SetFeeRecipientProps = SmartFnWriteOptions<{
     recipient: Address;
 }>;
 export declare const setFeeRecipient: (config: ConfigReturnType, { args: { recipient }, ...writeOptions }: SetFeeRecipientProps) => Promise<{
-    hash: import('viem').Hash;
+    hash: `0x${string}`;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({
             eventName: "AdminChanged";

@@ -6,7 +6,7 @@ type ExitValidatorsProps = SmartFnWriteOptions<{
     operatorIds: bigint[];
 }>;
 export declare const exitValidators: (config: ConfigReturnType, { args: { publicKeys, operatorIds }, ...writeOptions }: ExitValidatorsProps) => Promise<{
-    hash: import('viem').Hash;
+    hash: `0x${string}`;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({
             eventName: "AdminChanged";

@@ -7,7 +7,7 @@ type WithdrawArgs = SmartFnWriteOptions<{
     amount: bigint;
 }>;
 export declare const withdraw: (config: ConfigReturnType, { args: { operatorId, amount }, ...writeOptions }: WithdrawArgs) => Promise<{
-    hash: import('viem').Hash;
+    hash: `0x${string}`;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({
             eventName: "AdminChanged";
@@ -287,7 +287,7 @@ type RegisterOperatorArgs = SmartFnWriteOptions<{
     publicKey: string;
 }>;
 export declare const registerOperator: (config: ConfigReturnType, { args: { isPrivate, yearlyFee, publicKey }, ...writeOptions }: RegisterOperatorArgs) => Promise<{
-    hash: import('viem').Hash;
+    hash: `0x${string}`;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({
             eventName: "AdminChanged";
@@ -566,7 +566,7 @@ type SetOperatorWhitelistsArgs = SmartFnWriteOptions<{
     contractAddress: Address;
 }>;
 export declare const setOperatorWhitelists: (config: ConfigReturnType, { args: { operatorIds, contractAddress }, ...writeOptions }: SetOperatorWhitelistsArgs) => Promise<{
-    hash: import('viem').Hash;
+    hash: `0x${string}`;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({
             eventName: "AdminChanged";

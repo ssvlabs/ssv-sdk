@@ -5,7 +5,7 @@ type ReactivateClusterProps = SmartFnWriteOptions<{
     amount: bigint;
 }>;
 export declare const reactivateCluster: (config: ConfigReturnType, { args: { id, amount }, ...writeOptions }: ReactivateClusterProps) => Promise<{
-    hash: import('viem').Hash;
+    hash: `0x${string}`;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({
             eventName: "AdminChanged";

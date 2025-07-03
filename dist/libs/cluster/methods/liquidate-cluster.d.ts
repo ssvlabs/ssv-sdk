@@ -4,7 +4,7 @@ type LiquidateClusterProps = SmartFnWriteOptions<{
     id: string;
 }>;
 export declare const liquidateCluster: (config: ConfigReturnType, { args: { id }, ...writeOptions }: LiquidateClusterProps) => Promise<{
-    hash: import('viem').Hash;
+    hash: `0x${string}`;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({
             eventName: "AdminChanged";

@@ -17,5 +17,5 @@ export declare class KeysharesValidationError extends Error {
 }
 export declare const validateConsistentOperatorIds: (keyshares: KeySharesItem[]) => number[];
 export declare const ensureValidatorsUniqueness: (keyshares: KeySharesItem[]) => boolean;
-export declare const validateConsistentOperatorPublicKeys: (keyshares: KeySharesItem[], operators: Pick<Operator, "id" | "publicKey">[]) => true;
+export declare const validateConsistentOperatorPublicKeys: (keyshares: KeySharesItem[], operators: Pick<Operator, 'id' | 'publicKey'>[]) => true;
 export declare const ensureNoKeysharesErrors: (keyshares: KeySharesItem[]) => boolean;
