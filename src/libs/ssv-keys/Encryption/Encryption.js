@@ -1,4 +1,3 @@
-// import JSEncrypt from '@/libs/ssv-keys/JSEncrypt';
 import { ForgeEncrypt } from '@/libs/ssv-keys/Encryption/utils';
 import { OperatorPublicKeyError } from '@/libs/ssv-keys/exceptions/operator';
 import { OperatorPublicKeyValidator } from '@/libs/ssv-keys/validators';
