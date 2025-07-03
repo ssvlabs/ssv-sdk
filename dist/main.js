@@ -8,9 +8,7 @@ const globals = require("./globals-BPPTJ9ZU.js");
 const lodashEs = require("lodash-es");
 const viem = require("viem");
 const graphqlRequest = require("graphql-request");
-const KeySharesItem = require("./KeySharesItem-eOUocNIf.js");
-const bls = require("bls-eth-wasm");
-const classValidator = require("class-validator");
+const KeyShares = require("./KeyShares-DjdEcoN6.js");
 var main = { exports: {} };
 const version$1 = "16.6.1";
 const require$$4 = {
@@ -23,7 +21,7 @@ const crypto = crypto$1;
 const packageJson = require$$4;
 const version = packageJson.version;
 const LINE = /(?:^|^)\s*(?:export\s+)?([\w.-]+)(?:\s*=\s*?|:\s+?)(\s*'(?:\\'|[^'])*'|\s*"(?:\\"|[^"])*"|\s*`(?:\\`|[^`])*`|[^#\r\n]+)?\s*(?:#.*)?(?:$|$)/mg;
-function parse$2(src) {
+function parse(src) {
   const obj = {};
   let lines = src.toString();
   lines = lines.replace(/\r\n?/mg, "\n");
@@ -144,9 +142,9 @@ function _resolveHome(envPath) {
   return envPath[0] === "~" ? path.join(os.homedir(), envPath.slice(1)) : envPath;
 }
 function _configVault(options2) {
-  const debug2 = Boolean(options2 && options2.debug);
+  const debug = Boolean(options2 && options2.debug);
   const quiet = options2 && "quiet" in options2 ? options2.quiet : true;
-  if (debug2 || !quiet) {
+  if (debug || !quiet) {
     _log("Loading env from encrypted .env.vault");
   }
   const parsed = DotenvModule._parseVault(options2);
@@ -160,12 +158,12 @@ function _configVault(options2) {
 function configDotenv(options2) {
   const dotenvPath = path.resolve(process.cwd(), ".env");
   let encoding = "utf8";
-  const debug2 = Boolean(options2 && options2.debug);
+  const debug = Boolean(options2 && options2.debug);
   const quiet = options2 && "quiet" in options2 ? options2.quiet : true;
   if (options2 && options2.encoding) {
     encoding = options2.encoding;
   } else {
-    if (debug2) {
+    if (debug) {
       _debug("No encoding is specified. UTF-8 is used by default");
     }
   }
@@ -187,7 +185,7 @@ function configDotenv(options2) {
       const parsed = DotenvModule.parse(fs.readFileSync(path2, { encoding }));
       DotenvModule.populate(parsedAll, parsed, options2);
     } catch (e) {
-      if (debug2) {
+      if (debug) {
         _debug(`Failed to load ${path2} ${e.message}`);
       }
       lastError = e;
@@ -198,7 +196,7 @@ function configDotenv(options2) {
     processEnv = options2.processEnv;
   }
   DotenvModule.populate(processEnv, parsedAll, options2);
-  if (debug2 || !quiet) {
+  if (debug || !quiet) {
     const keysCount = Object.keys(parsedAll).length;
     const shortPaths = [];
     for (const filePath of optionPaths) {
@@ -206,7 +204,7 @@ function configDotenv(options2) {
         const relative = path.relative(process.cwd(), filePath);
         shortPaths.push(relative);
       } catch (e) {
-        if (debug2) {
+        if (debug) {
           _debug(`Failed to load ${filePath} ${e.message}`);
         }
         lastError = e;
@@ -259,7 +257,7 @@ function decrypt(encrypted, keyStr) {
   }
 }
 function populate(processEnv, parsed, options2 = {}) {
-  const debug2 = Boolean(options2 && options2.debug);
+  const debug = Boolean(options2 && options2.debug);
   const override = Boolean(options2 && options2.override);
   if (typeof parsed !== "object") {
     const err = new Error("OBJECT_REQUIRED: Please check the processEnv argument being passed to populate");
@@ -271,7 +269,7 @@ function populate(processEnv, parsed, options2 = {}) {
       if (override === true) {
         processEnv[key] = parsed[key];
       }
-      if (debug2) {
+      if (debug) {
         if (override === true) {
           _debug(`"${key}" is already defined and WAS overwritten`);
         } else {
@@ -289,7 +287,7 @@ const DotenvModule = {
   _parseVault,
   config,
   decrypt,
-  parse: parse$2,
+  parse,
   populate
 };
 main.exports.configDotenv = DotenvModule.configDotenv;
@@ -321,10 +319,10 @@ if (process.env.DOTENV_CONFIG_DOTENV_KEY != null) {
   options.DOTENV_KEY = process.env.DOTENV_CONFIG_DOTENV_KEY;
 }
 var envOptions = options;
-const re$2 = /^dotenv_config_(encoding|path|quiet|debug|override|DOTENV_KEY)=(.+)$/;
+const re = /^dotenv_config_(encoding|path|quiet|debug|override|DOTENV_KEY)=(.+)$/;
 var cliOptions = function optionMatcher(args) {
   const options2 = args.reduce(function(acc, cur) {
-    const matches = cur.match(re$2);
+    const matches = cur.match(re);
     if (matches) {
       acc[matches[1]] = matches[2];
     }
@@ -5352,118 +5350,6 @@ const reactivateCluster = async (config2, { args: { id, amount }, ...writeOption
     ...writeOptions
   });
 };
-class SSVKeys {
-  constructor() {
-    Object.defineProperty(this, "threshold", {
-      enumerable: true,
-      configurable: true,
-      writable: true,
-      value: void 0
-    });
-  }
-  /**
-   * Extract private key from keystore data using keystore password.
-   * Generally can be used in browsers when the keystore data has been provided by browser.
-   * @param data
-   * @param password
-   */
-  async extractKeys(data, password) {
-    const privateKey = await new KeySharesItem.EthereumKeyStore(data).getPrivateKey(password);
-    if (!bls.deserializeHexStrToSecretKey) {
-      await bls.init(bls.BLS12_381);
-    }
-    return {
-      privateKey: `0x${privateKey}`,
-      publicKey: `0x${bls.deserializeHexStrToSecretKey(privateKey).getPublicKey().serializeToHexStr()}`
-    };
-  }
-  /**
-   * Build threshold using private key and list of operators.
-   * @param privateKey
-   * @param operators
-   */
-  async createThreshold(privateKey, operators) {
-    const sortedOperators = KeySharesItem.operatorSortedList(operators);
-    this.threshold = await new KeySharesItem.Threshold().create(privateKey, sortedOperators.map((item) => item.id));
-    return this.threshold;
-  }
-  /**
-   * Encrypt operators shares using operators list (id, publicKey).
-   * @param operators
-   * @param shares
-   */
-  async encryptShares(operators, shares) {
-    const sortedOperators = KeySharesItem.operatorSortedList(operators);
-    const decodedOperatorPublicKeys = sortedOperators.map((item) => Buffer.from(item.operatorKey, "base64").toString());
-    return new KeySharesItem.Encryption(decodedOperatorPublicKeys, shares).encrypt();
-  }
-  /**
-   * Build shares from private key, operators list
-   * @param privateKey
-   * @param operators
-   */
-  async buildShares(privateKey, operators) {
-    const threshold = await this.createThreshold(privateKey, operators);
-    return this.encryptShares(operators, threshold.shares);
-  }
-  /**
-   * Getting threshold if it has been created before.
-   */
-  getThreshold() {
-    return this.threshold;
-  }
-  async validateSharesPostRegistration({ shares, operatorsCount, validatorPublicKey, isAccountExists, ownerAddress, ownerNonce, blockNumber }) {
-    const keySharesItem = new KeySharesItem.KeySharesItem();
-    let restoredSharesPublicKeys;
-    let restoredSharesEncryptedKeys;
-    let sharesError = "";
-    let sharesErrorMessage = "";
-    let signatureError = "";
-    let signatureErrorMessage = "";
-    let errorMessage = "";
-    try {
-      const restoredShares = keySharesItem.buildSharesFromBytes(shares, operatorsCount);
-      const { sharesPublicKeys, encryptedKeys } = restoredShares;
-      restoredSharesPublicKeys = sharesPublicKeys;
-      restoredSharesEncryptedKeys = encryptedKeys;
-    } catch (e) {
-      sharesError = e.stack || e.trace || e;
-      sharesErrorMessage = e.message;
-      errorMessage = "Can not extract shares from bytes";
-    }
-    if (!sharesError && !errorMessage) {
-      const signatureData = { ownerNonce, publicKey: validatorPublicKey, ownerAddress };
-      try {
-        await keySharesItem.validateSingleShares(shares, signatureData);
-      } catch (e) {
-        signatureError = e.stack || e.trace || e;
-        signatureErrorMessage = e.message;
-        errorMessage = "Failed to validate single shares";
-        if (isAccountExists) {
-          errorMessage += `. Account exist for owner address: ${ownerAddress}`;
-        } else {
-          errorMessage += `. Account is not synced for owner address: ${ownerAddress}`;
-        }
-        if (ownerNonce) {
-          errorMessage += `. Used nonce: ${ownerNonce}`;
-        }
-        errorMessage += `. Signature Data: ${JSON.stringify(signatureData)}`;
-      }
-    }
-    return {
-      isValid: !sharesError && !signatureError && !errorMessage,
-      isSharesValid: !sharesError,
-      sharesPublicKeys: restoredSharesPublicKeys,
-      encryptedKeys: restoredSharesEncryptedKeys,
-      memo: !!sharesError || !!signatureError ? [{
-        message: errorMessage,
-        error: sharesError || signatureError,
-        data: `${sharesErrorMessage}${signatureErrorMessage ? ". " + signatureErrorMessage : ""}`,
-        blockNumber
-      }] : []
-    };
-  }
-}
 const registerValidators = async (config2, { args: { keyshares, depositAmount = 0n }, ...writeOptions }) => {
   const shares = keyshares.map((share) => {
     return globals.isKeySharesItem(share) ? share.payload : share;
@@ -5540,7 +5426,7 @@ const registerValidatorsRawData = async (config2, { args: { keyshares, depositAm
     sharesData: shares.map((share) => share.sharesData)
   });
 };
-const ssvKeys$1 = new SSVKeys();
+const ssvKeys$1 = new KeyShares.SSVKeys();
 const validateSharesPostRegistration = async (config2, args) => {
   const receipt = await config2.publicClient.waitForTransactionReceipt({
     hash: args.txHash
@@ -5751,487 +5637,6 @@ const getClusterBalance = async (config2, { operatorIds }) => {
     operationalRunway
   };
 };
-const debug$1 = typeof process === "object" && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG) ? (...args) => console.error("SEMVER", ...args) : () => {
-};
-var debug_1 = debug$1;
-const MAX_LENGTH$1 = 256;
-const MAX_SAFE_INTEGER$1 = Number.MAX_SAFE_INTEGER || /* istanbul ignore next */
-9007199254740991;
-const MAX_SAFE_COMPONENT_LENGTH = 16;
-const MAX_SAFE_BUILD_LENGTH = MAX_LENGTH$1 - 6;
-var constants = {
-  MAX_LENGTH: MAX_LENGTH$1,
-  MAX_SAFE_COMPONENT_LENGTH,
-  MAX_SAFE_BUILD_LENGTH,
-  MAX_SAFE_INTEGER: MAX_SAFE_INTEGER$1
-};
-var re$1 = { exports: {} };
-(function(module2, exports2) {
-  const {
-    MAX_SAFE_COMPONENT_LENGTH: MAX_SAFE_COMPONENT_LENGTH2,
-    MAX_SAFE_BUILD_LENGTH: MAX_SAFE_BUILD_LENGTH2,
-    MAX_LENGTH: MAX_LENGTH2
-  } = constants;
-  const debug2 = debug_1;
-  exports2 = module2.exports = {};
-  const re2 = exports2.re = [];
-  const safeRe = exports2.safeRe = [];
-  const src = exports2.src = [];
-  const safeSrc = exports2.safeSrc = [];
-  const t2 = exports2.t = {};
-  let R = 0;
-  const LETTERDASHNUMBER = "[a-zA-Z0-9-]";
-  const safeRegexReplacements = [
-    ["\\s", 1],
-    ["\\d", MAX_LENGTH2],
-    [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH2]
-  ];
-  const makeSafeRegex = (value) => {
-    for (const [token, max] of safeRegexReplacements) {
-      value = value.split(`${token}*`).join(`${token}{0,${max}}`).split(`${token}+`).join(`${token}{1,${max}}`);
-    }
-    return value;
-  };
-  const createToken = (name, value, isGlobal) => {
-    const safe = makeSafeRegex(value);
-    const index = R++;
-    debug2(name, index, value);
-    t2[name] = index;
-    src[index] = value;
-    safeSrc[index] = safe;
-    re2[index] = new RegExp(value, isGlobal ? "g" : void 0);
-    safeRe[index] = new RegExp(safe, isGlobal ? "g" : void 0);
-  };
-  createToken("NUMERICIDENTIFIER", "0|[1-9]\\d*");
-  createToken("NUMERICIDENTIFIERLOOSE", "\\d+");
-  createToken("NONNUMERICIDENTIFIER", `\\d*[a-zA-Z-]${LETTERDASHNUMBER}*`);
-  createToken("MAINVERSION", `(${src[t2.NUMERICIDENTIFIER]})\\.(${src[t2.NUMERICIDENTIFIER]})\\.(${src[t2.NUMERICIDENTIFIER]})`);
-  createToken("MAINVERSIONLOOSE", `(${src[t2.NUMERICIDENTIFIERLOOSE]})\\.(${src[t2.NUMERICIDENTIFIERLOOSE]})\\.(${src[t2.NUMERICIDENTIFIERLOOSE]})`);
-  createToken("PRERELEASEIDENTIFIER", `(?:${src[t2.NONNUMERICIDENTIFIER]}|${src[t2.NUMERICIDENTIFIER]})`);
-  createToken("PRERELEASEIDENTIFIERLOOSE", `(?:${src[t2.NONNUMERICIDENTIFIER]}|${src[t2.NUMERICIDENTIFIERLOOSE]})`);
-  createToken("PRERELEASE", `(?:-(${src[t2.PRERELEASEIDENTIFIER]}(?:\\.${src[t2.PRERELEASEIDENTIFIER]})*))`);
-  createToken("PRERELEASELOOSE", `(?:-?(${src[t2.PRERELEASEIDENTIFIERLOOSE]}(?:\\.${src[t2.PRERELEASEIDENTIFIERLOOSE]})*))`);
-  createToken("BUILDIDENTIFIER", `${LETTERDASHNUMBER}+`);
-  createToken("BUILD", `(?:\\+(${src[t2.BUILDIDENTIFIER]}(?:\\.${src[t2.BUILDIDENTIFIER]})*))`);
-  createToken("FULLPLAIN", `v?${src[t2.MAINVERSION]}${src[t2.PRERELEASE]}?${src[t2.BUILD]}?`);
-  createToken("FULL", `^${src[t2.FULLPLAIN]}$`);
-  createToken("LOOSEPLAIN", `[v=\\s]*${src[t2.MAINVERSIONLOOSE]}${src[t2.PRERELEASELOOSE]}?${src[t2.BUILD]}?`);
-  createToken("LOOSE", `^${src[t2.LOOSEPLAIN]}$`);
-  createToken("GTLT", "((?:<|>)?=?)");
-  createToken("XRANGEIDENTIFIERLOOSE", `${src[t2.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`);
-  createToken("XRANGEIDENTIFIER", `${src[t2.NUMERICIDENTIFIER]}|x|X|\\*`);
-  createToken("XRANGEPLAIN", `[v=\\s]*(${src[t2.XRANGEIDENTIFIER]})(?:\\.(${src[t2.XRANGEIDENTIFIER]})(?:\\.(${src[t2.XRANGEIDENTIFIER]})(?:${src[t2.PRERELEASE]})?${src[t2.BUILD]}?)?)?`);
-  createToken("XRANGEPLAINLOOSE", `[v=\\s]*(${src[t2.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t2.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t2.XRANGEIDENTIFIERLOOSE]})(?:${src[t2.PRERELEASELOOSE]})?${src[t2.BUILD]}?)?)?`);
-  createToken("XRANGE", `^${src[t2.GTLT]}\\s*${src[t2.XRANGEPLAIN]}$`);
-  createToken("XRANGELOOSE", `^${src[t2.GTLT]}\\s*${src[t2.XRANGEPLAINLOOSE]}$`);
-  createToken("COERCEPLAIN", `${"(^|[^\\d])(\\d{1,"}${MAX_SAFE_COMPONENT_LENGTH2}})(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH2}}))?(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH2}}))?`);
-  createToken("COERCE", `${src[t2.COERCEPLAIN]}(?:$|[^\\d])`);
-  createToken("COERCEFULL", src[t2.COERCEPLAIN] + `(?:${src[t2.PRERELEASE]})?(?:${src[t2.BUILD]})?(?:$|[^\\d])`);
-  createToken("COERCERTL", src[t2.COERCE], true);
-  createToken("COERCERTLFULL", src[t2.COERCEFULL], true);
-  createToken("LONETILDE", "(?:~>?)");
-  createToken("TILDETRIM", `(\\s*)${src[t2.LONETILDE]}\\s+`, true);
-  exports2.tildeTrimReplace = "$1~";
-  createToken("TILDE", `^${src[t2.LONETILDE]}${src[t2.XRANGEPLAIN]}$`);
-  createToken("TILDELOOSE", `^${src[t2.LONETILDE]}${src[t2.XRANGEPLAINLOOSE]}$`);
-  createToken("LONECARET", "(?:\\^)");
-  createToken("CARETTRIM", `(\\s*)${src[t2.LONECARET]}\\s+`, true);
-  exports2.caretTrimReplace = "$1^";
-  createToken("CARET", `^${src[t2.LONECARET]}${src[t2.XRANGEPLAIN]}$`);
-  createToken("CARETLOOSE", `^${src[t2.LONECARET]}${src[t2.XRANGEPLAINLOOSE]}$`);
-  createToken("COMPARATORLOOSE", `^${src[t2.GTLT]}\\s*(${src[t2.LOOSEPLAIN]})$|^$`);
-  createToken("COMPARATOR", `^${src[t2.GTLT]}\\s*(${src[t2.FULLPLAIN]})$|^$`);
-  createToken("COMPARATORTRIM", `(\\s*)${src[t2.GTLT]}\\s*(${src[t2.LOOSEPLAIN]}|${src[t2.XRANGEPLAIN]})`, true);
-  exports2.comparatorTrimReplace = "$1$2$3";
-  createToken("HYPHENRANGE", `^\\s*(${src[t2.XRANGEPLAIN]})\\s+-\\s+(${src[t2.XRANGEPLAIN]})\\s*$`);
-  createToken("HYPHENRANGELOOSE", `^\\s*(${src[t2.XRANGEPLAINLOOSE]})\\s+-\\s+(${src[t2.XRANGEPLAINLOOSE]})\\s*$`);
-  createToken("STAR", "(<|>)?=?\\s*\\*");
-  createToken("GTE0", "^\\s*>=\\s*0\\.0\\.0\\s*$");
-  createToken("GTE0PRE", "^\\s*>=\\s*0\\.0\\.0-0\\s*$");
-})(re$1, re$1.exports);
-var reExports = re$1.exports;
-const looseOption = Object.freeze({ loose: true });
-const emptyOpts = Object.freeze({});
-const parseOptions$1 = (options2) => {
-  if (!options2) {
-    return emptyOpts;
-  }
-  if (typeof options2 !== "object") {
-    return looseOption;
-  }
-  return options2;
-};
-var parseOptions_1 = parseOptions$1;
-const numeric = /^[0-9]+$/;
-const compareIdentifiers$1 = (a, b) => {
-  const anum = numeric.test(a);
-  const bnum = numeric.test(b);
-  if (anum && bnum) {
-    a = +a;
-    b = +b;
-  }
-  return a === b ? 0 : anum && !bnum ? -1 : bnum && !anum ? 1 : a < b ? -1 : 1;
-};
-var identifiers = {
-  compareIdentifiers: compareIdentifiers$1
-};
-const debug = debug_1;
-const { MAX_LENGTH, MAX_SAFE_INTEGER } = constants;
-const { safeRe: re, t } = reExports;
-const parseOptions = parseOptions_1;
-const { compareIdentifiers } = identifiers;
-let SemVer$2 = class SemVer {
-  constructor(version2, options2) {
-    options2 = parseOptions(options2);
-    if (version2 instanceof SemVer) {
-      if (version2.loose === !!options2.loose && version2.includePrerelease === !!options2.includePrerelease) {
-        return version2;
-      } else {
-        version2 = version2.version;
-      }
-    } else if (typeof version2 !== "string") {
-      throw new TypeError(`Invalid version. Must be a string. Got type "${typeof version2}".`);
-    }
-    if (version2.length > MAX_LENGTH) {
-      throw new TypeError(
-        `version is longer than ${MAX_LENGTH} characters`
-      );
-    }
-    debug("SemVer", version2, options2);
-    this.options = options2;
-    this.loose = !!options2.loose;
-    this.includePrerelease = !!options2.includePrerelease;
-    const m = version2.trim().match(options2.loose ? re[t.LOOSE] : re[t.FULL]);
-    if (!m) {
-      throw new TypeError(`Invalid Version: ${version2}`);
-    }
-    this.raw = version2;
-    this.major = +m[1];
-    this.minor = +m[2];
-    this.patch = +m[3];
-    if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
-      throw new TypeError("Invalid major version");
-    }
-    if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
-      throw new TypeError("Invalid minor version");
-    }
-    if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
-      throw new TypeError("Invalid patch version");
-    }
-    if (!m[4]) {
-      this.prerelease = [];
-    } else {
-      this.prerelease = m[4].split(".").map((id) => {
-        if (/^[0-9]+$/.test(id)) {
-          const num = +id;
-          if (num >= 0 && num < MAX_SAFE_INTEGER) {
-            return num;
-          }
-        }
-        return id;
-      });
-    }
-    this.build = m[5] ? m[5].split(".") : [];
-    this.format();
-  }
-  format() {
-    this.version = `${this.major}.${this.minor}.${this.patch}`;
-    if (this.prerelease.length) {
-      this.version += `-${this.prerelease.join(".")}`;
-    }
-    return this.version;
-  }
-  toString() {
-    return this.version;
-  }
-  compare(other) {
-    debug("SemVer.compare", this.version, this.options, other);
-    if (!(other instanceof SemVer)) {
-      if (typeof other === "string" && other === this.version) {
-        return 0;
-      }
-      other = new SemVer(other, this.options);
-    }
-    if (other.version === this.version) {
-      return 0;
-    }
-    return this.compareMain(other) || this.comparePre(other);
-  }
-  compareMain(other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options);
-    }
-    return compareIdentifiers(this.major, other.major) || compareIdentifiers(this.minor, other.minor) || compareIdentifiers(this.patch, other.patch);
-  }
-  comparePre(other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options);
-    }
-    if (this.prerelease.length && !other.prerelease.length) {
-      return -1;
-    } else if (!this.prerelease.length && other.prerelease.length) {
-      return 1;
-    } else if (!this.prerelease.length && !other.prerelease.length) {
-      return 0;
-    }
-    let i = 0;
-    do {
-      const a = this.prerelease[i];
-      const b = other.prerelease[i];
-      debug("prerelease compare", i, a, b);
-      if (a === void 0 && b === void 0) {
-        return 0;
-      } else if (b === void 0) {
-        return 1;
-      } else if (a === void 0) {
-        return -1;
-      } else if (a === b) {
-        continue;
-      } else {
-        return compareIdentifiers(a, b);
-      }
-    } while (++i);
-  }
-  compareBuild(other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options);
-    }
-    let i = 0;
-    do {
-      const a = this.build[i];
-      const b = other.build[i];
-      debug("build compare", i, a, b);
-      if (a === void 0 && b === void 0) {
-        return 0;
-      } else if (b === void 0) {
-        return 1;
-      } else if (a === void 0) {
-        return -1;
-      } else if (a === b) {
-        continue;
-      } else {
-        return compareIdentifiers(a, b);
-      }
-    } while (++i);
-  }
-  // preminor will bump the version up to the next minor release, and immediately
-  // down to pre-release. premajor and prepatch work the same way.
-  inc(release, identifier, identifierBase) {
-    if (release.startsWith("pre")) {
-      if (!identifier && identifierBase === false) {
-        throw new Error("invalid increment argument: identifier is empty");
-      }
-      if (identifier) {
-        const match = `-${identifier}`.match(this.options.loose ? re[t.PRERELEASELOOSE] : re[t.PRERELEASE]);
-        if (!match || match[1] !== identifier) {
-          throw new Error(`invalid identifier: ${identifier}`);
-        }
-      }
-    }
-    switch (release) {
-      case "premajor":
-        this.prerelease.length = 0;
-        this.patch = 0;
-        this.minor = 0;
-        this.major++;
-        this.inc("pre", identifier, identifierBase);
-        break;
-      case "preminor":
-        this.prerelease.length = 0;
-        this.patch = 0;
-        this.minor++;
-        this.inc("pre", identifier, identifierBase);
-        break;
-      case "prepatch":
-        this.prerelease.length = 0;
-        this.inc("patch", identifier, identifierBase);
-        this.inc("pre", identifier, identifierBase);
-        break;
-      case "prerelease":
-        if (this.prerelease.length === 0) {
-          this.inc("patch", identifier, identifierBase);
-        }
-        this.inc("pre", identifier, identifierBase);
-        break;
-      case "release":
-        if (this.prerelease.length === 0) {
-          throw new Error(`version ${this.raw} is not a prerelease`);
-        }
-        this.prerelease.length = 0;
-        break;
-      case "major":
-        if (this.minor !== 0 || this.patch !== 0 || this.prerelease.length === 0) {
-          this.major++;
-        }
-        this.minor = 0;
-        this.patch = 0;
-        this.prerelease = [];
-        break;
-      case "minor":
-        if (this.patch !== 0 || this.prerelease.length === 0) {
-          this.minor++;
-        }
-        this.patch = 0;
-        this.prerelease = [];
-        break;
-      case "patch":
-        if (this.prerelease.length === 0) {
-          this.patch++;
-        }
-        this.prerelease = [];
-        break;
-      case "pre": {
-        const base = Number(identifierBase) ? 1 : 0;
-        if (this.prerelease.length === 0) {
-          this.prerelease = [base];
-        } else {
-          let i = this.prerelease.length;
-          while (--i >= 0) {
-            if (typeof this.prerelease[i] === "number") {
-              this.prerelease[i]++;
-              i = -2;
-            }
-          }
-          if (i === -1) {
-            if (identifier === this.prerelease.join(".") && identifierBase === false) {
-              throw new Error("invalid increment argument: identifier already exists");
-            }
-            this.prerelease.push(base);
-          }
-        }
-        if (identifier) {
-          let prerelease = [identifier, base];
-          if (identifierBase === false) {
-            prerelease = [identifier];
-          }
-          if (compareIdentifiers(this.prerelease[0], identifier) === 0) {
-            if (isNaN(this.prerelease[1])) {
-              this.prerelease = prerelease;
-            }
-          } else {
-            this.prerelease = prerelease;
-          }
-        }
-        break;
-      }
-      default:
-        throw new Error(`invalid increment argument: ${release}`);
-    }
-    this.raw = this.format();
-    if (this.build.length) {
-      this.raw += `+${this.build.join(".")}`;
-    }
-    return this;
-  }
-};
-var semver = SemVer$2;
-const SemVer$1 = semver;
-const compare$1 = (a, b, loose) => new SemVer$1(a, loose).compare(new SemVer$1(b, loose));
-var compare_1 = compare$1;
-const compare = compare_1;
-const eq = (a, b, loose) => compare(a, b, loose) === 0;
-var eq_1 = eq;
-const equalVersion = /* @__PURE__ */ KeySharesItem.getDefaultExportFromCjs(eq_1);
-const SemVer2 = semver;
-const parse$1 = (version2, options2, throwErrors = false) => {
-  if (version2 instanceof SemVer2) {
-    return version2;
-  }
-  try {
-    return new SemVer2(version2, options2);
-  } catch (er) {
-    if (!throwErrors) {
-      return null;
-    }
-    throw er;
-  }
-};
-var parse_1 = parse$1;
-const parse = parse_1;
-const valid = (version2, options2) => {
-  const v = parse(version2, options2);
-  return v ? v.version : null;
-};
-var valid_1 = valid;
-const validVersion = /* @__PURE__ */ KeySharesItem.getDefaultExportFromCjs(valid_1);
-var __decorate = function(decorators, target, key, desc) {
-  var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-  else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-  return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = function(k, v) {
-  if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-class KeyShares {
-  constructor(shares = []) {
-    Object.defineProperty(this, "shares", {
-      enumerable: true,
-      configurable: true,
-      writable: true,
-      value: void 0
-    });
-    this.shares = [...shares];
-  }
-  /**
-   * Add a single KeyShares item to the collection.
-   * @param keySharesItem The KeyShares item to add.
-   */
-  add(keySharesItem) {
-    this.shares.push(keySharesItem);
-  }
-  list() {
-    return this.shares;
-  }
-  /**
-   * Validate the KeyShares instance using class-validator.
-   * @returns The validation result.
-   */
-  validate() {
-    classValidator.validateSync(this);
-  }
-  /**
-   * Converts the KeyShares instance to a JSON string.
-   * @returns The JSON string representation of the KeyShares instance.
-   */
-  toJson() {
-    return JSON.stringify({
-      version: `v1.1.0`,
-      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
-      shares: this.shares.length > 0 ? this.shares : null
-    }, null, 2);
-  }
-  /**
-   * Initialize the KeyShares instance from JSON or object data.
-   * @param content The JSON string or object to initialize from.
-   * @returns The KeyShares instance.
-   * @throws Error if the version is incompatible or the shares array is invalid.
-   */
-  static async fromJson(content) {
-    const body = typeof content === "string" ? JSON.parse(content) : content;
-    if (!validVersion(body.version)) {
-      throw new KeySharesItem.SSVKeysException(`The file for keyshares must contain a version mark provided by ssv-keys.`);
-    }
-    if (!equalVersion(body.version, "v1.1.0") && !equalVersion(body.version, "v1.2.0")) {
-      throw new KeySharesItem.SSVKeysException(`The keyshares file you are attempting to reuse does not have the same version (v1.1.0 or v1.2.0) as supported by ssv-keys`);
-    }
-    const instance = new KeyShares();
-    instance.shares = [];
-    if (Array.isArray(body.shares)) {
-      for (const item of body.shares) {
-        instance.shares.push(await KeySharesItem.KeySharesItem.fromJson(item));
-      }
-    } else {
-      instance.shares.push(await KeySharesItem.KeySharesItem.fromJson(body));
-    }
-    return instance;
-  }
-}
-__decorate([
-  classValidator.IsOptional(),
-  classValidator.ValidateNested({ each: true }),
-  __metadata("design:type", Array)
-], KeyShares.prototype, "shares", void 0);
 const validateSharesPreRegistration = async (config2, { keyshares, operatorIds }) => {
   const operators = await config2.api.getOperators({ operatorIds });
   const shares = await validateKeysharesJSON({
@@ -6281,7 +5686,7 @@ const validateSharesPreRegistration = async (config2, { keyshares, operatorIds }
   return sharesWithStatuses;
 };
 const validateKeysharesJSON = async ({ account, operators, keyshares }) => {
-  const shares = (await KeyShares.fromJson(keyshares)).list();
+  const shares = (await KeyShares.KeyShares.fromJson(keyshares)).list();
   globals.ensureNoKeysharesErrors(shares);
   globals.ensureValidatorsUniqueness(shares);
   globals.validateConsistentOperatorPublicKeys(shares, operators);
@@ -6297,7 +5702,7 @@ const validateKeysharesJSON = async ({ account, operators, keyshares }) => {
   }
   return shares;
 };
-const ssvKeys = new SSVKeys();
+const ssvKeys = new KeyShares.SSVKeys();
 const createAndEncryptShares = async (privateKey, operators) => {
   const threshold = await ssvKeys.createThreshold(privateKey, operators);
   const encryptedShares = await ssvKeys.encryptShares(operators, threshold.shares);
@@ -6317,7 +5722,7 @@ const generateKeyShares = async (args) => {
       operatorKey: key
     }));
     const { threshold, encryptedShares } = await createAndEncryptShares(extracted.privateKey, operators);
-    shares.push(await new KeySharesItem.KeySharesItem().buildPayload({
+    shares.push(await new KeyShares.KeySharesItem().buildPayload({
       publicKey: threshold.publicKey,
       operators,
       encryptedShares
@@ -6402,13 +5807,13 @@ exports.hoodi = globals.hoodi;
 exports.networks = globals.networks;
 exports.registerValidatorsByClusterSizeLimits = globals.registerValidatorsByClusterSizeLimits;
 exports.rest_endpoints = globals.rest_endpoints;
-exports.KeySharesItem = KeySharesItem.KeySharesItem;
-exports.KeySharesPayload = KeySharesItem.KeySharesPayload;
-exports.OperatorPublicKeyError = KeySharesItem.OperatorPublicKeyError;
-exports.OperatorsCountsMismatchError = KeySharesItem.OperatorsCountsMismatchError;
-exports.SSVKeysException = KeySharesItem.SSVKeysException;
-exports.KeyShares = KeyShares;
-exports.SSVKeys = SSVKeys;
+exports.KeyShares = KeyShares.KeyShares;
+exports.KeySharesItem = KeyShares.KeySharesItem;
+exports.KeySharesPayload = KeyShares.KeySharesPayload;
+exports.OperatorPublicKeyError = KeyShares.OperatorPublicKeyError;
+exports.OperatorsCountsMismatchError = KeyShares.OperatorsCountsMismatchError;
+exports.SSVKeys = KeyShares.SSVKeys;
+exports.SSVKeysException = KeyShares.SSVKeysException;
 exports.SSVSDK = SSVSDK;
 exports.createClusterManager = createClusterManager;
 exports.createConfig = createConfig;

@@ -19,7 +19,7 @@ export default defineConfig({
       entry: {
         main: resolve(__dirname, 'src/main.ts'),
         utils: resolve(__dirname, 'src/utils/index.ts'),
-        keys: resolve(__dirname, 'src/libs/ssv-keys/SSVKeys.ts'),
+        keys: resolve(__dirname, 'src/libs/ssv-keys/index.ts'),
       },
       formats: ['es', 'cjs'],
     },
