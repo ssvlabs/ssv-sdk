@@ -7,9 +7,11 @@ import { H, F, I } from "./globals-U1L1vYaH.mjs";
 import { isUndefined, isEqual } from "lodash-es";
 import { decodeEventLog, encodeFunctionData, encodeAbiParameters, parseAbiParameters, isAddressEqual, zeroAddress } from "viem";
 import { GraphQLClient } from "graphql-request";
-import { E as EthereumKeyStore, o as operatorSortedList, T as Threshold, a as Encryption, K as KeySharesItem, S as SSVKeysException } from "./KeySharesItem-BEbHKODX.mjs";
+import { E as EthereumKeyStore, o as operatorSortedList, T as Threshold, a as Encryption, K as KeySharesItem, S as SSVKeysException } from "./KeySharesItem-CG1vZ-MG.mjs";
+import { b, O, c } from "./KeySharesItem-CG1vZ-MG.mjs";
 import bls from "bls-eth-wasm";
 import { IsOptional, ValidateNested, validateSync } from "class-validator";
+import "node-forge";
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
 }
@@ -5371,6 +5373,9 @@ class SSVKeys {
    */
   async extractKeys(data, password) {
     const privateKey = await new EthereumKeyStore(data).getPrivateKey(password);
+    if (!bls.deserializeHexStrToSecretKey) {
+      await bls.init(bls.BLS12_381);
+    }
     return {
       privateKey: `0x${privateKey}`,
       publicKey: `0x${bls.deserializeHexStrToSecretKey(privateKey).getPublicKey().serializeToHexStr()}`
@@ -5862,14 +5867,14 @@ const parseOptions$1 = (options2) => {
 };
 var parseOptions_1 = parseOptions$1;
 const numeric = /^[0-9]+$/;
-const compareIdentifiers$1 = (a, b) => {
+const compareIdentifiers$1 = (a, b2) => {
   const anum = numeric.test(a);
-  const bnum = numeric.test(b);
+  const bnum = numeric.test(b2);
   if (anum && bnum) {
     a = +a;
-    b = +b;
+    b2 = +b2;
   }
-  return a === b ? 0 : anum && !bnum ? -1 : bnum && !anum ? 1 : a < b ? -1 : 1;
+  return a === b2 ? 0 : anum && !bnum ? -1 : bnum && !anum ? 1 : a < b2 ? -1 : 1;
 };
 var identifiers = {
   compareIdentifiers: compareIdentifiers$1
@@ -5976,18 +5981,18 @@ let SemVer$2 = class SemVer {
     let i = 0;
     do {
       const a = this.prerelease[i];
-      const b = other.prerelease[i];
-      debug("prerelease compare", i, a, b);
-      if (a === void 0 && b === void 0) {
+      const b2 = other.prerelease[i];
+      debug("prerelease compare", i, a, b2);
+      if (a === void 0 && b2 === void 0) {
         return 0;
-      } else if (b === void 0) {
+      } else if (b2 === void 0) {
         return 1;
       } else if (a === void 0) {
         return -1;
-      } else if (a === b) {
+      } else if (a === b2) {
         continue;
       } else {
-        return compareIdentifiers(a, b);
+        return compareIdentifiers(a, b2);
       }
     } while (++i);
   }
@@ -5998,18 +6003,18 @@ let SemVer$2 = class SemVer {
     let i = 0;
     do {
       const a = this.build[i];
-      const b = other.build[i];
-      debug("build compare", i, a, b);
-      if (a === void 0 && b === void 0) {
+      const b2 = other.build[i];
+      debug("build compare", i, a, b2);
+      if (a === void 0 && b2 === void 0) {
         return 0;
-      } else if (b === void 0) {
+      } else if (b2 === void 0) {
         return 1;
       } else if (a === void 0) {
         return -1;
-      } else if (a === b) {
+      } else if (a === b2) {
         continue;
       } else {
-        return compareIdentifiers(a, b);
+        return compareIdentifiers(a, b2);
       }
     } while (++i);
   }
@@ -6125,10 +6130,10 @@ let SemVer$2 = class SemVer {
 };
 var semver = SemVer$2;
 const SemVer$1 = semver;
-const compare$1 = (a, b, loose) => new SemVer$1(a, loose).compare(new SemVer$1(b, loose));
+const compare$1 = (a, b2, loose) => new SemVer$1(a, loose).compare(new SemVer$1(b2, loose));
 var compare_1 = compare$1;
 const compare = compare_1;
-const eq = (a, b, loose) => compare(a, b, loose) === 0;
+const eq = (a, b2, loose) => compare(a, b2, loose) === 0;
 var eq_1 = eq;
 const equalVersion = /* @__PURE__ */ getDefaultExportFromCjs(eq_1);
 const SemVer2 = semver;
@@ -6154,10 +6159,10 @@ const valid = (version2, options2) => {
 var valid_1 = valid;
 const validVersion = /* @__PURE__ */ getDefaultExportFromCjs(valid_1);
 var __decorate = function(decorators, target, key, desc) {
-  var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+  var c2 = arguments.length, r = c2 < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-  else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-  return c > 3 && r && Object.defineProperty(target, key, r), r;
+  else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c2 < 3 ? d(r) : c2 > 3 ? d(target, key, r) : d(target, key)) || r;
+  return c2 > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var __metadata = function(k, v) {
   if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
@@ -6393,8 +6398,13 @@ class SSVSDK {
   }
 }
 export {
+  KeyShares,
   KeySharesItem,
+  b as KeySharesPayload,
+  O as OperatorPublicKeyError,
+  c as OperatorsCountsMismatchError,
   SSVKeys,
+  SSVKeysException,
   SSVSDK,
   chainIds,
   H as chains,

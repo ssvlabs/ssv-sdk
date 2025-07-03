@@ -10,7 +10,7 @@ export declare const createUtils: (config: ConfigReturnType) => {
         keystore_password: string;
         owner_address: string;
         nonce: number;
-    }) => Promise<import('../ssv-keys/KeyShares/KeySharesData/KeySharesPayload').KeySharesPayload[]>;
+    }) => Promise<import('../ssv-keys').KeySharesPayload[]>;
     validateKeysharesJSON: ({ account, operators, keyshares, }: {
         account: import('abitype').Address;
         operators: Pick<import('../../types/operator').Operator, "id" | "publicKey">[];

@@ -8,9 +8,10 @@ const globals = require("./globals-BPPTJ9ZU.js");
 const lodashEs = require("lodash-es");
 const viem = require("viem");
 const graphqlRequest = require("graphql-request");
-const KeySharesItem = require("./KeySharesItem-Q8pPk7R_.js");
+const KeySharesItem = require("./KeySharesItem-8wu5nyDn.js");
 const bls = require("bls-eth-wasm");
 const classValidator = require("class-validator");
+require("node-forge");
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
 }
@@ -5372,6 +5373,9 @@ class SSVKeys {
    */
   async extractKeys(data, password) {
     const privateKey = await new KeySharesItem.EthereumKeyStore(data).getPrivateKey(password);
+    if (!bls.deserializeHexStrToSecretKey) {
+      await bls.init(bls.BLS12_381);
+    }
     return {
       privateKey: `0x${privateKey}`,
       publicKey: `0x${bls.deserializeHexStrToSecretKey(privateKey).getPublicKey().serializeToHexStr()}`
@@ -6403,6 +6407,11 @@ exports.networks = globals.networks;
 exports.registerValidatorsByClusterSizeLimits = globals.registerValidatorsByClusterSizeLimits;
 exports.rest_endpoints = globals.rest_endpoints;
 exports.KeySharesItem = KeySharesItem.KeySharesItem;
+exports.KeySharesPayload = KeySharesItem.KeySharesPayload;
+exports.OperatorPublicKeyError = KeySharesItem.OperatorPublicKeyError;
+exports.OperatorsCountsMismatchError = KeySharesItem.OperatorsCountsMismatchError;
+exports.SSVKeysException = KeySharesItem.SSVKeysException;
+exports.KeyShares = KeyShares;
 exports.SSVKeys = SSVKeys;
 exports.SSVSDK = SSVSDK;
 exports.createClusterManager = createClusterManager;

@@ -1,4 +1,4 @@
-import { E as EthereumKeyStore, o as operatorSortedList, T as Threshold, a as Encryption, K as KeySharesItem } from "./KeySharesItem-BEbHKODX.mjs";
+import { E as EthereumKeyStore, o as operatorSortedList, T as Threshold, a as Encryption, K as KeySharesItem } from "./KeySharesItem-CG1vZ-MG.mjs";
 import bls from "bls-eth-wasm";
 class SSVKeys {
   threshold;
@@ -10,6 +10,9 @@ class SSVKeys {
    */
   async extractKeys(data, password) {
     const privateKey = await new EthereumKeyStore(data).getPrivateKey(password);
+    if (!bls.deserializeHexStrToSecretKey) {
+      await bls.init(bls.BLS12_381);
+    }
     return {
       privateKey: `0x${privateKey}`,
       publicKey: `0x${bls.deserializeHexStrToSecretKey(privateKey).getPublicKey().serializeToHexStr()}`

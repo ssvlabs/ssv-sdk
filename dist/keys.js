@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const KeySharesItem = require("./KeySharesItem-Q8pPk7R_.js");
+const KeySharesItem = require("./KeySharesItem-8wu5nyDn.js");
 const bls = require("bls-eth-wasm");
 class SSVKeys {
   threshold;
@@ -12,6 +12,9 @@ class SSVKeys {
    */
   async extractKeys(data, password) {
     const privateKey = await new KeySharesItem.EthereumKeyStore(data).getPrivateKey(password);
+    if (!bls.deserializeHexStrToSecretKey) {
+      await bls.init(bls.BLS12_381);
+    }
     return {
       privateKey: `0x${privateKey}`,
       publicKey: `0x${bls.deserializeHexStrToSecretKey(privateKey).getPublicKey().serializeToHexStr()}`
