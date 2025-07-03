@@ -9,6 +9,9 @@
 # production
 /build
 /dist
+/dist/*
+
+/hardhat
 
 # misc
 .DS_Store

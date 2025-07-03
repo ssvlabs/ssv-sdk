@@ -32,7 +32,6 @@ export default defineConfig({
         'dotenv',
         'graphql-request',
         'lodash-es',
-        'node-forge',
         'tslib',
         'zod',
 

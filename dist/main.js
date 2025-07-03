@@ -8,13 +8,9 @@ const globals = require("./globals-BPPTJ9ZU.js");
 const lodashEs = require("lodash-es");
 const viem = require("viem");
 const graphqlRequest = require("graphql-request");
-const KeySharesItem = require("./KeySharesItem-8wu5nyDn.js");
+const KeySharesItem = require("./KeySharesItem-eOUocNIf.js");
 const bls = require("bls-eth-wasm");
 const classValidator = require("class-validator");
-require("node-forge");
-function getDefaultExportFromCjs(x) {
-  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
-}
 var main = { exports: {} };
 const version$1 = "16.6.1";
 const require$$4 = {
@@ -6135,7 +6131,7 @@ var compare_1 = compare$1;
 const compare = compare_1;
 const eq = (a, b, loose) => compare(a, b, loose) === 0;
 var eq_1 = eq;
-const equalVersion = /* @__PURE__ */ getDefaultExportFromCjs(eq_1);
+const equalVersion = /* @__PURE__ */ KeySharesItem.getDefaultExportFromCjs(eq_1);
 const SemVer2 = semver;
 const parse$1 = (version2, options2, throwErrors = false) => {
   if (version2 instanceof SemVer2) {
@@ -6157,7 +6153,7 @@ const valid = (version2, options2) => {
   return v ? v.version : null;
 };
 var valid_1 = valid;
-const validVersion = /* @__PURE__ */ getDefaultExportFromCjs(valid_1);
+const validVersion = /* @__PURE__ */ KeySharesItem.getDefaultExportFromCjs(valid_1);
 var __decorate = function(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const KeySharesItem = require("./KeySharesItem-8wu5nyDn.js");
+const KeySharesItem = require("./KeySharesItem-eOUocNIf.js");
 const bls = require("bls-eth-wasm");
 class SSVKeys {
   threshold;

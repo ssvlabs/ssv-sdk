@@ -7,14 +7,10 @@ import { H, F, I } from "./globals-U1L1vYaH.mjs";
 import { isUndefined, isEqual } from "lodash-es";
 import { decodeEventLog, encodeFunctionData, encodeAbiParameters, parseAbiParameters, isAddressEqual, zeroAddress } from "viem";
 import { GraphQLClient } from "graphql-request";
-import { E as EthereumKeyStore, o as operatorSortedList, T as Threshold, a as Encryption, K as KeySharesItem, S as SSVKeysException } from "./KeySharesItem-CG1vZ-MG.mjs";
-import { b, O, c } from "./KeySharesItem-CG1vZ-MG.mjs";
+import { E as EthereumKeyStore, o as operatorSortedList, T as Threshold, a as Encryption, K as KeySharesItem, g as getDefaultExportFromCjs, S as SSVKeysException } from "./KeySharesItem-BL3QjU3H.mjs";
+import { b, O, c } from "./KeySharesItem-BL3QjU3H.mjs";
 import bls from "bls-eth-wasm";
 import { IsOptional, ValidateNested, validateSync } from "class-validator";
-import "node-forge";
-function getDefaultExportFromCjs(x) {
-  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
-}
 var main = { exports: {} };
 const version$1 = "16.6.1";
 const require$$4 = {
