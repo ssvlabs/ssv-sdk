@@ -1,8 +1,7 @@
-"use strict";
-const bls = require("bls-eth-wasm");
-const crypto$1 = require("crypto");
-const viem = require("viem");
-const classValidator = require("class-validator");
+import bls from "bls-eth-wasm";
+import crypto$1 from "crypto";
+import { keccak256, toHex, sha256 as sha256$1, toBytes, fromHex, getAddress } from "viem";
+import { ValidatorConstraint, registerDecorator, IsNotEmpty, IsDefined, IsInt, IsString, validateSync, IsOptional, IsNumber, Length, ValidateNested } from "class-validator";
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 function getDefaultExportFromCjs(x) {
   return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
@@ -873,20 +872,20 @@ util$1.fillString = function(c, n) {
 util$1.xorBytes = function(s1, s2, n) {
   var s3 = "";
   var b = "";
-  var t2 = "";
+  var t = "";
   var i = 0;
   var c = 0;
   for (; n > 0; --n, ++i) {
     b = s1.charCodeAt(i) ^ s2.charCodeAt(i);
     if (c >= 10) {
-      s3 += t2;
-      t2 = "";
+      s3 += t;
+      t = "";
       c = 0;
     }
-    t2 += String.fromCharCode(b);
+    t += String.fromCharCode(b);
     ++c;
   }
-  s3 += t2;
+  s3 += t;
   return s3;
 };
 util$1.hexToBytes = function(hex) {
@@ -1335,18 +1334,18 @@ util$1.isEmpty = function(obj) {
   return true;
 };
 util$1.format = function(format) {
-  var re2 = /%./g;
+  var re = /%./g;
   var match;
   var part;
   var argi = 0;
   var parts = [];
   var last = 0;
-  while (match = re2.exec(format)) {
-    part = format.substring(last, re2.lastIndex - 2);
+  while (match = re.exec(format)) {
+    part = format.substring(last, re.lastIndex - 2);
     if (part.length > 0) {
       parts.push(part);
     }
-    last = re2.lastIndex;
+    last = re.lastIndex;
     var code = match[0][1];
     switch (code) {
       case "s":
@@ -1370,10 +1369,10 @@ util$1.format = function(format) {
 util$1.formatNumber = function(number, decimals, dec_point, thousands_sep) {
   var n = number, c = isNaN(decimals = Math.abs(decimals)) ? 2 : decimals;
   var d = dec_point === void 0 ? "," : dec_point;
-  var t2 = thousands_sep === void 0 ? "." : thousands_sep, s2 = n < 0 ? "-" : "";
+  var t = thousands_sep === void 0 ? "." : thousands_sep, s2 = n < 0 ? "-" : "";
   var i = parseInt(n = Math.abs(+n || 0).toFixed(c), 10) + "";
   var j = i.length > 3 ? i.length % 3 : 0;
-  return s2 + (j ? i.substr(0, j) + t2 : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t2) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+  return s2 + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
 };
 util$1.formatSize = function(size) {
   if (size >= 1073741824) {
@@ -3822,7 +3821,7 @@ function _init$3() {
   _initialized$3 = true;
 }
 function _update$3(s2, w, bytes) {
-  var t2, a, b, c, d, f, r, i;
+  var t, a, b, c, d, f, r, i;
   var len = bytes.length();
   while (len >= 64) {
     a = s2.h0;
@@ -3832,39 +3831,39 @@ function _update$3(s2, w, bytes) {
     for (i = 0; i < 16; ++i) {
       w[i] = bytes.getInt32Le();
       f = d ^ b & (c ^ d);
-      t2 = a + f + _k$2[i] + w[i];
+      t = a + f + _k$2[i] + w[i];
       r = _r[i];
       a = d;
       d = c;
       c = b;
-      b += t2 << r | t2 >>> 32 - r;
+      b += t << r | t >>> 32 - r;
     }
     for (; i < 32; ++i) {
       f = c ^ d & (b ^ c);
-      t2 = a + f + _k$2[i] + w[_g[i]];
+      t = a + f + _k$2[i] + w[_g[i]];
       r = _r[i];
       a = d;
       d = c;
       c = b;
-      b += t2 << r | t2 >>> 32 - r;
+      b += t << r | t >>> 32 - r;
     }
     for (; i < 48; ++i) {
       f = b ^ c ^ d;
-      t2 = a + f + _k$2[i] + w[_g[i]];
+      t = a + f + _k$2[i] + w[_g[i]];
       r = _r[i];
       a = d;
       d = c;
       c = b;
-      b += t2 << r | t2 >>> 32 - r;
+      b += t << r | t >>> 32 - r;
     }
     for (; i < 64; ++i) {
       f = c ^ (b | ~d);
-      t2 = a + f + _k$2[i] + w[_g[i]];
+      t = a + f + _k$2[i] + w[_g[i]];
       r = _r[i];
       a = d;
       d = c;
       c = b;
-      b += t2 << r | t2 >>> 32 - r;
+      b += t << r | t >>> 32 - r;
     }
     s2.h0 = s2.h0 + a | 0;
     s2.h1 = s2.h1 + b | 0;
@@ -5553,25 +5552,25 @@ function bnCompareTo(a) {
   return 0;
 }
 function nbits(x) {
-  var r = 1, t2;
-  if ((t2 = x >>> 16) != 0) {
-    x = t2;
+  var r = 1, t;
+  if ((t = x >>> 16) != 0) {
+    x = t;
     r += 16;
   }
-  if ((t2 = x >> 8) != 0) {
-    x = t2;
+  if ((t = x >> 8) != 0) {
+    x = t;
     r += 8;
   }
-  if ((t2 = x >> 4) != 0) {
-    x = t2;
+  if ((t = x >> 4) != 0) {
+    x = t;
     r += 4;
   }
-  if ((t2 = x >> 2) != 0) {
-    x = t2;
+  if ((t = x >> 2) != 0) {
+    x = t;
     r += 2;
   }
-  if ((t2 = x >> 1) != 0) {
-    x = t2;
+  if ((t = x >> 1) != 0) {
+    x = t;
     r += 1;
   }
   return r;
@@ -5705,21 +5704,21 @@ function bnpDivRemTo(m, q, r) {
   if (y0 == 0) return;
   var yt = y0 * (1 << this.F1) + (ys > 1 ? y.data[ys - 2] >> this.F2 : 0);
   var d1 = this.FV / yt, d2 = (1 << this.F1) / yt, e = 1 << this.F2;
-  var i = r.t, j = i - ys, t2 = q == null ? nbi() : q;
-  y.dlShiftTo(j, t2);
-  if (r.compareTo(t2) >= 0) {
+  var i = r.t, j = i - ys, t = q == null ? nbi() : q;
+  y.dlShiftTo(j, t);
+  if (r.compareTo(t) >= 0) {
     r.data[r.t++] = 1;
-    r.subTo(t2, r);
+    r.subTo(t, r);
   }
-  BigInteger$4.ONE.dlShiftTo(ys, t2);
-  t2.subTo(y, y);
+  BigInteger$4.ONE.dlShiftTo(ys, t);
+  t.subTo(y, y);
   while (y.t < ys) y.data[y.t++] = 0;
   while (--j >= 0) {
     var qd = r.data[--i] == y0 ? this.DM : Math.floor(r.data[i] * d1 + (r.data[i - 1] + e) * d2);
     if ((r.data[i] += y.am(0, qd, r, j, 0, ys)) < qd) {
-      y.dlShiftTo(j, t2);
-      r.subTo(t2, r);
-      while (r.data[i] < --qd) r.subTo(t2, r);
+      y.dlShiftTo(j, t);
+      r.subTo(t, r);
+      while (r.data[i] < --qd) r.subTo(t, r);
     }
   }
   if (q != null) {
@@ -5836,9 +5835,9 @@ function bnpExp(e, z) {
     z.sqrTo(r, r2);
     if ((e & 1 << i) > 0) z.mulTo(r2, g, r);
     else {
-      var t2 = r;
+      var t = r;
       r = r2;
-      r2 = t2;
+      r2 = t;
     }
   }
   return z.revert(r);
@@ -5952,10 +5951,10 @@ function bnpFromNumber(a, b, c) {
       }
     }
   } else {
-    var x = new Array(), t2 = a & 7;
+    var x = new Array(), t = a & 7;
     x.length = (a >> 3) + 1;
     b.nextBytes(x);
-    if (t2 > 0) x[0] &= (1 << t2) - 1;
+    if (t > 0) x[0] &= (1 << t) - 1;
     else x[0] = 0;
     this.fromString(x, 256);
   }
@@ -6303,7 +6302,7 @@ function bnModPow(e, m) {
       n += 2;
     }
   }
-  var j = e.t - 1, w, is1 = true, r2 = nbi(), t2;
+  var j = e.t - 1, w, is1 = true, r2 = nbi(), t;
   i = nbits(e.data[j]) - 1;
   while (j >= 0) {
     if (i >= k1) w = e.data[j] >> i - k1 & km;
@@ -6331,17 +6330,17 @@ function bnModPow(e, m) {
       }
       if (n > 0) z.sqrTo(r, r2);
       else {
-        t2 = r;
+        t = r;
         r = r2;
-        r2 = t2;
+        r2 = t;
       }
       z.mulTo(r2, g[w], r);
     }
     while (j >= 0 && (e.data[j] & 1 << i) == 0) {
       z.sqrTo(r, r2);
-      t2 = r;
+      t = r;
       r = r2;
-      r2 = t2;
+      r2 = t;
       if (--i < 0) {
         i = this.DB - 1;
         --j;
@@ -6354,9 +6353,9 @@ function bnGCD(a) {
   var x = this.s < 0 ? this.negate() : this.clone();
   var y = a.s < 0 ? a.negate() : a.clone();
   if (x.compareTo(y) < 0) {
-    var t2 = x;
+    var t = x;
     x = y;
-    y = t2;
+    y = t;
   }
   var i = x.getLowestSetBit(), g = y.getLowestSetBit();
   if (g < 0) return x;
@@ -6434,7 +6433,7 @@ function bnModInverse(m) {
 }
 var lowprimes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509];
 var lplim = (1 << 26) / lowprimes[lowprimes.length - 1];
-function bnIsProbablePrime(t2) {
+function bnIsProbablePrime(t) {
   var i, x = this.abs();
   if (x.t == 1 && x.data[0] <= lowprimes[lowprimes.length - 1]) {
     for (i = 0; i < lowprimes.length; ++i)
@@ -6449,16 +6448,16 @@ function bnIsProbablePrime(t2) {
     m = x.modInt(m);
     while (i < j) if (m % lowprimes[i++] == 0) return false;
   }
-  return x.millerRabin(t2);
+  return x.millerRabin(t);
 }
-function bnpMillerRabin(t2) {
+function bnpMillerRabin(t) {
   var n1 = this.subtract(BigInteger$4.ONE);
   var k = n1.getLowestSetBit();
   if (k <= 0) return false;
   var r = n1.shiftRight(k);
   var prng2 = bnGetPrng();
   var a;
-  for (var i = 0; i < t2; ++i) {
+  for (var i = 0; i < t; ++i) {
     do {
       a = new BigInteger$4(this.bitLength(), prng2);
     } while (a.compareTo(BigInteger$4.ONE) <= 0 || a.compareTo(n1) >= 0);
@@ -6631,7 +6630,7 @@ function _init$1() {
   _initialized$1 = true;
 }
 function _update$1(s2, w, bytes) {
-  var t2, a, b, c, d, e, f, i;
+  var t, a, b, c, d, e, f, i;
   var len = bytes.length();
   while (len >= 64) {
     a = s2.h0;
@@ -6640,75 +6639,75 @@ function _update$1(s2, w, bytes) {
     d = s2.h3;
     e = s2.h4;
     for (i = 0; i < 16; ++i) {
-      t2 = bytes.getInt32();
-      w[i] = t2;
+      t = bytes.getInt32();
+      w[i] = t;
       f = d ^ b & (c ^ d);
-      t2 = (a << 5 | a >>> 27) + f + e + 1518500249 + t2;
+      t = (a << 5 | a >>> 27) + f + e + 1518500249 + t;
       e = d;
       d = c;
       c = (b << 30 | b >>> 2) >>> 0;
       b = a;
-      a = t2;
+      a = t;
     }
     for (; i < 20; ++i) {
-      t2 = w[i - 3] ^ w[i - 8] ^ w[i - 14] ^ w[i - 16];
-      t2 = t2 << 1 | t2 >>> 31;
-      w[i] = t2;
+      t = w[i - 3] ^ w[i - 8] ^ w[i - 14] ^ w[i - 16];
+      t = t << 1 | t >>> 31;
+      w[i] = t;
       f = d ^ b & (c ^ d);
-      t2 = (a << 5 | a >>> 27) + f + e + 1518500249 + t2;
+      t = (a << 5 | a >>> 27) + f + e + 1518500249 + t;
       e = d;
       d = c;
       c = (b << 30 | b >>> 2) >>> 0;
       b = a;
-      a = t2;
+      a = t;
     }
     for (; i < 32; ++i) {
-      t2 = w[i - 3] ^ w[i - 8] ^ w[i - 14] ^ w[i - 16];
-      t2 = t2 << 1 | t2 >>> 31;
-      w[i] = t2;
+      t = w[i - 3] ^ w[i - 8] ^ w[i - 14] ^ w[i - 16];
+      t = t << 1 | t >>> 31;
+      w[i] = t;
       f = b ^ c ^ d;
-      t2 = (a << 5 | a >>> 27) + f + e + 1859775393 + t2;
+      t = (a << 5 | a >>> 27) + f + e + 1859775393 + t;
       e = d;
       d = c;
       c = (b << 30 | b >>> 2) >>> 0;
       b = a;
-      a = t2;
+      a = t;
     }
     for (; i < 40; ++i) {
-      t2 = w[i - 6] ^ w[i - 16] ^ w[i - 28] ^ w[i - 32];
-      t2 = t2 << 2 | t2 >>> 30;
-      w[i] = t2;
+      t = w[i - 6] ^ w[i - 16] ^ w[i - 28] ^ w[i - 32];
+      t = t << 2 | t >>> 30;
+      w[i] = t;
       f = b ^ c ^ d;
-      t2 = (a << 5 | a >>> 27) + f + e + 1859775393 + t2;
+      t = (a << 5 | a >>> 27) + f + e + 1859775393 + t;
       e = d;
       d = c;
       c = (b << 30 | b >>> 2) >>> 0;
       b = a;
-      a = t2;
+      a = t;
     }
     for (; i < 60; ++i) {
-      t2 = w[i - 6] ^ w[i - 16] ^ w[i - 28] ^ w[i - 32];
-      t2 = t2 << 2 | t2 >>> 30;
-      w[i] = t2;
+      t = w[i - 6] ^ w[i - 16] ^ w[i - 28] ^ w[i - 32];
+      t = t << 2 | t >>> 30;
+      w[i] = t;
       f = b & c | d & (b ^ c);
-      t2 = (a << 5 | a >>> 27) + f + e + 2400959708 + t2;
+      t = (a << 5 | a >>> 27) + f + e + 2400959708 + t;
       e = d;
       d = c;
       c = (b << 30 | b >>> 2) >>> 0;
       b = a;
-      a = t2;
+      a = t;
     }
     for (; i < 80; ++i) {
-      t2 = w[i - 6] ^ w[i - 16] ^ w[i - 28] ^ w[i - 32];
-      t2 = t2 << 2 | t2 >>> 30;
-      w[i] = t2;
+      t = w[i - 6] ^ w[i - 16] ^ w[i - 28] ^ w[i - 32];
+      t = t << 2 | t >>> 30;
+      w[i] = t;
       f = b ^ c ^ d;
-      t2 = (a << 5 | a >>> 27) + f + e + 3395469782 + t2;
+      t = (a << 5 | a >>> 27) + f + e + 3395469782 + t;
       e = d;
       d = c;
       c = (b << 30 | b >>> 2) >>> 0;
       b = a;
-      a = t2;
+      a = t;
     }
     s2.h0 = s2.h0 + a | 0;
     s2.h1 = s2.h1 + b | 0;
@@ -6846,7 +6845,7 @@ function rsa_mgf1(seed, maskLength, hash2) {
   if (!hash2) {
     hash2 = forge$j.md.sha1.create();
   }
-  var t2 = "";
+  var t = "";
   var count = Math.ceil(maskLength / hash2.digestLength);
   for (var i = 0; i < count; ++i) {
     var c = String.fromCharCode(
@@ -6857,9 +6856,9 @@ function rsa_mgf1(seed, maskLength, hash2) {
     );
     hash2.start();
     hash2.update(seed + c);
-    t2 += hash2.digest().getBytes();
+    t += hash2.digest().getBytes();
   }
-  return t2.substring(0, maskLength);
+  return t.substring(0, maskLength);
 }
 var forge$i = forge$C;
 (function() {
@@ -9254,17 +9253,17 @@ mgf1.create = function(md) {
      * @return {String} The generated mask.
      */
     generate: function(seed, maskLen) {
-      var t2 = new forge$e.util.ByteBuffer();
+      var t = new forge$e.util.ByteBuffer();
       var len = Math.ceil(maskLen / md.digestLength);
       for (var i = 0; i < len; i++) {
         var c = new forge$e.util.ByteBuffer();
         c.putInt32(i);
         md.start();
         md.update(seed + c.getBytes());
-        t2.putBuffer(md.digest());
+        t.putBuffer(md.digest());
       }
-      t2.truncate(t2.length() - maskLen);
-      return t2.getBytes();
+      t.truncate(t.length() - maskLen);
+      return t.getBytes();
     }
   };
   return mgf;
@@ -15043,8 +15042,8 @@ ed25519.generateKeyPair = function(options) {
 ed25519.privateKeyFromAsn1 = function(obj) {
   var capture = {};
   var errors = [];
-  var valid2 = forge$4.asn1.validate(obj, privateKeyValidator, capture, errors);
-  if (!valid2) {
+  var valid = forge$4.asn1.validate(obj, privateKeyValidator, capture, errors);
+  if (!valid) {
     var error = new Error("Invalid Key.");
     error.errors = errors;
     throw error;
@@ -15064,8 +15063,8 @@ ed25519.privateKeyFromAsn1 = function(obj) {
 ed25519.publicKeyFromAsn1 = function(obj) {
   var capture = {};
   var errors = [];
-  var valid2 = forge$4.asn1.validate(obj, publicKeyValidator, capture, errors);
-  if (!valid2) {
+  var valid = forge$4.asn1.validate(obj, publicKeyValidator, capture, errors);
+  if (!valid) {
     var error = new Error("Invalid Key.");
     error.errors = errors;
     throw error;
@@ -15389,7 +15388,7 @@ function crypto_sign(sm, m, n, sk) {
 }
 function crypto_sign_open(m, sm, n, pk) {
   var i, mlen;
-  var t2 = new NativeBuffer(32);
+  var t = new NativeBuffer(32);
   var p = [gf(), gf(), gf(), gf()], q = [gf(), gf(), gf(), gf()];
   mlen = -1;
   if (n < 64) {
@@ -15409,9 +15408,9 @@ function crypto_sign_open(m, sm, n, pk) {
   scalarmult(p, q, h);
   scalarbase(q, sm.subarray(32));
   add(p, q);
-  pack(t2, p);
+  pack(t, p);
   n -= 64;
-  if (crypto_verify_32(sm, 0, t2, 0)) {
+  if (crypto_verify_32(sm, 0, t, 0)) {
     for (i = 0; i < n; ++i) {
       m[i] = 0;
     }
@@ -15458,13 +15457,13 @@ function reduce(r) {
   modL(r, x);
 }
 function add(p, q) {
-  var a = gf(), b = gf(), c = gf(), d = gf(), e = gf(), f = gf(), g = gf(), h = gf(), t2 = gf();
+  var a = gf(), b = gf(), c = gf(), d = gf(), e = gf(), f = gf(), g = gf(), h = gf(), t = gf();
   Z(a, p[1], p[0]);
-  Z(t2, q[1], q[0]);
-  M(a, a, t2);
+  Z(t, q[1], q[0]);
+  M(a, a, t);
   A(b, p[0], p[1]);
-  A(t2, q[0], q[1]);
-  M(b, b, t2);
+  A(t, q[0], q[1]);
+  M(b, b, t);
   M(c, p[3], q[3]);
   M(c, c, D2);
   M(d, p[2], q[2]);
@@ -15493,31 +15492,31 @@ function pack(r, p) {
 }
 function pack25519(o, n) {
   var i, j, b;
-  var m = gf(), t2 = gf();
+  var m = gf(), t = gf();
   for (i = 0; i < 16; ++i) {
-    t2[i] = n[i];
+    t[i] = n[i];
   }
-  car25519(t2);
-  car25519(t2);
-  car25519(t2);
+  car25519(t);
+  car25519(t);
+  car25519(t);
   for (j = 0; j < 2; ++j) {
-    m[0] = t2[0] - 65517;
+    m[0] = t[0] - 65517;
     for (i = 1; i < 15; ++i) {
-      m[i] = t2[i] - 65535 - (m[i - 1] >> 16 & 1);
+      m[i] = t[i] - 65535 - (m[i - 1] >> 16 & 1);
       m[i - 1] &= 65535;
     }
-    m[15] = t2[15] - 32767 - (m[14] >> 16 & 1);
+    m[15] = t[15] - 32767 - (m[14] >> 16 & 1);
     b = m[15] >> 16 & 1;
     m[14] &= 65535;
-    sel25519(t2, m, 1 - b);
+    sel25519(t, m, 1 - b);
   }
   for (i = 0; i < 16; i++) {
-    o[2 * i] = t2[i] & 255;
-    o[2 * i + 1] = t2[i] >> 8;
+    o[2 * i] = t[i] & 255;
+    o[2 * i + 1] = t[i] >> 8;
   }
 }
 function unpackneg(r, p) {
-  var t2 = gf(), chk = gf(), num = gf(), den = gf(), den2 = gf(), den4 = gf(), den6 = gf();
+  var t = gf(), chk = gf(), num = gf(), den = gf(), den2 = gf(), den4 = gf(), den6 = gf();
   set25519(r[2], gf1);
   unpack25519(r[1], p);
   S(num, r[1]);
@@ -15527,13 +15526,13 @@ function unpackneg(r, p) {
   S(den2, den);
   S(den4, den2);
   M(den6, den4, den2);
-  M(t2, den6, num);
-  M(t2, t2, den);
-  pow2523(t2, t2);
-  M(t2, t2, num);
-  M(t2, t2, den);
-  M(t2, t2, den);
-  M(r[0], t2, den);
+  M(t, den6, num);
+  M(t, t, den);
+  pow2523(t, t);
+  M(t, t, num);
+  M(t, t, den);
+  M(t, t, den);
+  M(r[0], t, den);
   S(chk, r[0]);
   M(chk, chk, den);
   if (neq25519(chk, num)) {
@@ -15649,11 +15648,11 @@ function car25519(o) {
   o[0] += c - 1 + 37 * (c - 1);
 }
 function sel25519(p, q, b) {
-  var t2, c = ~(b - 1);
+  var t, c = ~(b - 1);
   for (var i = 0; i < 16; ++i) {
-    t2 = c & (p[i] ^ q[i]);
-    p[i] ^= t2;
-    q[i] ^= t2;
+    t = c & (p[i] ^ q[i]);
+    p[i] ^= t;
+    q[i] ^= t;
   }
 }
 function gf(init2) {
@@ -17692,7 +17691,7 @@ class Threshold {
   }
 }
 var scrypt = { exports: {} };
-(function(module2, exports2) {
+(function(module, exports) {
   (function(root) {
     const MAX_VALUE = 2147483647;
     function SHA256(m) {
@@ -18144,7 +18143,7 @@ var scrypt = { exports: {} };
       }
     };
     {
-      module2.exports = lib2;
+      module.exports = lib2;
     }
   })();
 })(scrypt);
@@ -18220,7 +18219,7 @@ class EthereumKeyStore {
     }
     const ciphertext = Buffer.from(json.crypto.ciphertext, "hex");
     const macCheck = Buffer.concat([Buffer.from(derivedKey.slice(16, 32)), ciphertext]);
-    const mac = viem.keccak256(viem.toHex(macCheck)).replace(/^0x/, "");
+    const mac = keccak256(toHex(macCheck)).replace(/^0x/, "");
     if (mac !== json.crypto.mac.toLowerCase()) {
       throw new EthereumWalletError("Invalid password");
     }
@@ -18250,8 +18249,8 @@ class EthereumKeyStore {
     }
     const ciphertext = Buffer.from(cipher.message, "hex");
     const checksumBuffer = Buffer.concat([Buffer.from(derivedKey.slice(16, 32)), ciphertext]);
-    const hashFn = checksum.function === "sha256" ? viem.sha256 : viem.keccak256;
-    const calculatedMac = hashFn(viem.toHex(checksumBuffer));
+    const hashFn = checksum.function === "sha256" ? sha256$1 : keccak256;
+    const calculatedMac = hashFn(toHex(checksumBuffer));
     if (calculatedMac.replace(/^0x/, "") !== checksum.message.toLowerCase()) {
       throw new EthereumWalletError("Invalid password");
     }
@@ -18303,7 +18302,7 @@ class Encryption {
     return encryptedShares;
   }
 }
-var __decorate$a = function(decorators, target, key, desc) {
+var __decorate$9 = function(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
   else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
@@ -18317,12 +18316,12 @@ let OperatorPublicKeyValidatorConstraint = class OperatorPublicKeyValidatorConst
     return "Invalid operator public key";
   }
 };
-OperatorPublicKeyValidatorConstraint = __decorate$a([
-  classValidator.ValidatorConstraint({ name: "operatorKey", async: false })
+OperatorPublicKeyValidatorConstraint = __decorate$9([
+  ValidatorConstraint({ name: "operatorKey", async: false })
 ], OperatorPublicKeyValidatorConstraint);
 function OperatorPublicKeyValidator(validationOptions) {
   return function(object, propertyName) {
-    classValidator.registerDecorator({
+    registerDecorator({
       target: object.constructor,
       propertyName,
       options: validationOptions,
@@ -18331,13 +18330,13 @@ function OperatorPublicKeyValidator(validationOptions) {
     });
   };
 }
-var __decorate$9 = function(decorators, target, key, desc) {
+var __decorate$8 = function(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
   else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
   return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata$4 = function(k, v) {
+var __metadata$3 = function(k, v) {
   if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 class OperatorData {
@@ -18362,21 +18361,21 @@ class OperatorData {
    * Validate operator id and public key
    */
   validate() {
-    classValidator.validateSync(this);
+    validateSync(this);
   }
 }
-__decorate$9([
-  classValidator.IsNotEmpty({ message: "The operator id is null" }),
-  classValidator.IsDefined({ message: "The operator id is undefined" }),
-  classValidator.IsInt({ message: "The operator id must be an integer" }),
-  __metadata$4("design:type", Number)
+__decorate$8([
+  IsNotEmpty({ message: "The operator id is null" }),
+  IsDefined({ message: "The operator id is undefined" }),
+  IsInt({ message: "The operator id must be an integer" }),
+  __metadata$3("design:type", Number)
 ], OperatorData.prototype, "id", void 0);
-__decorate$9([
-  classValidator.IsNotEmpty({ message: "The operator public key is null" }),
-  classValidator.IsDefined({ message: "The operator public key is undefined" }),
-  classValidator.IsString({ message: "The operator public key must be a string" }),
+__decorate$8([
+  IsNotEmpty({ message: "The operator public key is null" }),
+  IsDefined({ message: "The operator public key is undefined" }),
+  IsString({ message: "The operator public key must be a string" }),
   OperatorPublicKeyValidator(),
-  __metadata$4("design:type", String)
+  __metadata$3("design:type", String)
 ], OperatorData.prototype, "operatorKey", void 0);
 const operatorSortedList = (operators) => {
   const ids = operators.map((op) => op.id);
@@ -18419,7 +18418,7 @@ class SingleSharesSignatureInvalid extends SSVKeysException {
   }
 }
 const hexArrayToBytes = (hexArr) => {
-  const uint8Array = new Uint8Array(hexArr.flatMap((hex) => Array.from(viem.toBytes(hex))));
+  const uint8Array = new Uint8Array(hexArr.flatMap((hex) => Array.from(toBytes(hex))));
   return Buffer.from(uint8Array);
 };
 const buildSignature = async (dataToSign, privateKeyHex) => {
@@ -18427,8 +18426,8 @@ const buildSignature = async (dataToSign, privateKeyHex) => {
     await bls.init(bls.BLS12_381);
   }
   const privateKey = bls.deserializeHexStrToSecretKey(privateKeyHex.replace("0x", ""));
-  const messageHash = viem.keccak256(viem.toBytes(dataToSign));
-  const messageBytes = viem.fromHex(messageHash, "bytes");
+  const messageHash = keccak256(toBytes(dataToSign));
+  const messageBytes = fromHex(messageHash, "bytes");
   const signature = privateKey.sign(messageBytes);
   const signatureHex = signature.serializeToHexStr();
   return `0x${signatureHex}`;
@@ -18436,8 +18435,8 @@ const buildSignature = async (dataToSign, privateKeyHex) => {
 const validateSignature = async (signedData, signatureHex, publicKey) => {
   const blsPublicKey = bls.deserializeHexStrToPublicKey(publicKey.replace("0x", ""));
   const signature = bls.deserializeHexStrToSignature(signatureHex.replace("0x", ""));
-  const messageHashHex = viem.keccak256(viem.toBytes(signedData));
-  const messageHashBytes = viem.fromHex(messageHashHex, "bytes");
+  const messageHashHex = keccak256(toBytes(signedData));
+  const messageHashBytes = fromHex(messageHashHex, "bytes");
   if (!blsPublicKey.verify(signature, messageHashBytes)) {
     throw new SingleSharesSignatureInvalid(signatureHex, "Single shares signature is invalid");
   }
@@ -18448,7 +18447,7 @@ const privateToPublicKey = async (privateKey) => {
   }
   return `0x${bls.deserializeHexStrToSecretKey(privateKey.replace("0x", "")).getPublicKey().serializeToHexStr()}`;
 };
-var __decorate$8 = function(decorators, target, key, desc) {
+var __decorate$7 = function(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
   else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
@@ -18473,12 +18472,12 @@ let OpeatorsListValidatorConstraint = class OpeatorsListValidatorConstraint2 {
     return "The list of operators contains duplicate entries";
   }
 };
-OpeatorsListValidatorConstraint = __decorate$8([
-  classValidator.ValidatorConstraint({ name: "uniqueList", async: false })
+OpeatorsListValidatorConstraint = __decorate$7([
+  ValidatorConstraint({ name: "uniqueList", async: false })
 ], OpeatorsListValidatorConstraint);
 function OpeatorsListValidator(validationOptions) {
   return function(object, propertyName) {
-    classValidator.registerDecorator({
+    registerDecorator({
       target: object.constructor,
       propertyName,
       options: validationOptions,
@@ -18487,7 +18486,7 @@ function OpeatorsListValidator(validationOptions) {
     });
   };
 }
-var __decorate$7 = function(decorators, target, key, desc) {
+var __decorate$6 = function(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
   else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
@@ -18510,15 +18509,15 @@ let PublicKeyValidatorConstraint = class PublicKeyValidatorConstraint2 {
     return "Invalid public key";
   }
 };
-PublicKeyValidatorConstraint = __decorate$7([
-  classValidator.ValidatorConstraint({ name: "publicKey", async: true })
+PublicKeyValidatorConstraint = __decorate$6([
+  ValidatorConstraint({ name: "publicKey", async: true })
 ], PublicKeyValidatorConstraint);
 function PublicKeyValidator(validationOptions) {
   return function(object, propertyName) {
     if (!object || typeof object !== "object") {
       throw new Error(`@PublicKeyValidator must be used on a class property — received ${typeof object} for ${propertyName}`);
     }
-    classValidator.registerDecorator({
+    registerDecorator({
       target: object.constructor,
       propertyName,
       options: validationOptions,
@@ -18527,7 +18526,7 @@ function PublicKeyValidator(validationOptions) {
     });
   };
 }
-var __decorate$6 = function(decorators, target, key, desc) {
+var __decorate$5 = function(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
   else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
@@ -18536,7 +18535,7 @@ var __decorate$6 = function(decorators, target, key, desc) {
 let OwnerAddressValidatorConstraint = class OwnerAddressValidatorConstraint2 {
   validate(value) {
     try {
-      viem.getAddress(value);
+      getAddress(value);
     } catch {
       throw new OwnerAddressFormatError(value, "Owner address is not a valid Ethereum address");
     }
@@ -18546,12 +18545,12 @@ let OwnerAddressValidatorConstraint = class OwnerAddressValidatorConstraint2 {
     return "Invalid owner address";
   }
 };
-OwnerAddressValidatorConstraint = __decorate$6([
-  classValidator.ValidatorConstraint({ name: "ownerAddress", async: false })
+OwnerAddressValidatorConstraint = __decorate$5([
+  ValidatorConstraint({ name: "ownerAddress", async: false })
 ], OwnerAddressValidatorConstraint);
 function OwnerAddressValidator(validationOptions) {
   return function(object, propertyName) {
-    classValidator.registerDecorator({
+    registerDecorator({
       target: object.constructor,
       propertyName,
       options: validationOptions,
@@ -18560,7 +18559,7 @@ function OwnerAddressValidator(validationOptions) {
     });
   };
 }
-var __decorate$5 = function(decorators, target, key, desc) {
+var __decorate$4 = function(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
   else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
@@ -18577,12 +18576,12 @@ let OwnerNonceValidatorConstraint = class OwnerNonceValidatorConstraint2 {
     return "Invalid owner nonce";
   }
 };
-OwnerNonceValidatorConstraint = __decorate$5([
-  classValidator.ValidatorConstraint({ name: "ownerNonce", async: false })
+OwnerNonceValidatorConstraint = __decorate$4([
+  ValidatorConstraint({ name: "ownerNonce", async: false })
 ], OwnerNonceValidatorConstraint);
 function OwnerNonceValidator(validationOptions) {
   return function(object, propertyName) {
-    classValidator.registerDecorator({
+    registerDecorator({
       target: object.constructor,
       propertyName,
       options: validationOptions,
@@ -18591,7 +18590,7 @@ function OwnerNonceValidator(validationOptions) {
     });
   };
 }
-var __decorate$4 = function(decorators, target, key, desc) {
+var __decorate$3 = function(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
   else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
@@ -18618,16 +18617,16 @@ let MatchLengthValidatorConstraint = class MatchLengthValidatorConstraint2 {
     return "The length of the entries lists are not equal";
   }
 };
-MatchLengthValidatorConstraint = __decorate$4([
-  classValidator.ValidatorConstraint({ name: "matchLength", async: false })
+MatchLengthValidatorConstraint = __decorate$3([
+  ValidatorConstraint({ name: "matchLength", async: false })
 ], MatchLengthValidatorConstraint);
-var __decorate$3 = function(decorators, target, key, desc) {
+var __decorate$2 = function(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
   else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
   return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata$3 = function(k, v) {
+var __metadata$2 = function(k, v) {
   if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 class KeySharesData {
@@ -18675,7 +18674,7 @@ class KeySharesData {
    * Do all possible validations.
    */
   async validate() {
-    classValidator.validateSync(this);
+    validateSync(this);
   }
   /**
    * Get the list of operators IDs.
@@ -18696,38 +18695,38 @@ class KeySharesData {
     return this.operators.map((operator) => String(operator.operatorKey));
   }
 }
-__decorate$3([
-  classValidator.IsOptional(),
-  classValidator.IsNumber(),
+__decorate$2([
+  IsOptional(),
+  IsNumber(),
   OwnerNonceValidator(),
-  __metadata$3("design:type", Object)
+  __metadata$2("design:type", Object)
 ], KeySharesData.prototype, "ownerNonce", void 0);
-__decorate$3([
-  classValidator.IsOptional(),
-  classValidator.IsString(),
+__decorate$2([
+  IsOptional(),
+  IsString(),
   OwnerAddressValidator(),
-  __metadata$3("design:type", Object)
+  __metadata$2("design:type", Object)
 ], KeySharesData.prototype, "ownerAddress", void 0);
-__decorate$3([
-  classValidator.IsOptional(),
-  classValidator.IsString(),
-  classValidator.Length(98, 98),
+__decorate$2([
+  IsOptional(),
+  IsString(),
+  Length(98, 98),
   PublicKeyValidator(),
-  __metadata$3("design:type", Object)
+  __metadata$2("design:type", Object)
 ], KeySharesData.prototype, "publicKey", void 0);
-__decorate$3([
-  classValidator.IsOptional(),
-  classValidator.ValidateNested({ each: true }),
+__decorate$2([
+  IsOptional(),
+  ValidateNested({ each: true }),
   OpeatorsListValidator(),
-  __metadata$3("design:type", Object)
+  __metadata$2("design:type", Object)
 ], KeySharesData.prototype, "operators", void 0);
-var __decorate$2 = function(decorators, target, key, desc) {
+var __decorate$1 = function(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
   else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
   return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata$2 = function(k, v) {
+var __metadata$1 = function(k, v) {
   if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 class KeySharesPayload {
@@ -18777,7 +18776,7 @@ class KeySharesPayload {
    * @returns {void | ValidationError[]} Validation errors if any, otherwise undefined.
    */
   validate() {
-    classValidator.validateSync(this);
+    validateSync(this);
   }
   /**
    * Builds the payload from the given data.
@@ -18791,27 +18790,27 @@ class KeySharesPayload {
     return this;
   }
 }
-__decorate$2([
-  classValidator.IsString(),
-  __metadata$2("design:type", String)
+__decorate$1([
+  IsString(),
+  __metadata$1("design:type", String)
 ], KeySharesPayload.prototype, "sharesData", void 0);
-__decorate$2([
-  classValidator.IsString(),
-  classValidator.Length(98, 98),
+__decorate$1([
+  IsString(),
+  Length(98, 98),
   PublicKeyValidator(),
-  __metadata$2("design:type", String)
+  __metadata$1("design:type", String)
 ], KeySharesPayload.prototype, "publicKey", void 0);
-__decorate$2([
-  classValidator.IsNumber({}, { each: true }),
-  __metadata$2("design:type", Array)
+__decorate$1([
+  IsNumber({}, { each: true }),
+  __metadata$1("design:type", Array)
 ], KeySharesPayload.prototype, "operatorIds", void 0);
-var __decorate$1 = function(decorators, target, key, desc) {
+var __decorate = function(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
   else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
   return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata$1 = function(k, v) {
+var __metadata = function(k, v) {
   if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 const SIGNATURE_LENGTH = 192;
@@ -18849,7 +18848,7 @@ class KeySharesItem {
     }
     let address;
     try {
-      address = viem.getAddress(ownerAddress);
+      address = getAddress(ownerAddress);
     } catch {
       throw new OwnerAddressFormatError(ownerAddress, "Owner address is not a valid Ethereum address");
     }
@@ -18873,7 +18872,7 @@ class KeySharesItem {
     if (!Number.isInteger(ownerNonce) || ownerNonce < 0) {
       throw new OwnerNonceFormatError(ownerNonce, "Owner nonce is not positive integer");
     }
-    const address = viem.getAddress(ownerAddress);
+    const address = getAddress(ownerAddress);
     const signaturePt = shares.replace("0x", "").substring(0, SIGNATURE_LENGTH);
     await validateSignature(`${address}:${ownerNonce}`, `0x${signaturePt}`, publicKey);
   }
@@ -18891,11 +18890,11 @@ class KeySharesItem {
     }
     const sharesPt = bytes.slice(2 + SIGNATURE_LENGTH);
     const pkSplit = sharesPt.substring(0, operatorCount * PUBLIC_KEY_LENGTH);
-    const pkBytes = viem.toBytes("0x" + pkSplit);
-    const sharesPublicKeys = this.splitArray(operatorCount, pkBytes).map((item) => viem.toHex(item));
+    const pkBytes = toBytes("0x" + pkSplit);
+    const sharesPublicKeys = this.splitArray(operatorCount, pkBytes).map((item) => toHex(item));
     const eSplit = bytes.substring(operatorCount * PUBLIC_KEY_LENGTH);
-    const eBytes = viem.toBytes("0x" + eSplit);
-    const encryptedKeys = this.splitArray(operatorCount, eBytes).map((item) => Buffer.from(viem.toHex(item).slice(2), "hex").toString("base64"));
+    const eBytes = toBytes("0x" + eSplit);
+    const encryptedKeys = this.splitArray(operatorCount, eBytes).map((item) => Buffer.from(toHex(item).slice(2), "hex").toString("base64"));
     return { sharesPublicKeys, encryptedKeys };
   }
   /**
@@ -18909,7 +18908,7 @@ class KeySharesItem {
    * Validate everything
    */
   validate() {
-    classValidator.validateSync(this);
+    validateSync(this);
   }
   /**
    * Stringify key shares to be ready for saving in file.
@@ -18951,19 +18950,19 @@ class KeySharesItem {
     return instance;
   }
 }
-__decorate$1([
-  classValidator.IsOptional(),
-  classValidator.ValidateNested(),
-  __metadata$1("design:type", KeySharesData)
+__decorate([
+  IsOptional(),
+  ValidateNested(),
+  __metadata("design:type", KeySharesData)
 ], KeySharesItem.prototype, "data", void 0);
-__decorate$1([
-  classValidator.IsOptional(),
-  classValidator.ValidateNested(),
-  __metadata$1("design:type", KeySharesPayload)
+__decorate([
+  IsOptional(),
+  ValidateNested(),
+  __metadata("design:type", KeySharesPayload)
 ], KeySharesItem.prototype, "payload", void 0);
-__decorate$1([
-  classValidator.IsOptional(),
-  __metadata$1("design:type", Object)
+__decorate([
+  IsOptional(),
+  __metadata("design:type", Object)
 ], KeySharesItem.prototype, "error", void 0);
 class SSVKeys {
   constructor() {
@@ -19077,491 +19076,12 @@ class SSVKeys {
     };
   }
 }
-const debug$1 = typeof process === "object" && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG) ? (...args) => console.error("SEMVER", ...args) : () => {
+export {
+  KeySharesItem as K,
+  OperatorPublicKeyError as O,
+  SSVKeys as S,
+  SSVKeysException as a,
+  KeySharesPayload as b,
+  OperatorsCountsMismatchError as c,
+  getDefaultExportFromCjs as g
 };
-var debug_1 = debug$1;
-const MAX_LENGTH$1 = 256;
-const MAX_SAFE_INTEGER$1 = Number.MAX_SAFE_INTEGER || /* istanbul ignore next */
-9007199254740991;
-const MAX_SAFE_COMPONENT_LENGTH = 16;
-const MAX_SAFE_BUILD_LENGTH = MAX_LENGTH$1 - 6;
-var constants = {
-  MAX_LENGTH: MAX_LENGTH$1,
-  MAX_SAFE_COMPONENT_LENGTH,
-  MAX_SAFE_BUILD_LENGTH,
-  MAX_SAFE_INTEGER: MAX_SAFE_INTEGER$1
-};
-var re$1 = { exports: {} };
-(function(module2, exports2) {
-  const {
-    MAX_SAFE_COMPONENT_LENGTH: MAX_SAFE_COMPONENT_LENGTH2,
-    MAX_SAFE_BUILD_LENGTH: MAX_SAFE_BUILD_LENGTH2,
-    MAX_LENGTH: MAX_LENGTH2
-  } = constants;
-  const debug2 = debug_1;
-  exports2 = module2.exports = {};
-  const re2 = exports2.re = [];
-  const safeRe = exports2.safeRe = [];
-  const src = exports2.src = [];
-  const safeSrc = exports2.safeSrc = [];
-  const t2 = exports2.t = {};
-  let R = 0;
-  const LETTERDASHNUMBER = "[a-zA-Z0-9-]";
-  const safeRegexReplacements = [
-    ["\\s", 1],
-    ["\\d", MAX_LENGTH2],
-    [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH2]
-  ];
-  const makeSafeRegex = (value) => {
-    for (const [token, max] of safeRegexReplacements) {
-      value = value.split(`${token}*`).join(`${token}{0,${max}}`).split(`${token}+`).join(`${token}{1,${max}}`);
-    }
-    return value;
-  };
-  const createToken = (name, value, isGlobal) => {
-    const safe = makeSafeRegex(value);
-    const index = R++;
-    debug2(name, index, value);
-    t2[name] = index;
-    src[index] = value;
-    safeSrc[index] = safe;
-    re2[index] = new RegExp(value, isGlobal ? "g" : void 0);
-    safeRe[index] = new RegExp(safe, isGlobal ? "g" : void 0);
-  };
-  createToken("NUMERICIDENTIFIER", "0|[1-9]\\d*");
-  createToken("NUMERICIDENTIFIERLOOSE", "\\d+");
-  createToken("NONNUMERICIDENTIFIER", `\\d*[a-zA-Z-]${LETTERDASHNUMBER}*`);
-  createToken("MAINVERSION", `(${src[t2.NUMERICIDENTIFIER]})\\.(${src[t2.NUMERICIDENTIFIER]})\\.(${src[t2.NUMERICIDENTIFIER]})`);
-  createToken("MAINVERSIONLOOSE", `(${src[t2.NUMERICIDENTIFIERLOOSE]})\\.(${src[t2.NUMERICIDENTIFIERLOOSE]})\\.(${src[t2.NUMERICIDENTIFIERLOOSE]})`);
-  createToken("PRERELEASEIDENTIFIER", `(?:${src[t2.NONNUMERICIDENTIFIER]}|${src[t2.NUMERICIDENTIFIER]})`);
-  createToken("PRERELEASEIDENTIFIERLOOSE", `(?:${src[t2.NONNUMERICIDENTIFIER]}|${src[t2.NUMERICIDENTIFIERLOOSE]})`);
-  createToken("PRERELEASE", `(?:-(${src[t2.PRERELEASEIDENTIFIER]}(?:\\.${src[t2.PRERELEASEIDENTIFIER]})*))`);
-  createToken("PRERELEASELOOSE", `(?:-?(${src[t2.PRERELEASEIDENTIFIERLOOSE]}(?:\\.${src[t2.PRERELEASEIDENTIFIERLOOSE]})*))`);
-  createToken("BUILDIDENTIFIER", `${LETTERDASHNUMBER}+`);
-  createToken("BUILD", `(?:\\+(${src[t2.BUILDIDENTIFIER]}(?:\\.${src[t2.BUILDIDENTIFIER]})*))`);
-  createToken("FULLPLAIN", `v?${src[t2.MAINVERSION]}${src[t2.PRERELEASE]}?${src[t2.BUILD]}?`);
-  createToken("FULL", `^${src[t2.FULLPLAIN]}$`);
-  createToken("LOOSEPLAIN", `[v=\\s]*${src[t2.MAINVERSIONLOOSE]}${src[t2.PRERELEASELOOSE]}?${src[t2.BUILD]}?`);
-  createToken("LOOSE", `^${src[t2.LOOSEPLAIN]}$`);
-  createToken("GTLT", "((?:<|>)?=?)");
-  createToken("XRANGEIDENTIFIERLOOSE", `${src[t2.NUMERICIDENTIFIERLOOSE]}|x|X|\\*`);
-  createToken("XRANGEIDENTIFIER", `${src[t2.NUMERICIDENTIFIER]}|x|X|\\*`);
-  createToken("XRANGEPLAIN", `[v=\\s]*(${src[t2.XRANGEIDENTIFIER]})(?:\\.(${src[t2.XRANGEIDENTIFIER]})(?:\\.(${src[t2.XRANGEIDENTIFIER]})(?:${src[t2.PRERELEASE]})?${src[t2.BUILD]}?)?)?`);
-  createToken("XRANGEPLAINLOOSE", `[v=\\s]*(${src[t2.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t2.XRANGEIDENTIFIERLOOSE]})(?:\\.(${src[t2.XRANGEIDENTIFIERLOOSE]})(?:${src[t2.PRERELEASELOOSE]})?${src[t2.BUILD]}?)?)?`);
-  createToken("XRANGE", `^${src[t2.GTLT]}\\s*${src[t2.XRANGEPLAIN]}$`);
-  createToken("XRANGELOOSE", `^${src[t2.GTLT]}\\s*${src[t2.XRANGEPLAINLOOSE]}$`);
-  createToken("COERCEPLAIN", `${"(^|[^\\d])(\\d{1,"}${MAX_SAFE_COMPONENT_LENGTH2}})(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH2}}))?(?:\\.(\\d{1,${MAX_SAFE_COMPONENT_LENGTH2}}))?`);
-  createToken("COERCE", `${src[t2.COERCEPLAIN]}(?:$|[^\\d])`);
-  createToken("COERCEFULL", src[t2.COERCEPLAIN] + `(?:${src[t2.PRERELEASE]})?(?:${src[t2.BUILD]})?(?:$|[^\\d])`);
-  createToken("COERCERTL", src[t2.COERCE], true);
-  createToken("COERCERTLFULL", src[t2.COERCEFULL], true);
-  createToken("LONETILDE", "(?:~>?)");
-  createToken("TILDETRIM", `(\\s*)${src[t2.LONETILDE]}\\s+`, true);
-  exports2.tildeTrimReplace = "$1~";
-  createToken("TILDE", `^${src[t2.LONETILDE]}${src[t2.XRANGEPLAIN]}$`);
-  createToken("TILDELOOSE", `^${src[t2.LONETILDE]}${src[t2.XRANGEPLAINLOOSE]}$`);
-  createToken("LONECARET", "(?:\\^)");
-  createToken("CARETTRIM", `(\\s*)${src[t2.LONECARET]}\\s+`, true);
-  exports2.caretTrimReplace = "$1^";
-  createToken("CARET", `^${src[t2.LONECARET]}${src[t2.XRANGEPLAIN]}$`);
-  createToken("CARETLOOSE", `^${src[t2.LONECARET]}${src[t2.XRANGEPLAINLOOSE]}$`);
-  createToken("COMPARATORLOOSE", `^${src[t2.GTLT]}\\s*(${src[t2.LOOSEPLAIN]})$|^$`);
-  createToken("COMPARATOR", `^${src[t2.GTLT]}\\s*(${src[t2.FULLPLAIN]})$|^$`);
-  createToken("COMPARATORTRIM", `(\\s*)${src[t2.GTLT]}\\s*(${src[t2.LOOSEPLAIN]}|${src[t2.XRANGEPLAIN]})`, true);
-  exports2.comparatorTrimReplace = "$1$2$3";
-  createToken("HYPHENRANGE", `^\\s*(${src[t2.XRANGEPLAIN]})\\s+-\\s+(${src[t2.XRANGEPLAIN]})\\s*$`);
-  createToken("HYPHENRANGELOOSE", `^\\s*(${src[t2.XRANGEPLAINLOOSE]})\\s+-\\s+(${src[t2.XRANGEPLAINLOOSE]})\\s*$`);
-  createToken("STAR", "(<|>)?=?\\s*\\*");
-  createToken("GTE0", "^\\s*>=\\s*0\\.0\\.0\\s*$");
-  createToken("GTE0PRE", "^\\s*>=\\s*0\\.0\\.0-0\\s*$");
-})(re$1, re$1.exports);
-var reExports = re$1.exports;
-const looseOption = Object.freeze({ loose: true });
-const emptyOpts = Object.freeze({});
-const parseOptions$1 = (options) => {
-  if (!options) {
-    return emptyOpts;
-  }
-  if (typeof options !== "object") {
-    return looseOption;
-  }
-  return options;
-};
-var parseOptions_1 = parseOptions$1;
-const numeric = /^[0-9]+$/;
-const compareIdentifiers$1 = (a, b) => {
-  const anum = numeric.test(a);
-  const bnum = numeric.test(b);
-  if (anum && bnum) {
-    a = +a;
-    b = +b;
-  }
-  return a === b ? 0 : anum && !bnum ? -1 : bnum && !anum ? 1 : a < b ? -1 : 1;
-};
-var identifiers = {
-  compareIdentifiers: compareIdentifiers$1
-};
-const debug = debug_1;
-const { MAX_LENGTH, MAX_SAFE_INTEGER } = constants;
-const { safeRe: re, t } = reExports;
-const parseOptions = parseOptions_1;
-const { compareIdentifiers } = identifiers;
-let SemVer$2 = class SemVer {
-  constructor(version, options) {
-    options = parseOptions(options);
-    if (version instanceof SemVer) {
-      if (version.loose === !!options.loose && version.includePrerelease === !!options.includePrerelease) {
-        return version;
-      } else {
-        version = version.version;
-      }
-    } else if (typeof version !== "string") {
-      throw new TypeError(`Invalid version. Must be a string. Got type "${typeof version}".`);
-    }
-    if (version.length > MAX_LENGTH) {
-      throw new TypeError(
-        `version is longer than ${MAX_LENGTH} characters`
-      );
-    }
-    debug("SemVer", version, options);
-    this.options = options;
-    this.loose = !!options.loose;
-    this.includePrerelease = !!options.includePrerelease;
-    const m = version.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL]);
-    if (!m) {
-      throw new TypeError(`Invalid Version: ${version}`);
-    }
-    this.raw = version;
-    this.major = +m[1];
-    this.minor = +m[2];
-    this.patch = +m[3];
-    if (this.major > MAX_SAFE_INTEGER || this.major < 0) {
-      throw new TypeError("Invalid major version");
-    }
-    if (this.minor > MAX_SAFE_INTEGER || this.minor < 0) {
-      throw new TypeError("Invalid minor version");
-    }
-    if (this.patch > MAX_SAFE_INTEGER || this.patch < 0) {
-      throw new TypeError("Invalid patch version");
-    }
-    if (!m[4]) {
-      this.prerelease = [];
-    } else {
-      this.prerelease = m[4].split(".").map((id) => {
-        if (/^[0-9]+$/.test(id)) {
-          const num = +id;
-          if (num >= 0 && num < MAX_SAFE_INTEGER) {
-            return num;
-          }
-        }
-        return id;
-      });
-    }
-    this.build = m[5] ? m[5].split(".") : [];
-    this.format();
-  }
-  format() {
-    this.version = `${this.major}.${this.minor}.${this.patch}`;
-    if (this.prerelease.length) {
-      this.version += `-${this.prerelease.join(".")}`;
-    }
-    return this.version;
-  }
-  toString() {
-    return this.version;
-  }
-  compare(other) {
-    debug("SemVer.compare", this.version, this.options, other);
-    if (!(other instanceof SemVer)) {
-      if (typeof other === "string" && other === this.version) {
-        return 0;
-      }
-      other = new SemVer(other, this.options);
-    }
-    if (other.version === this.version) {
-      return 0;
-    }
-    return this.compareMain(other) || this.comparePre(other);
-  }
-  compareMain(other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options);
-    }
-    return compareIdentifiers(this.major, other.major) || compareIdentifiers(this.minor, other.minor) || compareIdentifiers(this.patch, other.patch);
-  }
-  comparePre(other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options);
-    }
-    if (this.prerelease.length && !other.prerelease.length) {
-      return -1;
-    } else if (!this.prerelease.length && other.prerelease.length) {
-      return 1;
-    } else if (!this.prerelease.length && !other.prerelease.length) {
-      return 0;
-    }
-    let i = 0;
-    do {
-      const a = this.prerelease[i];
-      const b = other.prerelease[i];
-      debug("prerelease compare", i, a, b);
-      if (a === void 0 && b === void 0) {
-        return 0;
-      } else if (b === void 0) {
-        return 1;
-      } else if (a === void 0) {
-        return -1;
-      } else if (a === b) {
-        continue;
-      } else {
-        return compareIdentifiers(a, b);
-      }
-    } while (++i);
-  }
-  compareBuild(other) {
-    if (!(other instanceof SemVer)) {
-      other = new SemVer(other, this.options);
-    }
-    let i = 0;
-    do {
-      const a = this.build[i];
-      const b = other.build[i];
-      debug("build compare", i, a, b);
-      if (a === void 0 && b === void 0) {
-        return 0;
-      } else if (b === void 0) {
-        return 1;
-      } else if (a === void 0) {
-        return -1;
-      } else if (a === b) {
-        continue;
-      } else {
-        return compareIdentifiers(a, b);
-      }
-    } while (++i);
-  }
-  // preminor will bump the version up to the next minor release, and immediately
-  // down to pre-release. premajor and prepatch work the same way.
-  inc(release, identifier, identifierBase) {
-    if (release.startsWith("pre")) {
-      if (!identifier && identifierBase === false) {
-        throw new Error("invalid increment argument: identifier is empty");
-      }
-      if (identifier) {
-        const match = `-${identifier}`.match(this.options.loose ? re[t.PRERELEASELOOSE] : re[t.PRERELEASE]);
-        if (!match || match[1] !== identifier) {
-          throw new Error(`invalid identifier: ${identifier}`);
-        }
-      }
-    }
-    switch (release) {
-      case "premajor":
-        this.prerelease.length = 0;
-        this.patch = 0;
-        this.minor = 0;
-        this.major++;
-        this.inc("pre", identifier, identifierBase);
-        break;
-      case "preminor":
-        this.prerelease.length = 0;
-        this.patch = 0;
-        this.minor++;
-        this.inc("pre", identifier, identifierBase);
-        break;
-      case "prepatch":
-        this.prerelease.length = 0;
-        this.inc("patch", identifier, identifierBase);
-        this.inc("pre", identifier, identifierBase);
-        break;
-      case "prerelease":
-        if (this.prerelease.length === 0) {
-          this.inc("patch", identifier, identifierBase);
-        }
-        this.inc("pre", identifier, identifierBase);
-        break;
-      case "release":
-        if (this.prerelease.length === 0) {
-          throw new Error(`version ${this.raw} is not a prerelease`);
-        }
-        this.prerelease.length = 0;
-        break;
-      case "major":
-        if (this.minor !== 0 || this.patch !== 0 || this.prerelease.length === 0) {
-          this.major++;
-        }
-        this.minor = 0;
-        this.patch = 0;
-        this.prerelease = [];
-        break;
-      case "minor":
-        if (this.patch !== 0 || this.prerelease.length === 0) {
-          this.minor++;
-        }
-        this.patch = 0;
-        this.prerelease = [];
-        break;
-      case "patch":
-        if (this.prerelease.length === 0) {
-          this.patch++;
-        }
-        this.prerelease = [];
-        break;
-      case "pre": {
-        const base = Number(identifierBase) ? 1 : 0;
-        if (this.prerelease.length === 0) {
-          this.prerelease = [base];
-        } else {
-          let i = this.prerelease.length;
-          while (--i >= 0) {
-            if (typeof this.prerelease[i] === "number") {
-              this.prerelease[i]++;
-              i = -2;
-            }
-          }
-          if (i === -1) {
-            if (identifier === this.prerelease.join(".") && identifierBase === false) {
-              throw new Error("invalid increment argument: identifier already exists");
-            }
-            this.prerelease.push(base);
-          }
-        }
-        if (identifier) {
-          let prerelease = [identifier, base];
-          if (identifierBase === false) {
-            prerelease = [identifier];
-          }
-          if (compareIdentifiers(this.prerelease[0], identifier) === 0) {
-            if (isNaN(this.prerelease[1])) {
-              this.prerelease = prerelease;
-            }
-          } else {
-            this.prerelease = prerelease;
-          }
-        }
-        break;
-      }
-      default:
-        throw new Error(`invalid increment argument: ${release}`);
-    }
-    this.raw = this.format();
-    if (this.build.length) {
-      this.raw += `+${this.build.join(".")}`;
-    }
-    return this;
-  }
-};
-var semver = SemVer$2;
-const SemVer$1 = semver;
-const compare$1 = (a, b, loose) => new SemVer$1(a, loose).compare(new SemVer$1(b, loose));
-var compare_1 = compare$1;
-const compare = compare_1;
-const eq = (a, b, loose) => compare(a, b, loose) === 0;
-var eq_1 = eq;
-const equalVersion = /* @__PURE__ */ getDefaultExportFromCjs(eq_1);
-const SemVer2 = semver;
-const parse$1 = (version, options, throwErrors = false) => {
-  if (version instanceof SemVer2) {
-    return version;
-  }
-  try {
-    return new SemVer2(version, options);
-  } catch (er) {
-    if (!throwErrors) {
-      return null;
-    }
-    throw er;
-  }
-};
-var parse_1 = parse$1;
-const parse = parse_1;
-const valid = (version, options) => {
-  const v = parse(version, options);
-  return v ? v.version : null;
-};
-var valid_1 = valid;
-const validVersion = /* @__PURE__ */ getDefaultExportFromCjs(valid_1);
-var __decorate = function(decorators, target, key, desc) {
-  var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-  else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-  return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = function(k, v) {
-  if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-class KeyShares {
-  constructor(shares = []) {
-    Object.defineProperty(this, "shares", {
-      enumerable: true,
-      configurable: true,
-      writable: true,
-      value: void 0
-    });
-    this.shares = [...shares];
-  }
-  /**
-   * Add a single KeyShares item to the collection.
-   * @param keySharesItem The KeyShares item to add.
-   */
-  add(keySharesItem) {
-    this.shares.push(keySharesItem);
-  }
-  list() {
-    return this.shares;
-  }
-  /**
-   * Validate the KeyShares instance using class-validator.
-   * @returns The validation result.
-   */
-  validate() {
-    classValidator.validateSync(this);
-  }
-  /**
-   * Converts the KeyShares instance to a JSON string.
-   * @returns The JSON string representation of the KeyShares instance.
-   */
-  toJson() {
-    return JSON.stringify({
-      version: `v1.1.0`,
-      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
-      shares: this.shares.length > 0 ? this.shares : null
-    }, null, 2);
-  }
-  /**
-   * Initialize the KeyShares instance from JSON or object data.
-   * @param content The JSON string or object to initialize from.
-   * @returns The KeyShares instance.
-   * @throws Error if the version is incompatible or the shares array is invalid.
-   */
-  static async fromJson(content) {
-    const body = typeof content === "string" ? JSON.parse(content) : content;
-    if (!validVersion(body.version)) {
-      throw new SSVKeysException(`The file for keyshares must contain a version mark provided by ssv-keys.`);
-    }
-    if (!equalVersion(body.version, "v1.1.0") && !equalVersion(body.version, "v1.2.0")) {
-      throw new SSVKeysException(`The keyshares file you are attempting to reuse does not have the same version (v1.1.0 or v1.2.0) as supported by ssv-keys`);
-    }
-    const instance = new KeyShares();
-    instance.shares = [];
-    if (Array.isArray(body.shares)) {
-      for (const item of body.shares) {
-        instance.shares.push(await KeySharesItem.fromJson(item));
-      }
-    } else {
-      instance.shares.push(await KeySharesItem.fromJson(body));
-    }
-    return instance;
-  }
-}
-__decorate([
-  classValidator.IsOptional(),
-  classValidator.ValidateNested({ each: true }),
-  __metadata("design:type", Array)
-], KeyShares.prototype, "shares", void 0);
-exports.KeyShares = KeyShares;
-exports.KeySharesItem = KeySharesItem;
-exports.KeySharesPayload = KeySharesPayload;
-exports.OperatorPublicKeyError = OperatorPublicKeyError;
-exports.OperatorsCountsMismatchError = OperatorsCountsMismatchError;
-exports.SSVKeys = SSVKeys;
-exports.SSVKeysException = SSVKeysException;

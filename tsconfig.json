@@ -25,6 +25,7 @@
     "noFallthroughCasesInSwitch": true,
     "declaration": true,
     "declarationDir": "./dist/types",
+    "emitDeclarationOnly": false,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {

@@ -28,7 +28,7 @@
     "./keys": {
       "import": "./dist/keys.mjs",
       "require": "./dist/keys.js",
-      "types": "./dist/types/libs/ssv-keys/SSVKeys.d.ts"
+      "types": "./dist/types/libs/ssv-keys/index.d.ts"
     }
   },
   "scripts": {

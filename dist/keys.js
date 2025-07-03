@@ -1,12 +1,7 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const KeyShares = require("./KeyShares-DjdEcoN6.js");
-require("crypto");
-require("viem");
-exports.KeyShares = KeyShares.KeyShares;
-exports.KeySharesItem = KeyShares.KeySharesItem;
-exports.KeySharesPayload = KeyShares.KeySharesPayload;
-exports.OperatorPublicKeyError = KeyShares.OperatorPublicKeyError;
-exports.OperatorsCountsMismatchError = KeyShares.OperatorsCountsMismatchError;
-exports.SSVKeys = KeyShares.SSVKeys;
-exports.SSVKeysException = KeyShares.SSVKeysException;
+const SSVKeys = require("./SSVKeys-DWL2oFd6.js");
+exports.KeySharesItem = SSVKeys.KeySharesItem;
+exports.OperatorPublicKeyError = SSVKeys.OperatorPublicKeyError;
+exports.SSVKeys = SSVKeys.SSVKeys;
+exports.SSVKeysException = SSVKeys.SSVKeysException;
