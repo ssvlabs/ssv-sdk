@@ -1,5 +1,4 @@
 import Encryption from '@/libs/ssv-keys/Encryption/Encryption';
-// import JSEncrypt from '@/libs/ssv-keys/JSEncrypt';
 import { ForgeEncrypt } from '../utils';
 import { Threshold } from '@/libs/ssv-keys/Threshold';
 import type { IEncryptShare, ISharesKeyPairs } from '@/libs/ssv-keys/interfaces';

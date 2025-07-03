@@ -1,6 +1,4 @@
-// import { decode } from 'js-base64';
 import { util } from 'node-forge';
-// import JSEncrypt from '@/libs/ssv-keys/JSEncrypt';
 import { ForgeEncrypt }from '@/libs/ssv-keys/Encryption/utils';
 import { OperatorPublicKeyError } from '@/libs/ssv-keys/exceptions/operator';
 

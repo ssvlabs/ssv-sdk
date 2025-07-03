@@ -1,3 +1,4 @@
 export { SSVKeys } from './SSVKeys'
 export { KeySharesItem } from './KeyShares/KeySharesItem'
-export { SSVKeysException, OperatorPublicKeyError} from './exceptions'
+export { KeyShares } from './KeyShares/KeyShares'
+export { SSVKeysException, OperatorPublicKeyError, OperatorsCountsMismatchError } from './exceptions'

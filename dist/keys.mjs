@@ -1,7 +1,9 @@
-import { K, O, S, a } from "./SSVKeys-Dz7qr4I2.mjs";
+import { a, K, O, c, S, b } from "./KeyShares-CyQZW-0d.mjs";
 export {
+  a as KeyShares,
   K as KeySharesItem,
   O as OperatorPublicKeyError,
+  c as OperatorsCountsMismatchError,
   S as SSVKeys,
-  a as SSVKeysException
+  b as SSVKeysException
 };

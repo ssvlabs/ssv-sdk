@@ -1,8 +1,5 @@
 import crypto from 'crypto';
-// import { keccak256, sha256 } from 'ethereumjs-util';
-// import Wallet from 'ethereumjs-wallet';
 import { keccak256, sha256, toHex } from 'viem';
-// import { privateKeyToAccount } from 'viem/accounts';
 import { syncScrypt } from 'scrypt-js';
 import { EthereumWalletError, KeyStoreDataFormatError, KeyStoreInvalidError, KeyStorePasswordError } from '../exceptions/keystore';
 
