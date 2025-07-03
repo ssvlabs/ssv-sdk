@@ -33,7 +33,6 @@ export default defineConfig({
         'graphql-request',
         'lodash-es',
         'node-forge',
-        'scrypt-js',
         'tslib',
         'zod',
 
