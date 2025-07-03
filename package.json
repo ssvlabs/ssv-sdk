@@ -1,6 +1,6 @@
 {
   "name": "@ssv-labs/ssv-sdk",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "author": "SSV.Labs",
   "description": "ssv labs sdk",
   "keywords": [
@@ -110,7 +110,7 @@
     }
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22"
   },
   "dependencies": {
     "@graphql-typed-document-node/core": "^3.2.0",

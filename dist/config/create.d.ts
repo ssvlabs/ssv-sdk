@@ -9,7 +9,6 @@ export type ConfigReturnType = {
     walletClient: WalletClient;
     chain: Chain;
     api: ReturnType<typeof createQueries> & ReturnType<typeof createSSVAPI>;
-    graphQLClient: GraphQLClient;
     contractAddresses: {
         setter: Address;
         getter: Address;
@@ -22,8 +21,13 @@ export type ConfigReturnType = {
         };
         token: ContractInteractions<'token'>;
     };
-    graphEndpoint: string;
-    restEndpoint: string;
+    subgraph: {
+        client: GraphQLClient;
+        endpoint: string;
+    };
+    rest: {
+        endpoint: string;
+    };
 };
 export declare const isConfig: (props: unknown) => props is ConfigReturnType;
 type CreateContractInteractionsArgs = {
