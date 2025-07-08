@@ -83,7 +83,7 @@ importers:
         version: 4.6.1(graphql@16.11.0)
       '@nomicfoundation/hardhat-toolbox':
         specifier: ^5.0.0
-        version: 5.0.0(8ad266c02087ab83448e90763358dacc)
+        version: 5.0.0(aybjamy5f3qnu6m445aewifavy)
       '@nomicfoundation/hardhat-viem':
         specifier: ^2.0.6
         version: 2.0.6(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3))(typescript@5.8.3)(viem@2.31.7(typescript@5.8.3)(zod@3.25.76))(zod@3.25.76)
@@ -146,7 +146,7 @@ importers:
         version: 7.18.0(eslint@8.57.1)(typescript@5.8.3)
       '@vitest/coverage-v8':
         specifier: ^1.5.0
-        version: 1.6.1(vitest@1.6.1)
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.4)(@vitest/ui@1.6.1)(terser@5.43.1))
       '@vitest/ui':
         specifier: ^1.5.0
         version: 1.6.1(vitest@1.6.1)
@@ -172,7 +172,7 @@ importers:
         specifier: ^4.1.4
         version: 4.1.4(@typescript-eslint/eslint-plugin@7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)
       hardhat:
-        specifier: ^2.22.17
+        specifier: ^2.25.0
         version: 2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3)
       husky:
         specifier: ^9.0.11
@@ -794,7 +794,6 @@ packages:
   '@esbuild/darwin-x64@0.21.5':
     resolution: {integrity: sha512-se/JjF8NlmKVG4kNIuyWMV/22ZaerB+qaSi5MdrXtd6R08kvs2qCN4C09miupktDitvh8jRFflwGFBQcxZRjbw==}
     engines: {node: '>=12'}
-    cpu: [x64]
     os: [darwin]
 
   '@esbuild/freebsd-arm64@0.21.5':
@@ -1914,7 +1913,6 @@ packages:
 
   '@rollup/rollup-darwin-x64@4.44.2':
     resolution: {integrity: sha512-dv/t1t1RkCvJdWWxQ2lWOO+b7cMsVw5YFaS04oHpZRWehI1h0fV1gF4wgGCTyQHHjJDfbNpwOi6PXEafRBBezw==}
-    cpu: [x64]
     os: [darwin]
 
   '@rollup/rollup-freebsd-arm64@4.44.2':
@@ -9189,7 +9187,7 @@ snapshots:
       ethereumjs-util: 7.1.5
       hardhat: 2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3)
 
-  '@nomicfoundation/hardhat-toolbox@5.0.0(8ad266c02087ab83448e90763358dacc)':
+  '@nomicfoundation/hardhat-toolbox@5.0.0(aybjamy5f3qnu6m445aewifavy)':
     dependencies:
       '@nomicfoundation/hardhat-chai-matchers': 2.0.9(@nomicfoundation/hardhat-ethers@3.0.9(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3)))(chai@4.5.0)(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3))
       '@nomicfoundation/hardhat-ethers': 3.0.9(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3))
@@ -10454,7 +10452,7 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@vitest/coverage-v8@1.6.1(vitest@1.6.1)':
+  '@vitest/coverage-v8@1.6.1(vitest@1.6.1(@types/node@20.19.4)(@vitest/ui@1.6.1)(terser@5.43.1))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
