@@ -8,7 +8,7 @@ import { isUndefined, isEqual } from "lodash-es";
 import { decodeEventLog, encodeFunctionData, encodeAbiParameters, parseAbiParameters, isAddressEqual, zeroAddress } from "viem";
 import { GraphQLClient } from "graphql-request";
 import { S as SSVKeys, a as KeyShares, K as KeySharesItem } from "./KeyShares-CyQZW-0d.mjs";
-import { O, b } from "./KeyShares-CyQZW-0d.mjs";
+import { O, c, b } from "./KeyShares-CyQZW-0d.mjs";
 var main = { exports: {} };
 const version$1 = "16.6.1";
 const require$$4 = {
@@ -5799,8 +5799,10 @@ class SSVSDK {
   }
 }
 export {
+  KeyShares,
   KeySharesItem,
   O as OperatorPublicKeyError,
+  c as OperatorsCountsMismatchError,
   SSVKeys,
   b as SSVKeysException,
   SSVSDK,
