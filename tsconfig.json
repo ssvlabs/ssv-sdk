@@ -9,14 +9,15 @@
     "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["ES2020"],
     "skipLibCheck": true,
     /* Bundler mode */
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     /* Linting */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -24,13 +25,11 @@
     "declaration": true,
     "declarationDir": "./dist/types",
     "forceConsistentCasingInFileNames": true,
-    "emitDeclarationOnly": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "ssv-sdk": ["./dist/*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "examples/**/*", "hardhat.types.d.ts"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist", "src/graphql/**/*"]
 }

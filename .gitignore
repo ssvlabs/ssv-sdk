@@ -9,7 +9,7 @@ lerna-debug.log*
 
 node_modules
 coverage
-# dist
+dist
 # dist-ssr
 *.local
 
@@ -25,7 +25,6 @@ coverage
 
 # Environment files
 .env
-
 
 /hardhat/artifacts/*
 /hardhat/cache/*

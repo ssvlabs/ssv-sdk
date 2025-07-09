@@ -1,5 +1,5 @@
+import { KeySharesItem } from '../libs/ssv-keys/KeyShares/KeySharesItem';
 import { Operator } from '../types/operator';
-import { KeySharesItem } from 'ssv-keys';
 export declare const isKeySharesItem: (item: unknown) => item is KeySharesItem;
 export declare enum KeysharesValidationErrors {
     OperatorDoesNotExist = 0,
@@ -17,5 +17,5 @@ export declare class KeysharesValidationError extends Error {
 }
 export declare const validateConsistentOperatorIds: (keyshares: KeySharesItem[]) => number[];
 export declare const ensureValidatorsUniqueness: (keyshares: KeySharesItem[]) => boolean;
-export declare const validateConsistentOperatorPublicKeys: (keyshares: KeySharesItem[], operators: Pick<Operator, 'id' | 'publicKey'>[]) => true;
+export declare const validateConsistentOperatorPublicKeys: (keyshares: KeySharesItem[], operators: Pick<Operator, "id" | "publicKey">[]) => true;
 export declare const ensureNoKeysharesErrors: (keyshares: KeySharesItem[]) => boolean;

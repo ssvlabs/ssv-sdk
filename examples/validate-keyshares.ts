@@ -1,4 +1,4 @@
-import { SSVSDK, chains } from 'ssv-sdk';
+import { SSVSDK, chains } from '@ssv-labs/ssv-sdk';
 import { createPublicClient, createWalletClient, http, parseEther } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import keyshares from './path_to_your_keyshares.json'; // this is a json file that contains the keyshares

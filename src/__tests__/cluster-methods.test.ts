@@ -1,4 +1,4 @@
-import { type KeySharesPayload } from 'ssv-keys/dist/tsc/src/lib/KeyShares/KeySharesData/KeySharesPayload'
+import type { KeySharesPayload } from '@/libs/ssv-keys/KeyShares/KeySharesData/KeySharesPayload'
 import { type Hex } from 'viem'
 import { describe, expect, it, vi } from 'vitest'
 import { type ConfigReturnType } from '../config/create'

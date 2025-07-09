@@ -1,7 +1,7 @@
+import type { KeySharesItem } from '@/libs/ssv-keys/KeyShares/KeySharesItem'
 import type { Operator } from '@/types/operator'
 import { sortNumbers } from '@/utils/number'
 import { getOperatorIds } from '@/utils/operator'
-import type { KeySharesItem } from 'ssv-keys'
 
 export const isKeySharesItem = (item: unknown): item is KeySharesItem => {
   return (

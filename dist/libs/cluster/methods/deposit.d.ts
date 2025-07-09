@@ -9,7 +9,7 @@ type DepositOptions = {
     approve?: boolean;
 };
 export declare const deposit: (config: ConfigReturnType, { args: { id, amount }, ...writeOptions }: DepositProps, options?: DepositOptions) => Promise<{
-    hash: `0x${string}`;
+    hash: import('viem').Hash;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({
             eventName: "AdminChanged";
