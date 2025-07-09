@@ -1,11 +1,13 @@
 {
   "name": "@ssv-labs/ssv-sdk",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "author": "SSV.Labs",
   "description": "ssv labs sdk",
   "keywords": [
     "ssv",
-    "sdk"
+    "sdk",
+    "ssv-keys",
+    "keyshares"
   ],
   "repository": "https://github.com/ssvlabs/ssv-sdk",
   "files": [
