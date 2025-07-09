@@ -5,7 +5,9 @@
   "description": "ssv labs sdk",
   "keywords": [
     "ssv",
-    "sdk"
+    "sdk",
+    "ssv-keys",
+    "keyshares"
   ],
   "repository": "https://github.com/ssvlabs/ssv-sdk",
   "files": [
