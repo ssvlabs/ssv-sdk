@@ -18,7 +18,6 @@
     /* Linting */
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "rootDir": "src",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -29,9 +28,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-      //      "ssv-sdk": ["./dist/*"]
     }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "src/graphql/**/*", "**/*.test.ts", "**/*.spec.ts"]
+  "exclude": ["node_modules", "dist", "src/graphql/**/*"]
 }

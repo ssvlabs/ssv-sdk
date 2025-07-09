@@ -94,7 +94,7 @@ importers:
         specifier: ^4.9.6
         version: 4.9.6
       '@openzeppelin/hardhat-upgrades':
-        specifier: ^3.0.5
+        specifier: ^3.9.1
         version: 3.9.1(@nomicfoundation/hardhat-ethers@3.0.9(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3)))(@nomicfoundation/hardhat-verify@2.0.14(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3)))(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3))
       '@parcel/watcher':
         specifier: ^2.4.1

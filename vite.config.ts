@@ -34,7 +34,6 @@ export default defineConfig({
         'lodash-es',
         'tslib',
         'zod',
-
         'fs',
         'path',
         'crypto',

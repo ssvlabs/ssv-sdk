@@ -1,3 +1,5 @@
+import "@nomicfoundation/hardhat-viem"
+import "@openzeppelin/hardhat-upgrades"
 import hre, { ethers, upgrades } from 'hardhat'
 import { parseEther, type Address } from 'viem'
 

@@ -13,22 +13,22 @@
   ],
   "main": "./dist/main.js",
   "module": "./dist/main.mjs",
-  "types": "./dist/types/main.d.ts",
+  "types": "./dist/main.d.ts",
   "exports": {
     ".": {
       "import": "./dist/main.mjs",
       "require": "./dist/main.js",
-      "types": "./dist/types/main.d.ts"
+      "types": "./dist/main.d.ts"
     },
     "./utils": {
       "import": "./dist/utils.mjs",
       "require": "./dist/utils.js",
-      "types": "./dist/types/utils/index.d.ts"
+      "types": "./dist/utils/index.d.ts"
     },
     "./keys": {
       "import": "./dist/keys.mjs",
       "require": "./dist/keys.js",
-      "types": "./dist/types/libs/ssv-keys/index.d.ts"
+      "types": "./dist/libs/ssv-keys/index.d.ts"
     }
   },
   "scripts": {
@@ -67,7 +67,7 @@
     "@nomicfoundation/hardhat-viem": "^2.0.6",
     "@openzeppelin/contracts": "^4.9.6",
     "@openzeppelin/contracts-upgradeable": "^4.9.6",
-    "@openzeppelin/hardhat-upgrades": "^3.0.5",
+    "@openzeppelin/hardhat-upgrades": "^3.9.1",
     "@parcel/watcher": "^2.4.1",
     "@release-it/conventional-changelog": "^8.0.1",
     "@rollup/plugin-alias": "^5.1.1",
