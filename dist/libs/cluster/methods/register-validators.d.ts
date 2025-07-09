@@ -1,13 +1,14 @@
 import { ConfigReturnType } from '../../../config/create';
 import { SmartFnWriteOptions } from '../../../contract-interactions/types';
-import { SSVKeys, KeySharesItem } from 'ssv-keys';
+import { KeySharesItem } from '../../ssv-keys/KeyShares/KeySharesItem';
+import { SSVKeys } from '../../ssv-keys/SSVKeys';
 import { Hex } from 'viem';
 type RegisterValidatorsProps = Pick<SmartFnWriteOptions<{
     keyshares: KeySharesItem[] | KeySharesItem['payload'][];
     depositAmount?: bigint;
 }>, 'args'>;
 export declare const registerValidators: (config: ConfigReturnType, { args: { keyshares, depositAmount }, ...writeOptions }: RegisterValidatorsProps) => Promise<{
-    hash: `0x${string}`;
+    hash: import('viem').Hash;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({
             eventName: "AdminChanged";

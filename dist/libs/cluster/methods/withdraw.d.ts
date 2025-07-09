@@ -5,7 +5,7 @@ type WithdrawProps = SmartFnWriteOptions<{
     amount: bigint;
 }>;
 export declare const withdraw: (config: ConfigReturnType, { args: { id, amount }, ...writeOptions }: WithdrawProps) => Promise<{
-    hash: `0x${string}`;
+    hash: import('viem').Hash;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({
             eventName: "AdminChanged";
