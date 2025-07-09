@@ -52,178 +52,178 @@ importers:
         version: 3.25.76
     devDependencies:
       '@0no-co/graphqlsp':
-        specifier: ^1.12.16
+        specifier: 1.13.0
         version: 1.13.0(graphql@16.11.0)(typescript@5.8.3)
       '@chainsafe/bls-keystore':
-        specifier: ^3.1.0
+        specifier: 3.1.0
         version: 3.1.0
       '@commitlint/cli':
-        specifier: ^19.2.2
+        specifier: 19.8.1
         version: 19.8.1(@types/node@20.19.4)(typescript@5.8.3)
       '@commitlint/config-conventional':
-        specifier: ^19.2.2
+        specifier: 19.8.1
         version: 19.8.1
       '@graphql-codegen/cli':
-        specifier: ^5.0.3
+        specifier: 5.0.7
         version: 5.0.7(@parcel/watcher@2.5.1)(@types/node@20.19.4)(enquirer@2.4.1)(graphql@16.11.0)(typescript@5.8.3)
       '@graphql-codegen/schema-ast':
-        specifier: ^4.1.0
+        specifier: 4.1.0
         version: 4.1.0(graphql@16.11.0)
       '@graphql-codegen/typed-document-node':
-        specifier: ^5.0.10
+        specifier: 5.1.2
         version: 5.1.2(graphql@16.11.0)
       '@graphql-codegen/typescript':
-        specifier: ^4.1.0
+        specifier: 4.1.6
         version: 4.1.6(graphql@16.11.0)
       '@graphql-codegen/typescript-graphql-request':
-        specifier: ^6.2.0
+        specifier: 6.3.0
         version: 6.3.0(graphql-request@7.2.0(graphql@16.11.0))(graphql-tag@2.12.6(graphql@16.11.0))(graphql@16.11.0)
       '@graphql-codegen/typescript-operations':
-        specifier: ^4.3.0
+        specifier: 4.6.1
         version: 4.6.1(graphql@16.11.0)
       '@nomicfoundation/hardhat-toolbox':
-        specifier: ^5.0.0
-        version: 5.0.0(aybjamy5f3qnu6m445aewifavy)
+        specifier: 5.0.0
+        version: 5.0.0(8ad266c02087ab83448e90763358dacc)
       '@nomicfoundation/hardhat-viem':
-        specifier: ^2.0.6
+        specifier: 2.0.6
         version: 2.0.6(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3))(typescript@5.8.3)(viem@2.31.7(typescript@5.8.3)(zod@3.25.76))(zod@3.25.76)
       '@openzeppelin/contracts':
-        specifier: ^4.9.6
+        specifier: 4.9.6
         version: 4.9.6
       '@openzeppelin/contracts-upgradeable':
-        specifier: ^4.9.6
+        specifier: 4.9.6
         version: 4.9.6
       '@openzeppelin/hardhat-upgrades':
-        specifier: ^3.9.1
+        specifier: 3.9.1
         version: 3.9.1(@nomicfoundation/hardhat-ethers@3.0.9(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3)))(@nomicfoundation/hardhat-verify@2.0.14(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3)))(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3))
       '@parcel/watcher':
-        specifier: ^2.4.1
+        specifier: 2.5.1
         version: 2.5.1
       '@release-it/conventional-changelog':
-        specifier: ^8.0.1
+        specifier: 8.0.2
         version: 8.0.2(release-it@17.11.0(typescript@5.8.3))
       '@rollup/plugin-alias':
-        specifier: ^5.1.1
+        specifier: 5.1.1
         version: 5.1.1(rollup@4.44.2)
       '@rollup/plugin-commonjs':
-        specifier: ^28.0.1
+        specifier: 28.0.6
         version: 28.0.6(rollup@4.44.2)
       '@rollup/plugin-json':
-        specifier: ^6.1.0
+        specifier: 6.1.0
         version: 6.1.0(rollup@4.44.2)
       '@rollup/plugin-node-resolve':
-        specifier: ^15.2.3
+        specifier: 15.3.1
         version: 15.3.1(rollup@4.44.2)
       '@rollup/plugin-terser':
-        specifier: ^0.4.4
+        specifier: 0.4.4
         version: 0.4.4(rollup@4.44.2)
       '@rollup/plugin-typescript':
-        specifier: ^11.1.6
+        specifier: 11.1.6
         version: 11.1.6(rollup@4.44.2)(tslib@2.8.1)(typescript@5.8.3)
       '@rollup/rollup-darwin-x64':
-        specifier: ^4.30.1
+        specifier: 4.44.2
         version: 4.44.2
       '@types/eslint-plugin-prettier':
-        specifier: ^3.1.3
+        specifier: 3.1.3
         version: 3.1.3
       '@types/lodash-es':
-        specifier: ^4.17.12
+        specifier: 4.17.12
         version: 4.17.12
       '@types/node':
-        specifier: ^20.12.7
+        specifier: 20.19.4
         version: 20.19.4
       '@types/node-forge':
-        specifier: ^1.3.11
+        specifier: 1.3.12
         version: 1.3.12
       '@types/semver':
-        specifier: ^7.7.0
+        specifier: 7.7.0
         version: 7.7.0
       '@typescript-eslint/eslint-plugin':
-        specifier: ^7.7.0
+        specifier: 7.18.0
         version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3)
       '@typescript-eslint/parser':
-        specifier: ^7.7.0
+        specifier: 7.18.0
         version: 7.18.0(eslint@8.57.1)(typescript@5.8.3)
       '@vitest/coverage-v8':
-        specifier: ^1.5.0
-        version: 1.6.1(vitest@1.6.1(@types/node@20.19.4)(@vitest/ui@1.6.1)(terser@5.43.1))
+        specifier: 1.6.1
+        version: 1.6.1(vitest@1.6.1)
       '@vitest/ui':
-        specifier: ^1.5.0
+        specifier: 1.6.1
         version: 1.6.1(vitest@1.6.1)
       commitizen:
-        specifier: ^4.3.0
+        specifier: 4.3.1
         version: 4.3.1(@types/node@20.19.4)(typescript@5.8.3)
       concurrently:
-        specifier: ^9.0.1
+        specifier: 9.2.0
         version: 9.2.0
       cz-git:
-        specifier: ^1.9.1
+        specifier: 1.11.2
         version: 1.11.2
       eslint:
-        specifier: ^8.57.0
+        specifier: 8.57.1
         version: 8.57.1
       eslint-config-prettier:
-        specifier: ^9.1.0
+        specifier: 9.1.0
         version: 9.1.0(eslint@8.57.1)
       eslint-plugin-prettier:
-        specifier: ^5.1.3
+        specifier: 5.5.1
         version: 5.5.1(@types/eslint@9.6.1)(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.6.2)
       eslint-plugin-unused-imports:
-        specifier: ^4.1.4
+        specifier: 4.1.4
         version: 4.1.4(@typescript-eslint/eslint-plugin@7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)
       hardhat:
-        specifier: ^2.25.0
+        specifier: 2.25.0
         version: 2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3)
       husky:
-        specifier: ^9.0.11
+        specifier: 9.1.7
         version: 9.1.7
       lint-staged:
-        specifier: ^15.2.2
+        specifier: 15.5.2
         version: 15.5.2
       prettier:
-        specifier: ^3.2.5
+        specifier: 3.6.2
         version: 3.6.2
       release-it:
-        specifier: ^17.2.0
+        specifier: 17.11.0
         version: 17.11.0(typescript@5.8.3)
       rollup:
-        specifier: ^4.14.3
+        specifier: 4.44.2
         version: 4.44.2
       rollup-plugin-delete:
-        specifier: ^2.0.0
+        specifier: 2.2.0
         version: 2.2.0(rollup@4.44.2)
       rollup-plugin-dts:
-        specifier: ^6.1.1
+        specifier: 6.2.1
         version: 6.2.1(rollup@4.44.2)(typescript@5.8.3)
       rollup-plugin-tsconfig-paths:
-        specifier: ^1.5.2
+        specifier: 1.5.2
         version: 1.5.2(rollup@4.44.2)(typescript@5.8.3)
       rollup-plugin-typescript2:
-        specifier: ^0.36.0
+        specifier: 0.36.0
         version: 0.36.0(rollup@4.44.2)(typescript@5.8.3)
       semantic-release:
-        specifier: ^23.0.8
+        specifier: 23.1.1
         version: 23.1.1(typescript@5.8.3)
       semver:
-        specifier: ^7.6.3
+        specifier: 7.7.2
         version: 7.7.2
       typescript:
-        specifier: ^5.4.5
+        specifier: 5.8.3
         version: 5.8.3
       vite:
-        specifier: ^5.4.10
+        specifier: 5.4.19
         version: 5.4.19(@types/node@20.19.4)(terser@5.43.1)
       vite-plugin-dts:
-        specifier: ^4.3.0
+        specifier: 4.5.4
         version: 4.5.4(@types/node@20.19.4)(rollup@4.44.2)(typescript@5.8.3)(vite@5.4.19(@types/node@20.19.4)(terser@5.43.1))
       vite-plugin-glob:
-        specifier: ^0.3.2
+        specifier: 0.3.2
         version: 0.3.2
       vite-plugin-node-polyfills:
-        specifier: ^0.22.0
+        specifier: 0.22.0
         version: 0.22.0(rollup@4.44.2)(vite@5.4.19(@types/node@20.19.4)(terser@5.43.1))
       vitest:
-        specifier: ^1.5.0
+        specifier: 1.6.1
         version: 1.6.1(@types/node@20.19.4)(@vitest/ui@1.6.1)(terser@5.43.1)
 
 packages:
@@ -794,6 +794,7 @@ packages:
   '@esbuild/darwin-x64@0.21.5':
     resolution: {integrity: sha512-se/JjF8NlmKVG4kNIuyWMV/22ZaerB+qaSi5MdrXtd6R08kvs2qCN4C09miupktDitvh8jRFflwGFBQcxZRjbw==}
     engines: {node: '>=12'}
+    cpu: [x64]
     os: [darwin]
 
   '@esbuild/freebsd-arm64@0.21.5':
@@ -1913,6 +1914,7 @@ packages:
 
   '@rollup/rollup-darwin-x64@4.44.2':
     resolution: {integrity: sha512-dv/t1t1RkCvJdWWxQ2lWOO+b7cMsVw5YFaS04oHpZRWehI1h0fV1gF4wgGCTyQHHjJDfbNpwOi6PXEafRBBezw==}
+    cpu: [x64]
     os: [darwin]
 
   '@rollup/rollup-freebsd-arm64@4.44.2':
@@ -9187,7 +9189,7 @@ snapshots:
       ethereumjs-util: 7.1.5
       hardhat: 2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3)
 
-  '@nomicfoundation/hardhat-toolbox@5.0.0(aybjamy5f3qnu6m445aewifavy)':
+  '@nomicfoundation/hardhat-toolbox@5.0.0(8ad266c02087ab83448e90763358dacc)':
     dependencies:
       '@nomicfoundation/hardhat-chai-matchers': 2.0.9(@nomicfoundation/hardhat-ethers@3.0.9(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3)))(chai@4.5.0)(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3))
       '@nomicfoundation/hardhat-ethers': 3.0.9(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3))
@@ -10452,7 +10454,7 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@vitest/coverage-v8@1.6.1(vitest@1.6.1(@types/node@20.19.4)(@vitest/ui@1.6.1)(terser@5.43.1))':
+  '@vitest/coverage-v8@1.6.1(vitest@1.6.1)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -11487,7 +11489,7 @@ snapshots:
     dependencies:
       cipher-base: 1.0.6
       inherits: 2.0.4
-      ripemd160: 2.0.1
+      ripemd160: 2.0.2
       sha.js: 2.4.12
 
   create-hash@1.2.0:
