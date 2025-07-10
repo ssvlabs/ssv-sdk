@@ -83,7 +83,7 @@ importers:
         version: 4.6.1(graphql@16.11.0)
       '@nomicfoundation/hardhat-toolbox':
         specifier: ^5.0.0
-        version: 5.0.0(aybjamy5f3qnu6m445aewifavy)
+        version: 5.0.0(8ad266c02087ab83448e90763358dacc)
       '@nomicfoundation/hardhat-viem':
         specifier: ^2.0.6
         version: 2.0.6(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3))(typescript@5.8.3)(viem@2.31.7(typescript@5.8.3)(zod@3.25.76))(zod@3.25.76)
@@ -146,7 +146,7 @@ importers:
         version: 7.18.0(eslint@8.57.1)(typescript@5.8.3)
       '@vitest/coverage-v8':
         specifier: ^1.5.0
-        version: 1.6.1(vitest@1.6.1(@types/node@20.19.4)(@vitest/ui@1.6.1)(terser@5.43.1))
+        version: 1.6.1(vitest@1.6.1)
       '@vitest/ui':
         specifier: ^1.5.0
         version: 1.6.1(vitest@1.6.1)
@@ -220,8 +220,8 @@ importers:
         specifier: ^0.3.2
         version: 0.3.2
       vite-plugin-node-polyfills:
-        specifier: ^0.22.0
-        version: 0.22.0(rollup@4.44.2)(vite@5.4.19(@types/node@20.19.4)(terser@5.43.1))
+        specifier: ^0.24.0
+        version: 0.24.0(rollup@4.44.2)(vite@5.4.19(@types/node@20.19.4)(terser@5.43.1))
       vitest:
         specifier: ^1.5.0
         version: 1.6.1(@types/node@20.19.4)(@vitest/ui@1.6.1)(terser@5.43.1)
@@ -794,6 +794,7 @@ packages:
   '@esbuild/darwin-x64@0.21.5':
     resolution: {integrity: sha512-se/JjF8NlmKVG4kNIuyWMV/22ZaerB+qaSi5MdrXtd6R08kvs2qCN4C09miupktDitvh8jRFflwGFBQcxZRjbw==}
     engines: {node: '>=12'}
+    cpu: [x64]
     os: [darwin]
 
   '@esbuild/freebsd-arm64@0.21.5':
@@ -1913,6 +1914,7 @@ packages:
 
   '@rollup/rollup-darwin-x64@4.44.2':
     resolution: {integrity: sha512-dv/t1t1RkCvJdWWxQ2lWOO+b7cMsVw5YFaS04oHpZRWehI1h0fV1gF4wgGCTyQHHjJDfbNpwOi6PXEafRBBezw==}
+    cpu: [x64]
     os: [darwin]
 
   '@rollup/rollup-freebsd-arm64@4.44.2':
@@ -6893,10 +6895,10 @@ packages:
   vite-plugin-glob@0.3.2:
     resolution: {integrity: sha512-RoOm67e9eQ7bbWfnVbErjMcqnWCLjNtLy/fhOu8eqWbNi8Pz4T/co2j8uF9v2/P6KaGz02+4jFL83lDCAZ5StQ==}
 
-  vite-plugin-node-polyfills@0.22.0:
-    resolution: {integrity: sha512-F+G3LjiGbG8QpbH9bZ//GSBr9i1InSTkaulfUHFa9jkLqVGORFBoqc2A/Yu5Mmh1kNAbiAeKeK+6aaQUf3x0JA==}
+  vite-plugin-node-polyfills@0.24.0:
+    resolution: {integrity: sha512-GA9QKLH+vIM8NPaGA+o2t8PDfFUl32J8rUp1zQfMKVJQiNkOX4unE51tR6ppl6iKw5yOrDAdSH7r/UIFLCVhLw==}
     peerDependencies:
-      vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
+      vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
 
   vite@5.4.19:
     resolution: {integrity: sha512-qO3aKv3HoQC8QKiNSTuUM1l9o/XX3+c+VTgLHbJWHZGeTPVAg2XwazI9UWzoxjIJCGCV2zU60uqMzjeLZuULqA==}
@@ -9187,7 +9189,7 @@ snapshots:
       ethereumjs-util: 7.1.5
       hardhat: 2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3)
 
-  '@nomicfoundation/hardhat-toolbox@5.0.0(aybjamy5f3qnu6m445aewifavy)':
+  '@nomicfoundation/hardhat-toolbox@5.0.0(8ad266c02087ab83448e90763358dacc)':
     dependencies:
       '@nomicfoundation/hardhat-chai-matchers': 2.0.9(@nomicfoundation/hardhat-ethers@3.0.9(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3)))(chai@4.5.0)(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3))
       '@nomicfoundation/hardhat-ethers': 3.0.9(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.4)(typescript@5.8.3))(typescript@5.8.3))
@@ -10452,7 +10454,7 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@vitest/coverage-v8@1.6.1(vitest@1.6.1(@types/node@20.19.4)(@vitest/ui@1.6.1)(terser@5.43.1))':
+  '@vitest/coverage-v8@1.6.1(vitest@1.6.1)':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -15344,7 +15346,7 @@ snapshots:
       micromatch: 4.0.8
       ufo: 0.8.6
 
-  vite-plugin-node-polyfills@0.22.0(rollup@4.44.2)(vite@5.4.19(@types/node@20.19.4)(terser@5.43.1)):
+  vite-plugin-node-polyfills@0.24.0(rollup@4.44.2)(vite@5.4.19(@types/node@20.19.4)(terser@5.43.1)):
     dependencies:
       '@rollup/plugin-inject': 5.0.5(rollup@4.44.2)
       node-stdlib-browser: 1.3.1

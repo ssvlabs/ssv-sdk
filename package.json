@@ -111,7 +111,7 @@
     "vite": "^5.4.10",
     "vite-plugin-dts": "^4.3.0",
     "vite-plugin-glob": "^0.3.2",
-    "vite-plugin-node-polyfills": "^0.22.0",
+    "vite-plugin-node-polyfills": "^0.24.0",
     "vitest": "^1.5.0"
   },
   "config": {
