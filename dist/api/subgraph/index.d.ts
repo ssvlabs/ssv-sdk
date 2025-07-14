@@ -15,7 +15,7 @@ export declare const getCluster: (client: GraphQLClient, args: GetClusterQueryVa
     balance: string;
     index: string;
     networkFeeIndex: string;
-    operatorIds: string[];
+    operatorIds: Array<string>;
 } | null | undefined>;
 export declare const getClusters: (client: GraphQLClient, args: GetClustersQueryVariables) => Promise<{
     id: string;
@@ -24,7 +24,7 @@ export declare const getClusters: (client: GraphQLClient, args: GetClustersQuery
     balance: string;
     index: string;
     networkFeeIndex: string;
-    operatorIds: string[];
+    operatorIds: Array<string>;
 }[]>;
 export declare const getOperator: (client: GraphQLClient, args: GetOperatorQueryVariables) => Promise<{
     publicKey: string;
@@ -32,7 +32,7 @@ export declare const getOperator: (client: GraphQLClient, args: GetOperatorQuery
     id: string;
     validatorCount: string;
     isPrivate: boolean;
-    whitelistedContract: `0x${string}`;
+    whitelistedContract: import('abitype').Address;
 } | null>;
 export declare const getOperators: (client: GraphQLClient, args: GetOperatorsQueryVariables) => Promise<{
     publicKey: string;
@@ -40,62 +40,23 @@ export declare const getOperators: (client: GraphQLClient, args: GetOperatorsQue
     id: string;
     validatorCount: string;
     isPrivate: boolean;
-    whitelistedContract: `0x${string}`;
+    whitelistedContract: import('abitype').Address;
 }[]>;
 export declare const getValidators: (client: GraphQLClient, args: GetValidatorsQueryVariables) => Promise<{
-    id: `0x${string}`;
+    id: import('abitype').Address;
 }[]>;
 export declare const getValidator: (client: GraphQLClient, args: GetValidatorQueryVariables) => Promise<{
-    id: `0x${string}`;
+    id: import('abitype').Address;
 } | null | undefined>;
 export declare const getClusterBalance: (client: GraphQLClient, args: GetClusterBalanceQueryVariables) => Promise<import('../../graphql/graphql').GetClusterBalanceQuery>;
 export declare const getQueries: (client: GraphQLClient) => {
-    getOwnerNonce: RemoveConfigArg<(client: GraphQLClient, args: GetOwnerNonceByBlockQueryVariables) => Promise<string>>;
-    getClusterSnapshot: RemoveConfigArg<(client: GraphQLClient, args: GetClusterSnapshotQueryVariables) => Promise<{
-        active: boolean;
-        validatorCount: string;
-        balance: string;
-        index: string;
-        networkFeeIndex: string;
-    } | null | undefined>>;
-    getCluster: RemoveConfigArg<(client: GraphQLClient, args: GetClusterQueryVariables) => Promise<{
-        active: boolean;
-        validatorCount: string;
-        balance: string;
-        index: string;
-        networkFeeIndex: string;
-        operatorIds: string[];
-    } | null | undefined>>;
-    getClusters: RemoveConfigArg<(client: GraphQLClient, args: GetClustersQueryVariables) => Promise<{
-        id: string;
-        active: boolean;
-        validatorCount: string;
-        balance: string;
-        index: string;
-        networkFeeIndex: string;
-        operatorIds: string[];
-    }[]>>;
-    getOperator: RemoveConfigArg<(client: GraphQLClient, args: GetOperatorQueryVariables) => Promise<{
-        publicKey: string;
-        whitelisted: `0x${string}`[];
-        id: string;
-        validatorCount: string;
-        isPrivate: boolean;
-        whitelistedContract: `0x${string}`;
-    } | null>>;
-    getOperators: RemoveConfigArg<(client: GraphQLClient, args: GetOperatorsQueryVariables) => Promise<{
-        publicKey: string;
-        whitelisted: `0x${string}`[];
-        id: string;
-        validatorCount: string;
-        isPrivate: boolean;
-        whitelistedContract: `0x${string}`;
-    }[]>>;
-    getValidators: RemoveConfigArg<(client: GraphQLClient, args: GetValidatorsQueryVariables) => Promise<{
-        id: `0x${string}`;
-    }[]>>;
-    getValidator: RemoveConfigArg<(client: GraphQLClient, args: GetValidatorQueryVariables) => Promise<{
-        id: `0x${string}`;
-    } | null | undefined>>;
-    getClusterBalance: RemoveConfigArg<(client: GraphQLClient, args: GetClusterBalanceQueryVariables) => Promise<import('../../graphql/graphql').GetClusterBalanceQuery>>;
+    getOwnerNonce: RemoveConfigArg<typeof getOwnerNonce>;
+    getClusterSnapshot: RemoveConfigArg<typeof getClusterSnapshot>;
+    getCluster: RemoveConfigArg<typeof getCluster>;
+    getClusters: RemoveConfigArg<typeof getClusters>;
+    getOperator: RemoveConfigArg<typeof getOperator>;
+    getOperators: RemoveConfigArg<typeof getOperators>;
+    getValidators: RemoveConfigArg<typeof getValidators>;
+    getValidator: RemoveConfigArg<typeof getValidator>;
+    getClusterBalance: RemoveConfigArg<typeof getClusterBalance>;
 };

@@ -1,5 +1,5 @@
-import { SSVKeys } from 'ssv-keys';
-import { KeySharesPayload } from 'ssv-keys/dist/tsc/src/lib/KeyShares/KeySharesData/KeySharesPayload';
+import { KeySharesPayload } from '../../ssv-keys/KeyShares/KeySharesData/KeySharesPayload';
+import { SSVKeys } from '../../ssv-keys/SSVKeys';
 export declare const ssvKeys: SSVKeys;
 type GenerateKeySharesArgs = {
     operator_keys: string[];

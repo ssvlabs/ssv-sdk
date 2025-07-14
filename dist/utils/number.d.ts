@@ -17,5 +17,5 @@ declare const units: {
     readonly years: 31556952000;
 };
 export declare const ms: (value: number, unit: keyof typeof units) => number;
-export declare const sortNumbers: <T extends number | bigint>(numbers: T[]) => T[];
+export declare const sortNumbers: <T extends bigint | number>(numbers: T[]) => T[];
 export {};

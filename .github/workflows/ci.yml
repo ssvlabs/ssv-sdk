@@ -105,7 +105,7 @@ jobs:
           git config user.email "actions@github.com"
 
           # Stage only the build output (adjust if necessary)
-          git add dist/
+          git add dist/ -f
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
