@@ -65,7 +65,7 @@
     "@graphql-codegen/typescript": "4.1.6",
     "@graphql-codegen/typescript-graphql-request": "6.3.0",
     "@graphql-codegen/typescript-operations": "4.6.1",
-    "@nomicfoundation/hardhat-toolbox": "5.0.0",
+    "@nomicfoundation/hardhat-toolbox": "6.0.0",
     "@nomicfoundation/hardhat-viem": "2.0.6",
     "@openzeppelin/contracts": "4.9.6",
     "@openzeppelin/contracts-upgradeable": "4.9.6",
