@@ -90,7 +90,7 @@
     "@vitest/ui": "1.6.1",
     "commitizen": "4.3.1",
     "concurrently": "9.2.0",
-    "cz-git": "1.11.2",
+    "cz-git": "1.12.0",
     "eslint": "8.57.1",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.5.1",
