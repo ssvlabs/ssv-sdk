@@ -18,9 +18,13 @@ export const createMockConfig = (args: MockConfigArgs): ConfigReturnType => {
     walletClient: args.walletClient,
     contract,
     api: createMockApi(args.publicClient),
-    graphEndpoint: {} as unknown as ConfigReturnType['graphEndpoint'],
-    restEndpoint: {} as unknown as ConfigReturnType['restEndpoint'],
-    graphQLClient: {} as unknown as ConfigReturnType['graphQLClient'],
+    subgraph: {
+      client: {} as unknown as ConfigReturnType['subgraph']['client'],
+      endpoint: {} as unknown as ConfigReturnType['subgraph']['endpoint'],
+    },
+    rest: {
+      endpoint: {} as unknown as ConfigReturnType['rest']['endpoint'],
+    },
     contractAddresses: args.addresses,
   }
 }

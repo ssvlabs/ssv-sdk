@@ -4,10 +4,15 @@ export declare const configArgsSchema: z.ZodType<ConfigArgs>;
 export type ConfigArgs = {
     walletClient: WalletClient;
     publicClient: PublicClient;
-    _?: {
-        graphUrl?: string;
-        restUrl?: string;
-        contractAddresses?: {
+    extendedConfig?: {
+        subgraph?: {
+            endpoint?: string;
+            apiKey?: string;
+        };
+        rest?: {
+            endpoint?: string;
+        };
+        contracts?: {
             setter?: Address;
             getter?: Address;
             token?: Address;
