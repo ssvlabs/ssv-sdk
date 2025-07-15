@@ -91,8 +91,8 @@ importers:
         specifier: 4.9.6
         version: 4.9.6
       '@openzeppelin/contracts-upgradeable':
-        specifier: 4.9.6
-        version: 4.9.6
+        specifier: 5.3.0
+        version: 5.3.0(@openzeppelin/contracts@4.9.6)
       '@openzeppelin/hardhat-upgrades':
         specifier: 3.9.1
         version: 3.9.1(@nomicfoundation/hardhat-ethers@3.0.9(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.7)(typescript@5.8.3))(typescript@5.8.3)))(@nomicfoundation/hardhat-verify@2.0.14(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.7)(typescript@5.8.3))(typescript@5.8.3)))(ethers@6.15.0)(hardhat@2.25.0(ts-node@10.9.2(@types/node@20.19.7)(typescript@5.8.3))(typescript@5.8.3))
@@ -1679,8 +1679,10 @@ packages:
   '@octokit/types@14.1.0':
     resolution: {integrity: sha512-1y6DgTy8Jomcpu33N+p5w58l6xyt55Ar2I91RPiIA0xCJBXyUAhXCcmZaDWSANiha7R9a6qJJ2CRomGPZ6f46g==}
 
-  '@openzeppelin/contracts-upgradeable@4.9.6':
-    resolution: {integrity: sha512-m4iHazOsOCv1DgM7eD7GupTJ+NFVujRZt1wzddDPSVGpWdKq1SKkla5htKG7+IS4d2XOCtzkUNwRZ7Vq5aEUMA==}
+  '@openzeppelin/contracts-upgradeable@5.3.0':
+    resolution: {integrity: sha512-yVzSSyTMWO6rapGI5tuqkcLpcGGXA0UA1vScyV5EhE5yw8By3Ewex9rDUw8lfVw0iTkvR/egjfcW5vpk03lqZg==}
+    peerDependencies:
+      '@openzeppelin/contracts': 5.3.0
 
   '@openzeppelin/contracts@4.9.6':
     resolution: {integrity: sha512-xSmezSupL+y9VkHZJGDoCBpmnB2ogM13ccaYDWqJTfS3dbuHkgjuwDFUmaFauBCboQMGB/S5UqUl2y54X99BmA==}
@@ -9419,7 +9421,9 @@ snapshots:
     dependencies:
       '@octokit/openapi-types': 25.1.0
 
-  '@openzeppelin/contracts-upgradeable@4.9.6': {}
+  '@openzeppelin/contracts-upgradeable@5.3.0(@openzeppelin/contracts@4.9.6)':
+    dependencies:
+      '@openzeppelin/contracts': 4.9.6
 
   '@openzeppelin/contracts@4.9.6': {}
 
