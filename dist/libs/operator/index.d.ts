@@ -22,9 +22,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }): import('../../contract-interactions/types').WriteReturnType<{
             eventName: "AdminChanged";
@@ -314,9 +314,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "removeOperator">;
         getTransactionData: (props: {
@@ -344,9 +344,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }): import('../../contract-interactions/types').WriteReturnType<{
             eventName: "AdminChanged";
@@ -637,9 +637,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "setOperatorsWhitelists">;
         getTransactionData: (props: {
@@ -667,9 +667,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }): import('../../contract-interactions/types').WriteReturnType<{
             eventName: "AdminChanged";
@@ -960,9 +960,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "removeOperatorsWhitelists">;
         getTransactionData: (props: {
@@ -989,9 +989,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }): import('../../contract-interactions/types').WriteReturnType<{
             eventName: "AdminChanged";
@@ -1281,9 +1281,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "setOperatorsPrivateUnchecked">;
         getTransactionData: (props: {
@@ -1309,9 +1309,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }): import('../../contract-interactions/types').WriteReturnType<{
             eventName: "AdminChanged";
@@ -1601,9 +1601,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "setOperatorsPublicUnchecked">;
         getTransactionData: (props: {
@@ -1631,9 +1631,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }): import('../../contract-interactions/types').WriteReturnType<{
             eventName: "AdminChanged";
@@ -1924,9 +1924,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "removeOperatorsWhitelists">;
         getTransactionData: (props: {
@@ -1954,9 +1954,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }): import('../../contract-interactions/types').WriteReturnType<{
             eventName: "AdminChanged";
@@ -2247,9 +2247,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "declareOperatorFee">;
         getTransactionData: (props: {
@@ -2276,9 +2276,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }): import('../../contract-interactions/types').WriteReturnType<{
             eventName: "AdminChanged";
@@ -2568,9 +2568,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "executeOperatorFee">;
         getTransactionData: (props: {
@@ -2596,9 +2596,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }): import('../../contract-interactions/types').WriteReturnType<{
             eventName: "AdminChanged";
@@ -2888,9 +2888,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "cancelDeclaredOperatorFee">;
         getTransactionData: (props: {
@@ -2917,9 +2917,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }): import('../../contract-interactions/types').WriteReturnType<{
             eventName: "AdminChanged";
@@ -3210,9 +3210,9 @@ export declare const createOperatorManager: (config: ConfigReturnType) => {
             accessList?: import('viem').AccessList | undefined;
             sidecars?: readonly import('viem').BlobSidecar<`0x${string}`>[] | undefined;
             authorizationList?: import('viem').AuthorizationList<number, boolean> | undefined;
+            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             blockTag?: import('viem').BlockTag | undefined;
             stateOverride?: import('viem').StateOverride | undefined;
-            blockOverrides?: import('viem').BlockOverrides<bigint, number> | undefined;
             dataSuffix?: `0x${string}` | undefined;
         }) => import('viem').SimulateContractReturnType<import('../../contract-interactions/types').SupportedAbis, "reduceOperatorFee">;
         getTransactionData: (props: {

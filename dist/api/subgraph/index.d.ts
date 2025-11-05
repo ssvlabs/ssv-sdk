@@ -32,7 +32,7 @@ export declare const getOperator: (client: GraphQLClient, args: GetOperatorQuery
     id: string;
     validatorCount: string;
     isPrivate: boolean;
-    whitelistedContract: import('abitype').Address;
+    whitelistedContract: import('viem').Address;
 } | null>;
 export declare const getOperators: (client: GraphQLClient, args: GetOperatorsQueryVariables) => Promise<{
     publicKey: string;
@@ -40,13 +40,13 @@ export declare const getOperators: (client: GraphQLClient, args: GetOperatorsQue
     id: string;
     validatorCount: string;
     isPrivate: boolean;
-    whitelistedContract: import('abitype').Address;
+    whitelistedContract: import('viem').Address;
 }[]>;
 export declare const getValidators: (client: GraphQLClient, args: GetValidatorsQueryVariables) => Promise<{
-    id: import('abitype').Address;
+    id: import('viem').Address;
 }[]>;
 export declare const getValidator: (client: GraphQLClient, args: GetValidatorQueryVariables) => Promise<{
-    id: import('abitype').Address;
+    id: import('viem').Address;
 } | null | undefined>;
 export declare const getClusterBalance: (client: GraphQLClient, args: GetClusterBalanceQueryVariables) => Promise<import('../../graphql/graphql').GetClusterBalanceQuery>;
 export declare const getQueries: (client: GraphQLClient) => {
