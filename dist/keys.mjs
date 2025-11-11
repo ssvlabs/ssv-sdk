@@ -1,4 +1,4 @@
-import { a, K, O, c, S, b } from "./KeyShares-DEqBZits.mjs";
+import { a, K, O, c, S, b } from "./KeyShares-D5WDql14.mjs";
 export {
   a as KeyShares,
   K as KeySharesItem,
