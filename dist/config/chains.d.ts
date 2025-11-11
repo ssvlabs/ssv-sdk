@@ -20,7 +20,7 @@ export declare const hoodi: {
         ensRegistry?: import('viem').ChainContract | undefined;
         ensUniversalResolver?: import('viem').ChainContract | undefined;
         multicall3?: import('viem').ChainContract | undefined;
-        universalSignatureVerifier?: import('viem').ChainContract | undefined;
+        erc6492Verifier?: import('viem').ChainContract | undefined;
     } | undefined;
     ensTlds?: readonly string[] | undefined;
     id: 560048;
@@ -30,6 +30,7 @@ export declare const hoodi: {
         readonly symbol: "ETH";
         readonly decimals: 18;
     };
+    experimental_preconfirmationTime?: number | undefined | undefined;
     rpcUrls: {
         readonly default: {
             readonly http: readonly ["https://rpc.hoodi.ethpandaops.io"];
@@ -51,14 +52,11 @@ export declare const chains: {
                 readonly apiUrl: "https://api.etherscan.io/api";
             };
         };
-        blockTime?: number | undefined | undefined;
+        blockTime: 12000;
         contracts: {
-            readonly ensRegistry: {
-                readonly address: "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e";
-            };
             readonly ensUniversalResolver: {
-                readonly address: "0xce01f8eee7E479C928F8919abD53E553a36CeF67";
-                readonly blockCreated: 19258213;
+                readonly address: "0xeeeeeeee14d718c2b47d9923deab1335e144eeee";
+                readonly blockCreated: 23085558;
             };
             readonly multicall3: {
                 readonly address: "0xca11bde05977b3631167028862be2a173976ca11";
@@ -73,6 +71,7 @@ export declare const chains: {
             readonly symbol: "ETH";
             readonly decimals: 18;
         };
+        experimental_preconfirmationTime?: number | undefined | undefined;
         rpcUrls: {
             readonly default: {
                 readonly http: readonly ["https://eth.merkle.io"];
@@ -106,7 +105,7 @@ export declare const chains: {
             ensRegistry?: import('viem').ChainContract | undefined;
             ensUniversalResolver?: import('viem').ChainContract | undefined;
             multicall3?: import('viem').ChainContract | undefined;
-            universalSignatureVerifier?: import('viem').ChainContract | undefined;
+            erc6492Verifier?: import('viem').ChainContract | undefined;
         } | undefined;
         ensTlds?: readonly string[] | undefined;
         id: 560048;
@@ -116,6 +115,7 @@ export declare const chains: {
             readonly symbol: "ETH";
             readonly decimals: 18;
         };
+        experimental_preconfirmationTime?: number | undefined | undefined;
         rpcUrls: {
             readonly default: {
                 readonly http: readonly ["https://rpc.hoodi.ethpandaops.io"];

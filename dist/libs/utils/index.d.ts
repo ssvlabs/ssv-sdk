@@ -12,7 +12,7 @@ export declare const createUtils: (config: ConfigReturnType) => {
         nonce: number;
     }) => Promise<import('../ssv-keys/KeyShares/KeySharesData/KeySharesPayload').KeySharesPayload[]>;
     validateKeysharesJSON: ({ account, operators, keyshares, }: {
-        account: import('abitype').Address;
+        account: import('viem').Address;
         operators: Pick<import('../../types/operator').Operator, "id" | "publicKey">[];
         keyshares: string | object;
     }) => Promise<import('../ssv-keys').KeySharesItem[]>;
