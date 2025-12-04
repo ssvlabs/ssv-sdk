@@ -13,7 +13,7 @@ importers:
         version: 3.2.0(graphql@16.12.0)
       '@safe-global/protocol-kit':
         specifier: ^5.2.18
-        version: 5.2.18(typescript@5.8.3)(zod@3.25.76)
+        version: 5.2.22(typescript@5.8.3)(zod@3.25.76)
       abitype:
         specifier: ^1.0.6
         version: 1.1.1(typescript@5.8.3)(zod@3.25.76)
@@ -1940,8 +1940,8 @@ packages:
     resolution: {integrity: sha512-dfUnCxiN9H4ap84DvD2ubjw+3vUNpstxa0TneY/Paat8a3R4uQZDLSvWjmznAY/DoahqTHl9V46HF/Zs3F29pg==}
     engines: {node: '>= 10.0.0'}
 
-  '@peculiar/asn1-schema@2.5.0':
-    resolution: {integrity: sha512-YM/nFfskFJSlHqv59ed6dZlLZqtZQwjRVJ4bBAiWV08Oc+1rSd5lDZcBEx0lGDHfSoH3UziI2pXt2UM33KerPQ==}
+  '@peculiar/asn1-schema@2.6.0':
+    resolution: {integrity: sha512-xNLYLBFTBKkCzEZIw842BxytQQATQv+lDTCEMZ8C196iJcJJMBUZxrhSTxLaohMyKK8QlzRNTRkUmanucnDSqg==}
 
   '@phun-ky/typeof@2.0.3':
     resolution: {integrity: sha512-oeQJs1aa8Ghke8JIK9yuq/+KjMiaYeDZ38jx7MhkXncXlUKjqQ3wEm2X3qCKyjo+ZZofZj+WsEEiqkTtRuE2xQ==}
@@ -2199,14 +2199,14 @@ packages:
   '@rushstack/ts-command-line@5.1.3':
     resolution: {integrity: sha512-Kdv0k/BnnxIYFlMVC1IxrIS0oGQd4T4b7vKfx52Y2+wk2WZSDFIvedr7JrhenzSlm3ou5KwtoTGTGd5nbODRug==}
 
-  '@safe-global/protocol-kit@5.2.18':
-    resolution: {integrity: sha512-Yasndbl2huX62VhC96kQS43nSBbzK97WPnq8ACK9Dp/BtpN0jSdILtUidMkJ67PuBXUUN8I7NcK0AdE47Xqm8Q==}
+  '@safe-global/protocol-kit@5.2.22':
+    resolution: {integrity: sha512-1oGYFDw8UUQqYGrGZw0Yy30v8jlMzvMidMd35HRM3hK/sAAbisUmHqER+KUV1Vvb2KX4c+dnkaw4ctjuMhajbA==}
 
-  '@safe-global/safe-deployments@1.37.48':
-    resolution: {integrity: sha512-SeRkHlKDwtRarhpU2Ow7dFebJRppIGoYCMMeiTcW/MPovswvQGkPlki2/VoYKKKkRupTRXJ2VyRygdeKYz6VeQ==}
+  '@safe-global/safe-deployments@1.37.49':
+    resolution: {integrity: sha512-132QgqMY1/HktXqmda/uPp5b+73UXTgKRB00Xgc1kduFqceSw/ZyF1Q9jJjbND9q91hhapnXhYKWN2/HiWkRcg==}
 
-  '@safe-global/safe-modules-deployments@2.2.18':
-    resolution: {integrity: sha512-OQwoguGdano/XPMSbzc9cMuRXW84KCSAoG9avKRo5O4AcGLMNDqXTYG993a3k6QeWGpPwpl9LFEpwT0oAZ6UwQ==}
+  '@safe-global/safe-modules-deployments@2.2.21':
+    resolution: {integrity: sha512-fveOlRv0ccwsuaZjP1u7ZbXrwCyqMTYYiqETOGo8NdzTaceRUyR9TNzagSWovOSuHPVyUGJ9lnsxizikt/+PiQ==}
 
   '@safe-global/types-kit@1.0.5':
     resolution: {integrity: sha512-LcAsApV1MDEEymw3ealYjFEoD+PoruPG7Ggt6eF+LX++OGFowMQAS+zK2d5sRReqFjxwUJzMGlS48aQKlQpfZg==}
@@ -2517,8 +2517,8 @@ packages:
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
 
-  '@tsconfig/node10@1.0.11':
-    resolution: {integrity: sha512-DcRjDCujK/kCk/cUe8Xz8ZSpm8mS3mNNpta+jGCA6USEDfktlNvm1+IuZ9eTcDbNk41BHwpHHeW+N1lKCz4zOw==}
+  '@tsconfig/node10@1.0.12':
+    resolution: {integrity: sha512-UCYBaeFvM11aU2y3YPZ//O5Rhj+xKyzy7mvcIoAjASbigy8mHMryP5cK7dgjlz2hWxh1g5pLw084E0a/wlUSFQ==}
 
   '@tsconfig/node12@1.0.11':
     resolution: {integrity: sha512-cqefuRsh12pWyGsIoBKJA9luFu3mRxCA+ORZvA4ktLSzIuCUtWVxGIuXigEwO5/ywWFMZ2QEGKWvkZG1zDMTag==}
@@ -3988,6 +3988,10 @@ packages:
     resolution: {integrity: sha512-Kf/3ZW54L4UT0pZtsY/rf+EkBU7Qi5nnhonjUb8yTXcxH3cdcWrV2cRyk0Xk/4jK6OoHhxxZHriyhje20If2hQ==}
     engines: {node: '>=14.0.0'}
 
+  ethers@6.16.0:
+    resolution: {integrity: sha512-U1wulmetNymijEhpSEQ7Ct/P/Jw9/e7R1j5XIbPRydgV2DjLVMsULDlNksq3RQnFgKoLlZf88ijYtWEXcPa07A==}
+    engines: {node: '>=14.0.0'}
+
   ethjs-unit@0.1.6:
     resolution: {integrity: sha512-/Sn9Y0oKl0uqQuvgFk/zQgR7aw1g36qX/jzSQ5lSwlO0GigPymk4eGQfeNTD03w1dPOqfz8V77Cy43jH56pagw==}
     engines: {node: '>=6.5.0', npm: '>=3'}
@@ -4307,8 +4311,8 @@ packages:
     resolution: {integrity: sha512-XxwI8EOhVQgWp6iDL+3b0r86f4d6AX6zSU55HfB4ydCEuXLXc5FcYeOu+nnGftS4TEju/11rt4KJPTMgbfmv4A==}
     engines: {node: '>=10.13.0'}
 
-  glob@10.4.5:
-    resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
+  glob@10.5.0:
+    resolution: {integrity: sha512-DfXN8DfhJ7NH3Oe7cFmu3NCu1wKbkReJ8TorzSAFbSKrlNaQSKfIzqYqVY8zlbs2NLBbWpRiU52GX2PbaBVNkg==}
     hasBin: true
 
   glob@5.0.15:
@@ -4900,8 +4904,8 @@ packages:
   js-tokens@9.0.1:
     resolution: {integrity: sha512-mxa9E9ITFOt0ban3j6L5MpjwegGz6lBQmM1IJkWeBZGcMxto50+eWdjC/52xDbS2vy0k7vIMK0Fe2wfL9OQSpQ==}
 
-  js-yaml@3.14.1:
-    resolution: {integrity: sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==}
+  js-yaml@3.14.2:
+    resolution: {integrity: sha512-PMSmkqxr106Xa156c2M265Z+FTrPl+oxd/rgOQy2tijQeK5TxQ43psO1ZCwhVOSdnn+RzkzlRz/eY4BgJBYVpg==}
     hasBin: true
 
   js-yaml@4.1.0:
@@ -6972,6 +6976,14 @@ packages:
 
   viem@2.38.6:
     resolution: {integrity: sha512-aqO6P52LPXRjdnP6rl5Buab65sYa4cZ6Cpn+k4OLOzVJhGIK8onTVoKMFMT04YjDfyDICa/DZyV9HmvLDgcjkw==}
+    peerDependencies:
+      typescript: '>=5.0.4'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  viem@2.41.2:
+    resolution: {integrity: sha512-LYliajglBe1FU6+EH9mSWozp+gRA/QcHfxeD9Odf83AdH5fwUS7DroH4gHvlv6Sshqi1uXrYFA2B/EOczxd15g==}
     peerDependencies:
       typescript: '>=5.0.4'
     peerDependenciesMeta:
@@ -9402,7 +9414,7 @@ snapshots:
       '@nomicfoundation/solidity-analyzer': 0.1.2
       cbor: 9.0.2
       debug: 4.4.3(supports-color@8.1.1)
-      ethers: 6.15.0
+      ethers: 6.16.0
       fs-extra: 10.1.0
       immer: 10.0.2
       lodash: 4.17.21
@@ -9712,7 +9724,7 @@ snapshots:
       '@parcel/watcher-win32-ia32': 2.5.1
       '@parcel/watcher-win32-x64': 2.5.1
 
-  '@peculiar/asn1-schema@2.5.0':
+  '@peculiar/asn1-schema@2.6.0':
     dependencies:
       asn1js: 3.0.6
       pvtsutils: 1.3.6
@@ -9929,28 +9941,28 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  '@safe-global/protocol-kit@5.2.18(typescript@5.8.3)(zod@3.25.76)':
+  '@safe-global/protocol-kit@5.2.22(typescript@5.8.3)(zod@3.25.76)':
     dependencies:
-      '@safe-global/safe-deployments': 1.37.48
-      '@safe-global/safe-modules-deployments': 2.2.18
+      '@safe-global/safe-deployments': 1.37.49
+      '@safe-global/safe-modules-deployments': 2.2.21
       '@safe-global/types-kit': 1.0.5(typescript@5.8.3)(zod@3.25.76)
       abitype: 1.1.1(typescript@5.8.3)(zod@3.25.76)
       semver: 7.7.2
       viem: 2.38.6(typescript@5.8.3)(zod@3.25.76)
     optionalDependencies:
       '@noble/curves': 1.9.7
-      '@peculiar/asn1-schema': 2.5.0
+      '@peculiar/asn1-schema': 2.6.0
     transitivePeerDependencies:
       - bufferutil
       - typescript
       - utf-8-validate
       - zod
 
-  '@safe-global/safe-deployments@1.37.48':
+  '@safe-global/safe-deployments@1.37.49':
     dependencies:
       semver: 7.7.2
 
-  '@safe-global/safe-modules-deployments@2.2.18': {}
+  '@safe-global/safe-modules-deployments@2.2.21': {}
 
   '@safe-global/types-kit@1.0.5(typescript@5.8.3)(zod@3.25.76)':
     dependencies:
@@ -10449,7 +10461,7 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
-  '@tsconfig/node10@1.0.11': {}
+  '@tsconfig/node10@1.0.12': {}
 
   '@tsconfig/node12@1.0.11': {}
 
@@ -12170,6 +12182,19 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
+  ethers@6.16.0:
+    dependencies:
+      '@adraffy/ens-normalize': 1.10.1
+      '@noble/curves': 1.2.0
+      '@noble/hashes': 1.3.2
+      '@types/node': 22.7.5
+      aes-js: 4.0.0-beta.5
+      tslib: 2.7.0
+      ws: 8.17.1
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
   ethjs-unit@0.1.6:
     dependencies:
       bn.js: 4.11.6
@@ -12546,7 +12571,7 @@ snapshots:
     dependencies:
       is-glob: 4.0.3
 
-  glob@10.4.5:
+  glob@10.5.0:
     dependencies:
       foreground-child: 3.3.1
       jackspeak: 3.4.3
@@ -12728,13 +12753,13 @@ snapshots:
       chalk: 4.1.2
       cli-table3: 0.6.5
       ethereum-cryptography: 2.2.1
-      glob: 10.4.5
+      glob: 10.5.0
       hardhat: 2.27.0(ts-node@10.9.2(@types/node@22.17.0)(typescript@5.8.3))(typescript@5.8.3)
       jsonschema: 1.5.0
       lodash: 4.17.21
       markdown-table: 2.0.0
       sha1: 1.1.1
-      viem: 2.38.6(typescript@5.8.3)(zod@3.25.76)
+      viem: 2.41.2(typescript@5.8.3)(zod@3.25.76)
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -13224,7 +13249,7 @@ snapshots:
 
   js-tokens@9.0.1: {}
 
-  js-yaml@3.14.1:
+  js-yaml@3.14.2:
     dependencies:
       argparse: 1.0.10
       esprima: 4.0.1
@@ -14559,7 +14584,7 @@ snapshots:
       esprima: 2.7.3
       glob: 5.0.15
       handlebars: 4.7.8
-      js-yaml: 3.14.1
+      js-yaml: 3.14.2
       mkdirp: 0.5.6
       nopt: 3.0.6
       once: 1.4.0
@@ -15136,7 +15161,7 @@ snapshots:
   ts-node@10.9.2(@types/node@22.17.0)(typescript@5.8.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.11
+      '@tsconfig/node10': 1.0.12
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
@@ -15323,6 +15348,23 @@ snapshots:
   validator@13.15.20: {}
 
   viem@2.38.6(typescript@5.8.3)(zod@3.25.76):
+    dependencies:
+      '@noble/curves': 1.9.1
+      '@noble/hashes': 1.8.0
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
+      abitype: 1.1.0(typescript@5.8.3)(zod@3.25.76)
+      isows: 1.0.7(ws@8.18.3)
+      ox: 0.9.6(typescript@5.8.3)(zod@3.25.76)
+      ws: 8.18.3
+    optionalDependencies:
+      typescript: 5.8.3
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+      - zod
+
+  viem@2.41.2(typescript@5.8.3)(zod@3.25.76):
     dependencies:
       '@noble/curves': 1.9.1
       '@noble/hashes': 1.8.0
