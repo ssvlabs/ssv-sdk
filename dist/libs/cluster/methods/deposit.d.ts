@@ -3,7 +3,6 @@ import { SmartFnWriteOptions } from '../../../contract-interactions/types';
 type DepositProps = SmartFnWriteOptions<{
     id: string;
     amount: bigint;
-    options?: DepositOptions;
 }>;
 type DepositOptions = {
     approve?: boolean;

@@ -4278,7 +4278,7 @@ const deposit = async (config2, { args: { id, amount }, ...writeOptions }, optio
     args: {
       amount,
       cluster: snapshot,
-      clusterOwner: process.env.OWNER_ADDRESS,
+      clusterOwner: config2.walletClient.account.address,
       operatorIds: cluster.operatorIds.map(BigInt)
     },
     ...writeOptions
