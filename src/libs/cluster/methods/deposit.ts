@@ -5,7 +5,6 @@ import { getClusterSnapshot } from '@/utils/cluster'
 type DepositProps = SmartFnWriteOptions<{
   id: string
   amount: bigint
-  options?: DepositOptions
 }>
 
 type DepositOptions = {
@@ -46,7 +45,7 @@ export const deposit = async (
     args: {
       amount,
       cluster: snapshot,
-      clusterOwner: process.env.OWNER_ADDRESS!,
+      clusterOwner: config.walletClient.account!.address,
       operatorIds: cluster.operatorIds.map(BigInt),
     },
     ...writeOptions,
