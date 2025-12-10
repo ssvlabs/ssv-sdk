@@ -94,7 +94,7 @@
     "eslint-config-prettier": "9.1.2",
     "eslint-plugin-prettier": "5.5.4",
     "eslint-plugin-unused-imports": "4.1.4",
-    "hardhat": "2.27.0",
+    "hardhat": "2.27.1",
     "husky": "9.1.7",
     "lint-staged": "15.5.2",
     "prettier": "3.6.2",
