@@ -8,7 +8,7 @@ const globals = require("./globals-DsaKgq3v.js");
 const lodashEs = require("lodash-es");
 const viem = require("viem");
 const graphqlRequest = require("graphql-request");
-const KeyShares = require("./KeyShares-7biQfDev.js");
+const KeyShares = require("./KeyShares-B_4l2THg.js");
 var main = { exports: {} };
 const version$1 = "16.6.1";
 const require$$4 = {
@@ -4278,7 +4278,7 @@ const deposit = async (config2, { args: { id, amount }, ...writeOptions }, optio
     args: {
       amount,
       cluster: snapshot,
-      clusterOwner: process.env.OWNER_ADDRESS,
+      clusterOwner: config2.walletClient.account.address,
       operatorIds: cluster.operatorIds.map(BigInt)
     },
     ...writeOptions
