@@ -79,8 +79,8 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(graphql@16.12.0)
       '@nomicfoundation/hardhat-toolbox':
-        specifier: 6.0.0
-        version: 6.0.0(53b531caad13ce6d94200c2192878a5d)
+        specifier: 6.1.0
+        version: 6.1.0(53b531caad13ce6d94200c2192878a5d)
       '@nomicfoundation/hardhat-viem':
         specifier: 2.0.6
         version: 2.0.6(hardhat@2.27.2(ts-node@10.9.2(@types/node@22.17.0)(typescript@5.8.3))(typescript@5.8.3))(typescript@5.8.3)(viem@2.38.6(typescript@5.8.3)(zod@3.25.76))(zod@3.25.76)
@@ -1637,22 +1637,22 @@ packages:
     peerDependencies:
       hardhat: ^2.26.0
 
-  '@nomicfoundation/hardhat-toolbox@6.0.0':
-    resolution: {integrity: sha512-3qm3VuDp5xD8UyfhYPPfZHnCc0M/V5yfRSTSDdOuI8DTrmYJkMNW7QrTNGalMCigWn3suBghSw9YcMOyGDJ7Lg==}
+  '@nomicfoundation/hardhat-toolbox@6.1.0':
+    resolution: {integrity: sha512-iAIl6pIK3F4R3JXeq+b6tiShXUrp1sQRiPfqoCMUE7QLUzoFifzGV97IDRL6e73pWsMKpUQBsHBvTCsqn+ZdpA==}
     peerDependencies:
-      '@nomicfoundation/hardhat-chai-matchers': ^2.0.0
-      '@nomicfoundation/hardhat-ethers': ^3.0.0
-      '@nomicfoundation/hardhat-ignition-ethers': ^0.15.0
-      '@nomicfoundation/hardhat-network-helpers': ^1.0.0
-      '@nomicfoundation/hardhat-verify': ^2.0.0
+      '@nomicfoundation/hardhat-chai-matchers': ^2.1.0
+      '@nomicfoundation/hardhat-ethers': ^3.1.0
+      '@nomicfoundation/hardhat-ignition-ethers': ^0.15.14
+      '@nomicfoundation/hardhat-network-helpers': ^1.1.0
+      '@nomicfoundation/hardhat-verify': ^2.1.0
       '@typechain/ethers-v6': ^0.5.0
       '@typechain/hardhat': ^9.0.0
       '@types/chai': ^4.2.0
       '@types/mocha': '>=9.1.0'
-      '@types/node': '>=18.0.0'
+      '@types/node': '>=20.0.0'
       chai: ^4.2.0
       ethers: ^6.14.0
-      hardhat: ^2.11.0
+      hardhat: ^2.26.0
       hardhat-gas-reporter: ^2.3.0
       solidity-coverage: ^0.8.1
       ts-node: '>=8.0.0'
@@ -9329,7 +9329,7 @@ snapshots:
       ethereumjs-util: 7.1.5
       hardhat: 2.27.2(ts-node@10.9.2(@types/node@22.17.0)(typescript@5.8.3))(typescript@5.8.3)
 
-  '@nomicfoundation/hardhat-toolbox@6.0.0(53b531caad13ce6d94200c2192878a5d)':
+  '@nomicfoundation/hardhat-toolbox@6.1.0(53b531caad13ce6d94200c2192878a5d)':
     dependencies:
       '@nomicfoundation/hardhat-chai-matchers': 2.1.0(@nomicfoundation/hardhat-ethers@3.1.2(ethers@6.15.0)(hardhat@2.27.2(ts-node@10.9.2(@types/node@22.17.0)(typescript@5.8.3))(typescript@5.8.3)))(chai@4.5.0)(ethers@6.15.0)(hardhat@2.27.2(ts-node@10.9.2(@types/node@22.17.0)(typescript@5.8.3))(typescript@5.8.3))
       '@nomicfoundation/hardhat-ethers': 3.1.2(ethers@6.15.0)(hardhat@2.27.2(ts-node@10.9.2(@types/node@22.17.0)(typescript@5.8.3))(typescript@5.8.3))
