@@ -45,7 +45,7 @@ export const deposit = async (
     args: {
       amount,
       cluster: snapshot,
-      clusterOwner: config.walletClient.account!.address,
+      clusterOwner: cluster.owner.id as `0x${string}`,
       operatorIds: cluster.operatorIds.map(BigInt),
     },
     ...writeOptions,

@@ -315,6 +315,9 @@ describe('Cluster Utils', () => {
 
   test('getClusterSnapshot converts cluster data correctly', () => {
     const clusterData = {
+      owner: {
+        id: '0x1234567890123456789012345678901234567890',
+      },
       active: true,
       balance: '1000000000000000000',
       index: '1',

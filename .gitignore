@@ -28,3 +28,4 @@ dist
 
 /hardhat/artifacts/*
 /hardhat/cache/*
+/AGENTS.md

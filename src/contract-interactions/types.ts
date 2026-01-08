@@ -76,6 +76,7 @@ export type SmartFnWriteOptions<K extends Record<string, unknown>> = Omit<
   'chain' | 'args' | 'value' | 'abi' | 'functionName' | 'address' | 'account' | 'value'
 > & {
   args: K
+  value?: bigint
 }
 
 export type WriteProps = {

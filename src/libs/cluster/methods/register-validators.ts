@@ -11,13 +11,10 @@ import { isUndefined } from 'lodash-es'
 
 import type { Hex } from 'viem'
 
-type RegisterValidatorsProps = Pick<
-  SmartFnWriteOptions<{
-    keyshares: KeySharesItem[] | KeySharesItem['payload'][]
-    depositAmount?: bigint
-  }>,
-  'args'
->
+type RegisterValidatorsProps = SmartFnWriteOptions<{
+  keyshares: KeySharesItem[] | KeySharesItem['payload'][]
+  depositAmount?: bigint
+}>
 
 export const registerValidators = async (
   config: ConfigReturnType,

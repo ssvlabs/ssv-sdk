@@ -11,7 +11,7 @@ import type {
   GetOwnerNonceByBlockQueryVariables,
   GetValidatorQueryVariables,
   GetValidatorsQueryVariables,
-} from '../../graphql/graphql'
+} from '@/graphql/graphql'
 import {
   GetClusterBalanceDocument,
   GetClusterDocument,
@@ -23,7 +23,7 @@ import {
   GetOwnerNonceDocument,
   GetValidatorDocument,
   GetValidatorsDocument,
-} from '../../graphql/graphql'
+} from '@/graphql/graphql'
 export const getOwnerNonce = (client: GraphQLClient, args: GetOwnerNonceByBlockQueryVariables) => {
   const document =
     typeof args.block === 'number' ? GetOwnerNonceByBlockDocument : GetOwnerNonceDocument

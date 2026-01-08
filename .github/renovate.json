@@ -1,3 +1,24 @@
 {
-  "extends": ["github>ssvlabs/shared-configs//renovate/renovate.json"]
+  "extends": ["github>ssvlabs/shared-configs//renovate/renovate.json"],
+  "schedule": ["every week"],
+  "timezone": "UTC",
+  "separateMajorMinor": false,
+  "separateMultipleMajor": false,
+  "prConcurrentLimit": 1,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["every week"]
+  },
+  "packageRules": [
+    {
+      "groupName": "all dependency updates",
+      "groupSlug": "all-deps",
+      "matchPackagePatterns": ["*"]
+    },
+    {
+      "groupName": "all dependency updates",
+      "groupSlug": "all-deps",
+      "matchUpdateTypes": ["lockFileMaintenance"]
+    }
+  ]
 }

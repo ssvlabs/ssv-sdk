@@ -10,6 +10,9 @@ query GetClusterSnapshot($id: ID!) {
 
 query GetCluster($id: ID!) {
   cluster(id: $id) {
+    owner {
+      id
+    }
     active
     validatorCount
     balance
