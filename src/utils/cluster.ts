@@ -1,24 +1,27 @@
-import type { GetClusterQuery } from '@/graphql/graphql'
-import type { ClusterSnapshot } from '@/types/contract-interactions'
-import { merge } from 'lodash-es'
-import type { Hex } from 'viem'
-import { isAddress } from 'viem'
+import type { GetClusterQuery } from '@/graphql/graphql';
+import type { ClusterSnapshot } from '@/types/contract-interactions';
+import { merge } from 'lodash-es';
+import type { Hex } from 'viem';
+import { isAddress } from 'viem';
 
-export const createClusterId = (ownerAddress: string, operatorIds: number[]) => {
+export const createClusterId = (
+  ownerAddress: string,
+  operatorIds: number[],
+) => {
   if (!isAddress(ownerAddress)) {
-    throw new Error('Invalid owner address')
+    throw new Error('Invalid owner address');
   }
-  return `${ownerAddress.toLowerCase()}-${operatorIds.join('-')}`
-}
+  return `${ownerAddress.toLowerCase()}-${operatorIds.join('-')}`;
+};
 
 export const isClusterId = (clusterId: string) => {
-  const [ownerAddress, ...operatorIds] = clusterId.split('-')
+  const [ownerAddress, ...operatorIds] = clusterId.split('-');
   return (
     isAddress(ownerAddress) &&
     operatorIds.length >= 4 &&
     operatorIds.every((id) => !isNaN(Number(id)))
-  )
-}
+  );
+};
 
 export const getClusterSnapshot = (
   cluster: NonNullable<GetClusterQuery['cluster']>,
@@ -29,9 +32,11 @@ export const getClusterSnapshot = (
     index: BigInt(cluster.index),
     networkFeeIndex: BigInt(cluster.networkFeeIndex),
     validatorCount: +cluster.validatorCount,
-  }
-}
-export const createEmptyCluster = (cluster: Partial<ClusterSnapshot> = {}): ClusterSnapshot =>
+  };
+};
+export const createEmptyCluster = (
+  cluster: Partial<ClusterSnapshot> = {},
+): ClusterSnapshot =>
   merge(
     {
       validatorCount: 0,
@@ -41,7 +46,7 @@ export const createEmptyCluster = (cluster: Partial<ClusterSnapshot> = {}): Clus
       active: true,
     },
     cluster,
-  )
+  );
 
 export const add0x = (value: string | Hex): Hex =>
-  (!value.startsWith('0x') ? `0x${value}` : value) as Hex
+  (!value.startsWith('0x') ? `0x${value}` : value) as Hex;

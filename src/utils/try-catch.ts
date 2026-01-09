@@ -1,7 +1,7 @@
 export const tryCatch = <T>(fn: () => T): [T | null, Error | null] => {
   try {
-    return [fn(), null]
+    return [fn(), null];
   } catch (e) {
-    return [null, e as Error]
+    return [null, e as Error];
   }
-}
+};

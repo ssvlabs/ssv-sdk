@@ -4,18 +4,25 @@ import { Threshold } from '@/libs/ssv-keys/Threshold';
 import type { IShares } from '@/libs/ssv-keys/interfaces';
 
 export interface Shares {
-  privateKey: any,
-  publicKey: any,
-  signatures: any[],
-  ids: any[],
+  privateKey: any;
+  publicKey: any;
+  signatures: any[];
+  ids: any[];
 }
 
-export const sharesSignatures = async (_privateKey: string, operators: number[], message: string, isThreshold: boolean): Promise<Shares> => {
+export const sharesSignatures = async (
+  _privateKey: string,
+  operators: number[],
+  message: string,
+  isThreshold: boolean,
+): Promise<Shares> => {
   if (!bls.deserializeHexStrToSecretKey) {
     await bls.init(bls.BLS12_381);
   }
   const threshold = await new Threshold().create(_privateKey, operators);
-  const privateKey = bls.deserializeHexStrToSecretKey(_privateKey.replace('0x', ''));
+  const privateKey = bls.deserializeHexStrToSecretKey(
+    _privateKey.replace('0x', ''),
+  );
   const publicKey = privateKey.getPublicKey();
   const signatures: any[] = [];
   const ids: any[] = [];
@@ -23,10 +30,11 @@ export const sharesSignatures = async (_privateKey: string, operators: number[],
 
   threshold.shares.forEach((share: IShares, index: number) => {
     if (isThreshold && index === randomIndex) {
-        return;
+      return;
     }
     const sharePrivateKey = share.privateKey.substr(2);
-    const shareBlsPrivateKey = bls.deserializeHexStrToSecretKey(sharePrivateKey);
+    const shareBlsPrivateKey =
+      bls.deserializeHexStrToSecretKey(sharePrivateKey);
     signatures.push(shareBlsPrivateKey.sign(message));
     ids.push(share.id);
   });
@@ -39,5 +47,5 @@ export const sharesSignatures = async (_privateKey: string, operators: number[],
 };
 
 function getRandomInt(max: number): number {
-    return Math.floor(Math.random() * max);
+  return Math.floor(Math.random() * max);
 }

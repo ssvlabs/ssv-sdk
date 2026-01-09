@@ -1,10 +1,10 @@
-import { merge } from 'lodash-es'
-import { type Address, type Hash } from 'viem'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { type ConfigReturnType } from '../config/create'
+import { merge } from 'lodash-es';
+import { type Address, type Hash } from 'viem';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { type ConfigReturnType } from '../config/create';
 
 // Mock data
-const mockAddress = '0x012f55B6Cc5D57F943F1E79cF00214B652513f88' as Address
+const mockAddress = '0x012f55B6Cc5D57F943F1E79cF00214B652513f88' as Address;
 const _mockOperators = [
   {
     id: 378,
@@ -26,8 +26,8 @@ const _mockOperators = [
     operatorKey:
       'LS0tLS1CRUdJTiBSU0EgUFVCTElDIEtFWS0tLS0tCk1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBamk2SHFaU2NuYmFBNFpCelVzcVoKYnYrcmt3bDczdjVhMERrVGNkdUVJUVJXY1MyRXY3WEVFd2luQWVDQ3ErZ25ULzJLamVEQzQ4dktGMy9DdzQ5egpaSDRYZW94alVFQzhSMlZCaG9zM2lEdHdGWE5uYXpya050QUp1YllVQllOYytidm9oQlJkbU9yRWNZclZqdmt0Ci9iTXk3d0lacU1Xc2dXWlFZTktiUVBLYlRUNlNwVGZYekdLWENwT1BueXdZOXM2Y0g1UU1QNXZ6M0JVeVpIWCsKTnFoOXpuK2JRSHU3V1oyYjRpaVNSM2ZER1FYYnFnbitrK291Rkhkc2RzbFRVQmhQK0M3aXpYK2czdDJBc1M0agpRd2hlRDNjQ3hOV0I1OGFwa3U3SjE0QVRMWWloL0xTYW42L1M1MlpIZ1hFa3FFOUZYT0ZFdkZGbSsxb3ZmRHhxCkl3SURBUUFCCi0tLS0tRU5EIFJTQSBQVUJMSUMgS0VZLS0tLS0K',
   },
-]
-const mockOperatorIds = _mockOperators.map((o) => o.id)
+];
+const mockOperatorIds = _mockOperators.map((o) => o.id);
 const mockOperators = _mockOperators.map((o) => ({
   id: String(o.id),
   publicKey: o.operatorKey,
@@ -38,7 +38,7 @@ const mockOperators = _mockOperators.map((o) => ({
   isPrivate: false,
   whitelisted: [],
   whitelistedContract: mockAddress,
-}))
+}));
 
 const mockClusterBalanceData = {
   cluster: {
@@ -60,7 +60,7 @@ const mockClusterBalanceData = {
       number: 2000,
     },
   },
-}
+};
 
 const mockApi = {
   getOperator: vi.fn().mockResolvedValue(mockOperators[0]),
@@ -68,7 +68,7 @@ const mockApi = {
   getValidator: vi.fn().mockResolvedValue(null),
   getOwnerNonce: vi.fn().mockResolvedValue('833'),
   getClusterBalance: vi.fn().mockResolvedValue(mockClusterBalanceData),
-}
+};
 const mockConfig = {
   walletClient: {
     account: {
@@ -109,66 +109,74 @@ const mockConfig = {
   contractAddresses: {
     setter: mockAddress,
   },
-} as unknown as ConfigReturnType
+} as unknown as ConfigReturnType;
 
 describe('SDK Utils', () => {
   beforeEach(() => {
-    mockApi.getOperator.mockResolvedValue(mockOperators[0])
-    mockApi.getOperators.mockResolvedValue(mockOperators)
-    mockApi.getValidator.mockResolvedValue(null)
-    mockApi.getOwnerNonce.mockResolvedValue('1')
-    mockApi.getClusterBalance.mockResolvedValue(mockClusterBalanceData)
-  })
+    mockApi.getOperator.mockResolvedValue(mockOperators[0]);
+    mockApi.getOperators.mockResolvedValue(mockOperators);
+    mockApi.getValidator.mockResolvedValue(null);
+    mockApi.getOwnerNonce.mockResolvedValue('1');
+    mockApi.getClusterBalance.mockResolvedValue(mockClusterBalanceData);
+  });
 
   describe('getOperatorCapacity', () => {
     it('should return operator capacity', async () => {
-      const { getOperatorCapacity } = await import('../libs/utils/methods/methods')
+      const { getOperatorCapacity } = await import(
+        '../libs/utils/methods/methods'
+      );
 
-      const result = await getOperatorCapacity(mockConfig, '1')
+      const result = await getOperatorCapacity(mockConfig, '1');
 
-      expect(result).toBe(5) // limit (10) - validatorCount (5)
-      expect(mockConfig.api.getOperator).toHaveBeenCalledWith({ id: '1' })
-      expect(mockConfig.contract.ssv.read.getValidatorsPerOperatorLimit).toHaveBeenCalled()
-    })
+      expect(result).toBe(5); // limit (10) - validatorCount (5)
+      expect(mockConfig.api.getOperator).toHaveBeenCalledWith({ id: '1' });
+      expect(
+        mockConfig.contract.ssv.read.getValidatorsPerOperatorLimit,
+      ).toHaveBeenCalled();
+    });
 
     it('should return 0 for non-existent operator', async () => {
-      const { getOperatorCapacity } = await import('../libs/utils/methods/methods')
+      const { getOperatorCapacity } = await import(
+        '../libs/utils/methods/methods'
+      );
 
-      mockApi.getOperator.mockResolvedValue(null)
+      mockApi.getOperator.mockResolvedValue(null);
 
       const noOperatorConfig = merge({}, mockConfig, {
         api: {
           ...mockConfig.api,
           getOperator: vi.fn().mockResolvedValue(null),
         },
-      } satisfies Partial<ConfigReturnType>)
-      const result = await getOperatorCapacity(noOperatorConfig, '999')
+      } satisfies Partial<ConfigReturnType>);
+      const result = await getOperatorCapacity(noOperatorConfig, '999');
 
-      expect(result).toBe(0)
-    })
-  })
+      expect(result).toBe(0);
+    });
+  });
 
   describe('getClusterBalance', () => {
     it('should calculate cluster balance and operational runway', async () => {
-      const { getClusterBalance } = await import('../libs/utils/methods/get-cluster-balance')
+      const { getClusterBalance } = await import(
+        '../libs/utils/methods/get-cluster-balance'
+      );
 
       const result = await getClusterBalance(mockConfig, {
         operatorIds: mockOperatorIds,
-      })
+      });
 
-      expect(result).toHaveProperty('balance')
-      expect(result).toHaveProperty('operationalRunway')
+      expect(result).toHaveProperty('balance');
+      expect(result).toHaveProperty('operationalRunway');
       expect(mockConfig.api.getClusterBalance).toHaveBeenCalledWith({
         daoAddress: mockAddress,
         operatorIds: mockOperatorIds.map(String),
         clusterId: expect.any(String),
-      })
-    })
+      });
+    });
 
     it('should throw error when cluster data is missing', async () => {
-      const { getClusterBalance } = await import('../libs/utils/methods/get-cluster-balance')
-
-
+      const { getClusterBalance } = await import(
+        '../libs/utils/methods/get-cluster-balance'
+      );
 
       const noClusterConfig = merge({}, mockConfig, {
         api: {
@@ -178,13 +186,13 @@ describe('SDK Utils', () => {
             _meta: { block: { number: 2000 } },
           }),
         },
-      } satisfies Partial<ConfigReturnType>)
+      } satisfies Partial<ConfigReturnType>);
 
       await expect(
         getClusterBalance(noClusterConfig, {
           operatorIds: mockOperatorIds,
         }),
-      ).rejects.toThrow('Could not fetch cluster balance')
-    })
-  })
-})
+      ).rejects.toThrow('Could not fetch cluster balance');
+    });
+  });
+});

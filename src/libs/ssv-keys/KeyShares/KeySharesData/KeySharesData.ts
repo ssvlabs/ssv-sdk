@@ -1,8 +1,23 @@
-import type { IKeySharesData, IKeySharesPartialData } from '@/libs/ssv-keys/interfaces';
+import type {
+  IKeySharesData,
+  IKeySharesPartialData,
+} from '@/libs/ssv-keys/interfaces';
 import type { OperatorData } from '@/libs/ssv-keys/KeyShares/KeySharesData/OperatorData';
-import { IsNumber, IsOptional, IsString, Length, ValidateNested, validateSync } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+  ValidateNested,
+  validateSync,
+} from 'class-validator';
 import { operatorSortedList } from '../../helpers/operator.helper';
-import { OpeatorsListValidator, OwnerAddressValidator, OwnerNonceValidator, PublicKeyValidator } from './validators';
+import {
+  OpeatorsListValidator,
+  OwnerAddressValidator,
+  OwnerNonceValidator,
+  PublicKeyValidator,
+} from './validators';
 
 export class KeySharesData implements IKeySharesData {
   @IsOptional()
@@ -55,7 +70,7 @@ export class KeySharesData implements IKeySharesData {
     if (!this.operators?.length) {
       return [];
     }
-    return this.operators.map(operator => parseInt(String(operator.id), 10));
+    return this.operators.map((operator) => parseInt(String(operator.id), 10));
   }
 
   /**
@@ -65,6 +80,6 @@ export class KeySharesData implements IKeySharesData {
     if (!this.operators?.length) {
       return [];
     }
-    return this.operators.map(operator => String(operator.operatorKey));
+    return this.operators.map((operator) => String(operator.operatorKey));
   }
 }

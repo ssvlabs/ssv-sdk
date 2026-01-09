@@ -1,16 +1,23 @@
-import { createContractInteractions, type ConfigReturnType, type ContractAddresses } from '@/config'
-import { createMockApi } from './api'
+import {
+  createContractInteractions,
+  type ConfigReturnType,
+  type ContractAddresses,
+} from '@/config';
+import { createMockApi } from './api';
 
-type MockConfigArgs = Pick<ConfigReturnType, 'publicClient' | 'walletClient' | 'chain'> & {
-  addresses: ContractAddresses
-}
+type MockConfigArgs = Pick<
+  ConfigReturnType,
+  'publicClient' | 'walletClient' | 'chain'
+> & {
+  addresses: ContractAddresses;
+};
 
 export const createMockConfig = (args: MockConfigArgs): ConfigReturnType => {
   const contract = createContractInteractions({
     walletClient: args.walletClient,
     publicClient: args.publicClient,
     addresses: args.addresses,
-  })
+  });
 
   return {
     chain: args.chain,
@@ -26,5 +33,5 @@ export const createMockConfig = (args: MockConfigArgs): ConfigReturnType => {
       endpoint: {} as unknown as ConfigReturnType['rest']['endpoint'],
     },
     contractAddresses: args.addresses,
-  }
-}
+  };
+};

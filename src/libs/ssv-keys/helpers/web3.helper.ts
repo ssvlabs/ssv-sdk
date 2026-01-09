@@ -11,9 +11,11 @@ import { SingleSharesSignatureInvalid } from '../exceptions/bls';
  *
  */
 const hexArrayToBytes = (hexArr: string[]): Buffer => {
-  const uint8Array = new Uint8Array(hexArr.flatMap(hex => Array.from(toBytes(hex))));
+  const uint8Array = new Uint8Array(
+    hexArr.flatMap((hex) => Array.from(toBytes(hex))),
+  );
   return Buffer.from(uint8Array);
-}
+};
 
 /**
  * Asynchronously creates a BLS signature for given data using a private key.
@@ -26,18 +28,23 @@ const hexArrayToBytes = (hexArr: string[]): Buffer => {
  * computes the Keccak-256 hash of the data, signs the hashed data using the deserialized private key,
  * and returns the signature in hexadecimal format, prefixed with '0x'.
  */
-const buildSignature = async(dataToSign: string, privateKeyHex: string): Promise<string> => {
+const buildSignature = async (
+  dataToSign: string,
+  privateKeyHex: string,
+): Promise<string> => {
   if (!bls.deserializeHexStrToSecretKey) {
     await bls.init(bls.BLS12_381);
   }
-  const privateKey = bls.deserializeHexStrToSecretKey(privateKeyHex.replace('0x', ''));
+  const privateKey = bls.deserializeHexStrToSecretKey(
+    privateKeyHex.replace('0x', ''),
+  );
 
   const messageHash = keccak256(toBytes(dataToSign));
   const messageBytes = fromHex(messageHash, 'bytes');
   const signature = privateKey.sign(messageBytes);
   const signatureHex = signature.serializeToHexStr();
   return `0x${signatureHex}`;
-}
+};
 
 /**
  * Asynchronously validates a BLS signature for given signed data.
@@ -51,24 +58,36 @@ const buildSignature = async(dataToSign: string, privateKeyHex: string): Promise
  * The function initializes the BLS library if needed, deserializes the public key and signature from hexadecimal strings,
  * computes the Keccak-256 hash of the signed data, and verifies the signature using the deserialized public key.
  */
-const validateSignature = async(signedData: string, signatureHex: string, publicKey: string): Promise<void> => {
-  const blsPublicKey = bls.deserializeHexStrToPublicKey(publicKey.replace('0x', ''));
-  const signature = bls.deserializeHexStrToSignature(signatureHex.replace('0x', ''));
+const validateSignature = async (
+  signedData: string,
+  signatureHex: string,
+  publicKey: string,
+): Promise<void> => {
+  const blsPublicKey = bls.deserializeHexStrToPublicKey(
+    publicKey.replace('0x', ''),
+  );
+  const signature = bls.deserializeHexStrToSignature(
+    signatureHex.replace('0x', ''),
+  );
 
   const messageHashHex = keccak256(toBytes(signedData));
   const messageHashBytes = fromHex(messageHashHex, 'bytes');
 
   if (!blsPublicKey.verify(signature, messageHashBytes)) {
-    throw new SingleSharesSignatureInvalid(signatureHex, 'Single shares signature is invalid');
+    throw new SingleSharesSignatureInvalid(
+      signatureHex,
+      'Single shares signature is invalid',
+    );
   }
-}
+};
 
-export const privateToPublicKey = async(privateKey: string): Promise<string> => {
+export const privateToPublicKey = async (
+  privateKey: string,
+): Promise<string> => {
   if (!bls.deserializeHexStrToSecretKey) {
     await bls.init(bls.BLS12_381);
   }
   return `0x${bls.deserializeHexStrToSecretKey(privateKey.replace('0x', '')).getPublicKey().serializeToHexStr()}`;
-}
+};
 
 export { hexArrayToBytes, buildSignature, validateSignature };
-

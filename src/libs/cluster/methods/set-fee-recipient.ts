@@ -1,10 +1,10 @@
-import type { ConfigReturnType } from '@/config/create'
-import type { SmartFnWriteOptions } from '@/contract-interactions/types'
-import type { Address } from 'abitype'
+import type { ConfigReturnType } from '@/config/create';
+import type { SmartFnWriteOptions } from '@/contract-interactions/types';
+import type { Address } from 'abitype';
 
 type SetFeeRecipientProps = SmartFnWriteOptions<{
-  recipient: Address
-}>
+  recipient: Address;
+}>;
 
 export const setFeeRecipient = async (
   config: ConfigReturnType,
@@ -15,5 +15,5 @@ export const setFeeRecipient = async (
       recipientAddress: recipient,
     },
     ...writeOptions,
-  })
-} 
+  });
+};

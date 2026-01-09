@@ -10,7 +10,6 @@
 // export default index;
 
 import bls from 'bls-eth-wasm';
-
 (async () => {
   await bls.init(bls.BLS12_381);
 })();

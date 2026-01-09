@@ -24,7 +24,11 @@ export class OperatorsCountsMismatchError extends SSVKeysException {
   public listOne: any[] | null | undefined;
   public listTwo: any[] | null | undefined;
 
-  constructor(propertyListOne: any[] | null | undefined, propertyListTwo: any[] | null | undefined, message: string) {
+  constructor(
+    propertyListOne: any[] | null | undefined,
+    propertyListTwo: any[] | null | undefined,
+    message: string,
+  ) {
     super(message);
     this.listOne = propertyListOne;
     this.listTwo = propertyListTwo;
@@ -34,7 +38,10 @@ export class OperatorsCountsMismatchError extends SSVKeysException {
 export class OperatorPublicKeyError extends SSVKeysException {
   public operator: any;
 
-  constructor(operator: { rsa: string, base64: string | boolean }, message: string) {
+  constructor(
+    operator: { rsa: string; base64: string | boolean },
+    message: string,
+  ) {
     super(message);
     this.operator = operator;
   }
