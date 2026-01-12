@@ -29,6 +29,7 @@ import { sortNumbers } from '@/utils/number';
 import { decodeOperatorPublicKey, getOperatorIds } from '@/utils/operator';
 import { tryCatch } from '@/utils/try-catch';
 import urlJoin from '@/utils/url-join';
+import type { Address } from 'viem';
 import { encodeAbiParameters, parseEther } from 'viem';
 import { describe, expect, test, vi } from 'vitest';
 
@@ -352,7 +353,7 @@ describe('Cluster Utils', () => {
   test('getClusterSnapshot converts cluster data correctly', () => {
     const clusterData = {
       owner: {
-        id: '0x1234567890123456789012345678901234567890',
+        id: '0x1234567890123456789012345678901234567890' as Address,
       },
       active: true,
       balance: '1000000000000000000',
