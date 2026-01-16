@@ -32,7 +32,7 @@ export const graph_endpoints: Record<SupportedChainsIDs, string> = {
   [mainnet.id]:
     'https://api.studio.thegraph.com/query/71118/ssv-network-ethereum/version/latest',
   [hoodi.id]:
-    'https://api.studio.thegraph.com/query/71118/ssv-network-hoodi/version/latest',
+    'https://api.studio.thegraph.com/query/71118/ssv-network-hoodi-stage/version/latest',
 };
 
 export const paid_graph_endpoints: Record<SupportedChainsIDs, string> = {
