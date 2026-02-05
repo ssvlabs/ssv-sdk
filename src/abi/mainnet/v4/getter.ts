@@ -84,16 +84,6 @@ export const MainnetV4GetterABI = [
   },
   {
     inputs: [],
-    name: 'CooldownActive',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'CooldownNotFinished',
-    type: 'error',
-  },
-  {
-    inputs: [],
     name: 'EBBelowMinimum',
     type: 'error',
   },
@@ -240,6 +230,16 @@ export const MainnetV4GetterABI = [
       },
     ],
     name: 'InvalidWhitelistingContract',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'LegacyOperatorFeeDeclarationInvalid',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MaxRequestsAmountReached',
     type: 'error',
   },
   {
@@ -544,6 +544,19 @@ export const MainnetV4GetterABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'getActiveOracleIds',
+    outputs: [
+      {
+        internalType: 'uint32[4]',
+        name: '',
+        type: 'uint32[4]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -780,7 +793,7 @@ export const MainnetV4GetterABI = [
         type: 'uint64[]',
       },
     ],
-    name: 'getClusterVersion',
+    name: 'getClusterAssetType',
     outputs: [
       {
         internalType: 'uint8',
@@ -805,19 +818,6 @@ export const MainnetV4GetterABI = [
         internalType: 'bytes32',
         name: '',
         type: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getDefaultOracleIds',
-    outputs: [
-      {
-        internalType: 'uint32[4]',
-        name: '',
-        type: 'uint32[4]',
       },
     ],
     stateMutability: 'view',
@@ -952,6 +952,19 @@ export const MainnetV4GetterABI = [
         internalType: 'uint256',
         name: '',
         type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getMinimumOperatorEthFee',
+    outputs: [
+      {
+        internalType: 'uint64',
+        name: '',
+        type: 'uint64',
       },
     ],
     stateMutability: 'view',
@@ -1666,14 +1679,14 @@ export const MainnetV4GetterABI = [
     name: 'pendingUnstake',
     outputs: [
       {
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
+        internalType: 'uint256[]',
+        name: 'amounts',
+        type: 'uint256[]',
       },
       {
-        internalType: 'uint256',
-        name: 'unlockTime',
-        type: 'uint256',
+        internalType: 'uint256[]',
+        name: 'unlockTimes',
+        type: 'uint256[]',
       },
     ],
     stateMutability: 'view',

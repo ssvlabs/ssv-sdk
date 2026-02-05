@@ -1,10 +1,5 @@
 export const MainnetV4SetterABI = [
   {
-    inputs: [],
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -80,16 +75,6 @@ export const MainnetV4SetterABI = [
   {
     inputs: [],
     name: 'ClusterNotLiquidatable',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'CooldownActive',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'CooldownNotFinished',
     type: 'error',
   },
   {
@@ -240,6 +225,11 @@ export const MainnetV4SetterABI = [
       },
     ],
     name: 'InvalidWhitelistingContract',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MaxRequestsAmountReached',
     type: 'error',
   },
   {
@@ -2160,6 +2150,24 @@ export const MainnetV4SetterABI = [
     inputs: [
       {
         internalType: 'address',
+        name: 'cssv_',
+        type: 'address',
+      },
+      {
+        internalType: 'uint64',
+        name: 'cooldownDuration_',
+        type: 'uint64',
+      },
+    ],
+    name: 'initializeSSVStaking',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: 'clusterOwner',
         type: 'address',
       },
@@ -3200,56 +3208,6 @@ export const MainnetV4SetterABI = [
       },
     ],
     name: 'withdrawOperatorEarningsSSV',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint64[]',
-        name: 'operatorIds',
-        type: 'uint64[]',
-      },
-      {
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-      {
-        components: [
-          {
-            internalType: 'uint32',
-            name: 'validatorCount',
-            type: 'uint32',
-          },
-          {
-            internalType: 'uint64',
-            name: 'networkFeeIndex',
-            type: 'uint64',
-          },
-          {
-            internalType: 'uint64',
-            name: 'index',
-            type: 'uint64',
-          },
-          {
-            internalType: 'bool',
-            name: 'active',
-            type: 'bool',
-          },
-          {
-            internalType: 'uint256',
-            name: 'balance',
-            type: 'uint256',
-          },
-        ],
-        internalType: 'struct ISSVNetworkCore.Cluster',
-        name: 'cluster',
-        type: 'tuple',
-      },
-    ],
-    name: 'withdrawSSV',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
