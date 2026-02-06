@@ -361,6 +361,7 @@ describe('Cluster Utils', () => {
       networkFeeIndex: '2',
       validatorCount: '3',
       operatorIds: ['1', '2', '3', '4'],
+      effectiveBalance: '64',
     };
 
     const snapshot = toSolidityCluster(clusterData);

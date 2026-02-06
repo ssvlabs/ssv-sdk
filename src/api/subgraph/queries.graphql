@@ -32,6 +32,7 @@ query GetClusters($owner: String!) {
     index
     networkFeeIndex
     operatorIds
+    effectiveBalance
   }
 }
 
@@ -111,6 +112,7 @@ query GetClusterBalance(
     networkFeeIndex
     index
     balance
+    effectiveBalance
   }
 }
 
