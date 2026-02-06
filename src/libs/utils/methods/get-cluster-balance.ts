@@ -47,22 +47,25 @@ export const getClusterBalance = async (
     0n,
   );
 
+  const vUnits =
+    (globals.VUNITS_PRECISION * Number(query.cluster.effectiveBalance)) / 32;
+
   const calculatedClusterBalance =
     BigInt(query.cluster.balance) -
       (cumulativeNetworkFee + cumulativeOperatorFee) *
-        BigInt(query.cluster.validatorCount) || 1n;
+        BigInt(vUnits / globals.VUNITS_PRECISION) || 1n;
 
   const burnRate =
     (operatorsFee + BigInt(query.daovalues.networkFee)) *
-      BigInt(query.cluster.validatorCount) || 1n;
+      BigInt(vUnits / globals.VUNITS_PRECISION) || 1n;
 
   const mLc = BigInt(query.daovalues.minimumLiquidationCollateral);
   const LC = bigintMax(
     mLc,
     burnRate * BigInt(query.daovalues.liquidationThreshold),
   );
-  const runwaySSV = calculatedClusterBalance - LC;
-  const operationalRunway = runwaySSV / burnRate / globals.BLOCKS_PER_DAY;
+  const runway = calculatedClusterBalance - LC;
+  const operationalRunway = runway / burnRate / globals.BLOCKS_PER_DAY;
 
   return {
     balance: calculatedClusterBalance,

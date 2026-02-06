@@ -46,6 +46,7 @@ const mockClusterBalanceData = {
     networkFeeIndex: '0',
     index: '0',
     balance: '1000000',
+    effectiveBalance: '64',
   },
   daovalues: {
     networkFeeIndex: '0',
