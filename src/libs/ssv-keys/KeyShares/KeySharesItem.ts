@@ -68,7 +68,7 @@ export class KeySharesItem {
   async buildPayload(
     metaData: IKeySharesPayloadData,
     toSignatureData: IKeySharesToSignatureData,
-  ): Promise<any> {
+  ): Promise<KeySharesPayload> {
     const { ownerAddress, ownerNonce, privateKey } = toSignatureData;
 
     if (!Number.isInteger(ownerNonce) || ownerNonce < 0) {

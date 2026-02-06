@@ -92,6 +92,7 @@ const mockConfig = {
         exitValidator: vi.fn().mockResolvedValue({ hash: '0x123' }),
         withdraw: vi.fn().mockResolvedValue({ hash: '0x123' }),
         liquidate: vi.fn().mockResolvedValue({ hash: '0x123' }),
+        liquidateSSV: vi.fn().mockResolvedValue({ hash: '0x123' }),
         reactivate: vi.fn().mockResolvedValue({ hash: '0x123' }),
         setFeeRecipientAddress: vi.fn().mockResolvedValue({ hash: '0x123' }),
       },
@@ -122,8 +123,8 @@ describe('Cluster Methods', () => {
         mockConfig.contract.ssv.write.registerValidator,
       ).toHaveBeenCalledWith(
         expect.objectContaining({
+          value: 1000n,
           args: {
-            amount: 1000n,
             cluster: mockCluster,
             operatorIds: mockOperatorIdsBigInt,
             publicKey: mockPublicKey,
@@ -159,8 +160,8 @@ describe('Cluster Methods', () => {
         mockConfig.contract.ssv.write.bulkRegisterValidator,
       ).toHaveBeenCalledWith(
         expect.objectContaining({
+          value: 1000n,
           args: {
-            amount: 1000n,
             cluster: mockCluster,
             operatorIds: mockOperatorIdsBigInt,
             publicKeys: mockKeyshares.map((k) => k.publicKey),
@@ -360,6 +361,31 @@ describe('Cluster Methods', () => {
     });
   });
 
+  describe('liquidateSSV', () => {
+    it('should liquidate a cluster in SSV', async () => {
+      const { liquidateSSV } = await import(
+        '../libs/cluster/methods/liquidate-ssv'
+      );
+
+      const result = await liquidateSSV(mockConfig, {
+        args: {
+          owner: mockConfig.walletClient.account!.address,
+          operatorIds: mockOperatorIds,
+          cluster: mockCluster,
+        },
+      });
+
+      expect(result).toBeDefined();
+      expect(mockConfig.contract.ssv.write.liquidateSSV).toHaveBeenCalledWith({
+        args: {
+          clusterOwner: mockConfig.walletClient.account!.address,
+          operatorIds: mockOperatorIdsBigInt,
+          cluster: mockCluster,
+        },
+      });
+    });
+  });
+
   describe('reactivateCluster', () => {
     it('should reactivate a cluster', async () => {
       const { reactivateCluster } = await import(
@@ -375,10 +401,10 @@ describe('Cluster Methods', () => {
 
       expect(result).toBeDefined();
       expect(mockConfig.contract.ssv.write.reactivate).toHaveBeenCalledWith({
+        value: 1000n,
         args: {
           cluster: mockCluster,
           operatorIds: mockOperatorIdsBigInt,
-          amount: 1000n,
         },
       });
     });

@@ -3,6 +3,8 @@ import {
   deposit,
   exitValidators,
   liquidateCluster,
+  liquidateSSV,
+  migrateClusterToETH,
   reactivateCluster,
   registerValidators,
   registerValidatorsRawData,
@@ -19,8 +21,14 @@ export const createClusterManager = (config: ConfigReturnType) => ({
   liquidate: liquidateCluster.bind(null, config) as RemoveConfigArg<
     typeof liquidateCluster
   >,
+  liquidateSSV: liquidateSSV.bind(null, config) as RemoveConfigArg<
+    typeof liquidateSSV
+  >,
   reactivate: reactivateCluster.bind(null, config) as RemoveConfigArg<
     typeof reactivateCluster
+  >,
+  migrateClusterToETH: migrateClusterToETH.bind(null, config) as RemoveConfigArg<
+    typeof migrateClusterToETH
   >,
   removeValidators: removeValidators.bind(null, config) as RemoveConfigArg<
     typeof removeValidators

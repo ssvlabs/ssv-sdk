@@ -23,6 +23,7 @@ const mockConfig = {
     ssv: {
       read: {
         getOperatorEarnings: vi.fn().mockResolvedValue(2000n),
+        getOperatorEarningsSSV: vi.fn().mockResolvedValue(2000n),
         isWhitelistingContract: vi.fn<
           [{ contractAddress: Address }],
           Promise<boolean>
@@ -40,7 +41,16 @@ const mockConfig = {
       },
       write: {
         withdrawOperatorEarnings: vi.fn().mockResolvedValue({ hash: '0x123' }),
+        withdrawOperatorEarningsSSV: vi
+          .fn()
+          .mockResolvedValue({ hash: '0x123' }),
         withdrawAllOperatorEarnings: vi
+          .fn()
+          .mockResolvedValue({ hash: '0x123' }),
+        withdrawAllOperatorEarningsSSV: vi
+          .fn()
+          .mockResolvedValue({ hash: '0x123' }),
+        withdrawAllVersionOperatorEarnings: vi
           .fn()
           .mockResolvedValue({ hash: '0x123' }),
         setOperatorsWhitelists: vi.fn().mockResolvedValue({ hash: '0x123' }),
@@ -109,6 +119,86 @@ describe('Operator Methods', () => {
       });
       expect(
         mockConfig.contract.ssv.write.withdrawAllOperatorEarnings,
+      ).toHaveBeenCalledWith({
+        args: {
+          operatorId: 1n,
+        },
+      });
+    });
+  });
+
+  describe('withdrawOperatorEarningsSSV', () => {
+    it('should withdraw partial earnings', async () => {
+      const { withdrawOperatorEarningsSSV } = await import(
+        '../libs/operator/methods'
+      );
+
+      const result = await withdrawOperatorEarningsSSV(mockConfig, {
+        args: {
+          operatorId: mockOperatorId,
+          amount: 1000n,
+        },
+      });
+
+      expect(result).toBeDefined();
+      expect(
+        mockConfig.contract.ssv.read.getOperatorEarningsSSV,
+      ).toHaveBeenCalledWith({
+        id: 1n,
+      });
+      expect(
+        mockConfig.contract.ssv.write.withdrawOperatorEarningsSSV,
+      ).toHaveBeenCalledWith({
+        args: {
+          operatorId: 1n,
+          amount: 1000n,
+        },
+      });
+    });
+
+    it('should withdraw all earnings when amount >= balance', async () => {
+      const { withdrawOperatorEarningsSSV } = await import(
+        '../libs/operator/methods'
+      );
+
+      const result = await withdrawOperatorEarningsSSV(mockConfig, {
+        args: {
+          operatorId: mockOperatorId,
+          amount: 2000n,
+        },
+      });
+
+      expect(result).toBeDefined();
+      expect(
+        mockConfig.contract.ssv.read.getOperatorEarningsSSV,
+      ).toHaveBeenCalledWith({
+        id: 1n,
+      });
+      expect(
+        mockConfig.contract.ssv.write.withdrawAllOperatorEarningsSSV,
+      ).toHaveBeenCalledWith({
+        args: {
+          operatorId: 1n,
+        },
+      });
+    });
+  });
+
+  describe('withdrawAllVersionOperatorEarnings', () => {
+    it('should withdraw all version earnings', async () => {
+      const { withdrawAllVersionOperatorEarnings } = await import(
+        '../libs/operator/methods'
+      );
+
+      const result = await withdrawAllVersionOperatorEarnings(mockConfig, {
+        args: {
+          operatorId: mockOperatorId,
+        },
+      });
+
+      expect(result).toBeDefined();
+      expect(
+        mockConfig.contract.ssv.write.withdrawAllVersionOperatorEarnings,
       ).toHaveBeenCalledWith({
         args: {
           operatorId: 1n,

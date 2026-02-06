@@ -43,6 +43,59 @@ export const withdraw = async (
   });
 };
 
+type WithdrawOperatorEarningsSSVArgs = SmartFnWriteOptions<{
+  operatorId: string;
+  amount: bigint;
+}>;
+export const withdrawOperatorEarningsSSV = async (
+  config: ConfigReturnType,
+  {
+    args: { operatorId, amount },
+    ...writeOptions
+  }: WithdrawOperatorEarningsSSVArgs,
+) => {
+  const balance = await config.contract.ssv.read.getOperatorEarningsSSV({
+    id: BigInt(operatorId),
+  });
+
+  const isWithdrawingAll = amount >= balance;
+
+  if (isWithdrawingAll) {
+    return config.contract.ssv.write.withdrawAllOperatorEarningsSSV({
+      args: {
+        operatorId: BigInt(operatorId),
+      },
+      ...writeOptions,
+    });
+  }
+
+  return config.contract.ssv.write.withdrawOperatorEarningsSSV({
+    args: {
+      operatorId: BigInt(operatorId),
+      amount,
+    },
+    ...writeOptions,
+  });
+};
+
+type WithdrawAllVersionOperatorEarningsArgs = SmartFnWriteOptions<{
+  operatorId: string;
+}>;
+export const withdrawAllVersionOperatorEarnings = async (
+  config: ConfigReturnType,
+  {
+    args: { operatorId },
+    ...writeOptions
+  }: WithdrawAllVersionOperatorEarningsArgs,
+) => {
+  return config.contract.ssv.write.withdrawAllVersionOperatorEarnings({
+    args: {
+      operatorId: BigInt(operatorId),
+    },
+    ...writeOptions,
+  });
+};
+
 type RegisterOperatorArgs = SmartFnWriteOptions<{
   isPrivate: boolean;
   yearlyFee: bigint;

@@ -4,6 +4,7 @@ export * from '@/config';
 export * from '@/contract-interactions';
 export * from '@/libs/api';
 export * from '@/libs/cluster';
+export * from '@/libs/dao';
 export * from '@/libs/operator';
 export * from '@/libs/utils';
 export * from '@/libs/ssv-keys';

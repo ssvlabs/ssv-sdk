@@ -1,6 +1,8 @@
 export { deposit } from './deposit';
 export { exitValidators } from './exit-validators';
 export { liquidateCluster } from './liquidate-cluster';
+export { liquidateSSV } from './liquidate-ssv';
+export { migrateClusterToETH } from './migrate-cluster-to-eth';
 export { reactivateCluster } from './reactivate-cluster';
 export {
   registerValidators,

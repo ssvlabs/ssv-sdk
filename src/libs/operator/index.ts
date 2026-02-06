@@ -3,6 +3,8 @@ import {
   registerOperator,
   setOperatorWhitelists,
   withdraw,
+  withdrawAllVersionOperatorEarnings,
+  withdrawOperatorEarningsSSV,
 } from '@/libs/operator/methods';
 import type { RemoveConfigArg } from '@/types/methods';
 
@@ -12,6 +14,14 @@ export const createOperatorManager = (config: ConfigReturnType) => ({
   >,
   removeOperator: config.contract.ssv.write.removeOperator,
   withdraw: withdraw.bind(null, config) as RemoveConfigArg<typeof withdraw>,
+  withdrawOperatorEarningsSSV: withdrawOperatorEarningsSSV.bind(
+    null,
+    config,
+  ) as RemoveConfigArg<typeof withdrawOperatorEarningsSSV>,
+  withdrawAllVersionOperatorEarnings: withdrawAllVersionOperatorEarnings.bind(
+    null,
+    config,
+  ) as RemoveConfigArg<typeof withdrawAllVersionOperatorEarnings>,
   setOperatorWhitelists: config.contract.ssv.write.setOperatorsWhitelists,
   removeOperatorWhitelists: config.contract.ssv.write.removeOperatorsWhitelists,
   setOperatorsPrivate: config.contract.ssv.write.setOperatorsPrivateUnchecked,

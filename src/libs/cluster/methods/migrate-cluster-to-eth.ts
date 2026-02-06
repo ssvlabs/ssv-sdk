@@ -2,14 +2,13 @@ import type { ConfigReturnType } from '@/config/create';
 import type { SmartFnWriteOptions } from '@/contract-interactions/types';
 import { getClusterSnapshot } from '@/utils/cluster';
 
-type DepositProps = SmartFnWriteOptions<{
+type MigrateClusterToETHProps = SmartFnWriteOptions<{
   id: string;
-  amount: bigint;
 }>;
 
-export const deposit = async (
+export const migrateClusterToETH = async (
   config: ConfigReturnType,
-  { args: { id, amount }, ...writeOptions }: DepositProps,
+  { args: { id }, ...writeOptions }: MigrateClusterToETHProps,
 ) => {
   const cluster = await config.api.getCluster({ id });
 
@@ -17,14 +16,10 @@ export const deposit = async (
     throw new Error('Cluster not found');
   }
 
-  const snapshot = getClusterSnapshot(cluster);
-
-  return config.contract.ssv.write.deposit({
-    value: amount,
+  return config.contract.ssv.write.migrateClusterToETH({
     args: {
-      cluster: snapshot,
-      clusterOwner: cluster.owner.id as `0x${string}`,
       operatorIds: cluster.operatorIds.map(BigInt),
+      cluster: getClusterSnapshot(cluster),
     },
     ...writeOptions,
   });
