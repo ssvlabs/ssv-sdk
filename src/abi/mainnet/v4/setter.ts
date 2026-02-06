@@ -1,5 +1,10 @@
 export const MainnetV4SetterABI = [
   {
+    inputs: [],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -225,6 +230,11 @@ export const MainnetV4SetterABI = [
       },
     ],
     name: 'InvalidWhitelistingContract',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'LegacyOperatorFeeDeclarationInvalid',
     type: 'error',
   },
   {
@@ -1819,11 +1829,6 @@ export const MainnetV4SetterABI = [
         type: 'bytes[]',
       },
       {
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-      {
         components: [
           {
             internalType: 'uint32',
@@ -1978,11 +1983,6 @@ export const MainnetV4SetterABI = [
         internalType: 'uint64[]',
         name: 'operatorIds',
         type: 'uint64[]',
-      },
-      {
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
       },
       {
         components: [
@@ -2142,24 +2142,6 @@ export const MainnetV4SetterABI = [
       },
     ],
     name: 'initialize',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'cssv_',
-        type: 'address',
-      },
-      {
-        internalType: 'uint64',
-        name: 'cooldownDuration_',
-        type: 'uint64',
-      },
-    ],
-    name: 'initializeSSVStaking',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -2379,11 +2361,6 @@ export const MainnetV4SetterABI = [
         type: 'uint64[]',
       },
       {
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-      {
         components: [
           {
             internalType: 'uint32',
@@ -2484,11 +2461,6 @@ export const MainnetV4SetterABI = [
         internalType: 'bytes',
         name: 'sharesData',
         type: 'bytes',
-      },
-      {
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
       },
       {
         components: [

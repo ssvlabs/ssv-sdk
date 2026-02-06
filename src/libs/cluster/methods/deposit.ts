@@ -42,8 +42,8 @@ export const deposit = async (
   }
 
   return config.contract.ssv.write.deposit({
+    value: amount,
     args: {
-      amount,
       cluster: snapshot,
       clusterOwner: cluster.owner.id as `0x${string}`,
       operatorIds: cluster.operatorIds.map(BigInt),

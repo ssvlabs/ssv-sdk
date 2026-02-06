@@ -60,8 +60,8 @@ export const registerValidators = async (
 
   if (shares.length === 1) {
     return config.contract.ssv.write.registerValidator({
+      value: depositAmount,
       args: {
-        amount: depositAmount,
         cluster: snapshot,
         operatorIds: operatorIds.map(BigInt),
         publicKey: shares[0].publicKey as Hex,
@@ -72,9 +72,9 @@ export const registerValidators = async (
   }
 
   return config.contract.ssv.write.bulkRegisterValidator({
+    value: depositAmount,
     args: {
       cluster: snapshot,
-      amount: depositAmount,
       operatorIds: operatorIds.map(BigInt),
       publicKeys: shares.map((share) => share.publicKey as Hex),
       sharesData: shares.map((share) => share.sharesData as Hex),
@@ -86,6 +86,7 @@ export const registerValidatorsRawData = async (
   config: ConfigReturnType,
   { args: { keyshares, depositAmount = 0n } }: RegisterValidatorsProps,
 ) => {
+  console.log(depositAmount);
   const shares = keyshares.map((share) => {
     return isKeySharesItem(share) ? share.payload : share;
   });
@@ -119,7 +120,6 @@ export const registerValidatorsRawData = async (
 
   if (shares.length === 1) {
     return config.contract.ssv.write.registerValidator.getTransactionData({
-      amount: depositAmount,
       cluster: snapshot,
       operatorIds: operatorIds.map(BigInt),
       publicKey: shares[0].publicKey as Hex,
@@ -129,7 +129,6 @@ export const registerValidatorsRawData = async (
 
   return config.contract.ssv.write.bulkRegisterValidator.getTransactionData({
     cluster: snapshot,
-    amount: depositAmount,
     operatorIds: operatorIds.map(BigInt),
     publicKeys: shares.map((share) => share.publicKey as Hex),
     sharesData: shares.map((share) => share.sharesData as Hex),

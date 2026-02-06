@@ -18,9 +18,9 @@ export const reactivateCluster = async (
   }
 
   return config.contract.ssv.write.reactivate({
+    value: amount,
     args: {
       cluster: getClusterSnapshot(cluster),
-      amount,
       operatorIds: cluster.operatorIds.map(BigInt),
     },
     ...writeOptions,
