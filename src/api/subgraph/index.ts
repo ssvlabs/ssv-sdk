@@ -1,11 +1,9 @@
-import type { RemoveConfigArg } from '@/types/methods';
-import { decodeOperatorPublicKey } from '@/utils/operator';
-import type { GraphQLClient } from 'graphql-request';
 import type {
   GetClusterBalanceQueryVariables,
   GetClusterQueryVariables,
   GetClusterSnapshotQueryVariables,
   GetClustersQueryVariables,
+  GetDaoValuesQueryVariables,
   GetOperatorQueryVariables,
   GetOperatorsQueryVariables,
   GetOwnerNonceByBlockQueryVariables,
@@ -17,6 +15,7 @@ import {
   GetClusterDocument,
   GetClusterSnapshotDocument,
   GetClustersDocument,
+  GetDaoValuesDocument,
   GetOperatorDocument,
   GetOperatorsDocument,
   GetOwnerNonceByBlockDocument,
@@ -24,6 +23,9 @@ import {
   GetValidatorDocument,
   GetValidatorsDocument,
 } from '@/graphql/graphql';
+import type { RemoveConfigArg } from '@/types/methods';
+import { decodeOperatorPublicKey } from '@/utils/operator';
+import type { GraphQLClient } from 'graphql-request';
 export const getOwnerNonce = (
   client: GraphQLClient,
   args: GetOwnerNonceByBlockQueryVariables,
@@ -38,7 +40,7 @@ export const getOwnerNonce = (
     .catch(() => '0');
 };
 
-export const getClusterSnapshot = (
+export const toSolidityCluster = (
   client: GraphQLClient,
   args: GetClusterSnapshotQueryVariables,
 ) =>
@@ -94,12 +96,17 @@ export const getClusterBalance = (
   args: GetClusterBalanceQueryVariables,
 ) => client.request(GetClusterBalanceDocument, args);
 
+export const getDaoValues = (
+  client: GraphQLClient,
+  args: GetDaoValuesQueryVariables,
+) => client.request(GetDaoValuesDocument, args).then((res) => res.daovalues);
+
 export const getQueries = (client: GraphQLClient) => ({
   getOwnerNonce: getOwnerNonce.bind(null, client) as RemoveConfigArg<
     typeof getOwnerNonce
   >,
-  getClusterSnapshot: getClusterSnapshot.bind(null, client) as RemoveConfigArg<
-    typeof getClusterSnapshot
+  toSolidityCluster: toSolidityCluster.bind(null, client) as RemoveConfigArg<
+    typeof toSolidityCluster
   >,
   getCluster: getCluster.bind(null, client) as RemoveConfigArg<
     typeof getCluster
@@ -121,5 +128,8 @@ export const getQueries = (client: GraphQLClient) => ({
   >,
   getClusterBalance: getClusterBalance.bind(null, client) as RemoveConfigArg<
     typeof getClusterBalance
+  >,
+  getDaoValues: getDaoValues.bind(null, client) as RemoveConfigArg<
+    typeof getDaoValues
   >,
 });

@@ -1,6 +1,6 @@
 import type { ConfigReturnType } from '@/config/create';
 import type { SmartFnWriteOptions } from '@/contract-interactions/types';
-import { getClusterSnapshot } from '@/utils/cluster';
+import { toSolidityCluster } from '@/utils/cluster';
 
 type DepositProps = SmartFnWriteOptions<{
   id: string;
@@ -17,7 +17,7 @@ export const deposit = async (
     throw new Error('Cluster not found');
   }
 
-  const snapshot = getClusterSnapshot(cluster);
+  const snapshot = toSolidityCluster(cluster);
 
   return config.contract.ssv.write.deposit({
     value: amount,

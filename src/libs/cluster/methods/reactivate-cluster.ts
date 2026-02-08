@@ -1,6 +1,6 @@
 import type { ConfigReturnType } from '@/config/create';
 import type { SmartFnWriteOptions } from '@/contract-interactions/types';
-import { getClusterSnapshot } from '@/utils/cluster';
+import { toSolidityCluster } from '@/utils/cluster';
 
 type ReactivateClusterProps = SmartFnWriteOptions<{
   id: string;
@@ -20,7 +20,7 @@ export const reactivateCluster = async (
   return config.contract.ssv.write.reactivate({
     value: amount,
     args: {
-      cluster: getClusterSnapshot(cluster),
+      cluster: toSolidityCluster(cluster),
       operatorIds: cluster.operatorIds.map(BigInt),
     },
     ...writeOptions,

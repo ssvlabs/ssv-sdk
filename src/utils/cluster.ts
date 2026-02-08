@@ -1,5 +1,5 @@
 import type { GetClusterQuery } from '@/graphql/graphql';
-import type { ClusterSnapshot } from '@/types/contract-interactions';
+import type { ClusterSnapshot as SolidityCluster } from '@/types/contract-interactions';
 import { merge } from 'lodash-es';
 import type { Hex } from 'viem';
 import { isAddress } from 'viem';
@@ -23,9 +23,12 @@ export const isClusterId = (clusterId: string) => {
   );
 };
 
-export const getClusterSnapshot = (
-  cluster: NonNullable<GetClusterQuery['cluster']>,
-): ClusterSnapshot => {
+export const toSolidityCluster = (
+  cluster: Pick<
+    NonNullable<GetClusterQuery['cluster']>,
+    'active' | 'balance' | 'index' | 'networkFeeIndex' | 'validatorCount'
+  >,
+): SolidityCluster => {
   return {
     active: cluster.active,
     balance: BigInt(cluster.balance),
@@ -35,8 +38,8 @@ export const getClusterSnapshot = (
   };
 };
 export const createEmptyCluster = (
-  cluster: Partial<ClusterSnapshot> = {},
-): ClusterSnapshot =>
+  cluster: Partial<SolidityCluster> = {},
+): SolidityCluster =>
   merge(
     {
       validatorCount: 0,

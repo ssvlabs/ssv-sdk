@@ -51,7 +51,7 @@
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 </code></pre><h3 id="cluster-management">Cluster management </h3>
 <pre data-role="codeBlock" data-info="typescript" class="language-typescript typescript"><code><span class="token comment">// Get cluster balance</span>
-<span class="token keyword keyword-import">import</span> <span class="token punctuation">{</span> getClusterSnapshot <span class="token punctuation">}</span> <span class="token keyword keyword-from">from</span> <span class="token string">'@/utils/cluster'</span>
+<span class="token keyword keyword-import">import</span> <span class="token punctuation">{</span> toSolidityCluster <span class="token punctuation">}</span> <span class="token keyword keyword-from">from</span> <span class="token string">'@/utils/cluster'</span>
 <span class="token keyword keyword-import">import</span> <span class="token punctuation">{</span> <span class="token constant">SSVSDK</span> <span class="token punctuation">}</span> <span class="token keyword keyword-from">from</span> <span class="token string">'ssv-sdk'</span>
 
 <span class="token comment">// Initialize with basic configuration</span>
@@ -66,7 +66,7 @@
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 
 <span class="token keyword keyword-const">const</span> balance <span class="token operator">=</span> <span class="token keyword keyword-await">await</span> sdk<span class="token punctuation">.</span>contract<span class="token punctuation">.</span>write<span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-  cluster<span class="token operator">:</span> <span class="token function">getClusterSnapshot</span><span class="token punctuation">(</span>cluster<span class="token punctuation">)</span><span class="token punctuation">,</span>
+  cluster<span class="token operator">:</span> <span class="token function">toSolidityCluster</span><span class="token punctuation">(</span>cluster<span class="token punctuation">)</span><span class="token punctuation">,</span>
   clusterOwner<span class="token operator">:</span> <span class="token string">'0x'</span><span class="token punctuation">,</span>
   operatorIds<span class="token operator">:</span> operators<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span>o<span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token function">BigInt</span><span class="token punctuation">(</span>o<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>

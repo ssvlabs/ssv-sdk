@@ -14,8 +14,8 @@ import {
   add0x,
   createClusterId,
   createEmptyCluster,
-  getClusterSnapshot,
   isClusterId,
+  toSolidityCluster,
 } from '@/utils/cluster';
 import {
   ensureNoKeysharesErrors,
@@ -350,7 +350,7 @@ describe('Cluster Utils', () => {
     expect(isClusterId(invalidOperators)).toBe(false);
   });
 
-  test('getClusterSnapshot converts cluster data correctly', () => {
+  test('toSolidityCluster converts cluster data correctly', () => {
     const clusterData = {
       owner: {
         id: '0x1234567890123456789012345678901234567890' as Address,
@@ -363,7 +363,7 @@ describe('Cluster Utils', () => {
       operatorIds: ['1', '2', '3', '4'],
     };
 
-    const snapshot = getClusterSnapshot(clusterData);
+    const snapshot = toSolidityCluster(clusterData);
 
     expect(snapshot).toEqual({
       active: true,

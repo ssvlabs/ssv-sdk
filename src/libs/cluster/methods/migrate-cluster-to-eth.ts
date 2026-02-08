@@ -1,6 +1,6 @@
 import type { ConfigReturnType } from '@/config/create';
 import type { SmartFnWriteOptions } from '@/contract-interactions/types';
-import { getClusterSnapshot } from '@/utils/cluster';
+import { toSolidityCluster } from '@/utils/cluster';
 
 type MigrateClusterToETHProps = SmartFnWriteOptions<{
   id: string;
@@ -19,7 +19,7 @@ export const migrateClusterToETH = async (
   return config.contract.ssv.write.migrateClusterToETH({
     args: {
       operatorIds: cluster.operatorIds.map(BigInt),
-      cluster: getClusterSnapshot(cluster),
+      cluster: toSolidityCluster(cluster),
     },
     ...writeOptions,
   });

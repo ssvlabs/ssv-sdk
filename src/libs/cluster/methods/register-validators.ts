@@ -9,7 +9,7 @@ import { isKeySharesItem } from '@/utils';
 import {
   createClusterId,
   createEmptyCluster,
-  getClusterSnapshot,
+  toSolidityCluster,
 } from '@/utils/cluster';
 import { isUndefined } from 'lodash-es';
 
@@ -56,7 +56,7 @@ export const registerValidators = async (
     id: clusterId,
   });
 
-  const snapshot = cluster ? getClusterSnapshot(cluster) : createEmptyCluster();
+  const snapshot = cluster ? toSolidityCluster(cluster) : createEmptyCluster();
 
   if (shares.length === 1) {
     return config.contract.ssv.write.registerValidator({
@@ -116,7 +116,7 @@ export const registerValidatorsRawData = async (
     id: clusterId,
   });
 
-  const snapshot = cluster ? getClusterSnapshot(cluster) : createEmptyCluster();
+  const snapshot = cluster ? toSolidityCluster(cluster) : createEmptyCluster();
 
   if (shares.length === 1) {
     return config.contract.ssv.write.registerValidator.getTransactionData({

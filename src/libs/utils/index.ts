@@ -1,5 +1,6 @@
 import type { ConfigReturnType } from '@/config/create';
 import { getClusterBalance, getOperatorCapacity } from '@/libs/utils/methods';
+import { calcDepositFromRunway } from '@/libs/utils/methods/calc-deposit-from-runway';
 import {
   validateKeysharesJSON,
   validateSharesPreRegistration,
@@ -21,4 +22,8 @@ export const createUtils = (config: ConfigReturnType) => ({
   getClusterBalance: getClusterBalance.bind(null, config) as RemoveConfigArg<
     typeof getClusterBalance
   >,
+  calcDepositFromRunway: calcDepositFromRunway.bind(
+    null,
+    config,
+  ) as RemoveConfigArg<typeof calcDepositFromRunway>,
 });

@@ -1,6 +1,6 @@
 import type { ConfigReturnType } from '@/config/create';
 import type { SmartFnWriteOptions } from '@/contract-interactions/types';
-import { getClusterSnapshot } from '@/utils/cluster';
+import { toSolidityCluster } from '@/utils/cluster';
 
 type LiquidateClusterProps = SmartFnWriteOptions<{
   id: string;
@@ -18,7 +18,7 @@ export const liquidateCluster = async (
 
   return config.contract.ssv.write.liquidate({
     args: {
-      cluster: getClusterSnapshot(cluster),
+      cluster: toSolidityCluster(cluster),
       clusterOwner: config.walletClient.account!.address,
       operatorIds: cluster.operatorIds.map(BigInt),
     },

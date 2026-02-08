@@ -1,6 +1,6 @@
 import type { ConfigReturnType } from '@/config/create';
 import type { SmartFnWriteOptions } from '@/contract-interactions/types';
-import { getClusterSnapshot } from '@/utils/cluster';
+import { toSolidityCluster } from '@/utils/cluster';
 
 type WithdrawProps = SmartFnWriteOptions<{
   id: string;
@@ -20,7 +20,7 @@ export const withdraw = async (
   return config.contract.ssv.write.withdraw({
     args: {
       amount,
-      cluster: getClusterSnapshot(cluster),
+      cluster: toSolidityCluster(cluster),
       operatorIds: cluster.operatorIds.map(BigInt),
     },
     ...writeOptions,

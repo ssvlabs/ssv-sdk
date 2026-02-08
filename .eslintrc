@@ -26,7 +26,8 @@
         "fixStyle": "separate-type-imports"
       }
     ],
-    "unused-imports/no-unused-imports": "warn"
+    "unused-imports/no-unused-imports": "warn",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }]
   },
   "ignorePatterns": ["out", "dist", "**/*.d.ts", "webview-ui/**"]
 }

@@ -14,7 +14,7 @@ vi.mock('@/utils/cluster', () => ({
     balance: 0n,
     operatorIds: [1, 2, 3, 4],
   }),
-  getClusterSnapshot: vi.fn().mockReturnValue({
+  toSolidityCluster: vi.fn().mockReturnValue({
     validatorCount: 1,
     networkFeeIndex: 0n,
     index: 0n,

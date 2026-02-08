@@ -79,7 +79,7 @@ export const createMockApi = (
         account: { nonce: (nonces.get(args.owner) ?? 0).toString() },
       }),
     ),
-    getClusterSnapshot: vi.fn().mockImplementation((args) => {
+    toSolidityCluster: vi.fn().mockImplementation((args) => {
       const snapshot = clusterSnapshots.get(args.owner);
       return Promise.resolve({
         cluster: snapshot ?? {
