@@ -29,7 +29,9 @@ type GenerateKeySharesArgs = {
   nonce: number;
 };
 
-export const generateKeyShares = async (args: GenerateKeySharesArgs) => {
+export const generateKeyShares = async (
+  args: GenerateKeySharesArgs,
+): Promise<KeySharesPayload[]> => {
   const keystores = Array.isArray(args.keystore)
     ? args.keystore
     : [args.keystore];
@@ -51,20 +53,20 @@ export const generateKeyShares = async (args: GenerateKeySharesArgs) => {
       operators,
     );
 
-    shares.push(
-      (await new KeySharesItem().buildPayload(
-        {
-          publicKey: threshold.publicKey,
-          operators,
-          encryptedShares,
-        },
-        {
-          ownerAddress: args.owner_address,
-          ownerNonce: args.nonce + i,
-          privateKey: extracted.privateKey,
-        },
-      )) as KeySharesPayload,
+    const payload = await new KeySharesItem().buildPayload(
+      {
+        publicKey: threshold.publicKey,
+        operators,
+        encryptedShares,
+      },
+      {
+        ownerAddress: args.owner_address,
+        ownerNonce: args.nonce + i,
+        privateKey: extracted.privateKey,
+      },
     );
+
+    shares.push(payload);
   }
 
   return shares;

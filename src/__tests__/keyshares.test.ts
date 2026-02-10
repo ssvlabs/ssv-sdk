@@ -87,6 +87,59 @@ describe('Keyshares', async () => {
     expect(result.registered.length).toBe(0);
   });
 
+  it('can validate payload-only keyshares without nonce checks', async () => {
+    const { validateSharesPreRegistration } = await import(
+      '../libs/utils/methods'
+    );
+
+    const payloadConfig = merge({}, mockConfig, {
+      api: {
+        ...mockConfig.api,
+        getOwnerNonce: vi.fn().mockResolvedValue(833),
+        getValidator: vi.fn().mockResolvedValue(false),
+      },
+    } satisfies Partial<ConfigReturnType>);
+
+    const payloads = valid_keyshares.shares.map((share) => share.payload);
+
+    const result = await validateSharesPreRegistration(payloadConfig, {
+      operatorIds: mockOperators.ids.map(String),
+      keyshares: payloads,
+    });
+
+    expect(result).toBeDefined();
+    expect(result.available.length).toBe(payloads.length);
+    expect(result.incorrect.length).toBe(0);
+    expect(result.registered.length).toBe(0);
+    expect(payloadConfig.api.getOwnerNonce).not.toHaveBeenCalled();
+  });
+
+  it('should throw for payload operator mismatch', async () => {
+    const { validateSharesPreRegistration } = await import(
+      '../libs/utils/methods'
+    );
+
+    const payloadConfig = merge({}, mockConfig, {
+      api: {
+        ...mockConfig.api,
+        getOwnerNonce: vi.fn().mockResolvedValue(833),
+        getValidator: vi.fn().mockResolvedValue(false),
+      },
+    } satisfies Partial<ConfigReturnType>);
+
+    const payloads = valid_keyshares.shares.map((share) => ({
+      ...share.payload,
+      operatorIds: [1, 2, 3, 4],
+    }));
+
+    expect(
+      validateSharesPreRegistration(payloadConfig, {
+        operatorIds: mockOperators.ids.map(String),
+        keyshares: payloads,
+      }),
+    ).rejects.toThrow(KeysharesValidationError);
+  });
+
   it('should throw for invalid nonce', async () => {
     const { validateSharesPreRegistration } = await import(
       '../libs/utils/methods'

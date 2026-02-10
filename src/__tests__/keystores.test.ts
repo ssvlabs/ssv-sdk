@@ -38,6 +38,14 @@ describe('SSV Keys', () => {
       });
 
       expect(extracted).toBeTruthy();
+      expect(Array.isArray(extracted)).toBe(true);
+      expect(extracted[0]).toEqual(
+        expect.objectContaining({
+          sharesData: expect.any(String),
+          publicKey: expect.any(String),
+          operatorIds: operators.ids.map((id) => Number(id)),
+        }),
+      );
     },
     {
       timeout: 60000,

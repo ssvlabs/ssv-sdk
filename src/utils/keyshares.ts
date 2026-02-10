@@ -51,9 +51,23 @@ export class KeysharesValidationError extends Error {
 
 export const validateConsistentOperatorIds = (keyshares: KeySharesItem[]) => {
   const operatorIds = sortNumbers(keyshares[0].payload.operatorIds);
+  const hasOperatorData = keyshares.every(
+    (share) => (share.data.operators ?? []).length > 0,
+  );
 
   keyshares.every(({ payload, data }) => {
     const payloadOperatorIds = sortNumbers(payload.operatorIds).toString();
+
+    if (!hasOperatorData) {
+      const valid = payloadOperatorIds === operatorIds.toString();
+      if (!valid) {
+        throw new KeysharesValidationError(
+          KeysharesValidationErrors.InconsistentOperators,
+        );
+      }
+      return true;
+    }
+
     const dataOperatorIds = getOperatorIds(data.operators ?? []).toString();
 
     const valid =
@@ -72,7 +86,15 @@ export const validateConsistentOperatorIds = (keyshares: KeySharesItem[]) => {
 };
 
 export const ensureValidatorsUniqueness = (keyshares: KeySharesItem[]) => {
-  const set = new Set(keyshares.map(({ data }) => data.publicKey));
+  const keys = keyshares.map(
+    ({ data, payload }) => data.publicKey ?? payload.publicKey,
+  );
+  if (keys.some((key) => !key)) {
+    throw new KeysharesValidationError(
+      KeysharesValidationErrors.DuplicateValidatorKeys,
+    );
+  }
+  const set = new Set(keys);
   if (set.size !== keyshares.length) {
     throw new KeysharesValidationError(
       KeysharesValidationErrors.DuplicateValidatorKeys,
@@ -85,6 +107,13 @@ export const validateConsistentOperatorPublicKeys = (
   keyshares: KeySharesItem[],
   operators: Pick<Operator, 'id' | 'publicKey'>[],
 ) => {
+  const hasOperatorData = keyshares.every(
+    (share) => (share.data.operators ?? []).length > 0,
+  );
+  if (!hasOperatorData) {
+    return true;
+  }
+
   const operatorsMap = new Map(operators.map((o) => [o.id, o.publicKey]));
   const valid = keyshares.every(({ data }) => {
     return data.operators?.every(({ id, operatorKey }) => {

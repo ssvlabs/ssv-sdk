@@ -3,6 +3,7 @@ import type { ConfigReturnType } from '@/config/create';
 import { canAccountUseOperator } from '@/libs/operator/methods';
 import { KeyShares } from '@/libs/ssv-keys/KeyShares/KeyShares';
 import { KeySharesItem } from '@/libs/ssv-keys/KeyShares/KeySharesItem';
+import type { IKeySharesPartialPayload } from '@/libs/ssv-keys/interfaces';
 import type {
   MainnetEvent,
   ValidatorAddedEvent,
@@ -22,8 +23,38 @@ import type { Address, Hash } from 'viem';
 import { decodeEventLog } from 'viem';
 
 type ValidatedKeysharesArgs = {
-  keyshares: string | object;
+  keyshares: string | object | IKeySharesPartialPayload[];
   operatorIds: string[];
+};
+
+const isKeySharesPayload = (
+  value: unknown,
+): value is IKeySharesPartialPayload => {
+  return (
+    !!value &&
+    typeof value === 'object' &&
+    'sharesData' in value &&
+    'publicKey' in value &&
+    'operatorIds' in value
+  );
+};
+
+const isKeySharesPayloadList = (
+  value: unknown,
+): value is IKeySharesPartialPayload[] => {
+  return Array.isArray(value) && value.every(isKeySharesPayload);
+};
+
+const buildKeysharesFromPayloads = (payloads: IKeySharesPartialPayload[]) => {
+  const shares = payloads.map((payload) => {
+    const item = new KeySharesItem();
+    item.payload.update(payload);
+    return item;
+  });
+
+  ensureValidatorsUniqueness(shares);
+
+  return shares;
 };
 
 export const validateSharesPreRegistration = async (
@@ -31,12 +62,35 @@ export const validateSharesPreRegistration = async (
   { keyshares, operatorIds }: ValidatedKeysharesArgs,
 ) => {
   const operators = await config.api.getOperators({ operatorIds });
+  if (operators.length !== operatorIds.length) {
+    throw new KeysharesValidationError(
+      KeysharesValidationErrors.OperatorDoesNotExist,
+    );
+  }
 
-  const shares = await validateKeysharesJSON({
-    account: config.walletClient.account!.address,
-    operators,
-    keyshares,
-  });
+  const usesPayloads = isKeySharesPayloadList(keyshares);
+  const shares = usesPayloads
+    ? buildKeysharesFromPayloads(keyshares)
+    : await validateKeysharesJSON({
+        account: config.walletClient.account!.address,
+        operators,
+        keyshares,
+      });
+
+  if (usesPayloads) {
+    const shareOperatorIds = validateConsistentOperatorIds(shares);
+    const sortedOperatorIds = sortNumbers(
+      operators.map((operator) => Number(operator.id)),
+    );
+
+    if (
+      !isEqual(sortNumbers(shareOperatorIds), sortNumbers(sortedOperatorIds))
+    ) {
+      throw new KeysharesValidationError(
+        KeysharesValidationErrors.ClusterMismatch,
+      );
+    }
+  }
 
   const statuses = await Promise.all(
     shares.map((share) => {
@@ -51,12 +105,17 @@ export const validateSharesPreRegistration = async (
     throw new Error('All validators are already registered');
   }
 
-  const nonce = await config.api
-    .getOwnerNonce({ owner: config.walletClient.account!.address })
-    .then((nonce) => {
-      if (!nonce) throw new Error('Failed to get owner nonce');
-      return Number(nonce);
-    });
+  const shouldValidateNonce = shares.every(
+    (share) => typeof share.data.ownerNonce === 'number',
+  );
+  const nonce = shouldValidateNonce
+    ? await config.api
+        .getOwnerNonce({ owner: config.walletClient.account!.address })
+        .then((nonce) => {
+          if (!nonce) throw new Error('Failed to get owner nonce');
+          return Number(nonce);
+        })
+    : null;
 
   let i = 0;
 
@@ -65,7 +124,12 @@ export const validateSharesPreRegistration = async (
       if (isRegistered) {
         acc.registered.push(share);
       } else {
-        const validNonce = nonce + i === share.data.ownerNonce;
+        if (!shouldValidateNonce) {
+          acc.available.push(share);
+          return acc;
+        }
+
+        const validNonce = nonce! + i === share.data.ownerNonce;
         if (validNonce) i++;
 
         if (validNonce) {

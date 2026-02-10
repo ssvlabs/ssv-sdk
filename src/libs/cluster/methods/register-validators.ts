@@ -3,7 +3,9 @@ import type { ClusterSize } from '@/config';
 import { registerValidatorsByClusterSizeLimits } from '@/config';
 import type { ConfigReturnType } from '@/config/create';
 import type { SmartFnWriteOptions } from '@/contract-interactions/types';
+import type { IKeySharesPartialPayload } from '@/libs/ssv-keys/interfaces';
 import type { KeySharesItem } from '@/libs/ssv-keys/KeyShares/KeySharesItem';
+import type { KeySharesPayload } from '@/libs/ssv-keys/KeyShares/KeySharesData/KeySharesPayload';
 import { SSVKeys } from '@/libs/ssv-keys/SSVKeys';
 import { isKeySharesItem } from '@/utils';
 import {
@@ -16,7 +18,7 @@ import { isUndefined } from 'lodash-es';
 import type { Hex } from 'viem';
 
 type RegisterValidatorsProps = SmartFnWriteOptions<{
-  keyshares: KeySharesItem[] | KeySharesItem['payload'][];
+  keyshares: KeySharesItem[] | KeySharesPayload[] | IKeySharesPartialPayload[];
   depositAmount?: bigint;
 }>;
 
