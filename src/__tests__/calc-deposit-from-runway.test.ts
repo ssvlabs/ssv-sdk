@@ -58,13 +58,7 @@ describe('calcDepositFromRunway', () => {
       runway: 365,
     });
 
-    expect(result).toHaveProperty('total');
-    expect(result).toHaveProperty('perValidator');
-    expect(result).toHaveProperty('subtotal');
-    expect(result.perValidator).toHaveProperty('networkCost');
-    expect(result.perValidator).toHaveProperty('operatorsCost');
-    expect(result.perValidator).toHaveProperty('liquidationCollateral');
-    expect(result.total).toBeGreaterThan(0n);
+    expect(result).toBeGreaterThan(0n);
 
     expect(config.api.getCluster).toHaveBeenCalledWith({ id: 'cluster-1' });
     expect(config.api.getOperators).toHaveBeenCalledWith({
@@ -125,9 +119,7 @@ describe('calcDepositFromRunway', () => {
       runway: 30,
     });
 
-    // Total operator fee = 1000000000 + 2000000000 + 1500000000 + 500000000 = 5000000000
-    // operatorsCost should reflect that sum scaled by days and blocks per day
-    expect(result.perValidator.operatorsCost).toBeGreaterThan(0n);
+    expect(result).toBeGreaterThan(0n);
   });
 
   it('should return higher total for longer runway', async () => {
@@ -145,7 +137,7 @@ describe('calcDepositFromRunway', () => {
       runway: 31,
     });
 
-    expect(longRunwayResult.total).toBeGreaterThan(shortRunwayResult.total);
+    expect(longRunwayResult).toBeGreaterThan(shortRunwayResult);
   });
 
   it('should handle fractional runway days', async () => {
@@ -159,6 +151,6 @@ describe('calcDepositFromRunway', () => {
       runway: 0.5,
     });
 
-    expect(result.total).toBeGreaterThan(0n);
+    expect(result).toBeGreaterThan(0n);
   });
 });

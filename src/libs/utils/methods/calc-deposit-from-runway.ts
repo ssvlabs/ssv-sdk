@@ -1,5 +1,7 @@
 import type { ConfigReturnType } from '@/config/create';
-import { computeFundingCost } from '@/utils/funding';
+import { globals } from '@/config/globals';
+import { bigintMax } from '@/utils';
+import { computeDailyAmount } from '@/utils/funding';
 
 /**
  * @param clusterId - The unique identifier of the cluster.
@@ -36,14 +38,16 @@ export const calcDepositFromRunway = async (
     0n,
   );
 
-  return computeFundingCost({
-    effectiveBalance: BigInt(cluster.effectiveBalance),
-    fundingDays: runway,
-    liquidationCollateralPeriod: BigInt(daoValues.liquidationThreshold),
-    minimumLiquidationCollateral: BigInt(
-      daoValues.minimumLiquidationCollateral,
-    ),
-    networkFee: BigInt(daoValues.networkFee),
-    operatorsFee: operatorsFee,
-  });
+  const networkFee = BigInt(daoValues.networkFee);
+  const vUnits =
+    (globals.VUNITS_PRECISION * Number(cluster.effectiveBalance)) / 32;
+  const validatorUnits = BigInt(vUnits / globals.VUNITS_PRECISION) || 1n;
+  const burnRate = (operatorsFee + networkFee) * validatorUnits || 1n;
+  const liquidationCollateral = bigintMax(
+    BigInt(daoValues.minimumLiquidationCollateral),
+    burnRate * BigInt(daoValues.liquidationThreshold),
+  );
+  const residualBalance = computeDailyAmount(burnRate, runway);
+
+  return residualBalance + liquidationCollateral;
 };
