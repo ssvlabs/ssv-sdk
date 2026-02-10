@@ -56,6 +56,12 @@ const mockCluster = {
   balance: 1000n,
   operatorIds: mockOperatorIds,
 };
+const mockClusterFromApi = {
+  ...mockCluster,
+  owner: {
+    id: '0x123' as Hex,
+  },
+};
 
 // Create mock keyshares payload
 const mockKeysharePayload = {
@@ -72,7 +78,7 @@ const mockPublicClient = {
 };
 
 const mockApi = {
-  getCluster: vi.fn().mockImplementation(async () => mockCluster),
+  getCluster: vi.fn().mockImplementation(async () => mockClusterFromApi),
   getOwnerNonce: vi.fn().mockImplementation(async () => 1),
 };
 
@@ -369,9 +375,7 @@ describe('Cluster Methods', () => {
 
       const result = await liquidateSSV(mockConfig, {
         args: {
-          owner: mockConfig.walletClient.account!.address,
-          operatorIds: mockOperatorIds,
-          cluster: mockCluster,
+          id: mockClusterId,
         },
       });
 
@@ -380,7 +384,9 @@ describe('Cluster Methods', () => {
         args: {
           clusterOwner: mockConfig.walletClient.account!.address,
           operatorIds: mockOperatorIdsBigInt,
-          cluster: mockCluster,
+          cluster: expect.objectContaining({
+            balance: 1000n,
+          }),
         },
       });
     });

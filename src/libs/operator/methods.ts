@@ -78,6 +78,21 @@ export const withdrawOperatorEarningsSSV = async (
   });
 };
 
+type WithdrawAllOperatorEarningsSSVArgs = SmartFnWriteOptions<{
+  operatorId: string;
+}>;
+export const withdrawAllOperatorEarningsSSV = async (
+  config: ConfigReturnType,
+  { args: { operatorId }, ...writeOptions }: WithdrawAllOperatorEarningsSSVArgs,
+) => {
+  return config.contract.ssv.write.withdrawAllOperatorEarningsSSV({
+    args: {
+      operatorId: BigInt(operatorId),
+    },
+    ...writeOptions,
+  });
+};
+
 type WithdrawAllVersionOperatorEarningsArgs = SmartFnWriteOptions<{
   operatorId: string;
 }>;

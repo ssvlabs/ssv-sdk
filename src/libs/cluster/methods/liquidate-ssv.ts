@@ -1,23 +1,26 @@
 import type { ConfigReturnType } from '@/config/create';
 import type { SmartFnWriteOptions } from '@/contract-interactions/types';
-import type { ClusterSnapshot } from '@/types/contract-interactions';
-import type { Address } from 'abitype';
+import { toSolidityCluster } from '@/utils/cluster';
 
 type LiquidateSSVProps = SmartFnWriteOptions<{
-  owner: Address;
-  operatorIds: Array<bigint | number | string>;
-  cluster: ClusterSnapshot;
+  id: string;
 }>;
 
 export const liquidateSSV = async (
   config: ConfigReturnType,
-  { args: { owner, operatorIds, cluster }, ...writeOptions }: LiquidateSSVProps,
+  { args: { id }, ...writeOptions }: LiquidateSSVProps,
 ) => {
+  const cluster = await config.api.getCluster({ id });
+
+  if (!cluster) {
+    throw new Error('Cluster not found');
+  }
+
   return config.contract.ssv.write.liquidateSSV({
     args: {
-      clusterOwner: owner,
-      operatorIds: operatorIds.map(BigInt),
-      cluster,
+      clusterOwner: cluster.owner.id as `0x${string}`,
+      operatorIds: cluster.operatorIds.map(BigInt),
+      cluster: toSolidityCluster(cluster),
     },
     ...writeOptions,
   });

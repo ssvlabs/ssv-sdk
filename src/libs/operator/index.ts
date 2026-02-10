@@ -3,6 +3,7 @@ import {
   registerOperator,
   setOperatorWhitelists,
   withdraw,
+  withdrawAllOperatorEarningsSSV,
   withdrawAllVersionOperatorEarnings,
   withdrawOperatorEarningsSSV,
 } from '@/libs/operator/methods';
@@ -18,6 +19,10 @@ export const createOperatorManager = (config: ConfigReturnType) => ({
     null,
     config,
   ) as RemoveConfigArg<typeof withdrawOperatorEarningsSSV>,
+  withdrawAllOperatorEarningsSSV: withdrawAllOperatorEarningsSSV.bind(
+    null,
+    config,
+  ) as RemoveConfigArg<typeof withdrawAllOperatorEarningsSSV>,
   withdrawAllVersionOperatorEarnings: withdrawAllVersionOperatorEarnings.bind(
     null,
     config,
