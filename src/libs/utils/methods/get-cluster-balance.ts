@@ -22,12 +22,14 @@ export const getClusterBalance = async (
     throw new Error('Could not fetch cluster balance');
   }
 
+  const scallingCoefficient = 100_000n;
+
   const cumulativeNetworkFee =
     BigInt(query.daovalues.networkFeeIndex) +
     (BigInt(query._meta.block.number) -
       BigInt(query.daovalues.networkFeeIndexBlockNumber)) *
       BigInt(query.daovalues.networkFee) -
-    BigInt(query.cluster.networkFeeIndex) * 10000000n;
+    BigInt(query.cluster.networkFeeIndex) * scallingCoefficient;
 
   const cumulativeOperatorFee = query.operators.reduce(
     (acc, operator) => {
@@ -39,7 +41,7 @@ export const getClusterBalance = async (
           BigInt(operator.fee)
       );
     },
-    -BigInt(query.cluster.index) * 10000000n,
+    -BigInt(query.cluster.index) * scallingCoefficient,
   );
 
   const operatorsFee = query.operators.reduce(
@@ -47,17 +49,19 @@ export const getClusterBalance = async (
     0n,
   );
 
-  const vUnits =
-    (globals.VUNITS_PRECISION * Number(query.cluster.effectiveBalance)) / 32;
+  const effectiveBalanceValidatorUnits =
+    (Number(query.cluster.effectiveBalance) / 32) * globals.VUNITS_PRECISION;
 
   const calculatedClusterBalance =
     BigInt(query.cluster.balance) -
-      (cumulativeNetworkFee + cumulativeOperatorFee) *
-        BigInt(vUnits / globals.VUNITS_PRECISION) || 1n;
+      ((cumulativeNetworkFee + cumulativeOperatorFee) *
+        BigInt(effectiveBalanceValidatorUnits)) /
+        BigInt(globals.VUNITS_PRECISION) || 1n;
 
   const burnRate =
-    (operatorsFee + BigInt(query.daovalues.networkFee)) *
-      BigInt(vUnits / globals.VUNITS_PRECISION) || 1n;
+    ((operatorsFee + BigInt(query.daovalues.networkFee)) *
+      BigInt(effectiveBalanceValidatorUnits)) /
+      BigInt(globals.VUNITS_PRECISION) || 1n;
 
   const mLc = BigInt(query.daovalues.minimumLiquidationCollateral);
   const LC = bigintMax(

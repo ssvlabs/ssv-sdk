@@ -5,7 +5,7 @@ import { privateKeyToAccount } from 'viem/accounts';
 import keystores from './path_to_your_keystores.json';
 
 // Setup viem clients
-const chain = chains.mainnet; // or chains.holesky
+const chain = chains.mainnet; // or chains.hoodi
 const transport = http();
 
 const publicClient = createPublicClient({
