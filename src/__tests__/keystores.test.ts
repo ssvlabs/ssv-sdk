@@ -30,10 +30,10 @@ describe('SSV Keys', () => {
 
       const extracted = await sdk.utils.generateKeyShares({
         keystore: JSON.stringify(keystores),
-        keystore_password: '123123123',
-        operator_keys: operators.keys,
-        operator_ids: operators.ids.map((id) => Number(id)),
-        owner_address: wallets[0].account.address,
+        keystorePassword: '123123123',
+        operatorKeys: operators.keys,
+        operatorIds: operators.ids.map((id) => Number(id)),
+        ownerAddress: wallets[0].account.address,
         nonce: 1,
       });
 

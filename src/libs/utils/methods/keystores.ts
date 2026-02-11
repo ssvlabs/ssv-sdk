@@ -21,11 +21,11 @@ const createAndEncryptShares = async (
 };
 
 type GenerateKeySharesArgs = {
-  operator_keys: string[];
-  operator_ids: number[];
+  operatorKeys: string[];
+  operatorIds: number[];
   keystore: string | string[];
-  keystore_password: string;
-  owner_address: string;
+  keystorePassword: string;
+  ownerAddress: string;
   nonce: number;
 };
 
@@ -41,10 +41,10 @@ export const generateKeyShares = async (
     const keystore = keystores[i];
     const extracted = await ssvKeys.extractKeys(
       keystore,
-      args.keystore_password,
+      args.keystorePassword,
     );
-    const operators = args.operator_keys.map((key, index) => ({
-      id: args.operator_ids[index],
+    const operators = args.operatorKeys.map((key, index) => ({
+      id: args.operatorIds[index],
       operatorKey: key,
     }));
 
@@ -60,7 +60,7 @@ export const generateKeyShares = async (
         encryptedShares,
       },
       {
-        ownerAddress: args.owner_address,
+        ownerAddress: args.ownerAddress,
         ownerNonce: args.nonce + i,
         privateKey: extracted.privateKey,
       },
