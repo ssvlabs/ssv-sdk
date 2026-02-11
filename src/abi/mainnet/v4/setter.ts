@@ -69,7 +69,7 @@ export const MainnetV4SetterABI = [
   },
   {
     inputs: [],
-    name: 'ClusterDoesNotExists',
+    name: 'ClusterDoesNotExist',
     type: 'error',
   },
   {
@@ -213,6 +213,11 @@ export const MainnetV4SetterABI = [
   },
   {
     inputs: [],
+    name: 'InvalidQuorum',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'InvalidToken',
     type: 'error',
   },
@@ -239,7 +244,17 @@ export const MainnetV4SetterABI = [
   },
   {
     inputs: [],
+    name: 'MaxPrecisionExceeded',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'MaxRequestsAmountReached',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MaxValueExceeded',
     type: 'error',
   },
   {
@@ -305,6 +320,11 @@ export const MainnetV4SetterABI = [
   {
     inputs: [],
     name: 'OracleAlreadyAssigned',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'OracleHasZeroWeight',
     type: 'error',
   },
   {
@@ -996,6 +1016,19 @@ export const MainnetV4SetterABI = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'minFee',
+        type: 'uint256',
+      },
+    ],
+    name: 'MinimumOperatorEthFeeUpdated',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: 'enum SSVModules',
         name: 'moduleId',
@@ -1198,22 +1231,9 @@ export const MainnetV4SetterABI = [
     inputs: [
       {
         indexed: false,
-        internalType: 'uint64',
+        internalType: 'uint256',
         name: 'maxFee',
-        type: 'uint64',
-      },
-    ],
-    name: 'OperatorMaximumFeeSSVUpdated',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: 'uint64',
-        name: 'maxFee',
-        type: 'uint64',
+        type: 'uint256',
       },
     ],
     name: 'OperatorMaximumFeeUpdated',
@@ -1514,6 +1534,25 @@ export const MainnetV4SetterABI = [
       },
     ],
     name: 'RootProposed',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'string',
+        name: 'version',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'blockNumber',
+        type: 'uint256',
+      },
+    ],
+    name: 'SSVNetworkUpgradeBlock',
     type: 'event',
   },
   {
@@ -2909,25 +2948,12 @@ export const MainnetV4SetterABI = [
   {
     inputs: [
       {
-        internalType: 'uint64',
+        internalType: 'uint256',
         name: 'maxFee',
-        type: 'uint64',
+        type: 'uint256',
       },
     ],
     name: 'updateMaximumOperatorFee',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint64',
-        name: 'maxFee',
-        type: 'uint64',
-      },
-    ],
-    name: 'updateMaximumOperatorFeeSSV',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -2954,6 +2980,19 @@ export const MainnetV4SetterABI = [
       },
     ],
     name: 'updateMinimumLiquidationCollateralSSV',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'minFee',
+        type: 'uint256',
+      },
+    ],
+    name: 'updateMinimumOperatorEthFee',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
