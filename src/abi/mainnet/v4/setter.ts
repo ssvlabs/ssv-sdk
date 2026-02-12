@@ -26,11 +26,6 @@ export const MainnetV4SetterABI = [
     type: 'error',
   },
   {
-    inputs: [],
-    name: 'CallerNotOwner',
-    type: 'error',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -44,11 +39,6 @@ export const MainnetV4SetterABI = [
       },
     ],
     name: 'CallerNotOwnerWithData',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'CallerNotWhitelisted',
     type: 'error',
   },
   {
@@ -110,17 +100,6 @@ export const MainnetV4SetterABI = [
         type: 'uint64',
       },
     ],
-    name: 'ExceedValidatorLimit',
-    type: 'error',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint64',
-        name: 'operatorId',
-        type: 'uint64',
-      },
-    ],
     name: 'ExceedValidatorLimitWithData',
     type: 'error',
   },
@@ -168,11 +147,6 @@ export const MainnetV4SetterABI = [
       },
     ],
     name: 'IncorrectOperatorVersion',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'IncorrectValidatorState',
     type: 'error',
   },
   {
@@ -279,11 +253,6 @@ export const MainnetV4SetterABI = [
   },
   {
     inputs: [],
-    name: 'NotAuthorizedOracle',
-    type: 'error',
-  },
-  {
-    inputs: [],
     name: 'NotCSSV',
     type: 'error',
   },
@@ -358,11 +327,6 @@ export const MainnetV4SetterABI = [
     type: 'error',
   },
   {
-    inputs: [],
-    name: 'TargetModuleDoesNotExist',
-    type: 'error',
-  },
-  {
     inputs: [
       {
         internalType: 'uint8',
@@ -394,11 +358,6 @@ export const MainnetV4SetterABI = [
     type: 'error',
   },
   {
-    inputs: [],
-    name: 'ValidatorAlreadyExists',
-    type: 'error',
-  },
-  {
     inputs: [
       {
         internalType: 'bytes',
@@ -427,11 +386,6 @@ export const MainnetV4SetterABI = [
   {
     inputs: [],
     name: 'ZeroAmount',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'ZeroInterval',
     type: 'error',
   },
   {
@@ -844,31 +798,6 @@ export const MainnetV4SetterABI = [
       },
     ],
     name: 'DeclareOperatorFeePeriodUpdated',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'user',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'uint32[4]',
-        name: 'oracleIds',
-        type: 'uint32[4]',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256[4]',
-        name: 'amounts',
-        type: 'uint256[4]',
-      },
-    ],
-    name: 'DelegationUpdated',
     type: 'event',
   },
   {
@@ -1521,26 +1450,7 @@ export const MainnetV4SetterABI = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: 'bytes32',
-        name: 'merkleRoot',
-        type: 'bytes32',
-      },
-      {
-        indexed: true,
-        internalType: 'uint64',
-        name: 'blockNum',
-        type: 'uint64',
-      },
-    ],
-    name: 'RootProposed',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
+        indexed: false,
         internalType: 'string',
         name: 'version',
         type: 'string',

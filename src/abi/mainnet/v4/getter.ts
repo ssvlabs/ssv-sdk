@@ -26,11 +26,6 @@ export const MainnetV4GetterABI = [
     type: 'error',
   },
   {
-    inputs: [],
-    name: 'CallerNotOwner',
-    type: 'error',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -44,11 +39,6 @@ export const MainnetV4GetterABI = [
       },
     ],
     name: 'CallerNotOwnerWithData',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'CallerNotWhitelisted',
     type: 'error',
   },
   {
@@ -110,17 +100,6 @@ export const MainnetV4GetterABI = [
         type: 'uint64',
       },
     ],
-    name: 'ExceedValidatorLimit',
-    type: 'error',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint64',
-        name: 'operatorId',
-        type: 'uint64',
-      },
-    ],
     name: 'ExceedValidatorLimitWithData',
     type: 'error',
   },
@@ -168,11 +147,6 @@ export const MainnetV4GetterABI = [
       },
     ],
     name: 'IncorrectOperatorVersion',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'IncorrectValidatorState',
     type: 'error',
   },
   {
@@ -269,11 +243,6 @@ export const MainnetV4GetterABI = [
   },
   {
     inputs: [],
-    name: 'NotAuthorizedOracle',
-    type: 'error',
-  },
-  {
-    inputs: [],
     name: 'NotCSSV',
     type: 'error',
   },
@@ -348,11 +317,6 @@ export const MainnetV4GetterABI = [
     type: 'error',
   },
   {
-    inputs: [],
-    name: 'TargetModuleDoesNotExist',
-    type: 'error',
-  },
-  {
     inputs: [
       {
         internalType: 'uint8',
@@ -384,11 +348,6 @@ export const MainnetV4GetterABI = [
     type: 'error',
   },
   {
-    inputs: [],
-    name: 'ValidatorAlreadyExists',
-    type: 'error',
-  },
-  {
     inputs: [
       {
         internalType: 'bytes',
@@ -417,11 +376,6 @@ export const MainnetV4GetterABI = [
   {
     inputs: [],
     name: 'ZeroAmount',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'ZeroInterval',
     type: 'error',
   },
   {
