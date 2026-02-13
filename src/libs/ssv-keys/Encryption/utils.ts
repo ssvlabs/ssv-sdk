@@ -1,4 +1,4 @@
-import * as forge from 'node-forge'
+import * as forge from 'node-forge';
 
 /**
  * Node-forge implementation of JSEncrypt-like functionality
@@ -71,7 +71,10 @@ export class ForgeEncrypt {
 
     try {
       const encryptedBytes = forge.util.decode64(encryptedData);
-      const decrypted = this.privateKey.decrypt(encryptedBytes, 'RSAES-PKCS1-V1_5');
+      const decrypted = this.privateKey.decrypt(
+        encryptedBytes,
+        'RSAES-PKCS1-V1_5',
+      );
       return decrypted;
     } catch (error) {
       // JSEncrypt returns false on decryption failure
@@ -106,10 +109,10 @@ export class ForgeEncrypt {
  */
 export function validateRsaPublicKey(publicKeyPem: string): boolean {
   try {
-    forge.pki.publicKeyFromPem(publicKeyPem)
-    return true
+    forge.pki.publicKeyFromPem(publicKeyPem);
+    return true;
   } catch (error) {
-    return false
+    return false;
   }
 }
 
@@ -117,24 +120,24 @@ export function validateRsaPublicKey(publicKeyPem: string): boolean {
  * Generate a new RSA key pair (for testing purposes)
  */
 export function generateRsaKeyPair(keySize: number = 2048): {
-  publicKey: string
-  privateKey: string
+  publicKey: string;
+  privateKey: string;
 } {
-  const keypair = forge.pki.rsa.generateKeyPair(keySize)
+  const keypair = forge.pki.rsa.generateKeyPair(keySize);
 
   return {
     publicKey: forge.pki.publicKeyToPem(keypair.publicKey),
-    privateKey: forge.pki.privateKeyToPem(keypair.privateKey)
-  }
+    privateKey: forge.pki.privateKeyToPem(keypair.privateKey),
+  };
 }
 
 /**
  * Convert PEM key to node-forge key object
  */
 export function pemToPublicKey(pem: string): forge.pki.rsa.PublicKey {
-  return forge.pki.publicKeyFromPem(pem)
+  return forge.pki.publicKeyFromPem(pem);
 }
 
 export function pemToPrivateKey(pem: string): forge.pki.rsa.PrivateKey {
-  return forge.pki.privateKeyFromPem(pem)
+  return forge.pki.privateKeyFromPem(pem);
 }

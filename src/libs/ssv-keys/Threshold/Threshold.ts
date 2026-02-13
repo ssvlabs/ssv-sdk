@@ -42,16 +42,22 @@ class Threshold {
    * If F calculated from this formula is not integer number - it will raise exception.
    * Generate keys and return promise
    */
-  async create(privateKeyString: string, operatorIds: number[]): Promise<ISharesKeyPairs> {
+  async create(
+    privateKeyString: string,
+    operatorIds: number[],
+  ): Promise<ISharesKeyPairs> {
     if (!privateKeyString.startsWith('0x')) {
-      throw new PrivateKeyFormatError(privateKeyString, 'The private key must be provided in the 0x format.')
+      throw new PrivateKeyFormatError(
+        privateKeyString,
+        'The private key must be provided in the 0x format.',
+      );
     }
     // Validation
-    operatorIds.map(operatorId => {
+    operatorIds.map((operatorId) => {
       if (!Number.isInteger(operatorId)) {
         throw new ThresholdInvalidOperatorIdError(
           operatorId,
-          `Operator must be integer. Got: ${operatorId}`
+          `Operator must be integer. Got: ${operatorId}`,
         );
       }
     });
@@ -59,7 +65,7 @@ class Threshold {
     if (!isOperatorsLengthValid(operatorIds.length)) {
       throw new ThresholdInvalidOperatorsLengthError(
         operatorIds,
-        'Invalid operators amount. Enter an 3f+1 compatible amount of operator ids.'
+        'Invalid operators amount. Enter an 3f+1 compatible amount of operator ids.',
       );
     }
 
@@ -70,7 +76,9 @@ class Threshold {
       await bls.init(bls.BLS12_381);
     }
     // Master key Polynomial
-    this.privateKey = bls.deserializeHexStrToSecretKey(privateKeyString.replace('0x', ''));
+    this.privateKey = bls.deserializeHexStrToSecretKey(
+      privateKeyString.replace('0x', ''),
+    );
     this.publicKey = this.privateKey.getPublicKey();
 
     msk.push(this.privateKey);

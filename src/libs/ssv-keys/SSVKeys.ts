@@ -1,6 +1,11 @@
 import bls from '@/libs/ssv-keys/BLS';
 import { Threshold } from '@/libs/ssv-keys/Threshold';
-import type { IOperator, IShares, ISharesKeyPairs, IEncryptShare } from '@/libs/ssv-keys/interfaces';
+import type {
+  IOperator,
+  IShares,
+  ISharesKeyPairs,
+  IEncryptShare,
+} from '@/libs/ssv-keys/interfaces';
 import EthereumKeyStore from '@/libs/ssv-keys/EthereumKeyStore/EthereumKeyStore';
 import Encryption from '@/libs/ssv-keys/Encryption/Encryption';
 import { operatorSortedList } from '@/libs/ssv-keys/helpers/operator.helper';
@@ -44,7 +49,7 @@ export class SSVKeys {
     }
     return {
       privateKey: `0x${privateKey}`,
-      publicKey: `0x${bls.deserializeHexStrToSecretKey(privateKey).getPublicKey().serializeToHexStr()}`
+      publicKey: `0x${bls.deserializeHexStrToSecretKey(privateKey).getPublicKey().serializeToHexStr()}`,
     };
   }
 
@@ -53,9 +58,15 @@ export class SSVKeys {
    * @param privateKey
    * @param operators
    */
-  async createThreshold(privateKey: string, operators: IOperator[]): Promise<ISharesKeyPairs> {
+  async createThreshold(
+    privateKey: string,
+    operators: IOperator[],
+  ): Promise<ISharesKeyPairs> {
     const sortedOperators = operatorSortedList(operators);
-    this.threshold = await new Threshold().create(privateKey, sortedOperators.map(item => item.id));
+    this.threshold = await new Threshold().create(
+      privateKey,
+      sortedOperators.map((item) => item.id),
+    );
     return this.threshold;
   }
 
@@ -64,9 +75,14 @@ export class SSVKeys {
    * @param operators
    * @param shares
    */
-  async encryptShares(operators: IOperator[], shares: IShares[]): Promise<IEncryptShare[]> {
+  async encryptShares(
+    operators: IOperator[],
+    shares: IShares[],
+  ): Promise<IEncryptShare[]> {
     const sortedOperators = operatorSortedList(operators);
-    const decodedOperatorPublicKeys = sortedOperators.map(item => Buffer.from(item.operatorKey, 'base64').toString());
+    const decodedOperatorPublicKeys = sortedOperators.map((item) =>
+      Buffer.from(item.operatorKey, 'base64').toString(),
+    );
     return new Encryption(decodedOperatorPublicKeys, shares).encrypt();
   }
 
@@ -75,7 +91,10 @@ export class SSVKeys {
    * @param privateKey
    * @param operators
    */
-  async buildShares(privateKey: string, operators: IOperator[]): Promise<IEncryptShare[]> {
+  async buildShares(
+    privateKey: string,
+    operators: IOperator[],
+  ): Promise<IEncryptShare[]> {
     const threshold = await this.createThreshold(privateKey, operators);
     return this.encryptShares(operators, threshold.shares);
   }
@@ -83,18 +102,18 @@ export class SSVKeys {
   /**
    * Getting threshold if it has been created before.
    */
-  getThreshold()  {
+  getThreshold() {
     return this.threshold;
   }
 
   async validateSharesPostRegistration({
-                                         shares,
-                                         operatorsCount,
-                                         validatorPublicKey,
-                                         isAccountExists,
-                                         ownerAddress,
-                                         ownerNonce,
-                                         blockNumber
+    shares,
+    operatorsCount,
+    validatorPublicKey,
+    isAccountExists,
+    ownerAddress,
+    ownerNonce,
+    blockNumber,
   }: ISharesValidation) {
     const keySharesItem = new KeySharesItem();
     let restoredSharesPublicKeys;
@@ -106,23 +125,28 @@ export class SSVKeys {
     let errorMessage = '';
 
     try {
-      const restoredShares = keySharesItem.buildSharesFromBytes(shares, operatorsCount);
+      const restoredShares = keySharesItem.buildSharesFromBytes(
+        shares,
+        operatorsCount,
+      );
       const { sharesPublicKeys, encryptedKeys } = restoredShares;
       restoredSharesPublicKeys = sharesPublicKeys;
       restoredSharesEncryptedKeys = encryptedKeys;
-    }
-    catch (e: any) {
+    } catch (e: any) {
       sharesError = e.stack || e.trace || e;
       sharesErrorMessage = e.message;
       errorMessage = 'Can not extract shares from bytes';
     }
 
     if (!sharesError && !errorMessage) {
-      const signatureData = { ownerNonce, publicKey: validatorPublicKey, ownerAddress };
+      const signatureData = {
+        ownerNonce,
+        publicKey: validatorPublicKey,
+        ownerAddress,
+      };
       try {
-        await keySharesItem.validateSingleShares(shares, signatureData)
-      }
-      catch (e: any) {
+        await keySharesItem.validateSingleShares(shares, signatureData);
+      } catch (e: any) {
         signatureError = e.stack || e.trace || e;
         signatureErrorMessage = e.message;
         errorMessage = 'Failed to validate single shares';
@@ -143,12 +167,17 @@ export class SSVKeys {
       isSharesValid: !sharesError,
       sharesPublicKeys: restoredSharesPublicKeys,
       encryptedKeys: restoredSharesEncryptedKeys,
-      memo: !!sharesError || !!signatureError ?
-        [{
-          message: errorMessage,
-          error: sharesError || signatureError,
-          data: `${sharesErrorMessage}${signatureErrorMessage ? '. ' + signatureErrorMessage : ''}`, blockNumber
-        }] : []
-    }
+      memo:
+        !!sharesError || !!signatureError
+          ? [
+              {
+                message: errorMessage,
+                error: sharesError || signatureError,
+                data: `${sharesErrorMessage}${signatureErrorMessage ? '. ' + signatureErrorMessage : ''}`,
+                blockNumber,
+              },
+            ]
+          : [],
+    };
   }
 }

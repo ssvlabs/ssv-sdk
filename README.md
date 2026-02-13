@@ -18,9 +18,10 @@ The SSV SDK is a TypeScript library for interacting with the SSV network, enabli
 
 ## Core Modules
 
-The SDK consists of four main modules:
+The SDK consists of five main modules:
 
 - **Clusters**: Manage validator clusters, handle deposits, and register validators
+- **DAO**: Manage DAO-related actions and values
 - **Operators**: Interact with network operators and manage operator relationships
 - **API**: Access network data, query states, and retrieve operational information
 - **Utils**: Helper functions for keyshare validation, share generation, and other utilities
@@ -47,7 +48,7 @@ import { SSVSDK, chains } from '@ssv-labs/ssv-sdk'
 import { createPublicClient, createWalletClient, http } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
 
-const chain = chains.mainnet // or chains.holesky
+const chain = chains.mainnet // or chains.hoodi
 const transport = http()
 
 const publicClient = createPublicClient({

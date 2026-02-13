@@ -1,17 +1,25 @@
 import { registerDecorator, ValidatorConstraint } from 'class-validator';
-import type { ValidatorConstraintInterface, ValidationOptions } from 'class-validator';
+import type {
+  ValidatorConstraintInterface,
+  ValidationOptions,
+} from 'class-validator';
 import { getAddress } from 'viem';
 
 import { OwnerAddressFormatError } from '../../../exceptions/keystore';
 
 /* Try to validate ethereum owner address. */
 @ValidatorConstraint({ name: 'ownerAddress', async: false })
-export class OwnerAddressValidatorConstraint implements ValidatorConstraintInterface {
+export class OwnerAddressValidatorConstraint
+  implements ValidatorConstraintInterface
+{
   validate(value: any) {
     try {
       getAddress(value);
     } catch {
-      throw new OwnerAddressFormatError(value, 'Owner address is not a valid Ethereum address');
+      throw new OwnerAddressFormatError(
+        value,
+        'Owner address is not a valid Ethereum address',
+      );
     }
     return true;
   }

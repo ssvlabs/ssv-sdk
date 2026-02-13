@@ -15,15 +15,15 @@ export const checkOperatorDKGEnabled = (
     (res) =>
       res.json() as Promise<
         {
-          id: string
-          isHealthy: boolean
+          id: string;
+          isHealthy: boolean;
         }[]
       >,
-  )
-}
+  );
+};
 
 export const getSSVAPI = (endpoint: string) => {
   return {
     checkOperatorDKGEnabled: checkOperatorDKGEnabled.bind(null, endpoint),
-  }
-}
+  };
+};

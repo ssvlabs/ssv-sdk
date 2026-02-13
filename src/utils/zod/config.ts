@@ -1,64 +1,68 @@
-import { chainIds, networks } from '@/config'
-import type { Address, PublicClient, WalletClient } from 'viem'
-import { z } from 'zod'
+import { chainIds, networks } from '@/config';
+import type { Address, PublicClient, WalletClient } from 'viem';
+import { z } from 'zod';
 
 export const configArgsSchema = z
   .object({
     publicClient: z.custom().superRefine((val, ctx) => {
-      const client = val as PublicClient | undefined
+      const client = val as PublicClient | undefined;
       if (!client) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'Public client must be provided',
-        })
-        return false
+        });
+        return false;
       }
 
       if (client.chain === undefined) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'Public client must have a chain property',
-        })
-        return false
+        });
+        return false;
       }
 
-      if (![...chainIds].includes(client.chain?.id as (typeof chainIds)[number])) {
+      if (
+        ![...chainIds].includes(client.chain?.id as (typeof chainIds)[number])
+      ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: `Public client chain must be one of [${networks.join(', ')}]`,
-        })
-        return false
+        });
+        return false;
       }
 
-      return true
+      return true;
     }),
     walletClient: z.custom().superRefine((val, ctx) => {
-      const client = val as WalletClient | undefined
+      const client = val as WalletClient | undefined;
       if (!client) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'Wallet client must be provided',
-        })
-        return false
+        });
+        return false;
       }
 
       if (client.chain === undefined) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: 'Wallet client must have a chain property',
-        })
-        return false
+        });
+        return false;
       }
 
-      if (![...chainIds].includes(client.chain?.id as (typeof chainIds)[number])) {
+      if (
+        ![...chainIds].includes(client.chain?.id as (typeof chainIds)[number])
+      ) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           message: `Wallet client chain must be one of [${networks.join(', ')}]`,
-        })
-        return false
+        });
+        return false;
       }
 
-      return true
+      return true;
     }),
     extendedConfig: z
       .object({
@@ -85,30 +89,30 @@ export const configArgsSchema = z
   })
   .refine(
     (val) => {
-      const publicClient = val.publicClient as PublicClient
-      const walletClient = val.walletClient as WalletClient
-      return publicClient?.chain?.id === walletClient?.chain?.id
+      const publicClient = val.publicClient as PublicClient;
+      const walletClient = val.walletClient as WalletClient;
+      return publicClient?.chain?.id === walletClient?.chain?.id;
     },
     {
       message: 'Public and wallet client chains must be the same',
     },
-  ) as z.ZodType<ConfigArgs>
+  ) as z.ZodType<ConfigArgs>;
 
 export type ConfigArgs = {
-  walletClient: WalletClient
-  publicClient: PublicClient
+  walletClient: WalletClient;
+  publicClient: PublicClient;
   extendedConfig?: {
     subgraph?: {
-      endpoint?: string
-      apiKey?: string
-    }
+      endpoint?: string;
+      apiKey?: string;
+    };
     rest?: {
-      endpoint?: string
-    }
+      endpoint?: string;
+    };
     contracts?: {
-      setter?: Address
-      getter?: Address
-      token?: Address
-    }
-  }
-}
+      setter?: Address;
+      getter?: Address;
+      token?: Address;
+    };
+  };
+};

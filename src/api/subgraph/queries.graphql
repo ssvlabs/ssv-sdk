@@ -10,12 +10,16 @@ query GetClusterSnapshot($id: ID!) {
 
 query GetCluster($id: ID!) {
   cluster(id: $id) {
+    owner {
+      id
+    }
     active
     validatorCount
     balance
     index
     networkFeeIndex
     operatorIds
+    effectiveBalance
   }
 }
 
@@ -28,6 +32,7 @@ query GetClusters($owner: String!) {
     index
     networkFeeIndex
     operatorIds
+    effectiveBalance
   }
 }
 
@@ -61,6 +66,7 @@ query GetOperators($operatorIds: [String!]!) {
     validatorCount
     isPrivate
     whitelistedContract
+    fee
     whitelisted {
       id
     }
@@ -79,7 +85,11 @@ query GetValidator($id: ID!) {
   }
 }
 
-query GetClusterBalance($clusterId: ID!, $daoAddress: ID!, $operatorIds: [String!]!) {
+query GetClusterBalance(
+  $clusterId: ID!
+  $daoAddress: ID!
+  $operatorIds: [String!]!
+) {
   _meta {
     block {
       number
@@ -102,5 +112,16 @@ query GetClusterBalance($clusterId: ID!, $daoAddress: ID!, $operatorIds: [String
     networkFeeIndex
     index
     balance
+    effectiveBalance
+  }
+}
+
+query GetDaoValues($daoAddress: ID!) {
+  daovalues(id: $daoAddress) {
+    networkFee
+    networkFeeIndex
+    networkFeeIndexBlockNumber
+    liquidationThreshold
+    minimumLiquidationCollateral
   }
 }

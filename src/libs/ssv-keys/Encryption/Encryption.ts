@@ -1,4 +1,4 @@
-import { ForgeEncrypt }from '@/libs/ssv-keys/Encryption/utils';
+import { ForgeEncrypt } from '@/libs/ssv-keys/Encryption/utils';
 import { OperatorPublicKeyError } from '@/libs/ssv-keys/exceptions/operator';
 import type { IEncryptShare, IShares } from '@/libs/ssv-keys/interfaces';
 import { OperatorPublicKeyValidator } from '@/libs/ssv-keys/validators';
@@ -6,7 +6,6 @@ import { OperatorPublicKeyValidator } from '@/libs/ssv-keys/validators';
 export default class Encryption {
   private readonly operatorPublicKeys: string[];
   private readonly shares: IShares[];
-
 
   constructor(operatorPublicKeys: string[], shares: IShares[]) {
     this.operatorPublicKeys = [...operatorPublicKeys];
@@ -18,8 +17,10 @@ export default class Encryption {
     for (const [idx, operatorPublicKey] of this.operatorPublicKeys.entries()) {
       OperatorPublicKeyValidator(operatorPublicKey);
       const forgeEncrypt = new ForgeEncrypt();
-      forgeEncrypt.setPublicKey(operatorPublicKey)
-      const encryptedPrivateKey = forgeEncrypt.encrypt(this.shares[idx].privateKey);
+      forgeEncrypt.setPublicKey(operatorPublicKey);
+      const encryptedPrivateKey = forgeEncrypt.encrypt(
+        this.shares[idx].privateKey,
+      );
       if (!encryptedPrivateKey) {
         throw new OperatorPublicKeyError(
           {
@@ -30,9 +31,9 @@ export default class Encryption {
         );
       }
       const encryptedShare: IEncryptShare = {
-          operatorPublicKey,
-          privateKey: encryptedPrivateKey,
-          publicKey: this.shares[idx].publicKey,
+        operatorPublicKey,
+        privateKey: encryptedPrivateKey,
+        publicKey: this.shares[idx].publicKey,
       };
       encryptedShares.push(encryptedShare);
     }

@@ -1,53 +1,31 @@
-import type { ConfigReturnType } from '@/config/create'
-import type { SmartFnWriteOptions } from '@/contract-interactions/types'
-import { getClusterSnapshot } from '@/utils/cluster'
+import type { ConfigReturnType } from '@/config/create';
+import type { SmartFnWriteOptions } from '@/contract-interactions/types';
+import { toSolidityCluster } from '@/utils/cluster';
 
 type DepositProps = SmartFnWriteOptions<{
-  id: string
-  amount: bigint
-}>
-
-type DepositOptions = {
-  approve?: boolean
-}
+  id: string;
+  amount: bigint;
+}>;
 
 export const deposit = async (
   config: ConfigReturnType,
   { args: { id, amount }, ...writeOptions }: DepositProps,
-  options: DepositOptions = {},
 ) => {
-  const cluster = await config.api.getCluster({ id })
+  const cluster = await config.api.getCluster({ id });
 
   if (!cluster) {
-    throw new Error('Cluster not found')
+    throw new Error('Cluster not found');
   }
 
-  const snapshot = getClusterSnapshot(cluster)
-  if (options?.approve) {
-    const allowance = await config.contract.token.read.allowance({
-      owner: config.walletClient.account!.address,
-      spender: config.contractAddresses.setter,
-    })
-
-    if (allowance < amount) {
-      await config.contract.token.write
-        .approve({
-          args: {
-            spender: config.contractAddresses.setter,
-            amount,
-          },
-        })
-        .then((tx) => tx.wait())
-    }
-  }
+  const snapshot = toSolidityCluster(cluster);
 
   return config.contract.ssv.write.deposit({
+    value: amount,
     args: {
-      amount,
       cluster: snapshot,
-      clusterOwner: config.walletClient.account!.address,
+      clusterOwner: cluster.owner.id as `0x${string}`,
       operatorIds: cluster.operatorIds.map(BigInt),
     },
     ...writeOptions,
-  })
-}
+  });
+};

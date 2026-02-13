@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it, } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import { SSVKeysException } from '@/libs/ssv-keys/exceptions/base';
 import { KeySharesItem } from '@/libs/ssv-keys/KeyShares/KeySharesItem';
@@ -19,7 +19,9 @@ describe('KeyShares.validateSingleShares', () => {
       ownerAddress: mockKeySharesItemWithOperators.data.ownerAddress,
     };
 
-    await expect(keySharesItem.validateSingleShares(shares, fromSignatureData)).resolves.toBeUndefined();
+    await expect(
+      keySharesItem.validateSingleShares(shares, fromSignatureData),
+    ).resolves.toBeUndefined();
   });
 
   it('should throw error for invalid owner nonce', async () => {
@@ -30,7 +32,9 @@ describe('KeyShares.validateSingleShares', () => {
       ownerAddress: mockKeySharesItemWithOperators.data.ownerAddress,
     };
 
-    await expect(keySharesItem.validateSingleShares(shares, fromSignatureData)).rejects.toThrow('Owner nonce is not positive integer');
+    await expect(
+      keySharesItem.validateSingleShares(shares, fromSignatureData),
+    ).rejects.toThrow('Owner nonce is not positive integer');
   });
 
   it('should throw BLS error for invalid signature', async () => {
@@ -41,7 +45,9 @@ describe('KeyShares.validateSingleShares', () => {
       ownerAddress: mockKeySharesItemWithOperators.data.ownerAddress,
     };
 
-    await expect(keySharesItem.validateSingleShares(invalidSignature, fromSignatureData)).rejects.toThrowError();
+    await expect(
+      keySharesItem.validateSingleShares(invalidSignature, fromSignatureData),
+    ).rejects.toThrowError();
   });
 
   it('should throw SSVKeysException error type', async () => {
@@ -52,12 +58,16 @@ describe('KeyShares.validateSingleShares', () => {
       ownerAddress: mockKeySharesItemWithOperators.data.ownerAddress,
     };
 
-    await expect(keySharesItem.validateSingleShares(signature, fromSignatureData)).rejects.toMatchObject({
+    await expect(
+      keySharesItem.validateSingleShares(signature, fromSignatureData),
+    ).rejects.toMatchObject({
       name: 'SingleSharesSignatureInvalid',
-      message: 'Single shares signature is invalid'
+      message: 'Single shares signature is invalid',
     });
-    
+
     // Also verify it's an instance of SSVKeysException
-    await expect(keySharesItem.validateSingleShares(signature, fromSignatureData)).rejects.toBeInstanceOf(SSVKeysException);
+    await expect(
+      keySharesItem.validateSingleShares(signature, fromSignatureData),
+    ).rejects.toBeInstanceOf(SSVKeysException);
   });
 });

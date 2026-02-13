@@ -1,7 +1,10 @@
-import type { CodegenConfig } from '@graphql-codegen/cli'
+import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
-  schema: 'https://api.studio.thegraph.com/query/71118/ssv-network-ethereum/version/latest',
+  // schema:
+  //   'https://api.studio.thegraph.com/query/71118/ssv-network-ethereum/version/latest',
+  schema:
+    'https://api.studio.thegraph.com/query/71118/ssv-network-hoodi-stage/version/latest', // Changed to hoodi to get the latest schema
   documents: ['src/**/*.graphql'],
   ignoreNoDocuments: true,
   generates: {
@@ -34,6 +37,6 @@ const config: CodegenConfig = {
       },
     },
   },
-}
+};
 
-export default config
+export default config;

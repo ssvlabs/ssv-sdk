@@ -11,8 +11,10 @@ describe('Check private key decryption', () => {
     const keystore = Keystore.fromObject(keyStoreData);
     const password = 'testtest';
     const decryptedPrivateKey = await keystore.decrypt(password);
-    const correctPrivateKeyHex = '63bc15d14d1460491535700fa2b6ac8873e1ede401cfc46e0c5ce77f00633d29';
-    const decryptedPrivateKeyHex = Buffer.from(decryptedPrivateKey).toString('hex');
+    const correctPrivateKeyHex =
+      '63bc15d14d1460491535700fa2b6ac8873e1ede401cfc46e0c5ce77f00633d29';
+    const decryptedPrivateKeyHex =
+      Buffer.from(decryptedPrivateKey).toString('hex');
 
     expect(decryptedPrivateKey).toBeDefined();
     expect(decryptedPrivateKey.length).toEqual(32); // BLS private keys are 32 bytes

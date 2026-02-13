@@ -1,0 +1,156 @@
+import { merge } from 'lodash-es';
+import { type Address } from 'viem';
+import { describe, expect, it, vi } from 'vitest';
+import { type ConfigReturnType } from '../config/create';
+
+const mockAddress = '0x012f55B6Cc5D57F943F1E79cF00214B652513f88' as Address;
+
+const mockCluster = {
+  owner: { id: mockAddress },
+  active: true,
+  validatorCount: '1',
+  balance: '1000000000000000',
+  index: '0',
+  networkFeeIndex: '0',
+  operatorIds: ['1', '2', '3', '4'],
+  effectiveBalance: '32',
+};
+
+const mockOperators = [
+  { id: '1', fee: '1000000000', publicKey: '0x01', whitelisted: [] },
+  { id: '2', fee: '2000000000', publicKey: '0x02', whitelisted: [] },
+  { id: '3', fee: '1500000000', publicKey: '0x03', whitelisted: [] },
+  { id: '4', fee: '500000000', publicKey: '0x04', whitelisted: [] },
+];
+
+const mockDaoValues = {
+  networkFee: '1000000000',
+  networkFeeIndex: '0',
+  networkFeeIndexBlockNumber: '1000',
+  liquidationThreshold: '214800',
+  minimumLiquidationCollateral: '1000000000000000000',
+};
+
+const createMockConfig = (overrides?: Partial<ConfigReturnType>) =>
+  merge(
+    {
+      api: {
+        getCluster: vi.fn().mockResolvedValue(mockCluster),
+        getOperators: vi.fn().mockResolvedValue(mockOperators),
+        getDaoValues: vi.fn().mockResolvedValue(mockDaoValues),
+      },
+      contractAddresses: {
+        setter: mockAddress,
+      },
+    },
+    overrides,
+  ) as unknown as ConfigReturnType;
+
+describe('calcDepositFromRunway', () => {
+  it('should calculate the deposit amount for a given runway', async () => {
+    const { calcDepositFromRunway } = await import(
+      '../libs/utils/methods/calc-deposit-from-runway'
+    );
+    const config = createMockConfig();
+
+    const result = await calcDepositFromRunway(config, {
+      clusterId: 'cluster-1',
+      runway: 365,
+    });
+
+    expect(result).toBeGreaterThan(0n);
+
+    expect(config.api.getCluster).toHaveBeenCalledWith({ id: 'cluster-1' });
+    expect(config.api.getOperators).toHaveBeenCalledWith({
+      operatorIds: mockCluster.operatorIds,
+    });
+    expect(config.api.getDaoValues).toHaveBeenCalledWith({
+      daoAddress: mockAddress,
+    });
+  });
+
+  it('should throw when cluster is not found', async () => {
+    const { calcDepositFromRunway } = await import(
+      '../libs/utils/methods/calc-deposit-from-runway'
+    );
+    const config = createMockConfig({
+      api: { getCluster: vi.fn().mockResolvedValue(null) },
+    } as unknown as Partial<ConfigReturnType>);
+
+    await expect(
+      calcDepositFromRunway(config, { clusterId: 'missing', runway: 30 }),
+    ).rejects.toThrow('Cluster not found');
+  });
+
+  it('should throw when operators are not found', async () => {
+    const { calcDepositFromRunway } = await import(
+      '../libs/utils/methods/calc-deposit-from-runway'
+    );
+    const config = createMockConfig({
+      api: { getOperators: vi.fn().mockResolvedValue(null) },
+    } as unknown as Partial<ConfigReturnType>);
+
+    await expect(
+      calcDepositFromRunway(config, { clusterId: 'cluster-1', runway: 30 }),
+    ).rejects.toThrow('Operators not found');
+  });
+
+  it('should throw when DAO values are not found', async () => {
+    const { calcDepositFromRunway } = await import(
+      '../libs/utils/methods/calc-deposit-from-runway'
+    );
+    const config = createMockConfig({
+      api: { getDaoValues: vi.fn().mockResolvedValue(null) },
+    } as unknown as Partial<ConfigReturnType>);
+
+    await expect(
+      calcDepositFromRunway(config, { clusterId: 'cluster-1', runway: 30 }),
+    ).rejects.toThrow('DAO values not found');
+  });
+
+  it('should sum operator fees correctly', async () => {
+    const { calcDepositFromRunway } = await import(
+      '../libs/utils/methods/calc-deposit-from-runway'
+    );
+    const config = createMockConfig();
+
+    const result = await calcDepositFromRunway(config, {
+      clusterId: 'cluster-1',
+      runway: 30,
+    });
+
+    expect(result).toBeGreaterThan(0n);
+  });
+
+  it('should return higher total for longer runway', async () => {
+    const { calcDepositFromRunway } = await import(
+      '../libs/utils/methods/calc-deposit-from-runway'
+    );
+
+    const shortRunwayResult = await calcDepositFromRunway(createMockConfig(), {
+      clusterId: 'cluster-1',
+      runway: 30,
+    });
+
+    const longRunwayResult = await calcDepositFromRunway(createMockConfig(), {
+      clusterId: 'cluster-1',
+      runway: 31,
+    });
+
+    expect(longRunwayResult).toBeGreaterThan(shortRunwayResult);
+  });
+
+  it('should handle fractional runway days', async () => {
+    const { calcDepositFromRunway } = await import(
+      '../libs/utils/methods/calc-deposit-from-runway'
+    );
+    const config = createMockConfig();
+
+    const result = await calcDepositFromRunway(config, {
+      clusterId: 'cluster-1',
+      runway: 0.5,
+    });
+
+    expect(result).toBeGreaterThan(0n);
+  });
+});
