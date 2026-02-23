@@ -1,9 +1,10 @@
 import { ConfigReturnType } from '../../../config/create';
 import { KeySharesItem } from '../../ssv-keys/KeyShares/KeySharesItem';
+import { IKeySharesPartialPayload } from '../../ssv-keys/interfaces';
 import { Operator } from '../../../types/operator';
 import { Address, Hash } from 'viem';
 type ValidatedKeysharesArgs = {
-    keyshares: string | object;
+    keyshares: string | object | IKeySharesPartialPayload[];
     operatorIds: string[];
 };
 export declare const validateSharesPreRegistration: (config: ConfigReturnType, { keyshares, operatorIds }: ValidatedKeysharesArgs) => Promise<{

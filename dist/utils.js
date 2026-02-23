@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const globals = require("./globals-DsaKgq3v.js");
+const globals = require("./globals-F33LMemb.js");
 const waitForTransaction = async (config, fn) => {
   const hash = await fn;
   return config.publicClient.waitForTransactionReceipt({ hash });
@@ -26,7 +26,6 @@ exports.ensureValidatorsUniqueness = globals.ensureValidatorsUniqueness;
 exports.ethFormatter = globals.ethFormatter;
 exports.formatBigintInput = globals.formatBigintInput;
 exports.formatSSV = globals.formatSSV;
-exports.getClusterSnapshot = globals.getClusterSnapshot;
 exports.getOperatorIds = globals.getOperatorIds;
 exports.isBigIntChanged = globals.isBigIntChanged;
 exports.isClusterId = globals.isClusterId;
@@ -37,6 +36,7 @@ exports.percentageFormatter = globals.percentageFormatter;
 exports.roundOperatorFee = globals.roundOperatorFee;
 exports.sortNumbers = globals.sortNumbers;
 exports.stringifyBigints = globals.stringifyBigints;
+exports.toSolidityCluster = globals.toSolidityCluster;
 exports.tryCatch = globals.tryCatch;
 exports.validateConsistentOperatorIds = globals.validateConsistentOperatorIds;
 exports.validateConsistentOperatorPublicKeys = globals.validateConsistentOperatorPublicKeys;

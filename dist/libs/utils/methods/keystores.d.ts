@@ -2,11 +2,11 @@ import { KeySharesPayload } from '../../ssv-keys/KeyShares/KeySharesData/KeyShar
 import { SSVKeys } from '../../ssv-keys/SSVKeys';
 export declare const ssvKeys: SSVKeys;
 type GenerateKeySharesArgs = {
-    operator_keys: string[];
-    operator_ids: number[];
+    operatorKeys: string[];
+    operatorIds: number[];
     keystore: string | string[];
-    keystore_password: string;
-    owner_address: string;
+    keystorePassword: string;
+    ownerAddress: string;
     nonce: number;
 };
 export declare const generateKeyShares: (args: GenerateKeySharesArgs) => Promise<KeySharesPayload[]>;

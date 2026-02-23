@@ -12,11 +12,11 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
-    readonly name: "ApprovalNotWithinTimeframe";
+    readonly name: "AlreadyVoted";
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
-    readonly name: "CallerNotOwner";
+    readonly name: "ApprovalNotWithinTimeframe";
     readonly type: "error";
 }, {
     readonly inputs: readonly [{
@@ -29,10 +29,6 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly type: "address";
     }];
     readonly name: "CallerNotOwnerWithData";
-    readonly type: "error";
-}, {
-    readonly inputs: readonly [];
-    readonly name: "CallerNotWhitelisted";
     readonly type: "error";
 }, {
     readonly inputs: readonly [{
@@ -48,7 +44,7 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
-    readonly name: "ClusterDoesNotExists";
+    readonly name: "ClusterDoesNotExist";
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
@@ -60,15 +56,19 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
-    readonly name: "EmptyPublicKeysList";
+    readonly name: "EBBelowMinimum";
     readonly type: "error";
 }, {
-    readonly inputs: readonly [{
-        readonly internalType: "uint64";
-        readonly name: "operatorId";
-        readonly type: "uint64";
-    }];
-    readonly name: "ExceedValidatorLimit";
+    readonly inputs: readonly [];
+    readonly name: "EBExceedsMaximum";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "ETHTransferFailed";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "EmptyPublicKeysList";
     readonly type: "error";
 }, {
     readonly inputs: readonly [{
@@ -96,11 +96,23 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
+    readonly name: "FutureBlockNumber";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
     readonly name: "IncorrectClusterState";
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
-    readonly name: "IncorrectValidatorState";
+    readonly name: "IncorrectClusterVersion";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "uint8";
+        readonly name: "operatorVersion";
+        readonly type: "uint8";
+    }];
+    readonly name: "IncorrectOperatorVersion";
     readonly type: "error";
 }, {
     readonly inputs: readonly [{
@@ -124,7 +136,19 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
+    readonly name: "InvalidProof";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
     readonly name: "InvalidPublicKeyLength";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "InvalidQuorum";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "InvalidToken";
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
@@ -137,6 +161,22 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly type: "address";
     }];
     readonly name: "InvalidWhitelistingContract";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "LegacyOperatorFeeDeclarationInvalid";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "MaxPrecisionExceeded";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "MaxRequestsAmountReached";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "MaxValueExceeded";
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
@@ -156,6 +196,22 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
+    readonly name: "NotCSSV";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "NotOracle";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "NothingToClaim";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "NothingToWithdraw";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
     readonly name: "OperatorAlreadyExists";
     readonly type: "error";
 }, {
@@ -168,7 +224,19 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
+    readonly name: "OracleAlreadyAssigned";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "OracleHasZeroWeight";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
     readonly name: "PublicKeysSharesLengthMismatch";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "RootNotFound";
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
@@ -176,7 +244,15 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
-    readonly name: "TargetModuleDoesNotExist";
+    readonly name: "StakeTooLow";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "StaleBlockNumber";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "StaleUpdate";
     readonly type: "error";
 }, {
     readonly inputs: readonly [{
@@ -196,7 +272,11 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
-    readonly name: "ValidatorAlreadyExists";
+    readonly name: "UnstakeAmountExceedsBalance";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "UpdateTooFrequent";
     readonly type: "error";
 }, {
     readonly inputs: readonly [{
@@ -212,7 +292,15 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
+    readonly name: "ZeroAddress";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
     readonly name: "ZeroAddressNotAllowed";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "ZeroAmount";
     readonly type: "error";
 }, {
     readonly anonymous: false;
@@ -238,6 +326,57 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly type: "address";
     }];
     readonly name: "BeaconUpgraded";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: true;
+        readonly internalType: "address";
+        readonly name: "owner";
+        readonly type: "address";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint64[]";
+        readonly name: "operatorIds";
+        readonly type: "uint64[]";
+    }, {
+        readonly indexed: true;
+        readonly internalType: "uint64";
+        readonly name: "blockNum";
+        readonly type: "uint64";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint32";
+        readonly name: "effectiveBalance";
+        readonly type: "uint32";
+    }, {
+        readonly components: readonly [{
+            readonly internalType: "uint32";
+            readonly name: "validatorCount";
+            readonly type: "uint32";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "networkFeeIndex";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "index";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "bool";
+            readonly name: "active";
+            readonly type: "bool";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "balance";
+            readonly type: "uint256";
+        }];
+        readonly indexed: false;
+        readonly internalType: "struct ISSVNetworkCore.Cluster";
+        readonly name: "cluster";
+        readonly type: "tuple";
+    }];
+    readonly name: "ClusterBalanceUpdated";
     readonly type: "event";
 }, {
     readonly anonymous: false;
@@ -339,6 +478,62 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly name: "operatorIds";
         readonly type: "uint64[]";
     }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "ethDeposited";
+        readonly type: "uint256";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "ssvRefunded";
+        readonly type: "uint256";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint32";
+        readonly name: "effectiveBalance";
+        readonly type: "uint32";
+    }, {
+        readonly components: readonly [{
+            readonly internalType: "uint32";
+            readonly name: "validatorCount";
+            readonly type: "uint32";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "networkFeeIndex";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "index";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "bool";
+            readonly name: "active";
+            readonly type: "bool";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "balance";
+            readonly type: "uint256";
+        }];
+        readonly indexed: false;
+        readonly internalType: "struct ISSVNetworkCore.Cluster";
+        readonly name: "cluster";
+        readonly type: "tuple";
+    }];
+    readonly name: "ClusterMigratedToETH";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: true;
+        readonly internalType: "address";
+        readonly name: "owner";
+        readonly type: "address";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint64[]";
+        readonly name: "operatorIds";
+        readonly type: "uint64[]";
+    }, {
         readonly components: readonly [{
             readonly internalType: "uint32";
             readonly name: "validatorCount";
@@ -418,10 +613,40 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly inputs: readonly [{
         readonly indexed: false;
         readonly internalType: "uint64";
+        readonly name: "newCooldownDuration";
+        readonly type: "uint64";
+    }];
+    readonly name: "CooldownDurationUpdated";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: false;
+        readonly internalType: "uint64";
         readonly name: "value";
         readonly type: "uint64";
     }];
     readonly name: "DeclareOperatorFeePeriodUpdated";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: true;
+        readonly internalType: "address";
+        readonly name: "token";
+        readonly type: "address";
+    }, {
+        readonly indexed: true;
+        readonly internalType: "address";
+        readonly name: "to";
+        readonly type: "address";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "amount";
+        readonly type: "uint256";
+    }];
+    readonly name: "ERC20Rescued";
     readonly type: "event";
 }, {
     readonly anonymous: false;
@@ -452,11 +677,36 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly anonymous: false;
     readonly inputs: readonly [{
         readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "newFeesWei";
+        readonly type: "uint256";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "accEthPerShare";
+        readonly type: "uint256";
+    }];
+    readonly name: "FeesSynced";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: false;
         readonly internalType: "uint8";
         readonly name: "version";
         readonly type: "uint8";
     }];
     readonly name: "Initialized";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: false;
+        readonly internalType: "uint64";
+        readonly name: "value";
+        readonly type: "uint64";
+    }];
+    readonly name: "LiquidationThresholdPeriodSSVUpdated";
     readonly type: "event";
 }, {
     readonly anonymous: false;
@@ -476,7 +726,27 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly name: "value";
         readonly type: "uint256";
     }];
+    readonly name: "MinimumLiquidationCollateralSSVUpdated";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "value";
+        readonly type: "uint256";
+    }];
     readonly name: "MinimumLiquidationCollateralUpdated";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "minFee";
+        readonly type: "uint256";
+    }];
+    readonly name: "MinimumOperatorEthFeeUpdated";
     readonly type: "event";
 }, {
     readonly anonymous: false;
@@ -522,6 +792,21 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly type: "uint256";
     }];
     readonly name: "NetworkFeeUpdated";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "oldFee";
+        readonly type: "uint256";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "newFee";
+        readonly type: "uint256";
+    }];
+    readonly name: "NetworkFeeUpdatedSSV";
     readonly type: "event";
 }, {
     readonly anonymous: false;
@@ -627,9 +912,9 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly anonymous: false;
     readonly inputs: readonly [{
         readonly indexed: false;
-        readonly internalType: "uint64";
+        readonly internalType: "uint256";
         readonly name: "maxFee";
-        readonly type: "uint64";
+        readonly type: "uint256";
     }];
     readonly name: "OperatorMaximumFeeUpdated";
     readonly type: "event";
@@ -742,6 +1027,26 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly anonymous: false;
     readonly inputs: readonly [{
         readonly indexed: true;
+        readonly internalType: "uint32";
+        readonly name: "oracleId";
+        readonly type: "uint32";
+    }, {
+        readonly indexed: true;
+        readonly internalType: "address";
+        readonly name: "oldOracle";
+        readonly type: "address";
+    }, {
+        readonly indexed: true;
+        readonly internalType: "address";
+        readonly name: "newOracle";
+        readonly type: "address";
+    }];
+    readonly name: "OracleReplaced";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: true;
         readonly internalType: "address";
         readonly name: "previousOwner";
         readonly type: "address";
@@ -767,6 +1072,136 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly type: "address";
     }];
     readonly name: "OwnershipTransferred";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: false;
+        readonly internalType: "uint16";
+        readonly name: "newQuorum";
+        readonly type: "uint16";
+    }];
+    readonly name: "QuorumUpdated";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: true;
+        readonly internalType: "address";
+        readonly name: "user";
+        readonly type: "address";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "amount";
+        readonly type: "uint256";
+    }];
+    readonly name: "RewardsClaimed";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: true;
+        readonly internalType: "address";
+        readonly name: "user";
+        readonly type: "address";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "pending";
+        readonly type: "uint256";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "accrued";
+        readonly type: "uint256";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "userIndex";
+        readonly type: "uint256";
+    }];
+    readonly name: "RewardsSettled";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: true;
+        readonly internalType: "bytes32";
+        readonly name: "merkleRoot";
+        readonly type: "bytes32";
+    }, {
+        readonly indexed: true;
+        readonly internalType: "uint64";
+        readonly name: "blockNum";
+        readonly type: "uint64";
+    }];
+    readonly name: "RootCommitted";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: false;
+        readonly internalType: "string";
+        readonly name: "version";
+        readonly type: "string";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "blockNumber";
+        readonly type: "uint256";
+    }];
+    readonly name: "SSVNetworkUpgradeBlock";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: true;
+        readonly internalType: "address";
+        readonly name: "user";
+        readonly type: "address";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "amount";
+        readonly type: "uint256";
+    }];
+    readonly name: "Staked";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: true;
+        readonly internalType: "address";
+        readonly name: "user";
+        readonly type: "address";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "amount";
+        readonly type: "uint256";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "unlockTime";
+        readonly type: "uint256";
+    }];
+    readonly name: "UnstakeRequested";
+    readonly type: "event";
+}, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: true;
+        readonly internalType: "address";
+        readonly name: "user";
+        readonly type: "address";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "amount";
+        readonly type: "uint256";
+    }];
+    readonly name: "UnstakedWithdrawn";
     readonly type: "event";
 }, {
     readonly anonymous: false;
@@ -896,6 +1331,41 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly name: "ValidatorRemoved";
     readonly type: "event";
 }, {
+    readonly anonymous: false;
+    readonly inputs: readonly [{
+        readonly indexed: true;
+        readonly internalType: "bytes32";
+        readonly name: "merkleRoot";
+        readonly type: "bytes32";
+    }, {
+        readonly indexed: true;
+        readonly internalType: "uint64";
+        readonly name: "blockNum";
+        readonly type: "uint64";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "accumulatedWeight";
+        readonly type: "uint256";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint256";
+        readonly name: "quorum";
+        readonly type: "uint256";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "uint32";
+        readonly name: "oracleId";
+        readonly type: "uint32";
+    }, {
+        readonly indexed: false;
+        readonly internalType: "address";
+        readonly name: "oracle";
+        readonly type: "address";
+    }];
+    readonly name: "WeightedRootProposed";
+    readonly type: "event";
+}, {
     readonly stateMutability: "nonpayable";
     readonly type: "fallback";
 }, {
@@ -932,10 +1402,6 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly name: "sharesData";
         readonly type: "bytes[]";
     }, {
-        readonly internalType: "uint256";
-        readonly name: "amount";
-        readonly type: "uint256";
-    }, {
         readonly components: readonly [{
             readonly internalType: "uint32";
             readonly name: "validatorCount";
@@ -963,7 +1429,7 @@ export declare const MainnetV4SetterABI: readonly [{
     }];
     readonly name: "bulkRegisterValidator";
     readonly outputs: readonly [];
-    readonly stateMutability: "nonpayable";
+    readonly stateMutability: "payable";
     readonly type: "function";
 }, {
     readonly inputs: readonly [{
@@ -1015,6 +1481,26 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly stateMutability: "nonpayable";
     readonly type: "function";
 }, {
+    readonly inputs: readonly [];
+    readonly name: "claimEthRewards";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "bytes32";
+        readonly name: "merkleRoot";
+        readonly type: "bytes32";
+    }, {
+        readonly internalType: "uint64";
+        readonly name: "blockNum";
+        readonly type: "uint64";
+    }];
+    readonly name: "commitRoot";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
     readonly inputs: readonly [{
         readonly internalType: "uint64";
         readonly name: "operatorId";
@@ -1037,10 +1523,6 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly internalType: "uint64[]";
         readonly name: "operatorIds";
         readonly type: "uint64[]";
-    }, {
-        readonly internalType: "uint256";
-        readonly name: "amount";
-        readonly type: "uint256";
     }, {
         readonly components: readonly [{
             readonly internalType: "uint32";
@@ -1069,7 +1551,7 @@ export declare const MainnetV4SetterABI: readonly [{
     }];
     readonly name: "deposit";
     readonly outputs: readonly [];
-    readonly stateMutability: "nonpayable";
+    readonly stateMutability: "payable";
     readonly type: "function";
 }, {
     readonly inputs: readonly [{
@@ -1127,29 +1609,42 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly name: "ssvViews_";
         readonly type: "address";
     }, {
-        readonly internalType: "uint64";
-        readonly name: "minimumBlocksBeforeLiquidation_";
-        readonly type: "uint64";
-    }, {
-        readonly internalType: "uint256";
-        readonly name: "minimumLiquidationCollateral_";
-        readonly type: "uint256";
-    }, {
-        readonly internalType: "uint32";
-        readonly name: "validatorsPerOperatorLimit_";
-        readonly type: "uint32";
-    }, {
-        readonly internalType: "uint64";
-        readonly name: "declareOperatorFeePeriod_";
-        readonly type: "uint64";
-    }, {
-        readonly internalType: "uint64";
-        readonly name: "executeOperatorFeePeriod_";
-        readonly type: "uint64";
-    }, {
-        readonly internalType: "uint64";
-        readonly name: "operatorMaxFeeIncrease_";
-        readonly type: "uint64";
+        readonly components: readonly [{
+            readonly internalType: "uint64";
+            readonly name: "minimumBlocksBeforeLiquidation";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "minimumLiquidationCollateral";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint32";
+            readonly name: "validatorsPerOperatorLimit";
+            readonly type: "uint32";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "declareOperatorFeePeriod";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "executeOperatorFeePeriod";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "operatorMaxFeeIncrease";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "uint32[4]";
+            readonly name: "defaultOracleIds";
+            readonly type: "uint32[4]";
+        }, {
+            readonly internalType: "uint16";
+            readonly name: "quorumBps";
+            readonly type: "uint16";
+        }];
+        readonly internalType: "struct ISSVNetwork.NetworkInitParams";
+        readonly name: "params";
+        readonly type: "tuple";
     }];
     readonly name: "initialize";
     readonly outputs: readonly [];
@@ -1195,6 +1690,98 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly stateMutability: "nonpayable";
     readonly type: "function";
 }, {
+    readonly inputs: readonly [{
+        readonly internalType: "address";
+        readonly name: "clusterOwner";
+        readonly type: "address";
+    }, {
+        readonly internalType: "uint64[]";
+        readonly name: "operatorIds";
+        readonly type: "uint64[]";
+    }, {
+        readonly components: readonly [{
+            readonly internalType: "uint32";
+            readonly name: "validatorCount";
+            readonly type: "uint32";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "networkFeeIndex";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "index";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "bool";
+            readonly name: "active";
+            readonly type: "bool";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "balance";
+            readonly type: "uint256";
+        }];
+        readonly internalType: "struct ISSVNetworkCore.Cluster";
+        readonly name: "cluster";
+        readonly type: "tuple";
+    }];
+    readonly name: "liquidateSSV";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "uint64[]";
+        readonly name: "operatorIds";
+        readonly type: "uint64[]";
+    }, {
+        readonly components: readonly [{
+            readonly internalType: "uint32";
+            readonly name: "validatorCount";
+            readonly type: "uint32";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "networkFeeIndex";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "index";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "bool";
+            readonly name: "active";
+            readonly type: "bool";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "balance";
+            readonly type: "uint256";
+        }];
+        readonly internalType: "struct ISSVNetworkCore.Cluster";
+        readonly name: "cluster";
+        readonly type: "tuple";
+    }];
+    readonly name: "migrateClusterToETH";
+    readonly outputs: readonly [];
+    readonly stateMutability: "payable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "address";
+        readonly name: "from";
+        readonly type: "address";
+    }, {
+        readonly internalType: "address";
+        readonly name: "to";
+        readonly type: "address";
+    }, {
+        readonly internalType: "uint256";
+        readonly name: "amount";
+        readonly type: "uint256";
+    }];
+    readonly name: "onCSSVTransfer";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
     readonly inputs: readonly [];
     readonly name: "owner";
     readonly outputs: readonly [{
@@ -1230,10 +1817,6 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly name: "operatorIds";
         readonly type: "uint64[]";
     }, {
-        readonly internalType: "uint256";
-        readonly name: "amount";
-        readonly type: "uint256";
-    }, {
         readonly components: readonly [{
             readonly internalType: "uint32";
             readonly name: "validatorCount";
@@ -1261,7 +1844,7 @@ export declare const MainnetV4SetterABI: readonly [{
     }];
     readonly name: "reactivate";
     readonly outputs: readonly [];
-    readonly stateMutability: "nonpayable";
+    readonly stateMutability: "payable";
     readonly type: "function";
 }, {
     readonly inputs: readonly [{
@@ -1313,10 +1896,6 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly name: "sharesData";
         readonly type: "bytes";
     }, {
-        readonly internalType: "uint256";
-        readonly name: "amount";
-        readonly type: "uint256";
-    }, {
         readonly components: readonly [{
             readonly internalType: "uint32";
             readonly name: "validatorCount";
@@ -1344,7 +1923,7 @@ export declare const MainnetV4SetterABI: readonly [{
     }];
     readonly name: "registerValidator";
     readonly outputs: readonly [];
-    readonly stateMutability: "nonpayable";
+    readonly stateMutability: "payable";
     readonly type: "function";
 }, {
     readonly inputs: readonly [{
@@ -1427,6 +2006,48 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly type: "function";
 }, {
     readonly inputs: readonly [{
+        readonly internalType: "uint32";
+        readonly name: "oracleId";
+        readonly type: "uint32";
+    }, {
+        readonly internalType: "address";
+        readonly name: "newOracle";
+        readonly type: "address";
+    }];
+    readonly name: "replaceOracle";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "uint256";
+        readonly name: "amount";
+        readonly type: "uint256";
+    }];
+    readonly name: "requestUnstake";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "address";
+        readonly name: "token";
+        readonly type: "address";
+    }, {
+        readonly internalType: "address";
+        readonly name: "to";
+        readonly type: "address";
+    }, {
+        readonly internalType: "uint256";
+        readonly name: "amount";
+        readonly type: "uint256";
+    }];
+    readonly name: "rescueERC20";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
         readonly internalType: "address";
         readonly name: "recipientAddress";
         readonly type: "address";
@@ -1485,11 +2106,98 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly type: "function";
 }, {
     readonly inputs: readonly [{
+        readonly internalType: "uint16";
+        readonly name: "quorum";
+        readonly type: "uint16";
+    }];
+    readonly name: "setQuorumBps";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "uint64";
+        readonly name: "duration";
+        readonly type: "uint64";
+    }];
+    readonly name: "setUnstakeCooldownDuration";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "uint256";
+        readonly name: "amount";
+        readonly type: "uint256";
+    }];
+    readonly name: "stake";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "syncFees";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
         readonly internalType: "address";
         readonly name: "newOwner";
         readonly type: "address";
     }];
     readonly name: "transferOwnership";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "uint64";
+        readonly name: "blockNum";
+        readonly type: "uint64";
+    }, {
+        readonly internalType: "address";
+        readonly name: "clusterOwner";
+        readonly type: "address";
+    }, {
+        readonly internalType: "uint64[]";
+        readonly name: "operatorIds";
+        readonly type: "uint64[]";
+    }, {
+        readonly components: readonly [{
+            readonly internalType: "uint32";
+            readonly name: "validatorCount";
+            readonly type: "uint32";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "networkFeeIndex";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "uint64";
+            readonly name: "index";
+            readonly type: "uint64";
+        }, {
+            readonly internalType: "bool";
+            readonly name: "active";
+            readonly type: "bool";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "balance";
+            readonly type: "uint256";
+        }];
+        readonly internalType: "struct ISSVNetworkCore.Cluster";
+        readonly name: "cluster";
+        readonly type: "tuple";
+    }, {
+        readonly internalType: "uint32";
+        readonly name: "effectiveBalance";
+        readonly type: "uint32";
+    }, {
+        readonly internalType: "bytes32[]";
+        readonly name: "merkleProof";
+        readonly type: "bytes32[]";
+    }];
+    readonly name: "updateClusterBalance";
     readonly outputs: readonly [];
     readonly stateMutability: "nonpayable";
     readonly type: "function";
@@ -1526,8 +2234,18 @@ export declare const MainnetV4SetterABI: readonly [{
 }, {
     readonly inputs: readonly [{
         readonly internalType: "uint64";
-        readonly name: "maxFee";
+        readonly name: "blocks";
         readonly type: "uint64";
+    }];
+    readonly name: "updateLiquidationThresholdPeriodSSV";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "uint256";
+        readonly name: "maxFee";
+        readonly type: "uint256";
     }];
     readonly name: "updateMaximumOperatorFee";
     readonly outputs: readonly [];
@@ -1540,6 +2258,26 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly type: "uint256";
     }];
     readonly name: "updateMinimumLiquidationCollateral";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "uint256";
+        readonly name: "amount";
+        readonly type: "uint256";
+    }];
+    readonly name: "updateMinimumLiquidationCollateralSSV";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "uint256";
+        readonly name: "minFee";
+        readonly type: "uint256";
+    }];
+    readonly name: "updateMinimumOperatorEthFee";
     readonly outputs: readonly [];
     readonly stateMutability: "nonpayable";
     readonly type: "function";
@@ -1564,6 +2302,16 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly type: "uint256";
     }];
     readonly name: "updateNetworkFee";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "uint256";
+        readonly name: "fee";
+        readonly type: "uint256";
+    }];
+    readonly name: "updateNetworkFeeSSV";
     readonly outputs: readonly [];
     readonly stateMutability: "nonpayable";
     readonly type: "function";
@@ -1652,11 +2400,31 @@ export declare const MainnetV4SetterABI: readonly [{
     readonly type: "function";
 }, {
     readonly inputs: readonly [{
+        readonly internalType: "uint64";
+        readonly name: "operatorId";
+        readonly type: "uint64";
+    }];
+    readonly name: "withdrawAllOperatorEarningsSSV";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "uint64";
+        readonly name: "operatorId";
+        readonly type: "uint64";
+    }];
+    readonly name: "withdrawAllVersionOperatorEarnings";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
         readonly internalType: "uint256";
         readonly name: "amount";
         readonly type: "uint256";
     }];
-    readonly name: "withdrawNetworkEarnings";
+    readonly name: "withdrawNetworkSSVEarnings";
     readonly outputs: readonly [];
     readonly stateMutability: "nonpayable";
     readonly type: "function";
@@ -1671,6 +2439,26 @@ export declare const MainnetV4SetterABI: readonly [{
         readonly type: "uint256";
     }];
     readonly name: "withdrawOperatorEarnings";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "uint64";
+        readonly name: "operatorId";
+        readonly type: "uint64";
+    }, {
+        readonly internalType: "uint256";
+        readonly name: "amount";
+        readonly type: "uint256";
+    }];
+    readonly name: "withdrawOperatorEarningsSSV";
+    readonly outputs: readonly [];
+    readonly stateMutability: "nonpayable";
+    readonly type: "function";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "withdrawUnlocked";
     readonly outputs: readonly [];
     readonly stateMutability: "nonpayable";
     readonly type: "function";

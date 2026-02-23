@@ -41,6 +41,21 @@ export declare const withdraw: (config: ConfigReturnType, { args: { id, amount }
                 implementation: `0x${string}`;
             };
         } | {
+            eventName: "ClusterBalanceUpdated";
+            args: {
+                owner: `0x${string}`;
+                operatorIds: readonly bigint[];
+                blockNum: bigint;
+                effectiveBalance: number;
+                cluster: {
+                    validatorCount: number;
+                    networkFeeIndex: bigint;
+                    index: bigint;
+                    active: boolean;
+                    balance: bigint;
+                };
+            };
+        } | {
             eventName: "ClusterDeposited";
             args: {
                 owner: `0x${string}`;
@@ -59,6 +74,22 @@ export declare const withdraw: (config: ConfigReturnType, { args: { id, amount }
             args: {
                 owner: `0x${string}`;
                 operatorIds: readonly bigint[];
+                cluster: {
+                    validatorCount: number;
+                    networkFeeIndex: bigint;
+                    index: bigint;
+                    active: boolean;
+                    balance: bigint;
+                };
+            };
+        } | {
+            eventName: "ClusterMigratedToETH";
+            args: {
+                owner: `0x${string}`;
+                operatorIds: readonly bigint[];
+                ethDeposited: bigint;
+                ssvRefunded: bigint;
+                effectiveBalance: number;
                 cluster: {
                     validatorCount: number;
                     networkFeeIndex: bigint;
@@ -95,9 +126,21 @@ export declare const withdraw: (config: ConfigReturnType, { args: { id, amount }
                 };
             };
         } | {
+            eventName: "CooldownDurationUpdated";
+            args: {
+                newCooldownDuration: bigint;
+            };
+        } | {
             eventName: "DeclareOperatorFeePeriodUpdated";
             args: {
                 value: bigint;
+            };
+        } | {
+            eventName: "ERC20Rescued";
+            args: {
+                token: `0x${string}`;
+                to: `0x${string}`;
+                amount: bigint;
             };
         } | {
             eventName: "ExecuteOperatorFeePeriodUpdated";
@@ -111,7 +154,23 @@ export declare const withdraw: (config: ConfigReturnType, { args: { id, amount }
                 recipientAddress: `0x${string}`;
             };
         } | {
+            eventName: "FeesSynced";
+            args: {
+                newFeesWei: bigint;
+                accEthPerShare: bigint;
+            };
+        } | {
+            eventName: "LiquidationThresholdPeriodSSVUpdated";
+            args: {
+                value: bigint;
+            };
+        } | {
             eventName: "LiquidationThresholdPeriodUpdated";
+            args: {
+                value: bigint;
+            };
+        } | {
+            eventName: "MinimumLiquidationCollateralSSVUpdated";
             args: {
                 value: bigint;
             };
@@ -119,6 +178,11 @@ export declare const withdraw: (config: ConfigReturnType, { args: { id, amount }
             eventName: "MinimumLiquidationCollateralUpdated";
             args: {
                 value: bigint;
+            };
+        } | {
+            eventName: "MinimumOperatorEthFeeUpdated";
+            args: {
+                minFee: bigint;
             };
         } | {
             eventName: "ModuleUpgraded";
@@ -134,6 +198,12 @@ export declare const withdraw: (config: ConfigReturnType, { args: { id, amount }
             };
         } | {
             eventName: "NetworkFeeUpdated";
+            args: {
+                oldFee: bigint;
+                newFee: bigint;
+            };
+        } | {
+            eventName: "NetworkFeeUpdatedSSV";
             args: {
                 oldFee: bigint;
                 newFee: bigint;
@@ -221,6 +291,63 @@ export declare const withdraw: (config: ConfigReturnType, { args: { id, amount }
                 value: bigint;
             };
         } | {
+            eventName: "OracleReplaced";
+            args: {
+                oracleId: number;
+                oldOracle: `0x${string}`;
+                newOracle: `0x${string}`;
+            };
+        } | {
+            eventName: "QuorumUpdated";
+            args: {
+                newQuorum: number;
+            };
+        } | {
+            eventName: "RewardsClaimed";
+            args: {
+                user: `0x${string}`;
+                amount: bigint;
+            };
+        } | {
+            eventName: "RewardsSettled";
+            args: {
+                user: `0x${string}`;
+                pending: bigint;
+                accrued: bigint;
+                userIndex: bigint;
+            };
+        } | {
+            eventName: "RootCommitted";
+            args: {
+                merkleRoot: `0x${string}`;
+                blockNum: bigint;
+            };
+        } | {
+            eventName: "SSVNetworkUpgradeBlock";
+            args: {
+                version: string;
+                blockNumber: bigint;
+            };
+        } | {
+            eventName: "Staked";
+            args: {
+                user: `0x${string}`;
+                amount: bigint;
+            };
+        } | {
+            eventName: "UnstakeRequested";
+            args: {
+                user: `0x${string}`;
+                amount: bigint;
+                unlockTime: bigint;
+            };
+        } | {
+            eventName: "UnstakedWithdrawn";
+            args: {
+                user: `0x${string}`;
+                amount: bigint;
+            };
+        } | {
             eventName: "ValidatorAdded";
             args: {
                 owner: `0x${string}`;
@@ -255,6 +382,16 @@ export declare const withdraw: (config: ConfigReturnType, { args: { id, amount }
                     active: boolean;
                     balance: bigint;
                 };
+            };
+        } | {
+            eventName: "WeightedRootProposed";
+            args: {
+                merkleRoot: `0x${string}`;
+                blockNum: bigint;
+                accumulatedWeight: bigint;
+                quorum: bigint;
+                oracleId: number;
+                oracle: `0x${string}`;
             };
         } | {
             eventName: "OwnershipTransferred";

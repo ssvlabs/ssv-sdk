@@ -23,6 +23,7 @@ export declare const globals: {
     MINIMUM_OPERATOR_FEE_PER_BLOCK: bigint;
     MIN_VALIDATORS_COUNT_PER_BULK_REGISTRATION: number;
     DEFAULT_ADDRESS_WHITELIST: string;
+    VUNITS_PRECISION: number;
 };
 export type ClusterSize = (typeof globals.CLUSTER_SIZES)[keyof typeof globals.CLUSTER_SIZES];
 export declare const registerValidatorsByClusterSizeLimits: {

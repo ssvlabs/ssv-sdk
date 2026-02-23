@@ -1,7 +1,7 @@
 import { GraphQLClient } from 'graphql-request';
 export declare const createQueries: (graphqlClient: GraphQLClient) => {
     getOwnerNonce: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').getOwnerNonce>;
-    getClusterSnapshot: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').getClusterSnapshot>;
+    toSolidityCluster: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').toSolidityCluster>;
     getCluster: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').getCluster>;
     getClusters: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').getClusters>;
     getOperator: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').getOperator>;
@@ -9,6 +9,7 @@ export declare const createQueries: (graphqlClient: GraphQLClient) => {
     getValidators: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').getValidators>;
     getValidator: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').getValidator>;
     getClusterBalance: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').getClusterBalance>;
+    getDaoValues: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').getDaoValues>;
 };
 export declare const createSSVAPI: (endpoint: string) => {
     checkOperatorDKGEnabled: (dkgAddresses: {

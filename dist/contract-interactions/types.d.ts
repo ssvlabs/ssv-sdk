@@ -43,9 +43,10 @@ export type WriteReturnType<T extends SupportedEvents> = Promise<{
         events: T[];
     }>;
 }>;
-export type WriteOptions<K extends WriteFns> = Omit<SimulateContractParameters<SupportedAbis, K['name']>, 'chain' | 'args' | 'value' | 'abi' | 'functionName' | 'address' | 'account' | 'value'>;
-export type SmartFnWriteOptions<K extends Record<string, unknown>> = Omit<SimulateContractParameters, 'chain' | 'args' | 'value' | 'abi' | 'functionName' | 'address' | 'account' | 'value'> & {
+export type WriteOptions<K extends WriteFns> = Omit<SimulateContractParameters<SupportedAbis, K['name']>, 'chain' | 'args' | 'value' | 'abi' | 'functionName' | 'address' | 'account'>;
+export type SmartFnWriteOptions<K extends Record<string, unknown>> = Omit<SimulateContractParameters, 'chain' | 'args' | 'value' | 'abi' | 'functionName' | 'address' | 'account'> & {
     args: K;
+    value?: bigint;
 };
 export type WriteProps = {
     abi: Abi;
