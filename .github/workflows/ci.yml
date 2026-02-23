@@ -3,6 +3,9 @@ name: CI
 on:
   push:
 
+permissions:
+  contents: write
+
 
 jobs:
   pr-checks:
@@ -115,4 +118,26 @@ jobs:
           message: "ci: update artifacts [skip ci]"
           skip-empty: true
 
-      - run: git push origin || echo "nothing to push"
+      - name: Push artifact commit
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BRANCH=main
+          git fetch origin "$BRANCH"
+
+          LOCAL_HEAD="$(git rev-parse HEAD)"
+          REMOTE_HEAD="$(git rev-parse "origin/$BRANCH")"
+
+          if [ "$LOCAL_HEAD" = "$REMOTE_HEAD" ]; then
+            echo "No new commit to push."
+            exit 0
+          fi
+
+          # Prevent pushing stale dist from an outdated run.
+          if ! git merge-base --is-ancestor "$REMOTE_HEAD" "$LOCAL_HEAD"; then
+            echo "::error::Remote $BRANCH moved. This run is outdated; not pushing artifacts."
+            exit 1
+          fi
+
+          git push --porcelain origin "HEAD:$BRANCH"
