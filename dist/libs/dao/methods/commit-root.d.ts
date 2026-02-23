@@ -1,10 +1,11 @@
 import { ConfigReturnType } from '../../../config/create';
 import { SmartFnWriteOptions } from '../../../contract-interactions/types';
-type DepositProps = SmartFnWriteOptions<{
-    id: string;
-    amount: bigint;
+import { Hex } from 'viem';
+type CommitRootProps = SmartFnWriteOptions<{
+    merkleRoot: Hex;
+    blockNum: bigint;
 }>;
-export declare const deposit: (config: ConfigReturnType, { args: { id, amount }, ...writeOptions }: DepositProps) => Promise<{
+export declare const commitRoot: (config: ConfigReturnType, { args: { merkleRoot, blockNum }, ...writeOptions }: CommitRootProps) => Promise<{
     hash: import('viem').Hash;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({

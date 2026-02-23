@@ -50,7 +50,7 @@ export declare class SSVKeys {
      * Getting threshold if it has been created before.
      */
     getThreshold(): ISharesKeyPairs | undefined;
-    validateSharesPostRegistration({ shares, operatorsCount, validatorPublicKey, isAccountExists, ownerAddress, ownerNonce, blockNumber }: ISharesValidation): Promise<{
+    validateSharesPostRegistration({ shares, operatorsCount, validatorPublicKey, isAccountExists, ownerAddress, ownerNonce, blockNumber, }: ISharesValidation): Promise<{
         isValid: boolean;
         isSharesValid: boolean;
         sharesPublicKeys: string[] | undefined;

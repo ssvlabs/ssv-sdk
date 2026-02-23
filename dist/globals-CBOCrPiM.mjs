@@ -106,7 +106,7 @@ const chainIds = Object.values(chains).map((chain) => chain.id);
 const networks = Object.values(chains).map((chain) => chain.name);
 const graph_endpoints = {
   [mainnet.id]: "https://api.studio.thegraph.com/query/71118/ssv-network-ethereum/version/latest",
-  [hoodi.id]: "https://api.studio.thegraph.com/query/71118/ssv-network-hoodi/version/latest"
+  [hoodi.id]: "https://api.studio.thegraph.com/query/71118/ssv-network-hoodi-stage/version/latest"
 };
 const paid_graph_endpoints = {
   [mainnet.id]: "https://gateway.thegraph.com/api/subgraphs/id/7V45fKPugp9psQjgrGsfif98gWzCyC6ChN7CW98VyQnr",
@@ -123,9 +123,9 @@ const contracts = {
     token: "0x9D65fF81a3c488d585bBfb0Bfe3c7707c7917f54"
   },
   [hoodi.id]: {
-    setter: "0x58410Bef803ECd7E63B23664C586A6DB72DAf59c",
-    getter: "0x5AdDb3f1529C5ec70D77400499eE4bbF328368fe",
-    token: "0x9F5d4Ec84fC4785788aB44F9de973cF34F7A038e"
+    setter: "0x1784167a4D562110B021BE66067cb81D15F2FaC4",
+    getter: "0x417a6C301b03bB577bdA4c0259e0AfeFDc2c8240",
+    token: "0x746c33ccc28b1363c35c09badaf41b2ffa7e6d56"
   }
 };
 const bigintMax = (...args) => {
@@ -168,7 +168,7 @@ const isClusterId = (clusterId) => {
   const [ownerAddress, ...operatorIds] = clusterId.split("-");
   return isAddress(ownerAddress) && operatorIds.length >= 4 && operatorIds.every((id) => !isNaN(Number(id)));
 };
-const getClusterSnapshot = (cluster) => {
+const toSolidityCluster = (cluster) => {
   return {
     active: cluster.active,
     balance: BigInt(cluster.balance),
@@ -239,8 +239,21 @@ class KeysharesValidationError extends Error {
 }
 const validateConsistentOperatorIds = (keyshares) => {
   const operatorIds = sortNumbers(keyshares[0].payload.operatorIds);
+  const hasOperatorData = keyshares.every(
+    (share) => (share.data.operators ?? []).length > 0
+  );
   keyshares.every(({ payload, data }) => {
     const payloadOperatorIds = sortNumbers(payload.operatorIds).toString();
+    if (!hasOperatorData) {
+      const valid2 = payloadOperatorIds === operatorIds.toString();
+      if (!valid2) {
+        throw new KeysharesValidationError(
+          6
+          /* InconsistentOperators */
+        );
+      }
+      return true;
+    }
     const dataOperatorIds = getOperatorIds(data.operators ?? []).toString();
     const valid = payloadOperatorIds === dataOperatorIds && dataOperatorIds === operatorIds.toString();
     if (!valid) {
@@ -254,7 +267,16 @@ const validateConsistentOperatorIds = (keyshares) => {
   return operatorIds;
 };
 const ensureValidatorsUniqueness = (keyshares) => {
-  const set = new Set(keyshares.map(({ data }) => data.publicKey));
+  const keys = keyshares.map(
+    ({ data, payload }) => data.publicKey ?? payload.publicKey
+  );
+  if (keys.some((key) => !key)) {
+    throw new KeysharesValidationError(
+      4
+      /* DuplicateValidatorKeys */
+    );
+  }
+  const set = new Set(keys);
   if (set.size !== keyshares.length) {
     throw new KeysharesValidationError(
       4
@@ -264,6 +286,12 @@ const ensureValidatorsUniqueness = (keyshares) => {
   return true;
 };
 const validateConsistentOperatorPublicKeys = (keyshares, operators) => {
+  const hasOperatorData = keyshares.every(
+    (share) => (share.data.operators ?? []).length > 0
+  );
+  if (!hasOperatorData) {
+    return true;
+  }
   const operatorsMap = new Map(operators.map((o) => [o.id, o.publicKey]));
   const valid = keyshares.every(({ data }) => {
     return data.operators?.every(({ id, operatorKey }) => {
@@ -392,7 +420,8 @@ const globals = {
   OPERATOR_VALIDATORS_LIMIT_PRESERVE: 5,
   MINIMUM_OPERATOR_FEE_PER_BLOCK: 1000000000n,
   MIN_VALIDATORS_COUNT_PER_BULK_REGISTRATION: 1,
-  DEFAULT_ADDRESS_WHITELIST: "0x0000000000000000000000000000000000000000"
+  DEFAULT_ADDRESS_WHITELIST: "0x0000000000000000000000000000000000000000",
+  VUNITS_PRECISION: 1e4
 };
 const registerValidatorsByClusterSizeLimits = {
   [globals.CLUSTER_SIZES.QUAD_CLUSTER]: globals.FIXED_VALIDATORS_COUNT_PER_CLUSTER_SIZE.QUAD_CLUSTER,
@@ -429,17 +458,17 @@ export {
   createClusterId as g,
   isClusterId as h,
   isBigIntChanged as i,
-  getClusterSnapshot as j,
-  createEmptyCluster as k,
-  add0x as l,
-  isKeySharesItem as m,
-  KeysharesValidationErrorsMessages as n,
-  KeysharesValidationError as o,
-  ensureValidatorsUniqueness as p,
-  validateConsistentOperatorPublicKeys as q,
+  createEmptyCluster as j,
+  add0x as k,
+  isKeySharesItem as l,
+  KeysharesValidationErrorsMessages as m,
+  KeysharesValidationError as n,
+  ensureValidatorsUniqueness as o,
+  validateConsistentOperatorPublicKeys as p,
+  ensureNoKeysharesErrors as q,
   roundOperatorFee as r,
   stringifyBigints as s,
-  ensureNoKeysharesErrors as t,
+  toSolidityCluster as t,
   numberFormatter as u,
   validateConsistentOperatorIds as v,
   percentageFormatter as w,

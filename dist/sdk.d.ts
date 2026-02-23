@@ -1,4 +1,5 @@
 import { createClusterManager } from './libs/cluster';
+import { createDaoManager } from './libs/dao';
 import { createOperatorManager } from './libs/operator';
 import { createUtils } from './libs/utils';
 import { ConfigReturnType } from './config/create';
@@ -6,6 +7,7 @@ import { ConfigArgs } from './utils/zod/config';
 export declare class SSVSDK {
     readonly config: ConfigReturnType;
     readonly clusters: ReturnType<typeof createClusterManager>;
+    readonly dao: ReturnType<typeof createDaoManager>;
     readonly operators: ReturnType<typeof createOperatorManager>;
     readonly api: ConfigReturnType['api'];
     readonly contract: ConfigReturnType['contract'];
