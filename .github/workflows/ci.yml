@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 
 jobs:
@@ -54,7 +55,7 @@ jobs:
         run: pnpm build
 
   update-artifacts:
-    name: Build and Commit Artifacts
+    name: Build and Open Artifacts PR
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
@@ -102,42 +103,18 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Commit and push build files
+      - name: Stage build files
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-
-          # Stage only the build output (adjust if necessary)
+          # dist is gitignored; force-add to stage artifact updates
           git add dist/ -f
 
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: qoomon/actions--create-commit@dfef4d264de752be6d6195a4d61a2f3d3262d406 # v1
+      - name: Create signed PR with artifact updates
+        uses: peter-evans/create-pull-request@v8
         with:
-          message: "ci: update artifacts [skip ci]"
-          skip-empty: true
-
-      - name: Push artifact commit
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          BRANCH=main
-          git fetch origin "$BRANCH"
-
-          LOCAL_HEAD="$(git rev-parse HEAD)"
-          REMOTE_HEAD="$(git rev-parse "origin/$BRANCH")"
-
-          if [ "$LOCAL_HEAD" = "$REMOTE_HEAD" ]; then
-            echo "No new commit to push."
-            exit 0
-          fi
-
-          # Prevent pushing stale dist from an outdated run.
-          if ! git merge-base --is-ancestor "$REMOTE_HEAD" "$LOCAL_HEAD"; then
-            echo "::error::Remote $BRANCH moved. This run is outdated; not pushing artifacts."
-            exit 1
-          fi
-
-          git push --porcelain origin "HEAD:$BRANCH"
+          commit-message: "ci: update artifacts [skip ci]"
+          title: "ci: update artifacts"
+          body: "Automated dist update from main build for `${{ github.sha }}`."
+          branch: "ci/update-artifacts-${{ github.run_id }}"
+          base: "main"
+          delete-branch: true
+          sign-commits: true
