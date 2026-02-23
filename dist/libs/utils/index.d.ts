@@ -1,14 +1,15 @@
 import { ConfigReturnType } from '../../config/create';
 import { getClusterBalance, getOperatorCapacity } from './methods';
+import { calcDepositFromRunway } from './methods/calc-deposit-from-runway';
 import { validateSharesPreRegistration } from './methods/keyshares';
 import { RemoveConfigArg } from '../../types/methods';
 export declare const createUtils: (config: ConfigReturnType) => {
     generateKeyShares: (args: {
-        operator_keys: string[];
-        operator_ids: number[];
+        operatorKeys: string[];
+        operatorIds: number[];
         keystore: string | string[];
-        keystore_password: string;
-        owner_address: string;
+        keystorePassword: string;
+        ownerAddress: string;
         nonce: number;
     }) => Promise<import('../ssv-keys/KeyShares/KeySharesData/KeySharesPayload').KeySharesPayload[]>;
     validateKeysharesJSON: ({ account, operators, keyshares, }: {
@@ -19,4 +20,5 @@ export declare const createUtils: (config: ConfigReturnType) => {
     validateSharesPreRegistration: RemoveConfigArg<typeof validateSharesPreRegistration>;
     getOperatorCapacity: RemoveConfigArg<typeof getOperatorCapacity>;
     getClusterBalance: RemoveConfigArg<typeof getClusterBalance>;
+    calcDepositFromRunway: RemoveConfigArg<typeof calcDepositFromRunway>;
 };

@@ -28,7 +28,7 @@ export declare class KeySharesItem {
     /**
      * Build payload from operators list, encrypted shares and validator public key
      */
-    buildPayload(metaData: IKeySharesPayloadData, toSignatureData: IKeySharesToSignatureData): Promise<any>;
+    buildPayload(metaData: IKeySharesPayloadData, toSignatureData: IKeySharesToSignatureData): Promise<KeySharesPayload>;
     validateSingleShares(shares: string, fromSignatureData: IKeySharesFromSignatureData): Promise<void>;
     /**
      * Build shares from bytes string and operators list length

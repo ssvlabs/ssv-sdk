@@ -4,11 +4,11 @@ const require$$0 = require("fs");
 const require$$1 = require("path");
 const require$$2 = require("os");
 const crypto$1 = require("crypto");
-const globals = require("./globals-DsaKgq3v.js");
+const globals = require("./globals-F33LMemb.js");
 const lodashEs = require("lodash-es");
 const viem = require("viem");
 const graphqlRequest = require("graphql-request");
-const KeyShares = require("./KeyShares-B_4l2THg.js");
+const KeyShares = require("./KeyShares-D053gZhF.js");
 var main = { exports: {} };
 const version$1 = "16.6.1";
 const require$$4 = {
@@ -343,20 +343,21 @@ var cliOptions = function optionMatcher(args) {
   );
 })();
 const GetClusterSnapshotDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetClusterSnapshot" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "cluster" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "active" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }] } }] } }] };
-const GetClusterDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetCluster" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "cluster" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "active" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "operatorIds" } }] } }] } }] };
-const GetClustersDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetClusters" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "clusters" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "owner" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "active" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "operatorIds" } }] } }] } }] };
+const GetClusterDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetCluster" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "cluster" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "owner" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "active" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "operatorIds" } }, { "kind": "Field", "name": { "kind": "Name", "value": "effectiveBalance" } }] } }] } }] };
+const GetClustersDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetClusters" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "clusters" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "owner" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "active" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "operatorIds" } }, { "kind": "Field", "name": { "kind": "Name", "value": "effectiveBalance" } }] } }] } }] };
 const GetOwnerNonceDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetOwnerNonce" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "account" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "nonce" } }] } }] } }] };
 const GetOwnerNonceByBlockDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetOwnerNonceByBlock" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "block" } }, "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "Int" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "account" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } } }, { "kind": "Argument", "name": { "kind": "Name", "value": "block" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "number" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "block" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "nonce" } }] } }] } }] };
 const GetOperatorDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetOperator" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "operator" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "publicKey" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "isPrivate" } }, { "kind": "Field", "name": { "kind": "Name", "value": "whitelistedContract" } }, { "kind": "Field", "name": { "kind": "Name", "value": "whitelisted" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }] } }] } }] } }] };
-const GetOperatorsDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetOperators" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } }, "type": { "kind": "NonNullType", "type": { "kind": "ListType", "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "operators" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "id_in" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "publicKey" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "isPrivate" } }, { "kind": "Field", "name": { "kind": "Name", "value": "whitelistedContract" } }, { "kind": "Field", "name": { "kind": "Name", "value": "whitelisted" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }] } }] } }] } }] };
+const GetOperatorsDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetOperators" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } }, "type": { "kind": "NonNullType", "type": { "kind": "ListType", "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "operators" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "id_in" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "publicKey" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "isPrivate" } }, { "kind": "Field", "name": { "kind": "Name", "value": "whitelistedContract" } }, { "kind": "Field", "name": { "kind": "Name", "value": "fee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "whitelisted" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }] } }] } }] } }] };
 const GetValidatorsDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetValidators" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "ids" } }, "type": { "kind": "NonNullType", "type": { "kind": "ListType", "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "Bytes" } } } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "validators" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "id_in" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "ids" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }] } }] } }] };
 const GetValidatorDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetValidator" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "validator" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }] } }] } }] };
-const GetClusterBalanceDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetClusterBalance" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "clusterId" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } }, "type": { "kind": "NonNullType", "type": { "kind": "ListType", "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "_meta" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "block" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "number" } }] } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "daovalues" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "networkFee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexBlockNumber" } }, { "kind": "Field", "name": { "kind": "Name", "value": "liquidationThreshold" } }, { "kind": "Field", "name": { "kind": "Name", "value": "minimumLiquidationCollateral" } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "operators" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "id_in" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "fee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "feeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "feeIndexBlockNumber" } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "cluster" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "clusterId" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }] } }] } }] };
+const GetClusterBalanceDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetClusterBalance" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "clusterId" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } }, "type": { "kind": "NonNullType", "type": { "kind": "ListType", "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "_meta" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "block" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "number" } }] } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "daovalues" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "networkFee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexBlockNumber" } }, { "kind": "Field", "name": { "kind": "Name", "value": "liquidationThreshold" } }, { "kind": "Field", "name": { "kind": "Name", "value": "minimumLiquidationCollateral" } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "operators" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "id_in" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "fee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "feeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "feeIndexBlockNumber" } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "cluster" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "clusterId" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "effectiveBalance" } }] } }] } }] };
+const GetDaoValuesDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetDaoValues" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "daovalues" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "networkFee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexBlockNumber" } }, { "kind": "Field", "name": { "kind": "Name", "value": "liquidationThreshold" } }, { "kind": "Field", "name": { "kind": "Name", "value": "minimumLiquidationCollateral" } }] } }] } }] };
 const getOwnerNonce = (client, args) => {
   const document = typeof args.block === "number" ? GetOwnerNonceByBlockDocument : GetOwnerNonceDocument;
   return client.request(document, args).then((r) => r.account?.nonce || "0").catch(() => "0");
 };
-const getClusterSnapshot = (client, args) => client.request(GetClusterSnapshotDocument, args).then((res) => res.cluster);
+const toSolidityCluster = (client, args) => client.request(GetClusterSnapshotDocument, args).then((res) => res.cluster);
 const getCluster = (client, args) => client.request(GetClusterDocument, args).then((res) => res.cluster);
 const getClusters = (client, args) => client.request(GetClustersDocument, args).then((res) => res.clusters);
 const getOperator = (client, args) => client.request(GetOperatorDocument, args).then((res) => {
@@ -377,16 +378,18 @@ const getOperators = (client, args) => client.request(GetOperatorsDocument, args
 const getValidators = (client, args) => client.request(GetValidatorsDocument, args).then((res) => res.validators);
 const getValidator = (client, args) => client.request(GetValidatorDocument, args).then((res) => res.validator);
 const getClusterBalance$1 = (client, args) => client.request(GetClusterBalanceDocument, args);
+const getDaoValues = (client, args) => client.request(GetDaoValuesDocument, args).then((res) => res.daovalues);
 const getQueries = (client) => ({
   getOwnerNonce: getOwnerNonce.bind(null, client),
-  getClusterSnapshot: getClusterSnapshot.bind(null, client),
+  toSolidityCluster: toSolidityCluster.bind(null, client),
   getCluster: getCluster.bind(null, client),
   getClusters: getClusters.bind(null, client),
   getOperator: getOperator.bind(null, client),
   getOperators: getOperators.bind(null, client),
   getValidators: getValidators.bind(null, client),
   getValidator: getValidator.bind(null, client),
-  getClusterBalance: getClusterBalance$1.bind(null, client)
+  getClusterBalance: getClusterBalance$1.bind(null, client),
+  getDaoValues: getDaoValues.bind(null, client)
 });
 const MainnetV4GetterABI = [
   {
@@ -407,12 +410,12 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
-    name: "ApprovalNotWithinTimeframe",
+    name: "AlreadyVoted",
     type: "error"
   },
   {
     inputs: [],
-    name: "CallerNotOwner",
+    name: "ApprovalNotWithinTimeframe",
     type: "error"
   },
   {
@@ -429,11 +432,6 @@ const MainnetV4GetterABI = [
       }
     ],
     name: "CallerNotOwnerWithData",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "CallerNotWhitelisted",
     type: "error"
   },
   {
@@ -454,7 +452,7 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
-    name: "ClusterDoesNotExists",
+    name: "ClusterDoesNotExist",
     type: "error"
   },
   {
@@ -469,18 +467,22 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
-    name: "EmptyPublicKeysList",
+    name: "EBBelowMinimum",
     type: "error"
   },
   {
-    inputs: [
-      {
-        internalType: "uint64",
-        name: "operatorId",
-        type: "uint64"
-      }
-    ],
-    name: "ExceedValidatorLimit",
+    inputs: [],
+    name: "EBExceedsMaximum",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "ETHTransferFailed",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "EmptyPublicKeysList",
     type: "error"
   },
   {
@@ -516,12 +518,28 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
+    name: "FutureBlockNumber",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "IncorrectClusterState",
     type: "error"
   },
   {
     inputs: [],
-    name: "IncorrectValidatorState",
+    name: "IncorrectClusterVersion",
+    type: "error"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint8",
+        name: "operatorVersion",
+        type: "uint8"
+      }
+    ],
+    name: "IncorrectOperatorVersion",
     type: "error"
   },
   {
@@ -552,7 +570,22 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
+    name: "InvalidProof",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "InvalidPublicKeyLength",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "InvalidQuorum",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "InvalidToken",
     type: "error"
   },
   {
@@ -569,6 +602,16 @@ const MainnetV4GetterABI = [
       }
     ],
     name: "InvalidWhitelistingContract",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "LegacyOperatorFeeDeclarationInvalid",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "MaxRequestsAmountReached",
     type: "error"
   },
   {
@@ -593,6 +636,26 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
+    name: "NotCSSV",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "NotOracle",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "NothingToClaim",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "NothingToWithdraw",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "OperatorAlreadyExists",
     type: "error"
   },
@@ -608,7 +671,22 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
+    name: "OracleAlreadyAssigned",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "OracleHasZeroWeight",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "PublicKeysSharesLengthMismatch",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "RootNotFound",
     type: "error"
   },
   {
@@ -618,7 +696,17 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
-    name: "TargetModuleDoesNotExist",
+    name: "StakeTooLow",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "StaleBlockNumber",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "StaleUpdate",
     type: "error"
   },
   {
@@ -644,7 +732,12 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
-    name: "ValidatorAlreadyExists",
+    name: "UnstakeAmountExceedsBalance",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "UpdateTooFrequent",
     type: "error"
   },
   {
@@ -665,7 +758,17 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
+    name: "ZeroAddress",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "ZeroAddressNotAllowed",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "ZeroAmount",
     type: "error"
   },
   {
@@ -766,9 +869,48 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
+    name: "accEthPerShare",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
     name: "acceptOwnership",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "cooldownDuration",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "getActiveOracleIds",
+    outputs: [
+      {
+        internalType: "uint32[4]",
+        name: "",
+        type: "uint32[4]"
+      }
+    ],
+    stateMutability: "view",
     type: "function"
   },
   {
@@ -820,7 +962,63 @@ const MainnetV4GetterABI = [
     outputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "balance",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "clusterOwner",
+        type: "address"
+      },
+      {
+        internalType: "uint64[]",
+        name: "operatorIds",
+        type: "uint64[]"
+      },
+      {
+        components: [
+          {
+            internalType: "uint32",
+            name: "validatorCount",
+            type: "uint32"
+          },
+          {
+            internalType: "uint64",
+            name: "networkFeeIndex",
+            type: "uint64"
+          },
+          {
+            internalType: "uint64",
+            name: "index",
+            type: "uint64"
+          },
+          {
+            internalType: "bool",
+            name: "active",
+            type: "bool"
+          },
+          {
+            internalType: "uint256",
+            name: "balance",
+            type: "uint256"
+          }
+        ],
+        internalType: "struct ISSVNetworkCore.Cluster",
+        name: "cluster",
+        type: "tuple"
+      }
+    ],
+    name: "getBalanceSSV",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "balance",
         type: "uint256"
       }
     ],
@@ -884,8 +1082,176 @@ const MainnetV4GetterABI = [
     type: "function"
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "clusterOwner",
+        type: "address"
+      },
+      {
+        internalType: "uint64[]",
+        name: "operatorIds",
+        type: "uint64[]"
+      },
+      {
+        components: [
+          {
+            internalType: "uint32",
+            name: "validatorCount",
+            type: "uint32"
+          },
+          {
+            internalType: "uint64",
+            name: "networkFeeIndex",
+            type: "uint64"
+          },
+          {
+            internalType: "uint64",
+            name: "index",
+            type: "uint64"
+          },
+          {
+            internalType: "bool",
+            name: "active",
+            type: "bool"
+          },
+          {
+            internalType: "uint256",
+            name: "balance",
+            type: "uint256"
+          }
+        ],
+        internalType: "struct ISSVNetworkCore.Cluster",
+        name: "cluster",
+        type: "tuple"
+      }
+    ],
+    name: "getBurnRateSSV",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address"
+      },
+      {
+        internalType: "uint64[]",
+        name: "operatorIds",
+        type: "uint64[]"
+      }
+    ],
+    name: "getClusterAssetType",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "blockNum",
+        type: "uint64"
+      }
+    ],
+    name: "getCommittedRoot",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "clusterOwner",
+        type: "address"
+      },
+      {
+        internalType: "uint64[]",
+        name: "operatorIds",
+        type: "uint64[]"
+      },
+      {
+        components: [
+          {
+            internalType: "uint32",
+            name: "validatorCount",
+            type: "uint32"
+          },
+          {
+            internalType: "uint64",
+            name: "networkFeeIndex",
+            type: "uint64"
+          },
+          {
+            internalType: "uint64",
+            name: "index",
+            type: "uint64"
+          },
+          {
+            internalType: "bool",
+            name: "active",
+            type: "bool"
+          },
+          {
+            internalType: "uint256",
+            name: "balance",
+            type: "uint256"
+          }
+        ],
+        internalType: "struct ISSVNetworkCore.Cluster",
+        name: "cluster",
+        type: "tuple"
+      }
+    ],
+    name: "getEffectiveBalance",
+    outputs: [
+      {
+        internalType: "uint32",
+        name: "effectiveBalance",
+        type: "uint32"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
     inputs: [],
     name: "getLiquidationThresholdPeriod",
+    outputs: [
+      {
+        internalType: "uint64",
+        name: "",
+        type: "uint64"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "getLiquidationThresholdPeriodSSV",
     outputs: [
       {
         internalType: "uint64",
@@ -901,9 +1267,22 @@ const MainnetV4GetterABI = [
     name: "getMaximumOperatorFee",
     outputs: [
       {
-        internalType: "uint64",
+        internalType: "uint256",
         name: "",
-        type: "uint64"
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "getMaximumOperatorFeeSSV",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
       }
     ],
     stateMutability: "view",
@@ -912,6 +1291,32 @@ const MainnetV4GetterABI = [
   {
     inputs: [],
     name: "getMinimumLiquidationCollateral",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "getMinimumLiquidationCollateralSSV",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "getMinimumOperatorEthFee",
     outputs: [
       {
         internalType: "uint256",
@@ -937,7 +1342,33 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
+    name: "getNetworkEarningsSSV",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
     name: "getNetworkFee",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "getNetworkFeeSSV",
     outputs: [
       {
         internalType: "uint256",
@@ -972,34 +1403,92 @@ const MainnetV4GetterABI = [
     name: "getOperatorById",
     outputs: [
       {
-        internalType: "address",
+        components: [
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address"
+          },
+          {
+            internalType: "uint256",
+            name: "fee",
+            type: "uint256"
+          },
+          {
+            internalType: "uint32",
+            name: "validatorCount",
+            type: "uint32"
+          },
+          {
+            internalType: "address",
+            name: "whitelistedAddress",
+            type: "address"
+          },
+          {
+            internalType: "bool",
+            name: "isPrivate",
+            type: "bool"
+          },
+          {
+            internalType: "bool",
+            name: "isActive",
+            type: "bool"
+          }
+        ],
+        internalType: "struct ISSVViewsTypes.OperatorData",
         name: "",
-        type: "address"
-      },
+        type: "tuple"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      },
+        internalType: "uint64",
+        name: "operatorId",
+        type: "uint64"
+      }
+    ],
+    name: "getOperatorByIdSSV",
+    outputs: [
       {
-        internalType: "uint32",
+        components: [
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address"
+          },
+          {
+            internalType: "uint256",
+            name: "fee",
+            type: "uint256"
+          },
+          {
+            internalType: "uint32",
+            name: "validatorCount",
+            type: "uint32"
+          },
+          {
+            internalType: "address",
+            name: "whitelistedAddress",
+            type: "address"
+          },
+          {
+            internalType: "bool",
+            name: "isPrivate",
+            type: "bool"
+          },
+          {
+            internalType: "bool",
+            name: "isActive",
+            type: "bool"
+          }
+        ],
+        internalType: "struct ISSVViewsTypes.OperatorData",
         name: "",
-        type: "uint32"
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address"
-      },
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool"
-      },
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool"
+        type: "tuple"
       }
     ],
     stateMutability: "view",
@@ -1016,24 +1505,31 @@ const MainnetV4GetterABI = [
     name: "getOperatorDeclaredFee",
     outputs: [
       {
-        internalType: "bool",
+        components: [
+          {
+            internalType: "bool",
+            name: "isFeeDeclared",
+            type: "bool"
+          },
+          {
+            internalType: "uint256",
+            name: "fee",
+            type: "uint256"
+          },
+          {
+            internalType: "uint64",
+            name: "approvalBeginTime",
+            type: "uint64"
+          },
+          {
+            internalType: "uint64",
+            name: "approvalEndTime",
+            type: "uint64"
+          }
+        ],
+        internalType: "struct ISSVViewsTypes.OperatorDeclaredFeeData",
         name: "",
-        type: "bool"
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256"
-      },
-      {
-        internalType: "uint64",
-        name: "",
-        type: "uint64"
-      },
-      {
-        internalType: "uint64",
-        name: "",
-        type: "uint64"
+        type: "tuple"
       }
     ],
     stateMutability: "view",
@@ -1048,6 +1544,25 @@ const MainnetV4GetterABI = [
       }
     ],
     name: "getOperatorEarnings",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "id",
+        type: "uint64"
+      }
+    ],
+    name: "getOperatorEarningsSSV",
     outputs: [
       {
         internalType: "uint256",
@@ -1095,14 +1610,91 @@ const MainnetV4GetterABI = [
     name: "getOperatorFeePeriods",
     outputs: [
       {
-        internalType: "uint64",
+        components: [
+          {
+            internalType: "uint64",
+            name: "declarePeriod",
+            type: "uint64"
+          },
+          {
+            internalType: "uint64",
+            name: "executePeriod",
+            type: "uint64"
+          }
+        ],
+        internalType: "struct ISSVViewsTypes.OperatorFeePeriodsData",
         name: "",
-        type: "uint64"
-      },
+        type: "tuple"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
       {
         internalType: "uint64",
-        name: "",
+        name: "operatorId",
         type: "uint64"
+      }
+    ],
+    name: "getOperatorFeeSSV",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "oracleId",
+        type: "uint32"
+      }
+    ],
+    name: "getOracle",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "oracleId",
+        type: "uint32"
+      }
+    ],
+    name: "getOracleWeight",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "getQuorumBps",
+    outputs: [
+      {
+        internalType: "uint16",
+        name: "",
+        type: "uint16"
       }
     ],
     stateMutability: "view",
@@ -1325,6 +1917,62 @@ const MainnetV4GetterABI = [
         type: "tuple"
       }
     ],
+    name: "isLiquidatableSSV",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "clusterOwner",
+        type: "address"
+      },
+      {
+        internalType: "uint64[]",
+        name: "operatorIds",
+        type: "uint64[]"
+      },
+      {
+        components: [
+          {
+            internalType: "uint32",
+            name: "validatorCount",
+            type: "uint32"
+          },
+          {
+            internalType: "uint64",
+            name: "networkFeeIndex",
+            type: "uint64"
+          },
+          {
+            internalType: "uint64",
+            name: "index",
+            type: "uint64"
+          },
+          {
+            internalType: "bool",
+            name: "active",
+            type: "bool"
+          },
+          {
+            internalType: "uint256",
+            name: "balance",
+            type: "uint256"
+          }
+        ],
+        internalType: "struct ISSVNetworkCore.Cluster",
+        name: "cluster",
+        type: "tuple"
+      }
+    ],
     name: "isLiquidated",
     outputs: [
       {
@@ -1382,6 +2030,56 @@ const MainnetV4GetterABI = [
     type: "function"
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address"
+      }
+    ],
+    name: "pendingUnstake",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256"
+          },
+          {
+            internalType: "uint256",
+            name: "unlockTime",
+            type: "uint256"
+          }
+        ],
+        internalType: "struct ISSVViewsTypes.UnstakeRequestsData[]",
+        name: "",
+        type: "tuple[]"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address"
+      }
+    ],
+    name: "previewClaimableEth",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
     inputs: [],
     name: "proxiableUUID",
     outputs: [
@@ -1409,6 +2107,51 @@ const MainnetV4GetterABI = [
         internalType: "contract ISSVViews",
         name: "",
         type: "address"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "user",
+        type: "address"
+      }
+    ],
+    name: "stakedBalanceOf",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "stakingEthPoolBalance",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
+      }
+    ],
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "totalStaked",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256"
       }
     ],
     stateMutability: "view",
@@ -1478,12 +2221,12 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
-    name: "ApprovalNotWithinTimeframe",
+    name: "AlreadyVoted",
     type: "error"
   },
   {
     inputs: [],
-    name: "CallerNotOwner",
+    name: "ApprovalNotWithinTimeframe",
     type: "error"
   },
   {
@@ -1500,11 +2243,6 @@ const MainnetV4SetterABI = [
       }
     ],
     name: "CallerNotOwnerWithData",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "CallerNotWhitelisted",
     type: "error"
   },
   {
@@ -1525,7 +2263,7 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
-    name: "ClusterDoesNotExists",
+    name: "ClusterDoesNotExist",
     type: "error"
   },
   {
@@ -1540,18 +2278,22 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
-    name: "EmptyPublicKeysList",
+    name: "EBBelowMinimum",
     type: "error"
   },
   {
-    inputs: [
-      {
-        internalType: "uint64",
-        name: "operatorId",
-        type: "uint64"
-      }
-    ],
-    name: "ExceedValidatorLimit",
+    inputs: [],
+    name: "EBExceedsMaximum",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "ETHTransferFailed",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "EmptyPublicKeysList",
     type: "error"
   },
   {
@@ -1587,12 +2329,28 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
+    name: "FutureBlockNumber",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "IncorrectClusterState",
     type: "error"
   },
   {
     inputs: [],
-    name: "IncorrectValidatorState",
+    name: "IncorrectClusterVersion",
+    type: "error"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint8",
+        name: "operatorVersion",
+        type: "uint8"
+      }
+    ],
+    name: "IncorrectOperatorVersion",
     type: "error"
   },
   {
@@ -1623,7 +2381,22 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
+    name: "InvalidProof",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "InvalidPublicKeyLength",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "InvalidQuorum",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "InvalidToken",
     type: "error"
   },
   {
@@ -1640,6 +2413,26 @@ const MainnetV4SetterABI = [
       }
     ],
     name: "InvalidWhitelistingContract",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "LegacyOperatorFeeDeclarationInvalid",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "MaxPrecisionExceeded",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "MaxRequestsAmountReached",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "MaxValueExceeded",
     type: "error"
   },
   {
@@ -1664,6 +2457,26 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
+    name: "NotCSSV",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "NotOracle",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "NothingToClaim",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "NothingToWithdraw",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "OperatorAlreadyExists",
     type: "error"
   },
@@ -1679,7 +2492,22 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
+    name: "OracleAlreadyAssigned",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "OracleHasZeroWeight",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "PublicKeysSharesLengthMismatch",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "RootNotFound",
     type: "error"
   },
   {
@@ -1689,7 +2517,17 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
-    name: "TargetModuleDoesNotExist",
+    name: "StakeTooLow",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "StaleBlockNumber",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "StaleUpdate",
     type: "error"
   },
   {
@@ -1715,7 +2553,12 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
-    name: "ValidatorAlreadyExists",
+    name: "UnstakeAmountExceedsBalance",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "UpdateTooFrequent",
     type: "error"
   },
   {
@@ -1736,7 +2579,17 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
+    name: "ZeroAddress",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "ZeroAddressNotAllowed",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "ZeroAmount",
     type: "error"
   },
   {
@@ -1769,6 +2622,70 @@ const MainnetV4SetterABI = [
       }
     ],
     name: "BeaconUpgraded",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address"
+      },
+      {
+        indexed: false,
+        internalType: "uint64[]",
+        name: "operatorIds",
+        type: "uint64[]"
+      },
+      {
+        indexed: true,
+        internalType: "uint64",
+        name: "blockNum",
+        type: "uint64"
+      },
+      {
+        indexed: false,
+        internalType: "uint32",
+        name: "effectiveBalance",
+        type: "uint32"
+      },
+      {
+        components: [
+          {
+            internalType: "uint32",
+            name: "validatorCount",
+            type: "uint32"
+          },
+          {
+            internalType: "uint64",
+            name: "networkFeeIndex",
+            type: "uint64"
+          },
+          {
+            internalType: "uint64",
+            name: "index",
+            type: "uint64"
+          },
+          {
+            internalType: "bool",
+            name: "active",
+            type: "bool"
+          },
+          {
+            internalType: "uint256",
+            name: "balance",
+            type: "uint256"
+          }
+        ],
+        indexed: false,
+        internalType: "struct ISSVNetworkCore.Cluster",
+        name: "cluster",
+        type: "tuple"
+      }
+    ],
+    name: "ClusterBalanceUpdated",
     type: "event"
   },
   {
@@ -1897,6 +2814,76 @@ const MainnetV4SetterABI = [
         type: "uint64[]"
       },
       {
+        indexed: false,
+        internalType: "uint256",
+        name: "ethDeposited",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "ssvRefunded",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint32",
+        name: "effectiveBalance",
+        type: "uint32"
+      },
+      {
+        components: [
+          {
+            internalType: "uint32",
+            name: "validatorCount",
+            type: "uint32"
+          },
+          {
+            internalType: "uint64",
+            name: "networkFeeIndex",
+            type: "uint64"
+          },
+          {
+            internalType: "uint64",
+            name: "index",
+            type: "uint64"
+          },
+          {
+            internalType: "bool",
+            name: "active",
+            type: "bool"
+          },
+          {
+            internalType: "uint256",
+            name: "balance",
+            type: "uint256"
+          }
+        ],
+        indexed: false,
+        internalType: "struct ISSVNetworkCore.Cluster",
+        name: "cluster",
+        type: "tuple"
+      }
+    ],
+    name: "ClusterMigratedToETH",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address"
+      },
+      {
+        indexed: false,
+        internalType: "uint64[]",
+        name: "operatorIds",
+        type: "uint64[]"
+      },
+      {
         components: [
           {
             internalType: "uint32",
@@ -1997,11 +2984,49 @@ const MainnetV4SetterABI = [
       {
         indexed: false,
         internalType: "uint64",
+        name: "newCooldownDuration",
+        type: "uint64"
+      }
+    ],
+    name: "CooldownDurationUpdated",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint64",
         name: "value",
         type: "uint64"
       }
     ],
     name: "DeclareOperatorFeePeriodUpdated",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "token",
+        type: "address"
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "to",
+        type: "address"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256"
+      }
+    ],
+    name: "ERC20Rescued",
     type: "event"
   },
   {
@@ -2041,12 +3066,44 @@ const MainnetV4SetterABI = [
     inputs: [
       {
         indexed: false,
+        internalType: "uint256",
+        name: "newFeesWei",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "accEthPerShare",
+        type: "uint256"
+      }
+    ],
+    name: "FeesSynced",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
         internalType: "uint8",
         name: "version",
         type: "uint8"
       }
     ],
     name: "Initialized",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint64",
+        name: "value",
+        type: "uint64"
+      }
+    ],
+    name: "LiquidationThresholdPeriodSSVUpdated",
     type: "event"
   },
   {
@@ -2072,7 +3129,33 @@ const MainnetV4SetterABI = [
         type: "uint256"
       }
     ],
+    name: "MinimumLiquidationCollateralSSVUpdated",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "value",
+        type: "uint256"
+      }
+    ],
     name: "MinimumLiquidationCollateralUpdated",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "minFee",
+        type: "uint256"
+      }
+    ],
+    name: "MinimumOperatorEthFeeUpdated",
     type: "event"
   },
   {
@@ -2130,6 +3213,25 @@ const MainnetV4SetterABI = [
       }
     ],
     name: "NetworkFeeUpdated",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "oldFee",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "newFee",
+        type: "uint256"
+      }
+    ],
+    name: "NetworkFeeUpdatedSSV",
     type: "event"
   },
   {
@@ -2262,9 +3364,9 @@ const MainnetV4SetterABI = [
     inputs: [
       {
         indexed: false,
-        internalType: "uint64",
+        internalType: "uint256",
         name: "maxFee",
-        type: "uint64"
+        type: "uint256"
       }
     ],
     name: "OperatorMaximumFeeUpdated",
@@ -2408,6 +3510,31 @@ const MainnetV4SetterABI = [
     inputs: [
       {
         indexed: true,
+        internalType: "uint32",
+        name: "oracleId",
+        type: "uint32"
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "oldOracle",
+        type: "address"
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOracle",
+        type: "address"
+      }
+    ],
+    name: "OracleReplaced",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
         internalType: "address",
         name: "previousOwner",
         type: "address"
@@ -2439,6 +3566,170 @@ const MainnetV4SetterABI = [
       }
     ],
     name: "OwnershipTransferred",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint16",
+        name: "newQuorum",
+        type: "uint16"
+      }
+    ],
+    name: "QuorumUpdated",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "user",
+        type: "address"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256"
+      }
+    ],
+    name: "RewardsClaimed",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "user",
+        type: "address"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "pending",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "accrued",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "userIndex",
+        type: "uint256"
+      }
+    ],
+    name: "RewardsSettled",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "merkleRoot",
+        type: "bytes32"
+      },
+      {
+        indexed: true,
+        internalType: "uint64",
+        name: "blockNum",
+        type: "uint64"
+      }
+    ],
+    name: "RootCommitted",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "string",
+        name: "version",
+        type: "string"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "blockNumber",
+        type: "uint256"
+      }
+    ],
+    name: "SSVNetworkUpgradeBlock",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "user",
+        type: "address"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256"
+      }
+    ],
+    name: "Staked",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "user",
+        type: "address"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "unlockTime",
+        type: "uint256"
+      }
+    ],
+    name: "UnstakeRequested",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "user",
+        type: "address"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256"
+      }
+    ],
+    name: "UnstakedWithdrawn",
     type: "event"
   },
   {
@@ -2602,6 +3893,49 @@ const MainnetV4SetterABI = [
     type: "event"
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "merkleRoot",
+        type: "bytes32"
+      },
+      {
+        indexed: true,
+        internalType: "uint64",
+        name: "blockNum",
+        type: "uint64"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "accumulatedWeight",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "quorum",
+        type: "uint256"
+      },
+      {
+        indexed: false,
+        internalType: "uint32",
+        name: "oracleId",
+        type: "uint32"
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "oracle",
+        type: "address"
+      }
+    ],
+    name: "WeightedRootProposed",
+    type: "event"
+  },
+  {
     stateMutability: "nonpayable",
     type: "fallback"
   },
@@ -2648,11 +3982,6 @@ const MainnetV4SetterABI = [
         type: "bytes[]"
       },
       {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256"
-      },
-      {
         components: [
           {
             internalType: "uint32",
@@ -2687,7 +4016,7 @@ const MainnetV4SetterABI = [
     ],
     name: "bulkRegisterValidator",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function"
   },
   {
@@ -2754,6 +4083,31 @@ const MainnetV4SetterABI = [
     type: "function"
   },
   {
+    inputs: [],
+    name: "claimEthRewards",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "merkleRoot",
+        type: "bytes32"
+      },
+      {
+        internalType: "uint64",
+        name: "blockNum",
+        type: "uint64"
+      }
+    ],
+    name: "commitRoot",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
     inputs: [
       {
         internalType: "uint64",
@@ -2782,11 +4136,6 @@ const MainnetV4SetterABI = [
         internalType: "uint64[]",
         name: "operatorIds",
         type: "uint64[]"
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256"
       },
       {
         components: [
@@ -2823,7 +4172,7 @@ const MainnetV4SetterABI = [
     ],
     name: "deposit",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function"
   },
   {
@@ -2898,34 +4247,51 @@ const MainnetV4SetterABI = [
         type: "address"
       },
       {
-        internalType: "uint64",
-        name: "minimumBlocksBeforeLiquidation_",
-        type: "uint64"
-      },
-      {
-        internalType: "uint256",
-        name: "minimumLiquidationCollateral_",
-        type: "uint256"
-      },
-      {
-        internalType: "uint32",
-        name: "validatorsPerOperatorLimit_",
-        type: "uint32"
-      },
-      {
-        internalType: "uint64",
-        name: "declareOperatorFeePeriod_",
-        type: "uint64"
-      },
-      {
-        internalType: "uint64",
-        name: "executeOperatorFeePeriod_",
-        type: "uint64"
-      },
-      {
-        internalType: "uint64",
-        name: "operatorMaxFeeIncrease_",
-        type: "uint64"
+        components: [
+          {
+            internalType: "uint64",
+            name: "minimumBlocksBeforeLiquidation",
+            type: "uint64"
+          },
+          {
+            internalType: "uint256",
+            name: "minimumLiquidationCollateral",
+            type: "uint256"
+          },
+          {
+            internalType: "uint32",
+            name: "validatorsPerOperatorLimit",
+            type: "uint32"
+          },
+          {
+            internalType: "uint64",
+            name: "declareOperatorFeePeriod",
+            type: "uint64"
+          },
+          {
+            internalType: "uint64",
+            name: "executeOperatorFeePeriod",
+            type: "uint64"
+          },
+          {
+            internalType: "uint64",
+            name: "operatorMaxFeeIncrease",
+            type: "uint64"
+          },
+          {
+            internalType: "uint32[4]",
+            name: "defaultOracleIds",
+            type: "uint32[4]"
+          },
+          {
+            internalType: "uint16",
+            name: "quorumBps",
+            type: "uint16"
+          }
+        ],
+        internalType: "struct ISSVNetwork.NetworkInitParams",
+        name: "params",
+        type: "tuple"
       }
     ],
     name: "initialize",
@@ -2984,6 +4350,124 @@ const MainnetV4SetterABI = [
     type: "function"
   },
   {
+    inputs: [
+      {
+        internalType: "address",
+        name: "clusterOwner",
+        type: "address"
+      },
+      {
+        internalType: "uint64[]",
+        name: "operatorIds",
+        type: "uint64[]"
+      },
+      {
+        components: [
+          {
+            internalType: "uint32",
+            name: "validatorCount",
+            type: "uint32"
+          },
+          {
+            internalType: "uint64",
+            name: "networkFeeIndex",
+            type: "uint64"
+          },
+          {
+            internalType: "uint64",
+            name: "index",
+            type: "uint64"
+          },
+          {
+            internalType: "bool",
+            name: "active",
+            type: "bool"
+          },
+          {
+            internalType: "uint256",
+            name: "balance",
+            type: "uint256"
+          }
+        ],
+        internalType: "struct ISSVNetworkCore.Cluster",
+        name: "cluster",
+        type: "tuple"
+      }
+    ],
+    name: "liquidateSSV",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64[]",
+        name: "operatorIds",
+        type: "uint64[]"
+      },
+      {
+        components: [
+          {
+            internalType: "uint32",
+            name: "validatorCount",
+            type: "uint32"
+          },
+          {
+            internalType: "uint64",
+            name: "networkFeeIndex",
+            type: "uint64"
+          },
+          {
+            internalType: "uint64",
+            name: "index",
+            type: "uint64"
+          },
+          {
+            internalType: "bool",
+            name: "active",
+            type: "bool"
+          },
+          {
+            internalType: "uint256",
+            name: "balance",
+            type: "uint256"
+          }
+        ],
+        internalType: "struct ISSVNetworkCore.Cluster",
+        name: "cluster",
+        type: "tuple"
+      }
+    ],
+    name: "migrateClusterToETH",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "from",
+        type: "address"
+      },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address"
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256"
+      }
+    ],
+    name: "onCSSVTransfer",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
     inputs: [],
     name: "owner",
     outputs: [
@@ -3030,11 +4514,6 @@ const MainnetV4SetterABI = [
         type: "uint64[]"
       },
       {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256"
-      },
-      {
         components: [
           {
             internalType: "uint32",
@@ -3069,7 +4548,7 @@ const MainnetV4SetterABI = [
     ],
     name: "reactivate",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function"
   },
   {
@@ -3137,11 +4616,6 @@ const MainnetV4SetterABI = [
         type: "bytes"
       },
       {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256"
-      },
-      {
         components: [
           {
             internalType: "uint32",
@@ -3176,7 +4650,7 @@ const MainnetV4SetterABI = [
     ],
     name: "registerValidator",
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
     type: "function"
   },
   {
@@ -3283,6 +4757,60 @@ const MainnetV4SetterABI = [
   {
     inputs: [
       {
+        internalType: "uint32",
+        name: "oracleId",
+        type: "uint32"
+      },
+      {
+        internalType: "address",
+        name: "newOracle",
+        type: "address"
+      }
+    ],
+    name: "replaceOracle",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256"
+      }
+    ],
+    name: "requestUnstake",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "token",
+        type: "address"
+      },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address"
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256"
+      }
+    ],
+    name: "rescueERC20",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "recipientAddress",
         type: "address"
@@ -3358,12 +4886,123 @@ const MainnetV4SetterABI = [
   {
     inputs: [
       {
+        internalType: "uint16",
+        name: "quorum",
+        type: "uint16"
+      }
+    ],
+    name: "setQuorumBps",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "duration",
+        type: "uint64"
+      }
+    ],
+    name: "setUnstakeCooldownDuration",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256"
+      }
+    ],
+    name: "stake",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "syncFees",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "newOwner",
         type: "address"
       }
     ],
     name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "blockNum",
+        type: "uint64"
+      },
+      {
+        internalType: "address",
+        name: "clusterOwner",
+        type: "address"
+      },
+      {
+        internalType: "uint64[]",
+        name: "operatorIds",
+        type: "uint64[]"
+      },
+      {
+        components: [
+          {
+            internalType: "uint32",
+            name: "validatorCount",
+            type: "uint32"
+          },
+          {
+            internalType: "uint64",
+            name: "networkFeeIndex",
+            type: "uint64"
+          },
+          {
+            internalType: "uint64",
+            name: "index",
+            type: "uint64"
+          },
+          {
+            internalType: "bool",
+            name: "active",
+            type: "bool"
+          },
+          {
+            internalType: "uint256",
+            name: "balance",
+            type: "uint256"
+          }
+        ],
+        internalType: "struct ISSVNetworkCore.Cluster",
+        name: "cluster",
+        type: "tuple"
+      },
+      {
+        internalType: "uint32",
+        name: "effectiveBalance",
+        type: "uint32"
+      },
+      {
+        internalType: "bytes32[]",
+        name: "merkleProof",
+        type: "bytes32[]"
+      }
+    ],
+    name: "updateClusterBalance",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function"
@@ -3411,8 +5050,21 @@ const MainnetV4SetterABI = [
     inputs: [
       {
         internalType: "uint64",
-        name: "maxFee",
+        name: "blocks",
         type: "uint64"
+      }
+    ],
+    name: "updateLiquidationThresholdPeriodSSV",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "maxFee",
+        type: "uint256"
       }
     ],
     name: "updateMaximumOperatorFee",
@@ -3429,6 +5081,32 @@ const MainnetV4SetterABI = [
       }
     ],
     name: "updateMinimumLiquidationCollateral",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256"
+      }
+    ],
+    name: "updateMinimumLiquidationCollateralSSV",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "minFee",
+        type: "uint256"
+      }
+    ],
+    name: "updateMinimumOperatorEthFee",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function"
@@ -3460,6 +5138,19 @@ const MainnetV4SetterABI = [
       }
     ],
     name: "updateNetworkFee",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "fee",
+        type: "uint256"
+      }
+    ],
+    name: "updateNetworkFeeSSV",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function"
@@ -3574,12 +5265,38 @@ const MainnetV4SetterABI = [
   {
     inputs: [
       {
+        internalType: "uint64",
+        name: "operatorId",
+        type: "uint64"
+      }
+    ],
+    name: "withdrawAllOperatorEarningsSSV",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "operatorId",
+        type: "uint64"
+      }
+    ],
+    name: "withdrawAllVersionOperatorEarnings",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "amount",
         type: "uint256"
       }
     ],
-    name: "withdrawNetworkEarnings",
+    name: "withdrawNetworkSSVEarnings",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function"
@@ -3598,6 +5315,31 @@ const MainnetV4SetterABI = [
       }
     ],
     name: "withdrawOperatorEarnings",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "operatorId",
+        type: "uint64"
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256"
+      }
+    ],
+    name: "withdrawOperatorEarningsSSV",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [],
+    name: "withdrawUnlocked",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function"
@@ -4092,7 +5834,9 @@ const createWriter = ({
       };
       const func = async (options2) => {
         const { request } = await simulate(options2);
-        const hash = await walletClient.writeContract(request);
+        const hash = await walletClient.writeContract(
+          request
+        );
         return {
           hash,
           wait: () => publicClient.waitForTransactionReceipt({ hash }).then((receipt) => ({
@@ -4233,7 +5977,11 @@ const createConfig = (props) => {
   const restEndpoint = extendedConfig?.rest?.endpoint || globals.rest_endpoints[chainId];
   const graphQLClient = new graphqlRequest.GraphQLClient(
     graphEndpoint,
-    hasAPIKey ? { headers: { Authorization: `Bearer ${extendedConfig?.subgraph?.apiKey}` } } : void 0
+    hasAPIKey ? {
+      headers: {
+        Authorization: `Bearer ${extendedConfig?.subgraph?.apiKey}`
+      }
+    } : void 0
   );
   return {
     publicClient,
@@ -4254,31 +6002,17 @@ const createConfig = (props) => {
     contract
   };
 };
-const deposit = async (config2, { args: { id, amount }, ...writeOptions }, options2 = {}) => {
+const deposit = async (config2, { args: { id, amount }, ...writeOptions }) => {
   const cluster = await config2.api.getCluster({ id });
   if (!cluster) {
     throw new Error("Cluster not found");
   }
-  const snapshot = globals.getClusterSnapshot(cluster);
-  if (options2?.approve) {
-    const allowance = await config2.contract.token.read.allowance({
-      owner: config2.walletClient.account.address,
-      spender: config2.contractAddresses.setter
-    });
-    if (allowance < amount) {
-      await config2.contract.token.write.approve({
-        args: {
-          spender: config2.contractAddresses.setter,
-          amount
-        }
-      }).then((tx) => tx.wait());
-    }
-  }
+  const snapshot = globals.toSolidityCluster(cluster);
   return config2.contract.ssv.write.deposit({
+    value: amount,
     args: {
-      amount,
       cluster: snapshot,
-      clusterOwner: config2.walletClient.account.address,
+      clusterOwner: cluster.owner.id,
       operatorIds: cluster.operatorIds.map(BigInt)
     },
     ...writeOptions
@@ -4309,9 +6043,37 @@ const liquidateCluster = async (config2, { args: { id }, ...writeOptions }) => {
   }
   return config2.contract.ssv.write.liquidate({
     args: {
-      cluster: globals.getClusterSnapshot(cluster),
+      cluster: globals.toSolidityCluster(cluster),
       clusterOwner: config2.walletClient.account.address,
       operatorIds: cluster.operatorIds.map(BigInt)
+    },
+    ...writeOptions
+  });
+};
+const liquidateSSV = async (config2, { args: { id }, ...writeOptions }) => {
+  const cluster = await config2.api.getCluster({ id });
+  if (!cluster) {
+    throw new Error("Cluster not found");
+  }
+  return config2.contract.ssv.write.liquidateSSV({
+    args: {
+      clusterOwner: cluster.owner.id,
+      operatorIds: cluster.operatorIds.map(BigInt),
+      cluster: globals.toSolidityCluster(cluster)
+    },
+    ...writeOptions
+  });
+};
+const migrateClusterToETH = async (config2, { args: { id, amount }, ...writeOptions }) => {
+  const cluster = await config2.api.getCluster({ id });
+  if (!cluster) {
+    throw new Error("Cluster not found");
+  }
+  return config2.contract.ssv.write.migrateClusterToETH({
+    value: amount,
+    args: {
+      operatorIds: cluster.operatorIds.map(BigInt),
+      cluster: globals.toSolidityCluster(cluster)
     },
     ...writeOptions
   });
@@ -4322,15 +6084,18 @@ const reactivateCluster = async (config2, { args: { id, amount }, ...writeOption
     throw new Error("Cluster not found");
   }
   return config2.contract.ssv.write.reactivate({
+    value: amount,
     args: {
-      cluster: globals.getClusterSnapshot(cluster),
-      amount,
+      cluster: globals.toSolidityCluster(cluster),
       operatorIds: cluster.operatorIds.map(BigInt)
     },
     ...writeOptions
   });
 };
-const registerValidators = async (config2, { args: { keyshares, depositAmount = 0n }, ...writeOptions }) => {
+const registerValidators = async (config2, {
+  args: { keyshares, depositAmount = 0n },
+  ...writeOptions
+}) => {
   const shares = keyshares.map((share) => {
     return globals.isKeySharesItem(share) ? share.payload : share;
   });
@@ -4343,17 +6108,22 @@ const registerValidators = async (config2, { args: { keyshares, depositAmount = 
     );
   }
   if (shares.length > limit) {
-    throw new Error(`You can't register more than ${limit} validators in a single transaction`);
+    throw new Error(
+      `You can't register more than ${limit} validators in a single transaction`
+    );
   }
-  const clusterId = globals.createClusterId(config2.walletClient.account.address, operatorIds);
+  const clusterId = globals.createClusterId(
+    config2.walletClient.account.address,
+    operatorIds
+  );
   const cluster = await config2.api.getCluster({
     id: clusterId
   });
-  const snapshot = cluster ? globals.getClusterSnapshot(cluster) : globals.createEmptyCluster();
+  const snapshot = cluster ? globals.toSolidityCluster(cluster) : globals.createEmptyCluster();
   if (shares.length === 1) {
     return config2.contract.ssv.write.registerValidator({
+      value: depositAmount,
       args: {
-        amount: depositAmount,
         cluster: snapshot,
         operatorIds: operatorIds.map(BigInt),
         publicKey: shares[0].publicKey,
@@ -4363,9 +6133,9 @@ const registerValidators = async (config2, { args: { keyshares, depositAmount = 
     });
   }
   return config2.contract.ssv.write.bulkRegisterValidator({
+    value: depositAmount,
     args: {
       cluster: snapshot,
-      amount: depositAmount,
       operatorIds: operatorIds.map(BigInt),
       publicKeys: shares.map((share) => share.publicKey),
       sharesData: shares.map((share) => share.sharesData)
@@ -4374,6 +6144,7 @@ const registerValidators = async (config2, { args: { keyshares, depositAmount = 
   });
 };
 const registerValidatorsRawData = async (config2, { args: { keyshares, depositAmount = 0n } }) => {
+  console.log(depositAmount);
   const shares = keyshares.map((share) => {
     return globals.isKeySharesItem(share) ? share.payload : share;
   });
@@ -4386,16 +6157,20 @@ const registerValidatorsRawData = async (config2, { args: { keyshares, depositAm
     );
   }
   if (shares.length > limit) {
-    throw new Error(`You can't register more than ${limit} validators in a single transaction`);
+    throw new Error(
+      `You can't register more than ${limit} validators in a single transaction`
+    );
   }
-  const clusterId = globals.createClusterId(config2.walletClient.account.address, operatorIds);
+  const clusterId = globals.createClusterId(
+    config2.walletClient.account.address,
+    operatorIds
+  );
   const cluster = await config2.api.getCluster({
     id: clusterId
   });
-  const snapshot = cluster ? globals.getClusterSnapshot(cluster) : globals.createEmptyCluster();
+  const snapshot = cluster ? globals.toSolidityCluster(cluster) : globals.createEmptyCluster();
   if (shares.length === 1) {
     return config2.contract.ssv.write.registerValidator.getTransactionData({
-      amount: depositAmount,
       cluster: snapshot,
       operatorIds: operatorIds.map(BigInt),
       publicKey: shares[0].publicKey,
@@ -4404,7 +6179,6 @@ const registerValidatorsRawData = async (config2, { args: { keyshares, depositAm
   }
   return config2.contract.ssv.write.bulkRegisterValidator.getTransactionData({
     cluster: snapshot,
-    amount: depositAmount,
     operatorIds: operatorIds.map(BigInt),
     publicKeys: shares.map((share) => share.publicKey),
     sharesData: shares.map((share) => share.sharesData)
@@ -4468,7 +6242,7 @@ const removeValidators = async (config2, { args: { id, publicKeys }, ...writeOpt
   if (publicKeys.length === 1) {
     return config2.contract.ssv.write.removeValidator({
       args: {
-        cluster: globals.getClusterSnapshot(cluster),
+        cluster: globals.toSolidityCluster(cluster),
         publicKey: publicKeys[0],
         operatorIds: cluster.operatorIds.map(BigInt)
       },
@@ -4477,7 +6251,7 @@ const removeValidators = async (config2, { args: { id, publicKeys }, ...writeOpt
   }
   return config2.contract.ssv.write.bulkRemoveValidator({
     args: {
-      cluster: globals.getClusterSnapshot(cluster),
+      cluster: globals.toSolidityCluster(cluster),
       publicKeys,
       operatorIds: cluster.operatorIds.map(BigInt)
     },
@@ -4500,7 +6274,7 @@ const withdraw$1 = async (config2, { args: { id, amount }, ...writeOptions }) =>
   return config2.contract.ssv.write.withdraw({
     args: {
       amount,
-      cluster: globals.getClusterSnapshot(cluster),
+      cluster: globals.toSolidityCluster(cluster),
       operatorIds: cluster.operatorIds.map(BigInt)
     },
     ...writeOptions
@@ -4510,13 +6284,54 @@ const createClusterManager = (config2) => ({
   deposit: deposit.bind(null, config2),
   withdraw: withdraw$1.bind(null, config2),
   liquidate: liquidateCluster.bind(null, config2),
+  liquidateSSV: liquidateSSV.bind(null, config2),
   reactivate: reactivateCluster.bind(null, config2),
+  migrateClusterToETH: migrateClusterToETH.bind(null, config2),
   removeValidators: removeValidators.bind(null, config2),
   setFeeRecipient: setFeeRecipient.bind(null, config2),
   exitValidators: exitValidators.bind(null, config2),
   registerValidators: registerValidators.bind(null, config2),
-  registerValidatorsRawData: registerValidatorsRawData.bind(null, config2),
+  registerValidatorsRawData: registerValidatorsRawData.bind(
+    null,
+    config2
+  ),
   validateSharesPostRegistration: validateSharesPostRegistration.bind(
+    null,
+    config2
+  )
+});
+const commitRoot = async (config2, { args: { merkleRoot, blockNum }, ...writeOptions }) => {
+  return config2.contract.ssv.write.commitRoot({
+    args: {
+      merkleRoot,
+      blockNum
+    },
+    ...writeOptions
+  });
+};
+const updateNetworkFeeSSV = async (config2, { args: { fee }, ...writeOptions }) => {
+  return config2.contract.ssv.write.updateNetworkFeeSSV({
+    args: {
+      fee
+    },
+    ...writeOptions
+  });
+};
+const withdrawNetworkSSVEarnings = async (config2, { args: { amount }, ...writeOptions }) => {
+  return config2.contract.ssv.write.withdrawNetworkSSVEarnings({
+    args: {
+      amount
+    },
+    ...writeOptions
+  });
+};
+const createDaoManager = (config2) => ({
+  commitRoot: commitRoot.bind(null, config2),
+  updateNetworkFeeSSV: updateNetworkFeeSSV.bind(
+    null,
+    config2
+  ),
+  withdrawNetworkSSVEarnings: withdrawNetworkSSVEarnings.bind(
     null,
     config2
   )
@@ -4542,7 +6357,53 @@ const withdraw = async (config2, { args: { operatorId, amount }, ...writeOptions
     ...writeOptions
   });
 };
-const registerOperator = async (config2, { args: { isPrivate, yearlyFee, publicKey }, ...writeOptions }) => {
+const withdrawOperatorEarningsSSV = async (config2, {
+  args: { operatorId, amount },
+  ...writeOptions
+}) => {
+  const balance = await config2.contract.ssv.read.getOperatorEarningsSSV({
+    id: BigInt(operatorId)
+  });
+  const isWithdrawingAll = amount >= balance;
+  if (isWithdrawingAll) {
+    return config2.contract.ssv.write.withdrawAllOperatorEarningsSSV({
+      args: {
+        operatorId: BigInt(operatorId)
+      },
+      ...writeOptions
+    });
+  }
+  return config2.contract.ssv.write.withdrawOperatorEarningsSSV({
+    args: {
+      operatorId: BigInt(operatorId),
+      amount
+    },
+    ...writeOptions
+  });
+};
+const withdrawAllOperatorEarningsSSV = async (config2, { args: { operatorId }, ...writeOptions }) => {
+  return config2.contract.ssv.write.withdrawAllOperatorEarningsSSV({
+    args: {
+      operatorId: BigInt(operatorId)
+    },
+    ...writeOptions
+  });
+};
+const withdrawAllVersionOperatorEarnings = async (config2, {
+  args: { operatorId },
+  ...writeOptions
+}) => {
+  return config2.contract.ssv.write.withdrawAllVersionOperatorEarnings({
+    args: {
+      operatorId: BigInt(operatorId)
+    },
+    ...writeOptions
+  });
+};
+const registerOperator = async (config2, {
+  args: { isPrivate, yearlyFee, publicKey },
+  ...writeOptions
+}) => {
   return config2.contract.ssv.write.registerOperator({
     args: {
       publicKey: viem.encodeAbiParameters(viem.parseAbiParameters("string"), [publicKey]),
@@ -4552,7 +6413,10 @@ const registerOperator = async (config2, { args: { isPrivate, yearlyFee, publicK
     ...writeOptions
   });
 };
-const setOperatorWhitelists = async (config2, { args: { operatorIds, contractAddress }, ...writeOptions }) => {
+const setOperatorWhitelists = async (config2, {
+  args: { operatorIds, contractAddress },
+  ...writeOptions
+}) => {
   const isWhitelistingContract = await config2.contract.ssv.read.isWhitelistingContract({
     contractAddress
   });
@@ -4588,11 +6452,26 @@ const createOperatorManager = (config2) => ({
   registerOperator: registerOperator.bind(null, config2),
   removeOperator: config2.contract.ssv.write.removeOperator,
   withdraw: withdraw.bind(null, config2),
+  withdrawOperatorEarningsSSV: withdrawOperatorEarningsSSV.bind(
+    null,
+    config2
+  ),
+  withdrawAllOperatorEarningsSSV: withdrawAllOperatorEarningsSSV.bind(
+    null,
+    config2
+  ),
+  withdrawAllVersionOperatorEarnings: withdrawAllVersionOperatorEarnings.bind(
+    null,
+    config2
+  ),
   setOperatorWhitelists: config2.contract.ssv.write.setOperatorsWhitelists,
   removeOperatorWhitelists: config2.contract.ssv.write.removeOperatorsWhitelists,
   setOperatorsPrivate: config2.contract.ssv.write.setOperatorsPrivateUnchecked,
   setOperatorsPublic: config2.contract.ssv.write.setOperatorsPublicUnchecked,
-  setOperatorWhitelistingContract: setOperatorWhitelists.bind(null, config2),
+  setOperatorWhitelistingContract: setOperatorWhitelists.bind(
+    null,
+    config2
+  ),
   removeOperatorWhitelistingContract: config2.contract.ssv.write.removeOperatorsWhitelists,
   declareOperatorFee: config2.contract.ssv.write.declareOperatorFee,
   executeOperatorFee: config2.contract.ssv.write.executeOperatorFee,
@@ -4603,37 +6482,80 @@ const getClusterBalance = async (config2, { operatorIds }) => {
   const query = await config2.api.getClusterBalance({
     daoAddress: config2.contractAddresses.setter,
     operatorIds: operatorIds.map(String),
-    clusterId: globals.createClusterId(config2.walletClient.account.address, operatorIds)
+    clusterId: globals.createClusterId(
+      config2.walletClient.account.address,
+      operatorIds
+    )
   });
   if (!query.cluster || !query.daovalues || !query._meta) {
     throw new Error("Could not fetch cluster balance");
   }
-  const cumulativeNetworkFee = BigInt(query.daovalues.networkFeeIndex) + (BigInt(query._meta.block.number) - BigInt(query.daovalues.networkFeeIndexBlockNumber)) * BigInt(query.daovalues.networkFee) - BigInt(query.cluster.networkFeeIndex) * 10000000n;
+  const scallingCoefficient = 100000n;
+  const cumulativeNetworkFee = BigInt(query.daovalues.networkFeeIndex) + (BigInt(query._meta.block.number) - BigInt(query.daovalues.networkFeeIndexBlockNumber)) * BigInt(query.daovalues.networkFee) - BigInt(query.cluster.networkFeeIndex) * scallingCoefficient;
   const cumulativeOperatorFee = query.operators.reduce(
     (acc, operator) => {
       return acc + BigInt(operator.feeIndex) + (BigInt(query._meta.block.number) - BigInt(operator.feeIndexBlockNumber)) * BigInt(operator.fee);
     },
-    -BigInt(query.cluster.index) * 10000000n
+    -BigInt(query.cluster.index) * scallingCoefficient
   );
-  const operatorsFee = query.operators.reduce((acc, operator) => acc + BigInt(operator.fee), 0n);
-  const calculatedClusterBalance = BigInt(query.cluster.balance) - (cumulativeNetworkFee + cumulativeOperatorFee) * BigInt(query.cluster.validatorCount) || 1n;
-  const burnRate = (operatorsFee + BigInt(query.daovalues.networkFee)) * BigInt(query.cluster.validatorCount) || 1n;
+  const operatorsFee = query.operators.reduce(
+    (acc, operator) => acc + BigInt(operator.fee),
+    0n
+  );
+  const effectiveBalanceValidatorUnits = Number(query.cluster.effectiveBalance) / 32 * globals.globals.VUNITS_PRECISION;
+  const calculatedClusterBalance = BigInt(query.cluster.balance) - (cumulativeNetworkFee + cumulativeOperatorFee) * BigInt(effectiveBalanceValidatorUnits) / BigInt(globals.globals.VUNITS_PRECISION) || 1n;
+  const burnRate = (operatorsFee + BigInt(query.daovalues.networkFee)) * BigInt(effectiveBalanceValidatorUnits) / BigInt(globals.globals.VUNITS_PRECISION) || 1n;
   const mLc = BigInt(query.daovalues.minimumLiquidationCollateral);
-  const LC = globals.bigintMax(mLc, burnRate * BigInt(query.daovalues.liquidationThreshold));
-  const runwaySSV = calculatedClusterBalance - LC;
-  const operationalRunway = runwaySSV / burnRate / globals.globals.BLOCKS_PER_DAY;
+  const LC = globals.bigintMax(
+    mLc,
+    burnRate * BigInt(query.daovalues.liquidationThreshold)
+  );
+  const runway = calculatedClusterBalance - LC;
+  const operationalRunway = runway / burnRate / globals.globals.BLOCKS_PER_DAY;
   return {
     balance: calculatedClusterBalance,
     operationalRunway
   };
 };
+const isKeySharesPayload = (value) => {
+  return !!value && typeof value === "object" && "sharesData" in value && "publicKey" in value && "operatorIds" in value;
+};
+const isKeySharesPayloadList = (value) => {
+  return Array.isArray(value) && value.every(isKeySharesPayload);
+};
+const buildKeysharesFromPayloads = (payloads) => {
+  const shares = payloads.map((payload) => {
+    const item = new KeyShares.KeySharesItem();
+    item.payload.update(payload);
+    return item;
+  });
+  globals.ensureValidatorsUniqueness(shares);
+  return shares;
+};
 const validateSharesPreRegistration = async (config2, { keyshares, operatorIds }) => {
   const operators = await config2.api.getOperators({ operatorIds });
-  const shares = await validateKeysharesJSON({
+  if (operators.length !== operatorIds.length) {
+    throw new globals.KeysharesValidationError(
+      globals.KeysharesValidationErrors.OperatorDoesNotExist
+    );
+  }
+  const usesPayloads = isKeySharesPayloadList(keyshares);
+  const shares = usesPayloads ? buildKeysharesFromPayloads(keyshares) : await validateKeysharesJSON({
     account: config2.walletClient.account.address,
     operators,
     keyshares
   });
+  if (usesPayloads) {
+    const shareOperatorIds = globals.validateConsistentOperatorIds(shares);
+    const sortedOperatorIds = globals.sortNumbers(
+      operators.map((operator) => Number(operator.id))
+    );
+    if (!lodashEs.isEqual(globals.sortNumbers(shareOperatorIds), globals.sortNumbers(sortedOperatorIds))) {
+      throw new globals.KeysharesValidationError(
+        globals.KeysharesValidationErrors.ClusterMismatch
+      );
+    }
+  }
   const statuses = await Promise.all(
     shares.map((share) => {
       return config2.api.getValidator({ id: share.data.publicKey }).then((res) => [share, Boolean(res)]).catch(() => [share, false]);
@@ -4642,16 +6564,23 @@ const validateSharesPreRegistration = async (config2, { keyshares, operatorIds }
   if (statuses.every(([, isRegistered]) => isRegistered)) {
     throw new Error("All validators are already registered");
   }
-  const nonce = await config2.api.getOwnerNonce({ owner: config2.walletClient.account.address }).then((nonce2) => {
+  const shouldValidateNonce = shares.every(
+    (share) => typeof share.data.ownerNonce === "number"
+  );
+  const nonce = shouldValidateNonce ? await config2.api.getOwnerNonce({ owner: config2.walletClient.account.address }).then((nonce2) => {
     if (!nonce2) throw new Error("Failed to get owner nonce");
     return Number(nonce2);
-  });
+  }) : null;
   let i = 0;
   const sharesWithStatuses = statuses.reduce(
     (acc, [share, isRegistered]) => {
       if (isRegistered) {
         acc.registered.push(share);
       } else {
+        if (!shouldValidateNonce) {
+          acc.available.push(share);
+          return acc;
+        }
         const validNonce = nonce + i === share.data.ownerNonce;
         if (validNonce) i++;
         if (validNonce) {
@@ -4671,11 +6600,19 @@ const validateSharesPreRegistration = async (config2, { keyshares, operatorIds }
   }
   const limit = await config2.contract.ssv.read.getValidatorsPerOperatorLimit();
   for (const operator of operators) {
-    if (!await canAccountUseOperator(config2, operator, config2.walletClient.account.address)) {
-      throw new Error(`Operator ${operator.id} is private and the account is not whitelisted`);
+    if (!await canAccountUseOperator(
+      config2,
+      operator,
+      config2.walletClient.account.address
+    )) {
+      throw new Error(
+        `Operator ${operator.id} is private and the account is not whitelisted`
+      );
     }
     if (Number(operator.validatorCount) + sharesWithStatuses.available.length > limit) {
-      throw new Error(`Operator ${operator.id} has reached the limit of ${limit} validators`);
+      throw new Error(
+        `Operator ${operator.id} has reached the limit of ${limit} validators`
+      );
     }
   }
   return sharesWithStatuses;
@@ -4699,16 +6636,23 @@ const validateKeysharesJSON = async ({
     )
   );
   const shareOperatorIds = globals.validateConsistentOperatorIds(shares);
-  const operatorIds = globals.sortNumbers(operators.map((operator) => Number(operator.id)));
+  const operatorIds = globals.sortNumbers(
+    operators.map((operator) => Number(operator.id))
+  );
   if (!lodashEs.isEqual(globals.sortNumbers(shareOperatorIds), globals.sortNumbers(operatorIds))) {
-    throw new globals.KeysharesValidationError(globals.KeysharesValidationErrors.ClusterMismatch);
+    throw new globals.KeysharesValidationError(
+      globals.KeysharesValidationErrors.ClusterMismatch
+    );
   }
   return shares;
 };
 const ssvKeys = new KeyShares.SSVKeys();
 const createAndEncryptShares = async (privateKey, operators) => {
   const threshold = await ssvKeys.createThreshold(privateKey, operators);
-  const encryptedShares = await ssvKeys.encryptShares(operators, threshold.shares);
+  const encryptedShares = await ssvKeys.encryptShares(
+    operators,
+    threshold.shares
+  );
   return {
     threshold,
     encryptedShares
@@ -4719,29 +6663,31 @@ const generateKeyShares = async (args) => {
   const shares = [];
   for (let i = 0; i < keystores.length; i++) {
     const keystore = keystores[i];
-    const extracted = await ssvKeys.extractKeys(keystore, args.keystore_password);
-    const operators = args.operator_keys.map((key, index) => ({
-      id: args.operator_ids[index],
+    const extracted = await ssvKeys.extractKeys(
+      keystore,
+      args.keystorePassword
+    );
+    const operators = args.operatorKeys.map((key, index) => ({
+      id: args.operatorIds[index],
       operatorKey: key
     }));
     const { threshold, encryptedShares } = await createAndEncryptShares(
       extracted.privateKey,
       operators
     );
-    shares.push(
-      await new KeyShares.KeySharesItem().buildPayload(
-        {
-          publicKey: threshold.publicKey,
-          operators,
-          encryptedShares
-        },
-        {
-          ownerAddress: args.owner_address,
-          ownerNonce: args.nonce + i,
-          privateKey: extracted.privateKey
-        }
-      )
+    const payload = await new KeyShares.KeySharesItem().buildPayload(
+      {
+        publicKey: threshold.publicKey,
+        operators,
+        encryptedShares
+      },
+      {
+        ownerAddress: args.ownerAddress,
+        ownerNonce: args.nonce + i,
+        privateKey: extracted.privateKey
+      }
     );
+    shares.push(payload);
   }
   return shares;
 };
@@ -4755,16 +6701,64 @@ const getOperatorCapacity = async (config2, operatorId) => {
   if (!operator) return 0;
   return limit - Number(operator.validatorCount);
 };
+const computeDailyAmount = (value, days) => {
+  const scale = 10 ** 6;
+  const scaledDays = BigInt(days * scale);
+  return value * scaledDays * BigInt(globals.globals.BLOCKS_PER_DAY) / BigInt(scale);
+};
+const calcDepositFromRunway = async (config2, { clusterId, runway }) => {
+  const cluster = await config2.api.getCluster({ id: clusterId });
+  if (!cluster) {
+    throw new Error("Cluster not found");
+  }
+  const operators = await config2.api.getOperators({
+    operatorIds: cluster.operatorIds
+  });
+  if (!operators) {
+    throw new Error("Operators not found");
+  }
+  const daoValues = await config2.api.getDaoValues({
+    daoAddress: config2.contractAddresses.setter
+  });
+  if (!daoValues) {
+    throw new Error("DAO values not found");
+  }
+  const operatorsFee = operators.reduce(
+    (acc, operator) => acc + BigInt(operator.fee),
+    0n
+  );
+  const networkFee = BigInt(daoValues.networkFee);
+  const vUnits = globals.globals.VUNITS_PRECISION * Number(cluster.effectiveBalance) / 32;
+  const validatorUnits = BigInt(vUnits / globals.globals.VUNITS_PRECISION) || 1n;
+  const burnRate = (operatorsFee + networkFee) * validatorUnits || 1n;
+  const liquidationCollateral = globals.bigintMax(
+    BigInt(daoValues.minimumLiquidationCollateral),
+    burnRate * BigInt(daoValues.liquidationThreshold)
+  );
+  const residualBalance = computeDailyAmount(burnRate, runway);
+  return residualBalance + liquidationCollateral;
+};
 const createUtils = (config2) => ({
   generateKeyShares,
   validateKeysharesJSON,
-  validateSharesPreRegistration: validateSharesPreRegistration.bind(null, config2),
-  getOperatorCapacity: getOperatorCapacity.bind(null, config2),
-  getClusterBalance: getClusterBalance.bind(null, config2)
+  validateSharesPreRegistration: validateSharesPreRegistration.bind(
+    null,
+    config2
+  ),
+  getOperatorCapacity: getOperatorCapacity.bind(
+    null,
+    config2
+  ),
+  getClusterBalance: getClusterBalance.bind(null, config2),
+  calcDepositFromRunway: calcDepositFromRunway.bind(
+    null,
+    config2
+  )
 });
 class SSVSDK {
   config;
   clusters;
+  dao;
   operators;
   api;
   contract;
@@ -4772,6 +6766,7 @@ class SSVSDK {
   constructor(props) {
     this.config = isConfig(props) ? props : createConfig(props);
     this.clusters = createClusterManager(this.config);
+    this.dao = createDaoManager(this.config);
     this.operators = createOperatorManager(this.config);
     this.api = this.config.api;
     this.contract = this.config.contract;
@@ -4798,6 +6793,7 @@ exports.SSVSDK = SSVSDK;
 exports.createClusterManager = createClusterManager;
 exports.createConfig = createConfig;
 exports.createContractInteractions = createContractInteractions;
+exports.createDaoManager = createDaoManager;
 exports.createOperatorManager = createOperatorManager;
 exports.createQueries = createQueries;
 exports.createReader = createReader;
@@ -4806,8 +6802,8 @@ exports.createUtils = createUtils;
 exports.createWriter = createWriter;
 exports.getCluster = getCluster;
 exports.getClusterBalance = getClusterBalance$1;
-exports.getClusterSnapshot = getClusterSnapshot;
 exports.getClusters = getClusters;
+exports.getDaoValues = getDaoValues;
 exports.getOperator = getOperator;
 exports.getOperators = getOperators;
 exports.getOwnerNonce = getOwnerNonce;
@@ -4815,3 +6811,4 @@ exports.getQueries = getQueries;
 exports.getValidator = getValidator;
 exports.getValidators = getValidators;
 exports.isConfig = isConfig;
+exports.toSolidityCluster = toSolidityCluster;

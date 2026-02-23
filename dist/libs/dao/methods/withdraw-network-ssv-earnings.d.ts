@@ -1,10 +1,9 @@
 import { ConfigReturnType } from '../../../config/create';
 import { SmartFnWriteOptions } from '../../../contract-interactions/types';
-type DepositProps = SmartFnWriteOptions<{
-    id: string;
+type WithdrawNetworkSSVEarningsProps = SmartFnWriteOptions<{
     amount: bigint;
 }>;
-export declare const deposit: (config: ConfigReturnType, { args: { id, amount }, ...writeOptions }: DepositProps) => Promise<{
+export declare const withdrawNetworkSSVEarnings: (config: ConfigReturnType, { args: { amount }, ...writeOptions }: WithdrawNetworkSSVEarningsProps) => Promise<{
     hash: import('viem').Hash;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({

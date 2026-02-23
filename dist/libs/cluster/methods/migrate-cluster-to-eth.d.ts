@@ -1,10 +1,10 @@
 import { ConfigReturnType } from '../../../config/create';
 import { SmartFnWriteOptions } from '../../../contract-interactions/types';
-type DepositProps = SmartFnWriteOptions<{
+type MigrateClusterToETHProps = SmartFnWriteOptions<{
     id: string;
     amount: bigint;
 }>;
-export declare const deposit: (config: ConfigReturnType, { args: { id, amount }, ...writeOptions }: DepositProps) => Promise<{
+export declare const migrateClusterToETH: (config: ConfigReturnType, { args: { id, amount }, ...writeOptions }: MigrateClusterToETHProps) => Promise<{
     hash: import('viem').Hash;
     wait: () => Promise<import('viem').TransactionReceipt & {
         events: ({
