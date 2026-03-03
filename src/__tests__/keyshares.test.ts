@@ -7,8 +7,7 @@ import inconsistent_operator_ids_keyshares from '@/mock/keyshares/inconsistent_o
 import invalid_operator_key_keyshares from '@/mock/keyshares/invalid_operator_key_keyshares.json';
 import invalid_shares_data_keyshares from '@/mock/keyshares/invalid_shares_data_keyshares.json';
 import valid_keyshares from '@/mock/keyshares/valid_keyshares.json';
-import hre from 'hardhat';
-
+import 'hardhat';
 import { SSVSDK } from '@/sdk';
 import type { Operator } from '@/types/operator';
 import { KeysharesValidationError } from '@/utils/keyshares';
@@ -50,8 +49,6 @@ const mockConfig = {
 } as unknown as ConfigReturnType;
 
 describe('Keyshares', async () => {
-  await hre.run('compile');
-
   const { ssvNetwork, ssvNetworkViews, ssvToken, wallets, publicClient } =
     await initializeContract();
 

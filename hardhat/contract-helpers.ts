@@ -15,6 +15,8 @@ export const CONFIG: SSVConfig = {
   minimumLiquidationCollateral: 200000000,
   validatorsPerOperatorLimit: 500,
   maximumOperatorFee: BigInt(76528650000000),
+  defaultOracleIds: [1, 2, 3, 4],
+  quorumBps: 6667,
 }
 
 export const DEFAULT_OPERATOR_IDS = {
@@ -26,12 +28,15 @@ export const DEFAULT_OPERATOR_IDS = {
 
 export const initialBalance = parseEther('1000')
 export const initializeContract = async function () {
+  const mockCSSV = await hre.viem.deployContract('MockCSSV')
   const ssvToken = await hre.viem.deployContract('SSVToken')
-  const ssvOperatorsMod = await hre.viem.deployContract('SSVOperators')
+  const ssvOperatorsMod = await hre.viem.deployContract('SSVOperators', [0n])
   const ssvClustersMod = await hre.viem.deployContract('SSVClusters')
-  const ssvDAOMod = await hre.viem.deployContract('SSVDAO')
-  const ssvViewsMod = await hre.viem.deployContract('contracts/modules/SSVViews.sol:SSVViews')
+  const ssvDAOMod = await hre.viem.deployContract('SSVDAO', [mockCSSV.address])
+  const ssvViewsMod = await hre.viem.deployContract('contracts/modules/SSVViews.sol:SSVViews', [mockCSSV.address])
   const ssvWhitelistMod = await hre.viem.deployContract('SSVOperatorsWhitelist')
+  const ssvStakingMod = await hre.viem.deployContract('SSVStaking', [mockCSSV.address])
+  const ssvValidatorsMod = await hre.viem.deployContract('SSVValidators')
 
   const ssvNetworkFactory = await ethers.getContractFactory('SSVNetwork')
   const ssvNetworkProxy = await await upgrades.deployProxy(
@@ -42,12 +47,16 @@ export const initializeContract = async function () {
       ssvClustersMod.address,
       ssvDAOMod.address,
       ssvViewsMod.address,
-      CONFIG.minimalBlocksBeforeLiquidation,
-      CONFIG.minimumLiquidationCollateral,
-      CONFIG.validatorsPerOperatorLimit,
-      CONFIG.declareOperatorFeePeriod,
-      CONFIG.executeOperatorFeePeriod,
-      CONFIG.operatorMaxFeeIncrease,
+      {
+        minimumBlocksBeforeLiquidation: CONFIG.minimalBlocksBeforeLiquidation,
+        minimumLiquidationCollateral: CONFIG.minimumLiquidationCollateral,
+        validatorsPerOperatorLimit: CONFIG.validatorsPerOperatorLimit,
+        declareOperatorFeePeriod: CONFIG.declareOperatorFeePeriod,
+        executeOperatorFeePeriod: CONFIG.executeOperatorFeePeriod,
+        operatorMaxFeeIncrease: CONFIG.operatorMaxFeeIncrease,
+        defaultOracleIds: CONFIG.defaultOracleIds,
+        quorumBps: CONFIG.quorumBps,
+      },
     ],
     {
       kind: 'uups',
@@ -76,7 +85,9 @@ export const initializeContract = async function () {
 
   await ssvNetwork.write.updateMaximumOperatorFee([CONFIG.maximumOperatorFee as bigint])
 
-  ssvNetwork.write.updateModule([4, await ssvWhitelistMod.address])
+  await ssvNetwork.write.updateModule([4, await ssvWhitelistMod.address])
+  await ssvNetwork.write.updateModule([5, await ssvStakingMod.address])
+  await ssvNetwork.write.updateModule([6, await ssvValidatorsMod.address])
 
   const publicClient = await hre.viem.getPublicClient()
   const wallets = await hre.viem.getWalletClients()

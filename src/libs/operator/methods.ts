@@ -127,7 +127,10 @@ export const registerOperator = async (
   return config.contract.ssv.write.registerOperator({
     args: {
       publicKey: encodeAbiParameters(parseAbiParameters('string'), [publicKey]),
-      fee: roundOperatorFee(yearlyFee / globals.BLOCKS_PER_YEAR),
+      fee: roundOperatorFee(
+        yearlyFee / globals.BLOCKS_PER_YEAR,
+        globals.ETH_DEDUCTED_DIGITS,
+      ),
       setPrivate: isPrivate,
     },
     ...writeOptions,

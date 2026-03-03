@@ -1,3 +1,4 @@
+import { globals } from '@/config/globals';
 import { cloneDeepWith, isUndefined } from 'lodash-es';
 import { parseUnits } from 'viem';
 
@@ -19,7 +20,10 @@ export const bigintRound = (value: bigint, precision: bigint): bigint => {
     : value - remainder; // Round down
 };
 
-export const bigintFloor = (value: bigint, precision = 10_000_000n): bigint => {
+export const bigintFloor = (
+  value: bigint,
+  precision = globals.SSV_DEDUCTED_DIGITS,
+): bigint => {
   return value - (value % precision);
 };
 
@@ -42,7 +46,7 @@ export const isBigIntChanged = (
 
 export const roundOperatorFee = (
   fee: bigint,
-  precision = 10_000_000n,
+  precision = globals.SSV_DEDUCTED_DIGITS,
 ): bigint => {
   return bigintRound(fee, precision);
 };

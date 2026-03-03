@@ -1,4 +1,5 @@
 import { type getOperator } from '@/api/subgraph';
+import { globals } from '@/config/globals';
 import { type Address } from 'abitype';
 import { type Hex } from 'viem';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -40,6 +41,7 @@ const mockConfig = {
         >(),
       },
       write: {
+        registerOperator: vi.fn().mockResolvedValue({ hash: '0x123' }),
         withdrawOperatorEarnings: vi.fn().mockResolvedValue({ hash: '0x123' }),
         withdrawOperatorEarningsSSV: vi
           .fn()
@@ -74,6 +76,33 @@ const createMockOperator = (
 });
 
 describe('Operator Methods', () => {
+  describe('registerOperator', () => {
+    it('should round fee using ETH precision', async () => {
+      const { registerOperator } = await import('../libs/operator/methods');
+      const yearlyFee = globals.BLOCKS_PER_YEAR * 1_550_000n;
+
+      const result = await registerOperator(mockConfig, {
+        args: {
+          isPrivate: true,
+          yearlyFee,
+          publicKey: 'test-public-key',
+        },
+      });
+
+      expect(result).toBeDefined();
+      expect(
+        mockConfig.contract.ssv.write.registerOperator,
+      ).toHaveBeenCalledWith(
+        expect.objectContaining({
+          args: expect.objectContaining({
+            fee: 1_600_000n,
+            setPrivate: true,
+          }),
+        }),
+      );
+    });
+  });
+
   describe('withdraw', () => {
     it('should withdraw partial earnings', async () => {
       const { withdraw } = await import('../libs/operator/methods');

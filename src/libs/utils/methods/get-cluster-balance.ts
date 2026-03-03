@@ -22,7 +22,7 @@ export const getClusterBalance = async (
     throw new Error('Could not fetch cluster balance');
   }
 
-  const scallingCoefficient = 100_000n;
+  const scallingCoefficient = globals.ETH_DEDUCTED_DIGITS;
 
   const cumulativeNetworkFee =
     BigInt(query.daovalues.networkFeeIndex) +

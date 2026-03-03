@@ -1,19 +1,12 @@
 import { hoodi, paid_graph_endpoints } from '@/config/chains';
 import { SSVSDK } from '@/sdk';
 import type { ConfigArgs } from '@/utils';
-import hre from 'hardhat';
+import 'hardhat';
 import { initializeContract } from 'hardhat/contract-helpers';
-import {
-  createPublicClient,
-  createWalletClient,
-  http,
-  type PublicClient,
-  type WalletClient,
-} from 'viem';
+import { createPublicClient, createWalletClient, http, type PublicClient, type WalletClient } from 'viem';
 import { describe, expect, it } from 'vitest';
 
 describe('SDK Initiation', async () => {
-  await hre.run('compile');
   const network = await initializeContract();
 
   it('should initialize the SDK', async () => {
