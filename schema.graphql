@@ -17,7 +17,6 @@ directive @subgraphId(id: String!) on OBJECT
 
 type Account {
   clusters(first: Int = 100, orderBy: Cluster_orderBy, orderDirection: OrderDirection, skip: Int = 0, where: Cluster_filter): [Cluster!]
-  delegatedOracles(first: Int = 100, orderBy: OracleDelegation_orderBy, orderDirection: OrderDirection, skip: Int = 0, where: OracleDelegation_filter): [OracleDelegation!]
   feeRecipient: Bytes!
   id: Bytes!
   nonce: BigInt!
@@ -33,7 +32,6 @@ input Account_filter {
   _change_block: BlockChangedFilter
   and: [Account_filter]
   clusters_: Cluster_filter
-  delegatedOracles_: OracleDelegation_filter
   feeRecipient: Bytes
   feeRecipient_contains: Bytes
   feeRecipient_gt: Bytes
@@ -93,7 +91,6 @@ input Account_filter {
 
 enum Account_orderBy {
   clusters
-  delegatedOracles
   feeRecipient
   id
   nonce
@@ -1185,9 +1182,10 @@ enum DAOUpdateTypes {
   OPERATOR_MAX_FEE_SSV
   OPERATOR_REMOVED
   QUORUM_UPDATED
+  ROOT_COMMITTED
+  SSV_NETWORK_UPGRADE
   VALIDATOR_ADDED
   VALIDATOR_REMOVED
-  WEIGHTED_ROOT_PROPOSED
 }
 
 type DAOValues {
@@ -1224,6 +1222,7 @@ type DAOValues {
   validatorsAdded: BigInt!
   validatorsPerOperatorLimit: BigInt!
   validatorsRemoved: BigInt!
+  version: String!
 }
 
 input DAOValues_filter {
@@ -1497,6 +1496,26 @@ input DAOValues_filter {
   validatorsRemoved_lte: BigInt
   validatorsRemoved_not: BigInt
   validatorsRemoved_not_in: [BigInt!]
+  version: String
+  version_contains: String
+  version_contains_nocase: String
+  version_ends_with: String
+  version_ends_with_nocase: String
+  version_gt: String
+  version_gte: String
+  version_in: [String!]
+  version_lt: String
+  version_lte: String
+  version_not: String
+  version_not_contains: String
+  version_not_contains_nocase: String
+  version_not_ends_with: String
+  version_not_ends_with_nocase: String
+  version_not_in: [String!]
+  version_not_starts_with: String
+  version_not_starts_with_nocase: String
+  version_starts_with: String
+  version_starts_with_nocase: String
 }
 
 enum DAOValues_orderBy {
@@ -1533,6 +1552,7 @@ enum DAOValues_orderBy {
   validatorsAdded
   validatorsPerOperatorLimit
   validatorsRemoved
+  version
 }
 
 type DeclareOperatorFeePeriodUpdated {
@@ -3138,83 +3158,6 @@ enum OperatorFeeIncreaseLimitUpdated_orderBy {
   value
 }
 
-type OperatorMaximumFeeSSVUpdated {
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  id: String!
-  maxFee: BigInt!
-  transactionHash: Bytes!
-}
-
-input OperatorMaximumFeeSSVUpdated_filter {
-  """Filter for the block changed event."""
-  _change_block: BlockChangedFilter
-  and: [OperatorMaximumFeeSSVUpdated_filter]
-  blockNumber: BigInt
-  blockNumber_gt: BigInt
-  blockNumber_gte: BigInt
-  blockNumber_in: [BigInt!]
-  blockNumber_lt: BigInt
-  blockNumber_lte: BigInt
-  blockNumber_not: BigInt
-  blockNumber_not_in: [BigInt!]
-  blockTimestamp: BigInt
-  blockTimestamp_gt: BigInt
-  blockTimestamp_gte: BigInt
-  blockTimestamp_in: [BigInt!]
-  blockTimestamp_lt: BigInt
-  blockTimestamp_lte: BigInt
-  blockTimestamp_not: BigInt
-  blockTimestamp_not_in: [BigInt!]
-  id: String
-  id_contains: String
-  id_contains_nocase: String
-  id_ends_with: String
-  id_ends_with_nocase: String
-  id_gt: String
-  id_gte: String
-  id_in: [String!]
-  id_lt: String
-  id_lte: String
-  id_not: String
-  id_not_contains: String
-  id_not_contains_nocase: String
-  id_not_ends_with: String
-  id_not_ends_with_nocase: String
-  id_not_in: [String!]
-  id_not_starts_with: String
-  id_not_starts_with_nocase: String
-  id_starts_with: String
-  id_starts_with_nocase: String
-  maxFee: BigInt
-  maxFee_gt: BigInt
-  maxFee_gte: BigInt
-  maxFee_in: [BigInt!]
-  maxFee_lt: BigInt
-  maxFee_lte: BigInt
-  maxFee_not: BigInt
-  maxFee_not_in: [BigInt!]
-  or: [OperatorMaximumFeeSSVUpdated_filter]
-  transactionHash: Bytes
-  transactionHash_contains: Bytes
-  transactionHash_gt: Bytes
-  transactionHash_gte: Bytes
-  transactionHash_in: [Bytes!]
-  transactionHash_lt: Bytes
-  transactionHash_lte: Bytes
-  transactionHash_not: Bytes
-  transactionHash_not_contains: Bytes
-  transactionHash_not_in: [Bytes!]
-}
-
-enum OperatorMaximumFeeSSVUpdated_orderBy {
-  blockNumber
-  blockTimestamp
-  id
-  maxFee
-  transactionHash
-}
-
 type OperatorMaximumFeeUpdated {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -4130,118 +4073,12 @@ enum Operator_orderBy {
 }
 
 type Oracle {
-  delegators(first: Int = 100, orderBy: OracleDelegation_orderBy, orderDirection: OrderDirection, skip: Int = 0, where: OracleDelegation_filter): [OracleDelegation!]
   id: String!
   lastUpdateBlockNumber: BigInt!
   lastUpdateBlockTimestamp: BigInt!
   lastUpdateTransactionHash: Bytes!
   oracleAddress: Bytes!
   oracleId: BigInt!
-  totalDelegatedAmount: BigInt!
-}
-
-type OracleDelegation {
-  amount: BigInt!
-  delegatedOracle: Oracle!
-  delegator: Account!
-  id: String!
-}
-
-input OracleDelegation_filter {
-  """Filter for the block changed event."""
-  _change_block: BlockChangedFilter
-  amount: BigInt
-  amount_gt: BigInt
-  amount_gte: BigInt
-  amount_in: [BigInt!]
-  amount_lt: BigInt
-  amount_lte: BigInt
-  amount_not: BigInt
-  amount_not_in: [BigInt!]
-  and: [OracleDelegation_filter]
-  delegatedOracle: String
-  delegatedOracle_: Oracle_filter
-  delegatedOracle_contains: String
-  delegatedOracle_contains_nocase: String
-  delegatedOracle_ends_with: String
-  delegatedOracle_ends_with_nocase: String
-  delegatedOracle_gt: String
-  delegatedOracle_gte: String
-  delegatedOracle_in: [String!]
-  delegatedOracle_lt: String
-  delegatedOracle_lte: String
-  delegatedOracle_not: String
-  delegatedOracle_not_contains: String
-  delegatedOracle_not_contains_nocase: String
-  delegatedOracle_not_ends_with: String
-  delegatedOracle_not_ends_with_nocase: String
-  delegatedOracle_not_in: [String!]
-  delegatedOracle_not_starts_with: String
-  delegatedOracle_not_starts_with_nocase: String
-  delegatedOracle_starts_with: String
-  delegatedOracle_starts_with_nocase: String
-  delegator: String
-  delegator_: Account_filter
-  delegator_contains: String
-  delegator_contains_nocase: String
-  delegator_ends_with: String
-  delegator_ends_with_nocase: String
-  delegator_gt: String
-  delegator_gte: String
-  delegator_in: [String!]
-  delegator_lt: String
-  delegator_lte: String
-  delegator_not: String
-  delegator_not_contains: String
-  delegator_not_contains_nocase: String
-  delegator_not_ends_with: String
-  delegator_not_ends_with_nocase: String
-  delegator_not_in: [String!]
-  delegator_not_starts_with: String
-  delegator_not_starts_with_nocase: String
-  delegator_starts_with: String
-  delegator_starts_with_nocase: String
-  id: String
-  id_contains: String
-  id_contains_nocase: String
-  id_ends_with: String
-  id_ends_with_nocase: String
-  id_gt: String
-  id_gte: String
-  id_in: [String!]
-  id_lt: String
-  id_lte: String
-  id_not: String
-  id_not_contains: String
-  id_not_contains_nocase: String
-  id_not_ends_with: String
-  id_not_ends_with_nocase: String
-  id_not_in: [String!]
-  id_not_starts_with: String
-  id_not_starts_with_nocase: String
-  id_starts_with: String
-  id_starts_with_nocase: String
-  or: [OracleDelegation_filter]
-}
-
-enum OracleDelegation_orderBy {
-  amount
-  delegatedOracle
-  delegatedOracle__id
-  delegatedOracle__lastUpdateBlockNumber
-  delegatedOracle__lastUpdateBlockTimestamp
-  delegatedOracle__lastUpdateTransactionHash
-  delegatedOracle__oracleAddress
-  delegatedOracle__oracleId
-  delegatedOracle__totalDelegatedAmount
-  delegator
-  delegator__feeRecipient
-  delegator__id
-  delegator__nonce
-  delegator__stakedAmount
-  delegator__unstakePendingAmount
-  delegator__validatorCount
-  id
 }
 
 type OracleReplaced {
@@ -4349,7 +4186,6 @@ input Oracle_filter {
   """Filter for the block changed event."""
   _change_block: BlockChangedFilter
   and: [Oracle_filter]
-  delegators_: OracleDelegation_filter
   id: String
   id_contains: String
   id_contains_nocase: String
@@ -4415,25 +4251,15 @@ input Oracle_filter {
   oracleId_lte: BigInt
   oracleId_not: BigInt
   oracleId_not_in: [BigInt!]
-  totalDelegatedAmount: BigInt
-  totalDelegatedAmount_gt: BigInt
-  totalDelegatedAmount_gte: BigInt
-  totalDelegatedAmount_in: [BigInt!]
-  totalDelegatedAmount_lt: BigInt
-  totalDelegatedAmount_lte: BigInt
-  totalDelegatedAmount_not: BigInt
-  totalDelegatedAmount_not_in: [BigInt!]
 }
 
 enum Oracle_orderBy {
-  delegators
   id
   lastUpdateBlockNumber
   lastUpdateBlockTimestamp
   lastUpdateTransactionHash
   oracleAddress
   oracleId
-  totalDelegatedAmount
 }
 
 """Defines the order direction, either ascending or descending"""
@@ -5158,32 +4984,6 @@ type Query {
     subgraphError: _SubgraphErrorPolicy_! = deny
     where: OperatorFeeIncreaseLimitUpdated_filter
   ): [OperatorFeeIncreaseLimitUpdated!]!
-  operatorMaximumFeeSSVUpdated(
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    id: ID!
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): OperatorMaximumFeeSSVUpdated
-  operatorMaximumFeeSSVUpdateds(
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    first: Int = 100
-    orderBy: OperatorMaximumFeeSSVUpdated_orderBy
-    orderDirection: OrderDirection
-    skip: Int = 0
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-    where: OperatorMaximumFeeSSVUpdated_filter
-  ): [OperatorMaximumFeeSSVUpdated!]!
   operatorMaximumFeeUpdated(
     """
     The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
@@ -5418,32 +5218,6 @@ type Query {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): Oracle
-  oracleDelegation(
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    id: ID!
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): OracleDelegation
-  oracleDelegations(
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    first: Int = 100
-    orderBy: OracleDelegation_orderBy
-    orderDirection: OrderDirection
-    skip: Int = 0
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-    where: OracleDelegation_filter
-  ): [OracleDelegation!]!
   oracleReplaced(
     """
     The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
@@ -5615,6 +5389,32 @@ type Query {
     subgraphError: _SubgraphErrorPolicy_! = deny
     where: RootProposed_filter
   ): [RootProposed!]!
+  ssvnetworkUpgradeBlock(
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    id: ID!
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): SSVNetworkUpgradeBlock
+  ssvnetworkUpgradeBlocks(
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    first: Int = 100
+    orderBy: SSVNetworkUpgradeBlock_orderBy
+    orderDirection: OrderDirection
+    skip: Int = 0
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+    where: SSVNetworkUpgradeBlock_filter
+  ): [SSVNetworkUpgradeBlock!]!
   staked(
     """
     The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
@@ -6105,6 +5905,7 @@ type RootCommitted {
   blockTimestamp: BigInt!
   id: String!
   merkleRoot: Bytes!
+  sender: Bytes!
   transactionHash: Bytes!
 }
 
@@ -6159,6 +5960,16 @@ input RootCommitted_filter {
   merkleRoot_not_contains: Bytes
   merkleRoot_not_in: [Bytes!]
   or: [RootCommitted_filter]
+  sender: Bytes
+  sender_contains: Bytes
+  sender_gt: Bytes
+  sender_gte: Bytes
+  sender_in: [Bytes!]
+  sender_lt: Bytes
+  sender_lte: Bytes
+  sender_not: Bytes
+  sender_not_contains: Bytes
+  sender_not_in: [Bytes!]
   transactionHash: Bytes
   transactionHash_contains: Bytes
   transactionHash_gt: Bytes
@@ -6176,6 +5987,7 @@ enum RootCommitted_orderBy {
   blockTimestamp
   id
   merkleRoot
+  sender
   transactionHash
 }
 
@@ -6256,6 +6068,95 @@ enum RootProposed_orderBy {
   id
   merkleRoot
   transactionHash
+}
+
+type SSVNetworkUpgradeBlock {
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  id: String!
+  transactionHash: Bytes!
+  version: String!
+}
+
+input SSVNetworkUpgradeBlock_filter {
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [SSVNetworkUpgradeBlock_filter]
+  blockNumber: BigInt
+  blockNumber_gt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_in: [BigInt!]
+  blockNumber_lt: BigInt
+  blockNumber_lte: BigInt
+  blockNumber_not: BigInt
+  blockNumber_not_in: [BigInt!]
+  blockTimestamp: BigInt
+  blockTimestamp_gt: BigInt
+  blockTimestamp_gte: BigInt
+  blockTimestamp_in: [BigInt!]
+  blockTimestamp_lt: BigInt
+  blockTimestamp_lte: BigInt
+  blockTimestamp_not: BigInt
+  blockTimestamp_not_in: [BigInt!]
+  id: String
+  id_contains: String
+  id_contains_nocase: String
+  id_ends_with: String
+  id_ends_with_nocase: String
+  id_gt: String
+  id_gte: String
+  id_in: [String!]
+  id_lt: String
+  id_lte: String
+  id_not: String
+  id_not_contains: String
+  id_not_contains_nocase: String
+  id_not_ends_with: String
+  id_not_ends_with_nocase: String
+  id_not_in: [String!]
+  id_not_starts_with: String
+  id_not_starts_with_nocase: String
+  id_starts_with: String
+  id_starts_with_nocase: String
+  or: [SSVNetworkUpgradeBlock_filter]
+  transactionHash: Bytes
+  transactionHash_contains: Bytes
+  transactionHash_gt: Bytes
+  transactionHash_gte: Bytes
+  transactionHash_in: [Bytes!]
+  transactionHash_lt: Bytes
+  transactionHash_lte: Bytes
+  transactionHash_not: Bytes
+  transactionHash_not_contains: Bytes
+  transactionHash_not_in: [Bytes!]
+  version: String
+  version_contains: String
+  version_contains_nocase: String
+  version_ends_with: String
+  version_ends_with_nocase: String
+  version_gt: String
+  version_gte: String
+  version_in: [String!]
+  version_lt: String
+  version_lte: String
+  version_not: String
+  version_not_contains: String
+  version_not_contains_nocase: String
+  version_not_ends_with: String
+  version_not_ends_with_nocase: String
+  version_not_in: [String!]
+  version_not_starts_with: String
+  version_not_starts_with_nocase: String
+  version_starts_with: String
+  version_starts_with_nocase: String
+}
+
+enum SSVNetworkUpgradeBlock_orderBy {
+  blockNumber
+  blockTimestamp
+  id
+  transactionHash
+  version
 }
 
 type Staked {

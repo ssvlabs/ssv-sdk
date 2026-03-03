@@ -13,6 +13,7 @@ query GetCluster($id: ID!) {
     owner {
       id
     }
+    feeAsset
     active
     validatorCount
     balance
@@ -26,6 +27,7 @@ query GetCluster($id: ID!) {
 query GetClusters($owner: String!) {
   clusters(where: { owner: $owner }) {
     id
+    feeAsset
     active
     validatorCount
     balance

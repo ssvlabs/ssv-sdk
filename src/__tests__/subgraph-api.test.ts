@@ -1,0 +1,75 @@
+import { getCluster, getClusters } from '@/api/subgraph';
+import {
+  ClusterFeeAssetTypes,
+  GetClusterDocument,
+  GetClustersDocument,
+} from '@/graphql/graphql';
+import { describe, expect, it, vi } from 'vitest';
+
+describe('Subgraph API', () => {
+  it('returns feeAsset in getCluster response', async () => {
+    const client = {
+      request: vi.fn().mockResolvedValue({
+        cluster: {
+          owner: { id: '0x1234567890123456789012345678901234567890' },
+          feeAsset: ClusterFeeAssetTypes.Eth,
+          active: true,
+          validatorCount: '1',
+          balance: '100',
+          index: '1',
+          networkFeeIndex: '1',
+          operatorIds: ['1', '2', '3', '4'],
+          effectiveBalance: '100',
+        },
+      }),
+    };
+
+    const cluster = await getCluster(client as never, { id: 'cluster-1' });
+
+    expect(client.request).toHaveBeenCalledWith(GetClusterDocument, {
+      id: 'cluster-1',
+    });
+    expect(cluster?.feeAsset).toBe(ClusterFeeAssetTypes.Eth);
+  });
+
+  it('returns feeAsset in getClusters response', async () => {
+    const client = {
+      request: vi.fn().mockResolvedValue({
+        clusters: [
+          {
+            id: 'cluster-eth',
+            feeAsset: ClusterFeeAssetTypes.Eth,
+            active: true,
+            validatorCount: '1',
+            balance: '100',
+            index: '1',
+            networkFeeIndex: '1',
+            operatorIds: ['1', '2', '3', '4'],
+            effectiveBalance: '100',
+          },
+          {
+            id: 'cluster-ssv',
+            feeAsset: ClusterFeeAssetTypes.Ssv,
+            active: true,
+            validatorCount: '2',
+            balance: '200',
+            index: '2',
+            networkFeeIndex: '2',
+            operatorIds: ['1', '2', '3', '4'],
+            effectiveBalance: '200',
+          },
+        ],
+      }),
+    };
+
+    const clusters = await getClusters(client as never, { owner: '0xabc' });
+
+    expect(client.request).toHaveBeenCalledWith(GetClustersDocument, {
+      owner: '0xabc',
+    });
+    expect(clusters.map((cluster) => cluster.feeAsset)).toEqual([
+      ClusterFeeAssetTypes.Eth,
+      ClusterFeeAssetTypes.Ssv,
+    ]);
+  });
+});
