@@ -3,13 +3,12 @@ import { mockFetchedOperators } from '@/mock';
 import { createMockConfig } from '@/mock/config';
 import { SSVSDK } from '@/sdk';
 import { decodeOperatorPublicKey, roundOperatorFee } from '@/utils';
-import hre from 'hardhat';
+import 'hardhat';
 import { initializeContract } from 'hardhat/contract-helpers';
 import { getAddress, parseEther } from 'viem';
 import { describe, expect, it } from 'vitest';
 
 describe('SSV Keys', async () => {
-  await hre.run('compile');
   const { ssvNetwork, ssvNetworkViews, ssvToken, wallets, publicClient } =
     await initializeContract();
 
@@ -28,13 +27,16 @@ describe('SSV Keys', async () => {
 
   it('can write to the SSVNetwork contract', async () => {
     const yearlyFee = parseEther('1');
-    const blockFee = roundOperatorFee(yearlyFee / globals.BLOCKS_PER_YEAR);
+    const blockFee = roundOperatorFee(
+      yearlyFee / globals.BLOCKS_PER_YEAR,
+      globals.ETH_DEDUCTED_DIGITS,
+    );
 
     const receipt = await sdk.operators
       .registerOperator({
         args: {
           publicKey: mockFetchedOperators[0].publicKey, // LS0tLS1CRUdJTiBSU0EgUFVCTElDIE....
-          yearlyFee, // 1 ssv
+          yearlyFee,
           isPrivate: true,
         },
       })

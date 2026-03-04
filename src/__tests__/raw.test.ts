@@ -1,13 +1,10 @@
 import { chains } from '@/config';
 import { SSVSDK } from '@/sdk';
-import hre from 'hardhat';
 import { createPublicClient, createWalletClient, http } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 import { describe, expect, it } from 'vitest';
 
 describe('SDK Initiation', async () => {
-  await hre.run('compile');
-
   it('should initialize the SDK', async () => {
     const chain = chains.mainnet; // or chains.holesky
     const transport = http();

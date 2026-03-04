@@ -20,6 +20,8 @@ export type SSVConfig = {
   minimumLiquidationCollateral: number,
   validatorsPerOperatorLimit: number,
   maximumOperatorFee: bigint,
+  defaultOracleIds: [number, number, number, number],
+  quorumBps: number,
 };
 
 export type Cluster = {
@@ -34,5 +36,8 @@ export enum SSVModules {
   SSVOperators,
   SSVClusters,
   SSVDAO,
-  SSVViews
+  SSVViews,
+  SSVOperatorsWhitelist,
+  SSVStaking,
+  SSVValidators,
 };

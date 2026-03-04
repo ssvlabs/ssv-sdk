@@ -1,4 +1,5 @@
 import type { KeySharesItem } from '@/libs/ssv-keys/KeyShares/KeySharesItem';
+import { globals } from '@/config/globals';
 import {
   bigintAbs,
   bigintFloor,
@@ -269,7 +270,7 @@ describe('BigInt Utils', () => {
   });
 
   test('bigintFloor floors correctly', () => {
-    const precision = 10_000_000n;
+    const precision = globals.SSV_DEDUCTED_DIGITS;
     expect(bigintFloor(15_000_000n, precision)).toBe(10_000_000n);
     expect(bigintFloor(25_000_000n, precision)).toBe(20_000_000n);
   });
@@ -289,9 +290,18 @@ describe('BigInt Utils', () => {
   });
 
   test('roundOperatorFee rounds operator fee correctly', () => {
-    const precision = 10_000_000n;
+    const precision = globals.SSV_DEDUCTED_DIGITS;
     expect(roundOperatorFee(15_000_000n, precision)).toBe(20_000_000n);
     expect(roundOperatorFee(14_000_000n, precision)).toBe(10_000_000n);
+  });
+
+  test('roundOperatorFee rounds ETH operator fee with ETH precision', () => {
+    expect(roundOperatorFee(1_550_000n, globals.ETH_DEDUCTED_DIGITS)).toBe(
+      1_600_000n,
+    );
+    expect(roundOperatorFee(1_540_000n, globals.ETH_DEDUCTED_DIGITS)).toBe(
+      1_500_000n,
+    );
   });
 
   test('stringifyBigints converts bigints to strings', () => {

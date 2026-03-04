@@ -5,31 +5,34 @@ import "./interfaces/ISSVNetworkT.sol";
 
 import "../interfaces/ISSVClusters.sol";
 import "../interfaces/ISSVOperators.sol";
+import "../interfaces/ISSVValidators.sol";
 import "../interfaces/ISSVDAO.sol";
 import "../interfaces/ISSVViews.sol";
 
-import "../libraries/Types.sol";
 import "../libraries/CoreLib.sol";
-import "../libraries/SSVStorage.sol";
-import "../libraries/SSVStorageProtocol.sol";
+import "../libraries/storage/SSVStorage.sol";
+import "../libraries/storage/SSVStorageProtocol.sol";
 import "../libraries/OperatorLib.sol";
 import "../libraries/ClusterLib.sol";
+import {PackedETHLib} from "../libraries/SSVPackedLib.sol";
 
-import {SSVModules} from "../libraries/SSVStorage.sol";
+import {SSVModules} from "../libraries/storage/SSVStorage.sol";
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/Ownable2StepUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 
-contract SSVNetworkUpgrade is
+abstract contract SSVNetworkUpgrade is
     UUPSUpgradeable,
     Ownable2StepUpgradeable,
+    ReentrancyGuardUpgradeable,
     ISSVNetworkT,
     ISSVOperators,
     ISSVClusters,
-    ISSVDAO
+    ISSVDAO,
+    ISSVValidators
 {
-    using Types256 for uint256;
     using ClusterLib for Cluster;
 
     /****************/
@@ -51,6 +54,7 @@ contract SSVNetworkUpgrade is
     ) external override initializer onlyProxy {
         __UUPSUpgradeable_init();
         __Ownable_init_unchained();
+        __ReentrancyGuard_init();
         __SSVNetwork_init_unchained(
             token_,
             ssvOperators_,
@@ -87,7 +91,7 @@ contract SSVNetworkUpgrade is
         s.ssvContracts[SSVModules.SSV_DAO] = address(ssvDAO_);
         s.ssvContracts[SSVModules.SSV_VIEWS] = address(ssvViews_);
         sp.minimumBlocksBeforeLiquidation = minimumBlocksBeforeLiquidation_;
-        sp.minimumLiquidationCollateral = minimumLiquidationCollateral_.shrink();
+        sp.minimumLiquidationCollateral = PackedETHLib.pack(minimumLiquidationCollateral_);
         sp.validatorsPerOperatorLimit = validatorsPerOperatorLimit_;
         sp.declareOperatorFeePeriod = declareOperatorFeePeriod_;
         sp.executeOperatorFeePeriod = executeOperatorFeePeriod_;
@@ -117,7 +121,11 @@ contract SSVNetworkUpgrade is
     /* Operator External Functions */
     /*******************************/
 
-    function registerOperator(bytes calldata publicKey, uint256 fee, bool setPrivate) external override returns (uint64 id) {
+    function registerOperator(
+        bytes calldata publicKey,
+        uint256 fee,
+        bool setPrivate
+    ) external override returns (uint64 id) {
         bytes memory result = _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_OPERATORS],
             abi.encodeWithSignature("registerOperator(bytes,uint256)", publicKey, fee, setPrivate)
@@ -125,7 +133,7 @@ contract SSVNetworkUpgrade is
         return abi.decode(result, (uint64));
     }
 
-    function removeOperator(uint64 operatorId) external override {
+    function removeOperator(uint64 operatorId) external override nonReentrant {
         _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_OPERATORS],
             abi.encodeWithSignature("removeOperator(uint64)", operatorId)
@@ -170,28 +178,63 @@ contract SSVNetworkUpgrade is
     function setOperatorsPrivateUnchecked(uint64[] calldata operatorIds) external override {
         _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_OPERATORS],
-            abi.encodeWithSignature("setOperatorsPrivateUnchecked(address)", operatorIds)
+            abi.encodeWithSignature("setOperatorsPrivateUnchecked(uint64[])", operatorIds)
         );
     }
 
-    function setOperatorsPublicUnchecked(uint64[] calldata operatorIds) external {
+    function setOperatorsPublicUnchecked(uint64[] calldata operatorIds) external override {
         _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_OPERATORS],
-            abi.encodeWithSignature("setOperatorsPublicUnchecked(address)", operatorIds)
+            abi.encodeWithSignature("setOperatorsPublicUnchecked(uint64[])", operatorIds)
         );
     }
 
-    function withdrawOperatorEarnings(uint64 operatorId, uint256 amount) external override {
+    function withdrawOperatorEarnings(uint64 operatorId, uint256 amount) external override nonReentrant {
         _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_OPERATORS],
             abi.encodeWithSignature("withdrawOperatorEarnings(uint64,uint256)", operatorId, amount)
         );
     }
 
-    function withdrawAllOperatorEarnings(uint64 operatorId) external override {
+    function withdrawAllOperatorEarnings(uint64 operatorId) external override nonReentrant {
         _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_OPERATORS],
-            abi.encodeWithSignature("withdrawOperatorEarnings(uint64)", operatorId)
+            abi.encodeWithSignature("withdrawAllOperatorEarnings(uint64)", operatorId)
+        );
+    }
+
+    function withdrawAllVersionOperatorEarnings(uint64 operatorId) external override nonReentrant {
+        _delegateCall(
+            SSVStorage.load().ssvContracts[SSVModules.SSV_OPERATORS],
+            abi.encodeWithSignature("withdrawAllVersionOperatorEarnings(uint64)", operatorId)
+        );
+    }
+
+    function withdrawOperatorEarningsSSV(uint64 operatorId, uint256 amount) external override nonReentrant {
+        _delegateCall(
+            SSVStorage.load().ssvContracts[SSVModules.SSV_OPERATORS],
+            abi.encodeWithSignature("withdrawOperatorEarningsSSV(uint64,uint256)", operatorId, amount)
+        );
+    }
+
+    function withdrawAllOperatorEarningsSSV(uint64 operatorId) external override nonReentrant {
+        _delegateCall(
+            SSVStorage.load().ssvContracts[SSVModules.SSV_OPERATORS],
+            abi.encodeWithSignature("withdrawAllOperatorEarningsSSV(uint64)", operatorId)
+        );
+    }
+
+    function migrateClusterToETH(
+        uint64[] calldata operatorIds,
+        ISSVNetworkCore.Cluster memory cluster
+    ) external payable override {
+        _delegateCall(
+            SSVStorage.load().ssvContracts[SSVModules.SSV_CLUSTERS],
+            abi.encodeWithSignature(
+                "migrateClusterToETH(uint64[],(uint32,uint64,uint64,bool,uint256))",
+                operatorIds,
+                cluster
+            )
         );
     }
 
@@ -199,17 +242,15 @@ contract SSVNetworkUpgrade is
         bytes calldata publicKey,
         uint64[] memory operatorIds,
         bytes calldata shares,
-        uint256 amount,
         ISSVNetworkCore.Cluster memory cluster
-    ) external override {
+    ) external payable override {
         _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_CLUSTERS],
             abi.encodeWithSignature(
-                "registerValidator(bytes[],uint64[],bytes,uint256,(uint32,uint64,uint64,bool,uint256))",
+                "registerValidator(bytes[],uint64[],bytes,(uint32,uint64,uint64,bool,uint256))",
                 publicKey,
                 operatorIds,
                 shares,
-                amount,
                 cluster
             )
         );
@@ -219,17 +260,15 @@ contract SSVNetworkUpgrade is
         bytes[] calldata publicKey,
         uint64[] memory operatorIds,
         bytes[] calldata shares,
-        uint256 amount,
         ISSVNetworkCore.Cluster memory cluster
-    ) external override {
+    ) external payable override {
         _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_CLUSTERS],
             abi.encodeWithSignature(
-                "registerValidator(bytes[],uint64[],bytes,uint256,(uint32,uint64,uint64,bool,uint256))",
+                "registerValidator(bytes[],uint64[],bytes,(uint32,uint64,uint64,bool,uint256))",
                 publicKey,
                 operatorIds,
                 shares,
-                amount,
                 cluster
             )
         );
@@ -267,7 +306,11 @@ contract SSVNetworkUpgrade is
         );
     }
 
-    function liquidate(address owner, uint64[] calldata operatorIds, ISSVNetworkCore.Cluster memory cluster) external {
+    function liquidate(
+        address owner,
+        uint64[] calldata operatorIds,
+        ISSVNetworkCore.Cluster memory cluster
+    ) external override nonReentrant {
         _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_CLUSTERS],
             abi.encodeWithSignature(
@@ -279,17 +322,31 @@ contract SSVNetworkUpgrade is
         );
     }
 
-    function reactivate(
+    function liquidateSSV(
+        address owner,
         uint64[] calldata operatorIds,
-        uint256 amount,
         ISSVNetworkCore.Cluster memory cluster
-    ) external override {
+    ) external override nonReentrant {
         _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_CLUSTERS],
             abi.encodeWithSignature(
-                "reactivate(uint64[],uint256,(uint32,uint64,uint64,bool,uint256))",
+                "liquidateSSV(address,uint64[],(uint32,uint64,uint64,bool,uint256))",
+                owner,
                 operatorIds,
-                amount,
+                cluster
+            )
+        );
+    }
+
+    function reactivate(
+        uint64[] calldata operatorIds,
+        ISSVNetworkCore.Cluster memory cluster
+    ) external payable override {
+        _delegateCall(
+            SSVStorage.load().ssvContracts[SSVModules.SSV_CLUSTERS],
+            abi.encodeWithSignature(
+                "reactivate(uint64[],(uint32,uint64,uint64,bool,uint256))",
+                operatorIds,
                 cluster
             )
         );
@@ -298,16 +355,14 @@ contract SSVNetworkUpgrade is
     function deposit(
         address owner,
         uint64[] calldata operatorIds,
-        uint256 amount,
         ISSVNetworkCore.Cluster memory cluster
-    ) external override {
+    ) external payable override {
         _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_CLUSTERS],
             abi.encodeWithSignature(
-                "deposit(address,uint64[],uint256,(uint32,uint64,uint64,bool,uint256))",
+                "deposit(address,uint64[],(uint32,uint64,uint64,bool,uint256))",
                 owner,
                 operatorIds,
-                amount,
                 cluster
             )
         );
@@ -317,7 +372,7 @@ contract SSVNetworkUpgrade is
         uint64[] calldata operatorIds,
         uint256 amount,
         ISSVNetworkCore.Cluster memory cluster
-    ) external override {
+    ) external override nonReentrant {
         _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_CLUSTERS],
             abi.encodeWithSignature(
@@ -350,10 +405,17 @@ contract SSVNetworkUpgrade is
         );
     }
 
-    function withdrawNetworkEarnings(uint256 amount) external override onlyOwner {
+    function updateNetworkFeeSSV(uint256 fee) external override onlyOwner {
         _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_DAO],
-            abi.encodeWithSignature("withdrawNetworkEarnings(uint256)", amount)
+            abi.encodeWithSignature("updateNetworkFeeSSV(uint256)", fee)
+        );
+    }
+
+    function withdrawNetworkSSVEarnings(uint256 amount) external override onlyOwner nonReentrant {
+        _delegateCall(
+            SSVStorage.load().ssvContracts[SSVModules.SSV_DAO],
+            abi.encodeWithSignature("withdrawNetworkSSVEarnings(uint256)", amount)
         );
     }
 
@@ -392,10 +454,31 @@ contract SSVNetworkUpgrade is
         );
     }
 
-    function updateMaximumOperatorFee(uint64 maxFee) external override {
+    function updateMaximumOperatorFee(uint256 maxFee) external override {
         _delegateCall(
             SSVStorage.load().ssvContracts[SSVModules.SSV_DAO],
             abi.encodeWithSignature("updateMaximumOperatorFee(uint64)", maxFee)
+        );
+    }
+
+    function updateMinimumOperatorEthFee(uint256 minFee) external override onlyOwner {
+        _delegateCall(
+            SSVStorage.load().ssvContracts[SSVModules.SSV_DAO],
+            abi.encodeWithSignature("updateMinimumOperatorEthFee(uint64)", minFee)
+        );
+    }
+
+    function replaceOracle(uint32 oracleId, address newOracle) external override onlyOwner {
+        _delegateCall(
+            SSVStorage.load().ssvContracts[SSVModules.SSV_DAO],
+            abi.encodeWithSignature("replaceOracle(uint32,address)", oracleId, newOracle)
+        );
+    }
+
+    function setQuorumBps(uint16 quorum) external override onlyOwner {
+        _delegateCall(
+            SSVStorage.load().ssvContracts[SSVModules.SSV_DAO],
+            abi.encodeWithSignature("setQuorumBps(uint16)", quorum)
         );
     }
 
