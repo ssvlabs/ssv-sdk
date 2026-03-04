@@ -1,5 +1,6 @@
 import type { ConfigReturnType } from '@/config/create';
 import { globals } from '@/config/globals';
+import { ClusterFeeAssetTypes } from '@/graphql/graphql';
 import { bigintMax } from '@/utils';
 import { computeDailyAmount } from '@/utils/funding';
 
@@ -33,19 +34,33 @@ export const calcDepositFromRunway = async (
   if (!daoValues) {
     throw new Error('DAO values not found');
   }
+  const isSsvCluster = cluster.feeAsset === ClusterFeeAssetTypes.Ssv;
   const operatorsFee = operators.reduce(
-    (acc, operator) => acc + BigInt(operator.fee),
+    (acc, operator) =>
+      acc + BigInt(isSsvCluster ? operator.ssvFee : operator.fee),
     0n,
   );
 
-  const networkFee = BigInt(daoValues.networkFee);
+  const networkFee = BigInt(
+    isSsvCluster ? daoValues.networkFeeSSV : daoValues.networkFee,
+  );
+  const minimumLiquidationCollateral = BigInt(
+    isSsvCluster
+      ? daoValues.minimumLiquidationCollateralSSV
+      : daoValues.minimumLiquidationCollateral,
+  );
+  const liquidationThreshold = BigInt(
+    isSsvCluster
+      ? daoValues.liquidationThresholdSSV
+      : daoValues.liquidationThreshold,
+  );
   const vUnits =
     (globals.VUNITS_PRECISION * Number(cluster.effectiveBalance)) / 32;
   const validatorUnits = BigInt(vUnits / globals.VUNITS_PRECISION) || 1n;
   const burnRate = (operatorsFee + networkFee) * validatorUnits || 1n;
   const liquidationCollateral = bigintMax(
-    BigInt(daoValues.minimumLiquidationCollateral),
-    burnRate * BigInt(daoValues.liquidationThreshold),
+    minimumLiquidationCollateral,
+    burnRate * liquidationThreshold,
   );
   const residualBalance = computeDailyAmount(burnRate, runway);
 

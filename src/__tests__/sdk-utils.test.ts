@@ -1,7 +1,8 @@
 import { merge } from 'lodash-es';
 import { type Address, type Hash } from 'viem';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { type ConfigReturnType } from '../config/create';
+import { type ConfigReturnType } from '@/config';
+import { ClusterFeeAssetTypes } from '@/graphql/graphql';
 
 // Mock data
 const mockAddress = '0x012f55B6Cc5D57F943F1E79cF00214B652513f88' as Address;
@@ -33,8 +34,11 @@ const mockOperators = _mockOperators.map((o) => ({
   publicKey: o.operatorKey,
   validatorCount: '5',
   fee: '1000000',
+  ssvFee: '1000000',
   feeIndex: '0',
   feeIndexBlockNumber: '1000',
+  ssvFeeIndex: '0',
+  ssvFeeIndexBlockNumber: '1000',
   isPrivate: false,
   whitelisted: [],
   whitelistedContract: mockAddress,
@@ -42,6 +46,7 @@ const mockOperators = _mockOperators.map((o) => ({
 
 const mockClusterBalanceData = {
   cluster: {
+    feeAsset: ClusterFeeAssetTypes.Eth,
     validatorCount: '1',
     networkFeeIndex: '0',
     index: '0',
@@ -52,8 +57,13 @@ const mockClusterBalanceData = {
     networkFeeIndex: '0',
     networkFeeIndexBlockNumber: '1000',
     networkFee: '1000000',
+    networkFeeIndexSSV: '0',
+    networkFeeIndexBlockNumberSSV: '1000',
+    networkFeeSSV: '1000000',
     minimumLiquidationCollateral: '100000',
+    minimumLiquidationCollateralSSV: '100000',
     liquidationThreshold: '100',
+    liquidationThresholdSSV: '100',
   },
   operators: mockOperators,
   _meta: {
@@ -194,6 +204,57 @@ describe('SDK Utils', () => {
           operatorIds: mockOperatorIds,
         }),
       ).rejects.toThrow('Could not fetch cluster balance');
+    });
+
+    it('should use ssvFee fields for SSV clusters', async () => {
+      const { getClusterBalance } = await import(
+        '../libs/utils/methods/get-cluster-balance'
+      );
+
+      const ssvClusterConfig = merge({}, mockConfig, {
+        api: {
+          ...mockConfig.api,
+          getClusterBalance: vi.fn().mockResolvedValue({
+            _meta: { block: { number: 10 } },
+            daovalues: {
+              networkFeeIndex: '0',
+              networkFeeIndexBlockNumber: '10',
+              networkFee: '0',
+              networkFeeIndexSSV: '0',
+              networkFeeIndexBlockNumberSSV: '10',
+              networkFeeSSV: '0',
+              minimumLiquidationCollateral: '0',
+              minimumLiquidationCollateralSSV: '0',
+              liquidationThreshold: '1',
+              liquidationThresholdSSV: '1',
+            },
+            operators: [
+              {
+                fee: '100',
+                feeIndex: '0',
+                feeIndexBlockNumber: '0',
+                ssvFee: '1',
+                ssvFeeIndex: '0',
+                ssvFeeIndexBlockNumber: '0',
+              },
+            ],
+            cluster: {
+              feeAsset: ClusterFeeAssetTypes.Ssv,
+              validatorCount: '1',
+              networkFeeIndex: '0',
+              index: '0',
+              balance: '1000',
+              effectiveBalance: '32',
+            },
+          }),
+        },
+      } satisfies Partial<ConfigReturnType>);
+
+      const result = await getClusterBalance(ssvClusterConfig, {
+        operatorIds: [1],
+      });
+
+      expect(result.balance).toBe(990n);
     });
   });
 });

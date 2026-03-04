@@ -69,6 +69,7 @@ query GetOperators($operatorIds: [String!]!) {
     isPrivate
     whitelistedContract
     fee
+    ssvFee
     whitelisted {
       id
     }
@@ -101,15 +102,24 @@ query GetClusterBalance(
     networkFee
     networkFeeIndex
     networkFeeIndexBlockNumber
+    networkFeeSSV
+    networkFeeIndexSSV
+    networkFeeIndexBlockNumberSSV
     liquidationThreshold
+    liquidationThresholdSSV
     minimumLiquidationCollateral
+    minimumLiquidationCollateralSSV
   }
   operators(where: { id_in: $operatorIds }) {
     fee
     feeIndex
     feeIndexBlockNumber
+    ssvFee
+    ssvFeeIndex
+    ssvFeeIndexBlockNumber
   }
   cluster(id: $clusterId) {
+    feeAsset
     validatorCount
     networkFeeIndex
     index
@@ -123,7 +133,12 @@ query GetDaoValues($daoAddress: ID!) {
     networkFee
     networkFeeIndex
     networkFeeIndexBlockNumber
+    networkFeeSSV
+    networkFeeIndexSSV
+    networkFeeIndexBlockNumberSSV
     liquidationThreshold
+    liquidationThresholdSSV
     minimumLiquidationCollateral
+    minimumLiquidationCollateralSSV
   }
 }

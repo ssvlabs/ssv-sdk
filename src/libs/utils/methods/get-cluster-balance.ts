@@ -1,5 +1,6 @@
 import type { ConfigReturnType } from '@/config/create';
 import { globals } from '@/config/globals';
+import { ClusterFeeAssetTypes } from '@/graphql/graphql';
 import { bigintMax, createClusterId } from '@/utils';
 
 type GetClusterBalanceArgs = {
@@ -22,30 +23,61 @@ export const getClusterBalance = async (
     throw new Error('Could not fetch cluster balance');
   }
 
-  const scallingCoefficient = globals.ETH_DEDUCTED_DIGITS;
+  const isSsvCluster = query.cluster.feeAsset === ClusterFeeAssetTypes.Ssv;
+  const networkFee = BigInt(
+    isSsvCluster ? query.daovalues.networkFeeSSV : query.daovalues.networkFee,
+  );
+  const networkFeeIndex = BigInt(
+    isSsvCluster
+      ? query.daovalues.networkFeeIndexSSV
+      : query.daovalues.networkFeeIndex,
+  );
+  const networkFeeIndexBlockNumber = BigInt(
+    isSsvCluster
+      ? query.daovalues.networkFeeIndexBlockNumberSSV
+      : query.daovalues.networkFeeIndexBlockNumber,
+  );
+  const minimumLiquidationCollateral = BigInt(
+    isSsvCluster
+      ? query.daovalues.minimumLiquidationCollateralSSV
+      : query.daovalues.minimumLiquidationCollateral,
+  );
+  const liquidationThreshold = BigInt(
+    isSsvCluster
+      ? query.daovalues.liquidationThresholdSSV
+      : query.daovalues.liquidationThreshold,
+  );
+
+  const scallingCoefficient = isSsvCluster
+    ? globals.SSV_DEDUCTED_DIGITS
+    : globals.ETH_DEDUCTED_DIGITS;
 
   const cumulativeNetworkFee =
-    BigInt(query.daovalues.networkFeeIndex) +
-    (BigInt(query._meta.block.number) -
-      BigInt(query.daovalues.networkFeeIndexBlockNumber)) *
-      BigInt(query.daovalues.networkFee) -
+    networkFeeIndex +
+    (BigInt(query._meta.block.number) - networkFeeIndexBlockNumber) *
+      networkFee -
     BigInt(query.cluster.networkFeeIndex) * scallingCoefficient;
 
   const cumulativeOperatorFee = query.operators.reduce(
     (acc, operator) => {
+      const fee = isSsvCluster ? operator.ssvFee : operator.fee;
+      const feeIndex = isSsvCluster ? operator.ssvFeeIndex : operator.feeIndex;
+      const feeIndexBlockNumber = isSsvCluster
+        ? operator.ssvFeeIndexBlockNumber
+        : operator.feeIndexBlockNumber;
       return (
         acc +
-        BigInt(operator.feeIndex) +
-        (BigInt(query._meta!.block.number) -
-          BigInt(operator.feeIndexBlockNumber)) *
-          BigInt(operator.fee)
+        BigInt(feeIndex) +
+        (BigInt(query._meta!.block.number) - BigInt(feeIndexBlockNumber)) *
+          BigInt(fee)
       );
     },
     -BigInt(query.cluster.index) * scallingCoefficient,
   );
 
   const operatorsFee = query.operators.reduce(
-    (acc, operator) => acc + BigInt(operator.fee),
+    (acc, operator) =>
+      acc + BigInt(isSsvCluster ? operator.ssvFee : operator.fee),
     0n,
   );
 
@@ -59,14 +91,12 @@ export const getClusterBalance = async (
         BigInt(globals.VUNITS_PRECISION) || 1n;
 
   const burnRate =
-    ((operatorsFee + BigInt(query.daovalues.networkFee)) *
-      BigInt(effectiveBalanceValidatorUnits)) /
+    ((operatorsFee + networkFee) * BigInt(effectiveBalanceValidatorUnits)) /
       BigInt(globals.VUNITS_PRECISION) || 1n;
 
-  const mLc = BigInt(query.daovalues.minimumLiquidationCollateral);
   const LC = bigintMax(
-    mLc,
-    burnRate * BigInt(query.daovalues.liquidationThreshold),
+    minimumLiquidationCollateral,
+    burnRate * liquidationThreshold,
   );
   const runway = calculatedClusterBalance - LC;
   const operationalRunway = runway / burnRate / globals.BLOCKS_PER_DAY;

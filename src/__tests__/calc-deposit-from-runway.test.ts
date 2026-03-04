@@ -2,11 +2,13 @@ import { merge } from 'lodash-es';
 import { type Address } from 'viem';
 import { describe, expect, it, vi } from 'vitest';
 import { type ConfigReturnType } from '../config/create';
+import { ClusterFeeAssetTypes } from '../graphql/graphql';
 
 const mockAddress = '0x012f55B6Cc5D57F943F1E79cF00214B652513f88' as Address;
 
 const mockCluster = {
   owner: { id: mockAddress },
+  feeAsset: ClusterFeeAssetTypes.Eth,
   active: true,
   validatorCount: '1',
   balance: '1000000000000000',
@@ -17,18 +19,47 @@ const mockCluster = {
 };
 
 const mockOperators = [
-  { id: '1', fee: '1000000000', publicKey: '0x01', whitelisted: [] },
-  { id: '2', fee: '2000000000', publicKey: '0x02', whitelisted: [] },
-  { id: '3', fee: '1500000000', publicKey: '0x03', whitelisted: [] },
-  { id: '4', fee: '500000000', publicKey: '0x04', whitelisted: [] },
+  {
+    id: '1',
+    fee: '1000000000',
+    ssvFee: '1000000000',
+    publicKey: '0x01',
+    whitelisted: [],
+  },
+  {
+    id: '2',
+    fee: '2000000000',
+    ssvFee: '2000000000',
+    publicKey: '0x02',
+    whitelisted: [],
+  },
+  {
+    id: '3',
+    fee: '1500000000',
+    ssvFee: '1500000000',
+    publicKey: '0x03',
+    whitelisted: [],
+  },
+  {
+    id: '4',
+    fee: '500000000',
+    ssvFee: '500000000',
+    publicKey: '0x04',
+    whitelisted: [],
+  },
 ];
 
 const mockDaoValues = {
   networkFee: '1000000000',
   networkFeeIndex: '0',
   networkFeeIndexBlockNumber: '1000',
+  networkFeeSSV: '1000000000',
+  networkFeeIndexSSV: '0',
+  networkFeeIndexBlockNumberSSV: '1000',
   liquidationThreshold: '214800',
+  liquidationThresholdSSV: '214800',
   minimumLiquidationCollateral: '1000000000000000000',
+  minimumLiquidationCollateralSSV: '1000000000000000000',
 };
 
 const createMockConfig = (overrides?: Partial<ConfigReturnType>) =>
@@ -152,5 +183,36 @@ describe('calcDepositFromRunway', () => {
     });
 
     expect(result).toBeGreaterThan(0n);
+  });
+
+  it('should use ssvFee for SSV clusters', async () => {
+    const { calcDepositFromRunway } = await import(
+      '../libs/utils/methods/calc-deposit-from-runway'
+    );
+    const config = createMockConfig({
+      api: {
+        getCluster: vi.fn().mockResolvedValue({
+          ...mockCluster,
+          feeAsset: ClusterFeeAssetTypes.Ssv,
+        }),
+        getOperators: vi.fn().mockResolvedValue([
+          { id: '1', fee: '1000', ssvFee: '10', publicKey: '0x01' },
+          { id: '2', fee: '2000', ssvFee: '20', publicKey: '0x02' },
+        ]),
+        getDaoValues: vi.fn().mockResolvedValue({
+          ...mockDaoValues,
+          networkFeeSSV: '0',
+          liquidationThresholdSSV: '1',
+          minimumLiquidationCollateralSSV: '0',
+        }),
+      },
+    } as unknown as Partial<ConfigReturnType>);
+
+    const result = await calcDepositFromRunway(config, {
+      clusterId: 'cluster-1',
+      runway: 1,
+    });
+
+    expect(result).toBe(214830n);
   });
 });
