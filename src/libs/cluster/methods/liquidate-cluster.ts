@@ -19,7 +19,7 @@ export const liquidateCluster = async (
   return config.contract.ssv.write.liquidate({
     args: {
       cluster: toSolidityCluster(cluster),
-      clusterOwner: config.walletClient.account!.address,
+      clusterOwner: cluster.owner.id,
       operatorIds: cluster.operatorIds.map(BigInt),
     },
     ...writeOptions,

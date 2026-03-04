@@ -1,7 +1,7 @@
 import type { KeySharesPayload } from '@/libs/ssv-keys/KeyShares/KeySharesData/KeySharesPayload';
 import { type Hex } from 'viem';
 import { describe, expect, it, vi } from 'vitest';
-import { type ConfigReturnType } from '../config/create';
+import { type ConfigReturnType } from '@/config';
 
 // Mock dependencies
 vi.mock('@/utils/cluster', () => ({
@@ -48,6 +48,8 @@ const mockSharesData = '0x456' as Hex;
 const mockOperatorIds = [1, 2, 3, 4];
 const mockOperatorIdsBigInt = mockOperatorIds.map(BigInt);
 const mockClusterId = '0x789' as Hex;
+const mockCallerAddress = '0x123' as Hex;
+const mockClusterOwnerAddress = '0xabc' as Hex;
 const mockCluster = {
   validatorCount: 1,
   networkFeeIndex: 0n,
@@ -59,7 +61,7 @@ const mockCluster = {
 const mockClusterFromApi = {
   ...mockCluster,
   owner: {
-    id: '0x123' as Hex,
+    id: mockClusterOwnerAddress,
   },
 };
 
@@ -85,7 +87,7 @@ const mockApi = {
 const mockConfig = {
   walletClient: {
     account: {
-      address: '0x123' as Hex,
+      address: mockCallerAddress,
     },
   },
   publicClient: mockPublicClient,
@@ -360,7 +362,7 @@ describe('Cluster Methods', () => {
       expect(mockConfig.contract.ssv.write.liquidate).toHaveBeenCalledWith({
         args: {
           cluster: mockCluster,
-          clusterOwner: mockConfig.walletClient.account!.address,
+          clusterOwner: mockClusterFromApi.owner.id,
           operatorIds: mockOperatorIdsBigInt,
         },
       });
@@ -382,7 +384,7 @@ describe('Cluster Methods', () => {
       expect(result).toBeDefined();
       expect(mockConfig.contract.ssv.write.liquidateSSV).toHaveBeenCalledWith({
         args: {
-          clusterOwner: mockConfig.walletClient.account!.address,
+          clusterOwner: mockClusterFromApi.owner.id,
           operatorIds: mockOperatorIdsBigInt,
           cluster: expect.objectContaining({
             balance: 1000n,
