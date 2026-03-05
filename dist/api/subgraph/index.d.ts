@@ -10,6 +10,7 @@ export declare const toSolidityCluster: (client: GraphQLClient, args: GetCluster
     networkFeeIndex: string;
 } | null | undefined>;
 export declare const getCluster: (client: GraphQLClient, args: GetClusterQueryVariables) => Promise<{
+    feeAsset: import('../../graphql/graphql').ClusterFeeAssetTypes;
     active: boolean;
     validatorCount: string;
     balance: string;
@@ -23,6 +24,7 @@ export declare const getCluster: (client: GraphQLClient, args: GetClusterQueryVa
 } | null | undefined>;
 export declare const getClusters: (client: GraphQLClient, args: GetClustersQueryVariables) => Promise<{
     id: string;
+    feeAsset: import('../../graphql/graphql').ClusterFeeAssetTypes;
     active: boolean;
     validatorCount: string;
     balance: string;
