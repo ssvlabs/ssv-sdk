@@ -25,6 +25,7 @@ import { decodeEventLog } from 'viem';
 type ValidatedKeysharesArgs = {
   keyshares: string | object | IKeySharesPartialPayload[];
   operatorIds: string[];
+  ownerAddress?: Address;
 };
 
 const isKeySharesPayload = (
@@ -59,8 +60,16 @@ const buildKeysharesFromPayloads = (payloads: IKeySharesPartialPayload[]) => {
 
 export const validateSharesPreRegistration = async (
   config: ConfigReturnType,
-  { keyshares, operatorIds }: ValidatedKeysharesArgs,
+  { keyshares, operatorIds, ownerAddress }: ValidatedKeysharesArgs,
 ) => {
+  const account = ownerAddress ?? config.walletClient.account?.address;
+
+  if (!account) {
+    throw new Error(
+      'ownerAddress is required when walletClient.account.address is not available',
+    );
+  }
+
   const operators = await config.api.getOperators({ operatorIds });
   if (operators.length !== operatorIds.length) {
     throw new KeysharesValidationError(
@@ -72,7 +81,7 @@ export const validateSharesPreRegistration = async (
   const shares = usesPayloads
     ? buildKeysharesFromPayloads(keyshares)
     : await validateKeysharesJSON({
-        account: config.walletClient.account!.address,
+        account,
         operators,
         keyshares,
       });
@@ -110,7 +119,7 @@ export const validateSharesPreRegistration = async (
   );
   const nonce = shouldValidateNonce
     ? await config.api
-        .getOwnerNonce({ owner: config.walletClient.account!.address })
+        .getOwnerNonce({ owner: account })
         .then((nonce) => {
           if (!nonce) throw new Error('Failed to get owner nonce');
           return Number(nonce);
@@ -160,7 +169,7 @@ export const validateSharesPreRegistration = async (
       !(await canAccountUseOperator(
         config,
         operator,
-        config.walletClient.account!.address,
+        account,
       ))
     ) {
       throw new Error(
