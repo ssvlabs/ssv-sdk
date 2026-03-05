@@ -2,21 +2,29 @@ import type { ConfigReturnType } from '@/config/create';
 import { globals } from '@/config/globals';
 import { ClusterFeeAssetTypes } from '@/graphql/graphql';
 import { bigintMax, createClusterId } from '@/utils';
+import type { Address } from 'viem';
 
 type GetClusterBalanceArgs = {
   operatorIds: number[];
+  ownerAddress?: Address;
 };
 export const getClusterBalance = async (
   config: ConfigReturnType,
-  { operatorIds }: GetClusterBalanceArgs,
+  { operatorIds, ownerAddress }: GetClusterBalanceArgs,
 ) => {
+  const resolvedOwnerAddress =
+    ownerAddress ?? config.walletClient.account?.address;
+
+  if (!resolvedOwnerAddress) {
+    throw new Error(
+      'ownerAddress is required when walletClient.account.address is not available',
+    );
+  }
+
   const query = await config.api.getClusterBalance({
     daoAddress: config.contractAddresses.setter,
     operatorIds: operatorIds.map(String),
-    clusterId: createClusterId(
-      config.walletClient.account!.address,
-      operatorIds,
-    ),
+    clusterId: createClusterId(resolvedOwnerAddress, operatorIds),
   });
 
   if (!query.cluster || !query.daovalues || !query._meta) {

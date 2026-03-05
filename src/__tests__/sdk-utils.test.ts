@@ -3,6 +3,7 @@ import { type Address, type Hash } from 'viem';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { type ConfigReturnType } from '@/config';
 import { ClusterFeeAssetTypes } from '@/graphql/graphql';
+import { createClusterId } from '@/utils';
 
 // Mock data
 const mockAddress = '0x012f55B6Cc5D57F943F1E79cF00214B652513f88' as Address;
@@ -255,6 +256,25 @@ describe('SDK Utils', () => {
       });
 
       expect(result.balance).toBe(990n);
+    });
+
+    it('should use explicit ownerAddress for clusterId derivation', async () => {
+      const { getClusterBalance } = await import(
+        '../libs/utils/methods/get-cluster-balance'
+      );
+
+      const ownerAddress = '0x1234567890123456789012345678901234567890';
+
+      await getClusterBalance(mockConfig, {
+        operatorIds: mockOperatorIds,
+        ownerAddress,
+      });
+
+      expect(mockConfig.api.getClusterBalance).toHaveBeenCalledWith({
+        daoAddress: mockAddress,
+        operatorIds: mockOperatorIds.map(String),
+        clusterId: createClusterId(ownerAddress, mockOperatorIds),
+      });
     });
   });
 });
