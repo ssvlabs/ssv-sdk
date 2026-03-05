@@ -54,9 +54,10 @@ export const calcDepositFromRunway = async (
       ? daoValues.liquidationThresholdSSV
       : daoValues.liquidationThreshold,
   );
-  const vUnits =
-    (globals.VUNITS_PRECISION * Number(cluster.effectiveBalance)) / 32;
-  const validatorUnits = BigInt(vUnits / globals.VUNITS_PRECISION) || 1n;
+  const effectiveBalanceValidatorUnits =
+    (BigInt(cluster.effectiveBalance) * BigInt(globals.VUNITS_PRECISION)) / 32n;
+  const validatorUnits =
+    effectiveBalanceValidatorUnits / BigInt(globals.VUNITS_PRECISION) || 1n;
   const burnRate = (operatorsFee + networkFee) * validatorUnits || 1n;
   const liquidationCollateral = bigintMax(
     minimumLiquidationCollateral,
