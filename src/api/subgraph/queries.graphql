@@ -5,6 +5,7 @@ query GetClusterSnapshot($id: ID!) {
     balance
     index
     networkFeeIndex
+    effectiveBalance
   }
 }
 

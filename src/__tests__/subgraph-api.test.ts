@@ -1,7 +1,8 @@
-import { getCluster, getClusters } from '@/api/subgraph';
+import { getCluster, getClusters, toSolidityCluster } from '@/api/subgraph';
 import {
   ClusterFeeAssetTypes,
   GetClusterDocument,
+  GetClusterSnapshotDocument,
   GetClustersDocument,
 } from '@/graphql/graphql';
 import { describe, expect, it, vi } from 'vitest';
@@ -71,5 +72,29 @@ describe('Subgraph API', () => {
       ClusterFeeAssetTypes.Eth,
       ClusterFeeAssetTypes.Ssv,
     ]);
+  });
+
+  it('returns effectiveBalance in toSolidityCluster response', async () => {
+    const client = {
+      request: vi.fn().mockResolvedValue({
+        cluster: {
+          active: true,
+          validatorCount: '1',
+          balance: '100',
+          index: '1',
+          networkFeeIndex: '1',
+          effectiveBalance: '32',
+        },
+      }),
+    };
+
+    const cluster = await toSolidityCluster(client as never, {
+      id: 'cluster-1',
+    });
+
+    expect(client.request).toHaveBeenCalledWith(GetClusterSnapshotDocument, {
+      id: 'cluster-1',
+    });
+    expect(cluster?.effectiveBalance).toBe('32');
   });
 });
