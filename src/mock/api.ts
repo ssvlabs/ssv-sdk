@@ -25,49 +25,66 @@ export const createMockApi = (
       index: string;
       active: boolean;
       balance: string;
+      effectiveBalance: string;
     }
   >();
 
   publicClient.watchEvent({
     onLogs: (logs) => {
       logs.forEach((log) => {
+        let event;
         try {
-          const event = decodeEventLog({
+          event = decodeEventLog({
             abi: MainnetV4SetterABI,
             data: log.data,
             topics: log.topics,
           });
-          if ('cluster' in event.args) {
-            clusterSnapshots.set(
-              createClusterId(
-                event.args.owner,
-                event.args.operatorIds.map(Number),
-              ),
-              {
-                validatorCount: event.args.cluster.validatorCount.toString(),
-                networkFeeIndex: event.args.cluster.networkFeeIndex.toString(),
-                index: event.args.cluster.index.toString(),
-                active: event.args.cluster.active,
-                balance: event.args.cluster.balance.toString(),
-              },
-            );
-          }
-          if (event.eventName === 'ValidatorAdded') {
-            nonces.set(
-              event.args.owner,
-              (nonces.get(event.args.owner) ?? 0) + 1,
-            );
-          }
-          if (event.eventName === 'OperatorAdded') {
-            operators.set(event.args.operatorId.toString(), {
-              id: event.args.operatorId.toString(),
-              publicKey: event.args.publicKey,
-              fee: event.args.fee,
-              owner: event.args.owner,
-            });
-          }
         } catch {
           // do nothing
+          return;
+        }
+
+        if ('cluster' in event.args) {
+          const clusterId = createClusterId(
+            event.args.owner,
+            event.args.operatorIds.map(Number),
+          );
+          const previousSnapshot = clusterSnapshots.get(clusterId);
+          const validatorCount = event.args.cluster.validatorCount.toString();
+          const effectiveBalance =
+            'effectiveBalance' in event.args &&
+            typeof event.args.effectiveBalance !== 'undefined'
+              ? event.args.effectiveBalance.toString()
+              : previousSnapshot &&
+                  previousSnapshot.validatorCount === validatorCount
+                ? previousSnapshot.effectiveBalance
+                : null;
+
+          if (effectiveBalance === null) {
+            throw new Error(
+              `Mock cluster event "${event.eventName}" is missing effectiveBalance and it cannot be inferred`,
+            );
+          }
+
+          clusterSnapshots.set(clusterId, {
+            validatorCount,
+            networkFeeIndex: event.args.cluster.networkFeeIndex.toString(),
+            index: event.args.cluster.index.toString(),
+            active: event.args.cluster.active,
+            balance: event.args.cluster.balance.toString(),
+            effectiveBalance,
+          });
+        }
+        if (event.eventName === 'ValidatorAdded') {
+          nonces.set(event.args.owner, (nonces.get(event.args.owner) ?? 0) + 1);
+        }
+        if (event.eventName === 'OperatorAdded') {
+          operators.set(event.args.operatorId.toString(), {
+            id: event.args.operatorId.toString(),
+            publicKey: event.args.publicKey,
+            fee: event.args.fee,
+            owner: event.args.owner,
+          });
         }
       });
     },
@@ -88,6 +105,7 @@ export const createMockApi = (
           balance: '0',
           index: '0',
           networkFeeIndex: '0',
+          effectiveBalance: '0',
         },
       });
     }),
@@ -102,6 +120,8 @@ export const createMockApi = (
           networkFeeIndex:
             clusterSnapshots.get(args.owner)?.networkFeeIndex ?? '0',
           operatorIds: Array.from(operators.keys()),
+          effectiveBalance:
+            clusterSnapshots.get(args.owner)?.effectiveBalance ?? '0',
         },
       }),
     ),
@@ -116,6 +136,7 @@ export const createMockApi = (
             index: snapshot.index,
             networkFeeIndex: snapshot.networkFeeIndex,
             operatorIds: Array.from(operators.keys()),
+            effectiveBalance: snapshot.effectiveBalance,
           }),
         ),
       }),
@@ -187,6 +208,7 @@ export const createMockApi = (
           networkFeeIndex: '0',
           index: '0',
           balance: '0',
+          effectiveBalance: '0',
         },
       });
     }),
