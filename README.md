@@ -44,29 +44,29 @@ pnpm install @ssv-labs/ssv-sdk
 ### Initialize the SDK
 
 ```typescript
-import { SSVSDK, chains } from '@ssv-labs/ssv-sdk'
-import { createPublicClient, createWalletClient, http } from 'viem'
-import { privateKeyToAccount } from 'viem/accounts'
+import { SSVSDK, chains } from '@ssv-labs/ssv-sdk';
+import { createPublicClient, createWalletClient, http } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
 
-const chain = chains.mainnet // or chains.hoodi
-const transport = http()
+const chain = chains.mainnet; // or chains.hoodi
+const transport = http();
 
 const publicClient = createPublicClient({
   chain,
   transport,
-})
+});
 
-const account = privateKeyToAccount('0x...')
+const account = privateKeyToAccount('0x...');
 const walletClient = createWalletClient({
   account,
   chain,
   transport,
-})
+});
 
 const sdk = new SSVSDK({
   publicClient,
   walletClient,
-})
+});
 ```
 
 ### API Examples
@@ -75,18 +75,29 @@ const sdk = new SSVSDK({
 // Query operators
 const operators = await sdk.api.getOperators({
   operatorIds: ['220', '221', '223', '224'],
-})
+});
 
 // Get owner nonce
 const nonce = await sdk.api.getOwnerNonce({
   owner: 'your_wallet_address',
-})
+});
 ```
+
+### API Compatibility Notes
+
+`getClusterSnapshot` was renamed in `v1.0.0`.
+
+| SDK version | Method name                          |
+| ----------- | ------------------------------------ |
+| `0.1.x`     | `sdk.api.getClusterSnapshot({ id })` |
+| `1.x`       | `sdk.api.toSolidityCluster({ id })`  |
+
+`sdk.api.getClusterSnapshot` is available as a deprecated alias in current `1.x` releases for compatibility with `0.1.x` code.
 
 ### Cluster Management
 
 ```typescript
-import { parseEther } from 'viem'
+import { parseEther } from 'viem';
 
 // Deposit to cluster
 await sdk.clusters.deposit(
@@ -97,26 +108,28 @@ await sdk.clusters.deposit(
   {
     approve: true, // Auto-approve token if needed
   },
-)
+);
 ```
 
 ### Register Validators
+
 To register validators, you'll need to:
 
 1. Create shares from your keyshares JSON file
 2. Register the validator using the created shares
+
 ```typescript
-import { parseEther } from 'viem'
+import { parseEther } from 'viem';
 
 // Your keyshares JSON file containing the validator's data
-import keyshares from 'path/to/keyshares.json'
+import keyshares from 'path/to/keyshares.json';
 
 // First, validate and create shares from your keyshares
 try {
   const result = await sdk.utils.validateSharesPreRegistration({
     operatorIds: ['220', '221', '223', '224'],
     keyshares,
-  })
+  });
 
   // Register validators using the clusters API
   const receipt = await sdk.clusters
@@ -126,7 +139,7 @@ try {
         depositAmount: parseEther('2'),
       },
     })
-    .then((tx) => tx.wait())
+    .then((tx) => tx.wait());
 } catch (e) {
   // something went wrong
 }
