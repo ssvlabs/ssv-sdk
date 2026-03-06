@@ -90,25 +90,28 @@ export const createMockApi = (
     },
   });
 
+  const toSolidityClusterMock = vi.fn().mockImplementation((args) => {
+    const snapshot = clusterSnapshots.get(args.owner);
+    return Promise.resolve({
+      cluster: snapshot ?? {
+        active: true,
+        validatorCount: '0',
+        balance: '0',
+        index: '0',
+        networkFeeIndex: '0',
+        effectiveBalance: '0',
+      },
+    });
+  });
+
   return {
     getOwnerNonce: vi.fn().mockImplementation((args) =>
       Promise.resolve({
         account: { nonce: (nonces.get(args.owner) ?? 0).toString() },
       }),
     ),
-    toSolidityCluster: vi.fn().mockImplementation((args) => {
-      const snapshot = clusterSnapshots.get(args.owner);
-      return Promise.resolve({
-        cluster: snapshot ?? {
-          active: true,
-          validatorCount: '0',
-          balance: '0',
-          index: '0',
-          networkFeeIndex: '0',
-          effectiveBalance: '0',
-        },
-      });
-    }),
+    toSolidityCluster: toSolidityClusterMock,
+    getClusterSnapshot: toSolidityClusterMock,
     getCluster: vi.fn().mockImplementation((args) =>
       Promise.resolve({
         cluster: {
