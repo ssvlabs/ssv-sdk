@@ -1,7 +1,8 @@
-import { getCluster, getClusters } from '@/api/subgraph';
+import { getCluster, getClusters, getQueries } from '@/api/subgraph';
 import {
   ClusterFeeAssetTypes,
   GetClusterDocument,
+  GetClusterSnapshotDocument,
   GetClustersDocument,
 } from '@/graphql/graphql';
 import { describe, expect, it, vi } from 'vitest';
@@ -71,5 +72,35 @@ describe('Subgraph API', () => {
       ClusterFeeAssetTypes.Eth,
       ClusterFeeAssetTypes.Ssv,
     ]);
+  });
+
+  it('supports deprecated getClusterSnapshot alias', async () => {
+    const cluster = {
+      active: true,
+      validatorCount: '1',
+      balance: '100',
+      index: '1',
+      networkFeeIndex: '1',
+    };
+    const client = {
+      request: vi.fn().mockResolvedValue({ cluster }),
+    };
+
+    const api = getQueries(client as never);
+    const snapshotFromAlias = await api.getClusterSnapshot({ id: 'cluster-1' });
+    const snapshotFromCurrent = await api.toSolidityCluster({ id: 'cluster-1' });
+
+    expect(client.request).toHaveBeenNthCalledWith(
+      1,
+      GetClusterSnapshotDocument,
+      { id: 'cluster-1' },
+    );
+    expect(client.request).toHaveBeenNthCalledWith(
+      2,
+      GetClusterSnapshotDocument,
+      { id: 'cluster-1' },
+    );
+    expect(snapshotFromAlias).toEqual(cluster);
+    expect(snapshotFromCurrent).toEqual(cluster);
   });
 });

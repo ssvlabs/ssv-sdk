@@ -1,3 +1,10 @@
+# Unreleased
+
+### Fixes
+
+- restore `sdk.api.getClusterSnapshot` as a deprecated alias to `sdk.api.toSolidityCluster` for `0.1.x` compatibility
+- add explicit API method name mapping for `0.1.x` vs `1.x` in `README.md`
+
 # 1.0.0 (2026-02-12)
 
 ### Features
