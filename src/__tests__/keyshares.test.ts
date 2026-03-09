@@ -84,6 +84,37 @@ describe('Keyshares', async () => {
     expect(result.registered.length).toBe(0);
   });
 
+  it('uses explicit ownerAddress during pre-registration validation', async () => {
+    const { validateSharesPreRegistration } = await import(
+      '../libs/utils/methods'
+    );
+
+    const ownerAddress = valid_keyshares.shares[0].data
+      .ownerAddress as `0x${string}`;
+    const customConfig = merge({}, mockConfig, {
+      walletClient: {
+        account: {
+          address: '0x9999999999999999999999999999999999999999',
+        },
+      },
+      api: {
+        ...mockConfig.api,
+        getOwnerNonce: vi.fn().mockResolvedValue(833),
+      },
+    }) as unknown as ConfigReturnType;
+
+    const result = await validateSharesPreRegistration(customConfig, {
+      operatorIds: mockOperators.ids.map(String),
+      keyshares: valid_keyshares,
+      ownerAddress,
+    });
+
+    expect(result.available.length).toBe(9);
+    expect(customConfig.api.getOwnerNonce).toHaveBeenCalledWith({
+      owner: ownerAddress,
+    });
+  });
+
   it('can validate payload-only keyshares without nonce checks', async () => {
     const { validateSharesPreRegistration } = await import(
       '../libs/utils/methods'

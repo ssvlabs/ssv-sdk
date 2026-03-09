@@ -15,11 +15,12 @@ import {
 } from '@/utils/cluster';
 import { isUndefined } from 'lodash-es';
 
-import type { Hex } from 'viem';
+import type { Address, Hex } from 'viem';
 
 type RegisterValidatorsProps = SmartFnWriteOptions<{
   keyshares: KeySharesItem[] | KeySharesPayload[] | IKeySharesPartialPayload[];
   depositAmount?: bigint;
+  ownerAddress?: Address;
 }>;
 
 export const registerValidators = async (
@@ -86,9 +87,8 @@ export const registerValidators = async (
 };
 export const registerValidatorsRawData = async (
   config: ConfigReturnType,
-  { args: { keyshares, depositAmount = 0n } }: RegisterValidatorsProps,
+  { args: { keyshares, ownerAddress } }: RegisterValidatorsProps,
 ) => {
-  console.log(depositAmount);
   const shares = keyshares.map((share) => {
     return isKeySharesItem(share) ? share.payload : share;
   });
@@ -110,10 +110,16 @@ export const registerValidatorsRawData = async (
     );
   }
 
-  const clusterId = createClusterId(
-    config.walletClient.account!.address,
-    operatorIds,
-  );
+  const resolvedOwnerAddress =
+    ownerAddress ?? config.walletClient.account?.address;
+
+  if (!resolvedOwnerAddress) {
+    throw new Error(
+      'ownerAddress is required when walletClient.account.address is not available',
+    );
+  }
+
+  const clusterId = createClusterId(resolvedOwnerAddress, operatorIds);
   const cluster = await config.api.getCluster({
     id: clusterId,
   });
@@ -142,14 +148,24 @@ export const validateSharesPostRegistration = async (
   config: ConfigReturnType,
   args: {
     txHash: Hex;
+    ownerAddress?: Address;
   },
 ) => {
+  const ownerAddress =
+    args.ownerAddress ?? config.walletClient.account?.address;
+
+  if (!ownerAddress) {
+    throw new Error(
+      'ownerAddress is required when walletClient.account.address is not available',
+    );
+  }
+
   const receipt = await config.publicClient.waitForTransactionReceipt({
     hash: args.txHash,
   });
 
   const ownerNonce = await config.api.getOwnerNonce({
-    owner: config.walletClient.account!.address,
+    owner: ownerAddress,
     block: Number(receipt.blockNumber) - 1,
   });
 
@@ -162,7 +178,7 @@ export const validateSharesPostRegistration = async (
     address: config.contractAddresses.setter,
     eventName: 'ValidatorAdded',
     args: {
-      owner: config.walletClient.account!.address,
+      owner: ownerAddress,
     },
     fromBlock: receipt.blockNumber,
     toBlock: receipt.blockNumber,
@@ -186,7 +202,7 @@ export const validateSharesPostRegistration = async (
         blockNumber: Number(receipt.blockNumber),
         operatorsCount: e.args.operatorIds!.length,
         isAccountExists: false,
-        ownerAddress: config.walletClient.account!.address,
+        ownerAddress,
         ownerNonce: Number(ownerNonce) + index,
         shares: e.args.shares!,
         validatorPublicKey: e.args.publicKey!,

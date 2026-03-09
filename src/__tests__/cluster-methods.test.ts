@@ -2,6 +2,7 @@ import type { KeySharesPayload } from '@/libs/ssv-keys/KeyShares/KeySharesData/K
 import { type Hex } from 'viem';
 import { describe, expect, it, vi } from 'vitest';
 import { type ConfigReturnType } from '@/config';
+import { createClusterId } from '@/utils/cluster';
 
 // Mock dependencies
 vi.mock('@/utils/cluster', () => ({
@@ -219,6 +220,31 @@ describe('Cluster Methods', () => {
       );
     });
 
+    it('should build raw tx data using explicit ownerAddress', async () => {
+      const { registerValidatorsRawData } = await import(
+        '../libs/cluster/methods/register-validators'
+      );
+
+      const getTransactionData = vi.fn().mockReturnValue('0xbeef');
+      (
+        mockConfig.contract.ssv.write.registerValidator as unknown as {
+          getTransactionData: typeof getTransactionData;
+        }
+      ).getTransactionData = getTransactionData;
+
+      await registerValidatorsRawData(mockConfig, {
+        args: {
+          keyshares: [mockKeysharePayload],
+          ownerAddress: mockClusterOwnerAddress,
+        },
+      });
+
+      expect(createClusterId).toHaveBeenCalledWith(
+        mockClusterOwnerAddress,
+        mockOperatorIds,
+      );
+    });
+
     it('should validate shares post registration', async () => {
       const { validateSharesPostRegistration } = await import(
         '../libs/cluster/methods/register-validators'
@@ -244,6 +270,39 @@ describe('Cluster Methods', () => {
       expect(result).toHaveProperty('invalids');
       expect(result).toHaveProperty('ownerNonceAtBlock');
       expect(result).toHaveProperty('block');
+    });
+
+    it('should validate post-registration using explicit ownerAddress', async () => {
+      const { validateSharesPostRegistration } = await import(
+        '../libs/cluster/methods/register-validators'
+      );
+
+      mockPublicClient.getContractEvents.mockImplementation(async () => [
+        {
+          args: {
+            operatorIds: mockOperatorIds,
+            shares: '0x123',
+            publicKey: '0x456',
+          },
+        },
+      ]);
+
+      await validateSharesPostRegistration(mockConfig, {
+        txHash: '0x123' as Hex,
+        ownerAddress: mockClusterOwnerAddress,
+      });
+
+      expect(mockApi.getOwnerNonce).toHaveBeenCalledWith({
+        owner: mockClusterOwnerAddress,
+        block: 0,
+      });
+      expect(mockPublicClient.getContractEvents).toHaveBeenCalledWith(
+        expect.objectContaining({
+          args: {
+            owner: mockClusterOwnerAddress,
+          },
+        }),
+      );
     });
 
     it('should throw error when no validator added events found', async () => {
