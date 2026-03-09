@@ -90,17 +90,17 @@ export const getClusterBalance = async (
   );
 
   const effectiveBalanceValidatorUnits =
-    (Number(query.cluster.effectiveBalance) / 32) * globals.VUNITS_PRECISION;
+    (BigInt(query.cluster.effectiveBalance) *
+      BigInt(globals.VUNITS_PRECISION)) /
+    32n;
+  const validatorUnits =
+    effectiveBalanceValidatorUnits / BigInt(globals.VUNITS_PRECISION);
 
   const calculatedClusterBalance =
     BigInt(query.cluster.balance) -
-      ((cumulativeNetworkFee + cumulativeOperatorFee) *
-        BigInt(effectiveBalanceValidatorUnits)) /
-        BigInt(globals.VUNITS_PRECISION) || 1n;
+      (cumulativeNetworkFee + cumulativeOperatorFee) * validatorUnits || 1n;
 
-  const burnRate =
-    ((operatorsFee + networkFee) * BigInt(effectiveBalanceValidatorUnits)) /
-      BigInt(globals.VUNITS_PRECISION) || 1n;
+  const burnRate = (operatorsFee + networkFee) * validatorUnits || 1n;
 
   const LC = bigintMax(
     minimumLiquidationCollateral,
