@@ -76,11 +76,8 @@
 <span class="token keyword keyword-await">await</span> sdk<span class="token punctuation">.</span>clusters<span class="token punctuation">.</span><span class="token function">deposit</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
   id<span class="token operator">:</span> <span class="token string">'...'</span><span class="token punctuation">,</span>
   amount<span class="token operator">:</span> <span class="token function">parseEther</span><span class="token punctuation">(</span><span class="token string">'1.5'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
-  options<span class="token operator">:</span> <span class="token punctuation">{</span>
-    approve<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token comment">// Automatically triggers token approval transaction if the allowance is lower than the deposit amount</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
-</code></pre><h3 id="environment-setup-for-testing">Environment Setup for Testing </h3>
+</code></pre><p><strong>Note:</strong> The current <code>sdk.clusters.deposit</code> path is payable and does not perform ERC-20 allowance checks or <code>approve</code> calls.</p><h3 id="environment-setup-for-testing">Environment Setup for Testing </h3>
 <p>To run tests, you'll need to set up your environment variables. Create a <code>.env</code> file in the root directory of your project using the provided <code>.env.example</code> as a template:</p>
 <pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code><span class="token comment"># Copy the example env file</span>
 <span class="token function">cp</span> .env.example .env
