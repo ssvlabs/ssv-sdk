@@ -34,36 +34,33 @@ export const configArgsSchema = z
 
       return true;
     }),
-    walletClient: z.custom().superRefine((val, ctx) => {
-      const client = val as WalletClient | undefined;
-      if (!client) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Wallet client must be provided',
-        });
-        return false;
-      }
+    walletClient: z
+      .custom()
+      .optional()
+      .superRefine((val, ctx) => {
+        const client = val as WalletClient | undefined;
+        if (!client) return true;
 
-      if (client.chain === undefined) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Wallet client must have a chain property',
-        });
-        return false;
-      }
+        if (client.chain === undefined) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Wallet client must have a chain property',
+          });
+          return false;
+        }
 
-      if (
-        ![...chainIds].includes(client.chain?.id as (typeof chainIds)[number])
-      ) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: `Wallet client chain must be one of [${networks.join(', ')}]`,
-        });
-        return false;
-      }
+        if (
+          ![...chainIds].includes(client.chain?.id as (typeof chainIds)[number])
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: `Wallet client chain must be one of [${networks.join(', ')}]`,
+          });
+          return false;
+        }
 
-      return true;
-    }),
+        return true;
+      }),
     extendedConfig: z
       .object({
         subgraph: z
@@ -90,7 +87,12 @@ export const configArgsSchema = z
   .refine(
     (val) => {
       const publicClient = val.publicClient as PublicClient;
-      const walletClient = val.walletClient as WalletClient;
+      const walletClient = val.walletClient as WalletClient | undefined;
+
+      if (!walletClient) {
+        return true;
+      }
+
       return publicClient?.chain?.id === walletClient?.chain?.id;
     },
     {
@@ -99,7 +101,7 @@ export const configArgsSchema = z
   ) as z.ZodType<ConfigArgs>;
 
 export type ConfigArgs = {
-  walletClient: WalletClient;
+  walletClient?: WalletClient;
   publicClient: PublicClient;
   extendedConfig?: {
     subgraph?: {

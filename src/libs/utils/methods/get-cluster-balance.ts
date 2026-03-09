@@ -13,7 +13,7 @@ export const getClusterBalance = async (
   { operatorIds, ownerAddress }: GetClusterBalanceArgs,
 ) => {
   const resolvedOwnerAddress =
-    ownerAddress ?? config.walletClient.account?.address;
+    ownerAddress ?? config.walletClient?.account?.address;
 
   if (!resolvedOwnerAddress) {
     throw new Error(

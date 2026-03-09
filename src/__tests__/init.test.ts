@@ -1,9 +1,14 @@
-import { hoodi, paid_graph_endpoints } from '@/config/chains';
+import { chains, hoodi, paid_graph_endpoints } from '@/config/chains';
 import { SSVSDK } from '@/sdk';
 import type { ConfigArgs } from '@/utils';
 import 'hardhat';
 import { initializeContract } from 'hardhat/contract-helpers';
-import { createPublicClient, createWalletClient, http, type PublicClient, type WalletClient } from 'viem';
+import {
+  createPublicClient,
+  createWalletClient,
+  http,
+  type PublicClient,
+} from 'viem';
 import { describe, expect, it } from 'vitest';
 
 describe('SDK Initiation', async () => {
@@ -131,7 +136,7 @@ describe('SDK Initiation', async () => {
       }).toThrowError('Public client must be provided');
     });
 
-    it('should throw error when walletClient is not provided', () => {
+    it('should initialize without walletClient', () => {
       const transport = http(hoodi.rpcUrls.default.http[0]);
       const publicClient = createPublicClient({
         chain: hoodi,
@@ -141,9 +146,72 @@ describe('SDK Initiation', async () => {
       expect(() => {
         new SSVSDK({
           publicClient,
-          walletClient: null as unknown as WalletClient,
         });
-      }).toThrowError('Wallet client must be provided');
+      }).not.toThrowError();
+    });
+
+    it('should build write transaction data without walletClient', () => {
+      const transport = http(hoodi.rpcUrls.default.http[0]);
+      const publicClient = createPublicClient({
+        chain: hoodi,
+        transport,
+      });
+
+      const sdk = new SSVSDK({
+        publicClient,
+      });
+
+      const txData = sdk.contract.token.write.transfer.getTransactionData({
+        amount: 1n,
+        recipient: network.wallets[0].account.address,
+      });
+
+      expect(txData.startsWith('0x')).toBe(true);
+    });
+
+    it('should throw when executing write without walletClient', async () => {
+      const transport = http(hoodi.rpcUrls.default.http[0]);
+      const publicClient = createPublicClient({
+        chain: hoodi,
+        transport,
+      });
+
+      const sdk = new SSVSDK({
+        publicClient,
+      });
+
+      await expect(
+        sdk.contract.token.write.transfer({
+          args: {
+            amount: 1n,
+            recipient: network.wallets[0].account.address,
+          },
+        }),
+      ).rejects.toThrowError(
+        'Wallet client is required for write method "transfer". Provide walletClient in SDK config.',
+      );
+    });
+
+    it('should refresh operator write bindings when connectWallet is called', () => {
+      const transport = http(hoodi.rpcUrls.default.http[0]);
+      const publicClient = createPublicClient({
+        chain: hoodi,
+        transport,
+      });
+      const walletClient = createWalletClient({
+        chain: hoodi,
+        account: network.wallets[0].account,
+        transport,
+      });
+
+      const sdk = new SSVSDK({
+        publicClient,
+      });
+      const previousRemoveOperator = sdk.operators.removeOperator;
+
+      sdk.connectWallet(walletClient);
+
+      expect(sdk.operators.removeOperator).not.toBe(previousRemoveOperator);
     });
 
     it('should throw error when publicClient has no chain property', () => {
@@ -188,6 +256,26 @@ describe('SDK Initiation', async () => {
           walletClient,
         });
       }).toThrowError('Wallet client must have a chain property');
+    });
+
+    it('should throw error when walletClient chain differs from publicClient chain', () => {
+      const transport = http(hoodi.rpcUrls.default.http[0]);
+      const walletClient = createWalletClient({
+        chain: chains.mainnet,
+        account: network.wallets[0].account,
+        transport,
+      });
+      const publicClient = createPublicClient({
+        chain: hoodi,
+        transport,
+      });
+
+      expect(() => {
+        new SSVSDK({
+          publicClient,
+          walletClient,
+        });
+      }).toThrowError('Public and wallet client chains must be the same');
     });
 
     it('should throw error when publicClient chain is not supported', () => {

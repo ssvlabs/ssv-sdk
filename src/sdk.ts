@@ -2,17 +2,19 @@ import { createClusterManager } from '@/libs/cluster';
 import { createDaoManager } from '@/libs/dao';
 import { createOperatorManager } from '@/libs/operator';
 import { createUtils } from '@/libs/utils';
-import type { ConfigReturnType } from './config/create';
-import { createConfig, isConfig } from './config/create';
-import type { ConfigArgs } from './utils/zod/config';
+import type { WalletClient } from 'viem';
+import type { ConfigReturnType } from '@/config';
+import { createConfig, createContractInteractions, isConfig } from '@/config';
+import type { ConfigArgs } from '@/utils';
+import { configArgsSchema } from '@/utils';
 
 export class SSVSDK {
   readonly config: ConfigReturnType;
   readonly clusters: ReturnType<typeof createClusterManager>;
   readonly dao: ReturnType<typeof createDaoManager>;
-  readonly operators: ReturnType<typeof createOperatorManager>;
+  operators: ReturnType<typeof createOperatorManager>;
   readonly api: ConfigReturnType['api'];
-  readonly contract: ConfigReturnType['contract'];
+  contract: ConfigReturnType['contract'];
   readonly utils: ReturnType<typeof createUtils>;
 
   constructor(props: ConfigArgs | ConfigReturnType) {
@@ -23,5 +25,22 @@ export class SSVSDK {
     this.api = this.config.api;
     this.contract = this.config.contract;
     this.utils = createUtils(this.config);
+  }
+
+  connectWallet(walletClient: WalletClient) {
+    configArgsSchema.parse({
+      publicClient: this.config.publicClient,
+      walletClient,
+    });
+
+    this.config.walletClient = walletClient;
+    this.config.contract = createContractInteractions({
+      walletClient,
+      publicClient: this.config.publicClient,
+      addresses: this.config.contractAddresses,
+    });
+    this.contract = this.config.contract;
+    this.operators = createOperatorManager(this.config);
+    return this;
   }
 }

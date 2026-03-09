@@ -27,9 +27,10 @@ export const createClusterManager = (config: ConfigReturnType) => ({
   reactivate: reactivateCluster.bind(null, config) as RemoveConfigArg<
     typeof reactivateCluster
   >,
-  migrateClusterToETH: migrateClusterToETH.bind(null, config) as RemoveConfigArg<
-    typeof migrateClusterToETH
-  >,
+  migrateClusterToETH: migrateClusterToETH.bind(
+    null,
+    config,
+  ) as RemoveConfigArg<typeof migrateClusterToETH>,
   removeValidators: removeValidators.bind(null, config) as RemoveConfigArg<
     typeof removeValidators
   >,

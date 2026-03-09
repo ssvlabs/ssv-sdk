@@ -3,7 +3,7 @@ import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter';
 import { TokenABI } from '@/abi/token';
 import { paramsToArray } from '@/types/contract-interactions';
 import { tryCatch } from '@/utils';
-import type { AbiFunction, WriteContractParameters } from 'viem';
+import type { AbiFunction, WalletClient, WriteContractParameters } from 'viem';
 import { decodeEventLog, encodeFunctionData } from 'viem';
 import type {
   ContractNames,
@@ -16,6 +16,25 @@ import type {
 } from './types';
 
 const ABIS = [TokenABI, MainnetV4SetterABI];
+
+const ensureWritableWallet = (
+  walletClient: WalletClient | undefined,
+  functionName: string,
+) => {
+  if (!walletClient) {
+    throw new Error(
+      `Wallet client is required for write method "${functionName}". Provide walletClient in SDK config.`,
+    );
+  }
+
+  if (!walletClient.account) {
+    throw new Error(
+      `Wallet client account is required for write method "${functionName}".`,
+    );
+  }
+
+  return walletClient;
+};
 
 export const createWriter = <T extends ContractNames>({
   abi,
@@ -32,15 +51,18 @@ export const createWriter = <T extends ContractNames>({
 
   return Object.fromEntries(
     writeFnsMainnet.map((fn) => {
-      const simulate = async (options: any) =>
-        publicClient.simulateContract({
+      const simulate = async (options: any) => {
+        const writableWallet = ensureWritableWallet(walletClient, fn.name);
+
+        return publicClient.simulateContract({
           ...options,
           address: contractAddress,
           abi,
           functionName: fn.name,
           args: paramsToArray({ params: options.args, abiFunction: fn }),
-          account: walletClient.account!,
+          account: writableWallet.account!,
         });
+      };
 
       const getTransactionData = (params: any) => {
         return encodeFunctionData({
@@ -51,9 +73,10 @@ export const createWriter = <T extends ContractNames>({
       };
 
       const func = async (options: any) => {
+        const writableWallet = ensureWritableWallet(walletClient, fn.name);
         const { request } = await simulate(options);
 
-        const hash = await walletClient.writeContract(
+        const hash = await writableWallet.writeContract(
           request as WriteContractParameters,
         );
         return {

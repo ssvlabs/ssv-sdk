@@ -51,10 +51,15 @@ export const registerValidators = async (
     );
   }
 
-  const clusterId = createClusterId(
-    config.walletClient.account!.address,
-    operatorIds,
-  );
+  const ownerAddress = config.walletClient?.account?.address;
+
+  if (!ownerAddress) {
+    throw new Error(
+      'walletClient with account is required for write operations',
+    );
+  }
+
+  const clusterId = createClusterId(ownerAddress, operatorIds);
   const cluster = await config.api.getCluster({
     id: clusterId,
   });
@@ -111,7 +116,7 @@ export const registerValidatorsRawData = async (
   }
 
   const resolvedOwnerAddress =
-    ownerAddress ?? config.walletClient.account?.address;
+    ownerAddress ?? config.walletClient?.account?.address;
 
   if (!resolvedOwnerAddress) {
     throw new Error(
@@ -152,7 +157,7 @@ export const validateSharesPostRegistration = async (
   },
 ) => {
   const ownerAddress =
-    args.ownerAddress ?? config.walletClient.account?.address;
+    args.ownerAddress ?? config.walletClient?.account?.address;
 
   if (!ownerAddress) {
     throw new Error(

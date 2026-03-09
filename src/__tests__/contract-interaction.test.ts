@@ -64,7 +64,7 @@ describe('SSV Keys', async () => {
     );
     expect(operatorAddedEvent?.args.fee).toBe(blockFee);
     expect(operatorAddedEvent?.args.owner).toBe(
-      getAddress(sdk.config.walletClient.account!.address),
+      getAddress(sdk.config.walletClient!.account!.address),
     );
   });
 
