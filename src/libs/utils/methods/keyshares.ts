@@ -4,18 +4,15 @@ import { canAccountUseOperator } from '@/libs/operator/methods';
 import { KeyShares } from '@/libs/ssv-keys/KeyShares/KeyShares';
 import { KeySharesItem } from '@/libs/ssv-keys/KeyShares/KeySharesItem';
 import type { IKeySharesPartialPayload } from '@/libs/ssv-keys/interfaces';
-import type {
-  MainnetEvent,
-  ValidatorAddedEvent,
-} from '@/types/contract-interactions';
+import type { MainnetEvent, ValidatorAddedEvent } from '@/types/contract-interactions';
 import type { Operator } from '@/types/operator';
 import {
-  KeysharesValidationError,
-  KeysharesValidationErrors,
   ensureNoKeysharesErrors,
   ensureValidatorsUniqueness,
+  KeysharesValidationError,
+  KeysharesValidationErrors,
   validateConsistentOperatorIds,
-  validateConsistentOperatorPublicKeys,
+  validateConsistentOperatorPublicKeys
 } from '@/utils/keyshares';
 import { sortNumbers } from '@/utils/number';
 import { isEqual } from 'lodash-es';
@@ -62,7 +59,7 @@ export const validateSharesPreRegistration = async (
   config: ConfigReturnType,
   { keyshares, operatorIds, ownerAddress }: ValidatedKeysharesArgs,
 ) => {
-  const account = ownerAddress ?? config.walletClient.account?.address;
+  const account = ownerAddress ?? config.walletClient?.account?.address;
 
   if (!account) {
     throw new Error(
@@ -118,12 +115,10 @@ export const validateSharesPreRegistration = async (
     (share) => typeof share.data.ownerNonce === 'number',
   );
   const nonce = shouldValidateNonce
-    ? await config.api
-        .getOwnerNonce({ owner: account })
-        .then((nonce) => {
-          if (!nonce) throw new Error('Failed to get owner nonce');
-          return Number(nonce);
-        })
+    ? await config.api.getOwnerNonce({ owner: account }).then((nonce) => {
+        if (!nonce) throw new Error('Failed to get owner nonce');
+        return Number(nonce);
+      })
     : null;
 
   let i = 0;
@@ -165,13 +160,7 @@ export const validateSharesPreRegistration = async (
   const limit = await config.contract.ssv.read.getValidatorsPerOperatorLimit();
 
   for (const operator of operators) {
-    if (
-      !(await canAccountUseOperator(
-        config,
-        operator,
-        account,
-      ))
-    ) {
+    if (!(await canAccountUseOperator(config, operator, account))) {
       throw new Error(
         `Operator ${operator.id} is private and the account is not whitelisted`,
       );

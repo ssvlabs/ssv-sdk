@@ -112,7 +112,7 @@ export type SmartFnWriteOptions<K extends Record<string, unknown>> = Omit<
 export type WriteProps = {
   abi: Abi;
   publicClient: PublicClient;
-  walletClient: WalletClient;
+  walletClient?: WalletClient;
   contractAddress: Address;
 };
 export type ReadProps = {

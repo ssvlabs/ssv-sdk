@@ -22,7 +22,7 @@ import {
 
 export type ConfigReturnType = {
   publicClient: PublicClient;
-  walletClient: WalletClient;
+  walletClient?: WalletClient;
   chain: Chain;
   api: ReturnType<typeof createQueries> & ReturnType<typeof createSSVAPI>;
   contractAddresses: {
@@ -51,7 +51,6 @@ export const isConfig = (props: unknown): props is ConfigReturnType => {
     typeof props === 'object' &&
     props !== null &&
     'publicClient' in props &&
-    'walletClient' in props &&
     'chain' in props &&
     'api' in props &&
     'contractAddresses' in props &&
@@ -62,7 +61,7 @@ export const isConfig = (props: unknown): props is ConfigReturnType => {
 };
 
 type CreateContractInteractionsArgs = {
-  walletClient: WalletClient;
+  walletClient?: WalletClient;
   publicClient: PublicClient;
   addresses: ContractAddresses;
 };
@@ -107,7 +106,7 @@ export const createConfig = (props: ConfigArgs): ConfigReturnType => {
     configArgsSchema.parse(props);
 
   const hasAPIKey = Boolean(extendedConfig?.subgraph?.apiKey);
-  const chainId = walletClient.chain!.id as SupportedChainsIDs;
+  const chainId = publicClient.chain!.id as SupportedChainsIDs;
   const chainContracts = contracts[chainId];
 
   const addresses = {
@@ -143,7 +142,7 @@ export const createConfig = (props: ConfigArgs): ConfigReturnType => {
   return {
     publicClient: publicClient,
     walletClient: walletClient,
-    chain: walletClient.chain!,
+    chain: publicClient.chain!,
     api: {
       ...createQueries(graphQLClient),
       ...createSSVAPI(restEndpoint),
