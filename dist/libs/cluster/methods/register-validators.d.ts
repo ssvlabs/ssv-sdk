@@ -4,10 +4,11 @@ import { IKeySharesPartialPayload } from '../../ssv-keys/interfaces';
 import { KeySharesItem } from '../../ssv-keys/KeyShares/KeySharesItem';
 import { KeySharesPayload } from '../../ssv-keys/KeyShares/KeySharesData/KeySharesPayload';
 import { SSVKeys } from '../../ssv-keys/SSVKeys';
-import { Hex } from 'viem';
+import { Address, Hex } from 'viem';
 type RegisterValidatorsProps = SmartFnWriteOptions<{
     keyshares: KeySharesItem[] | KeySharesPayload[] | IKeySharesPartialPayload[];
     depositAmount?: bigint;
+    ownerAddress?: Address;
 }>;
 export declare const registerValidators: (config: ConfigReturnType, { args: { keyshares, depositAmount }, ...writeOptions }: RegisterValidatorsProps) => Promise<{
     hash: import('viem').Hash;
@@ -421,10 +422,11 @@ export declare const registerValidators: (config: ConfigReturnType, { args: { ke
         })[];
     }>;
 }>;
-export declare const registerValidatorsRawData: (config: ConfigReturnType, { args: { keyshares, depositAmount } }: RegisterValidatorsProps) => Promise<`0x${string}`>;
+export declare const registerValidatorsRawData: (config: ConfigReturnType, { args: { keyshares, ownerAddress } }: RegisterValidatorsProps) => Promise<`0x${string}`>;
 declare const ssvKeys: SSVKeys;
 export declare const validateSharesPostRegistration: (config: ConfigReturnType, args: {
     txHash: Hex;
+    ownerAddress?: Address;
 }) => Promise<{
     isValid: boolean;
     validations: {
