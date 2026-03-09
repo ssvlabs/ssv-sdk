@@ -4,7 +4,7 @@ const require$$0 = require("fs");
 const require$$1 = require("path");
 const require$$2 = require("os");
 const crypto$1 = require("crypto");
-const globals = require("./globals-F33LMemb.js");
+const config$1 = require("./config-DCm0t2Z2.js");
 const lodashEs = require("lodash-es");
 const viem = require("viem");
 const graphqlRequest = require("graphql-request");
@@ -342,36 +342,42 @@ var cliOptions = function optionMatcher(args) {
     )
   );
 })();
-const GetClusterSnapshotDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetClusterSnapshot" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "cluster" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "active" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }] } }] } }] };
-const GetClusterDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetCluster" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "cluster" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "owner" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "active" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "operatorIds" } }, { "kind": "Field", "name": { "kind": "Name", "value": "effectiveBalance" } }] } }] } }] };
-const GetClustersDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetClusters" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "clusters" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "owner" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "active" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "operatorIds" } }, { "kind": "Field", "name": { "kind": "Name", "value": "effectiveBalance" } }] } }] } }] };
+var ClusterFeeAssetTypes = /* @__PURE__ */ ((ClusterFeeAssetTypes2) => {
+  ClusterFeeAssetTypes2["Eth"] = "ETH";
+  ClusterFeeAssetTypes2["Ssv"] = "SSV";
+  return ClusterFeeAssetTypes2;
+})(ClusterFeeAssetTypes || {});
+const GetClusterSnapshotDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetClusterSnapshot" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "cluster" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "active" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "effectiveBalance" } }] } }] } }] };
+const GetClusterDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetCluster" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "cluster" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "owner" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "feeAsset" } }, { "kind": "Field", "name": { "kind": "Name", "value": "active" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "operatorIds" } }, { "kind": "Field", "name": { "kind": "Name", "value": "effectiveBalance" } }] } }] } }] };
+const GetClustersDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetClusters" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "clusters" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "owner" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "feeAsset" } }, { "kind": "Field", "name": { "kind": "Name", "value": "active" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "operatorIds" } }, { "kind": "Field", "name": { "kind": "Name", "value": "effectiveBalance" } }] } }] } }] };
 const GetOwnerNonceDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetOwnerNonce" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "account" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "nonce" } }] } }] } }] };
 const GetOwnerNonceByBlockDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetOwnerNonceByBlock" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "block" } }, "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "Int" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "account" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "owner" } } }, { "kind": "Argument", "name": { "kind": "Name", "value": "block" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "number" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "block" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "nonce" } }] } }] } }] };
 const GetOperatorDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetOperator" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "operator" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "publicKey" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "isPrivate" } }, { "kind": "Field", "name": { "kind": "Name", "value": "whitelistedContract" } }, { "kind": "Field", "name": { "kind": "Name", "value": "whitelisted" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }] } }] } }] } }] };
-const GetOperatorsDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetOperators" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } }, "type": { "kind": "NonNullType", "type": { "kind": "ListType", "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "operators" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "id_in" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "publicKey" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "isPrivate" } }, { "kind": "Field", "name": { "kind": "Name", "value": "whitelistedContract" } }, { "kind": "Field", "name": { "kind": "Name", "value": "fee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "whitelisted" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }] } }] } }] } }] };
+const GetOperatorsDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetOperators" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } }, "type": { "kind": "NonNullType", "type": { "kind": "ListType", "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "operators" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "id_in" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "publicKey" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "isPrivate" } }, { "kind": "Field", "name": { "kind": "Name", "value": "whitelistedContract" } }, { "kind": "Field", "name": { "kind": "Name", "value": "fee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "ssvFee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "whitelisted" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }] } }] } }] } }] };
 const GetValidatorsDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetValidators" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "ids" } }, "type": { "kind": "NonNullType", "type": { "kind": "ListType", "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "Bytes" } } } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "validators" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "id_in" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "ids" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }] } }] } }] };
 const GetValidatorDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetValidator" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "validator" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }] } }] } }] };
-const GetClusterBalanceDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetClusterBalance" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "clusterId" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } }, "type": { "kind": "NonNullType", "type": { "kind": "ListType", "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "_meta" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "block" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "number" } }] } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "daovalues" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "networkFee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexBlockNumber" } }, { "kind": "Field", "name": { "kind": "Name", "value": "liquidationThreshold" } }, { "kind": "Field", "name": { "kind": "Name", "value": "minimumLiquidationCollateral" } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "operators" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "id_in" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "fee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "feeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "feeIndexBlockNumber" } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "cluster" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "clusterId" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "effectiveBalance" } }] } }] } }] };
-const GetDaoValuesDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetDaoValues" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "daovalues" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "networkFee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexBlockNumber" } }, { "kind": "Field", "name": { "kind": "Name", "value": "liquidationThreshold" } }, { "kind": "Field", "name": { "kind": "Name", "value": "minimumLiquidationCollateral" } }] } }] } }] };
+const GetClusterBalanceDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetClusterBalance" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "clusterId" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } }, "type": { "kind": "NonNullType", "type": { "kind": "ListType", "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "String" } } } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "_meta" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "block" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "number" } }] } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "daovalues" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "networkFee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexBlockNumber" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeSSV" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexSSV" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexBlockNumberSSV" } }, { "kind": "Field", "name": { "kind": "Name", "value": "liquidationThreshold" } }, { "kind": "Field", "name": { "kind": "Name", "value": "liquidationThresholdSSV" } }, { "kind": "Field", "name": { "kind": "Name", "value": "minimumLiquidationCollateral" } }, { "kind": "Field", "name": { "kind": "Name", "value": "minimumLiquidationCollateralSSV" } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "operators" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "where" }, "value": { "kind": "ObjectValue", "fields": [{ "kind": "ObjectField", "name": { "kind": "Name", "value": "id_in" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "operatorIds" } } }] } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "fee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "feeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "feeIndexBlockNumber" } }, { "kind": "Field", "name": { "kind": "Name", "value": "ssvFee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "ssvFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "ssvFeeIndexBlockNumber" } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "cluster" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "clusterId" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "feeAsset" } }, { "kind": "Field", "name": { "kind": "Name", "value": "validatorCount" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "index" } }, { "kind": "Field", "name": { "kind": "Name", "value": "balance" } }, { "kind": "Field", "name": { "kind": "Name", "value": "effectiveBalance" } }] } }] } }] };
+const GetDaoValuesDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetDaoValues" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "daovalues" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "networkFee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexBlockNumber" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeSSV" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexSSV" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexBlockNumberSSV" } }, { "kind": "Field", "name": { "kind": "Name", "value": "liquidationThreshold" } }, { "kind": "Field", "name": { "kind": "Name", "value": "liquidationThresholdSSV" } }, { "kind": "Field", "name": { "kind": "Name", "value": "minimumLiquidationCollateral" } }, { "kind": "Field", "name": { "kind": "Name", "value": "minimumLiquidationCollateralSSV" } }] } }] } }] };
 const getOwnerNonce = (client, args) => {
   const document = typeof args.block === "number" ? GetOwnerNonceByBlockDocument : GetOwnerNonceDocument;
   return client.request(document, args).then((r) => r.account?.nonce || "0").catch(() => "0");
 };
 const toSolidityCluster = (client, args) => client.request(GetClusterSnapshotDocument, args).then((res) => res.cluster);
+const getClusterSnapshot = (client, args) => toSolidityCluster(client, args);
 const getCluster = (client, args) => client.request(GetClusterDocument, args).then((res) => res.cluster);
 const getClusters = (client, args) => client.request(GetClustersDocument, args).then((res) => res.clusters);
 const getOperator = (client, args) => client.request(GetOperatorDocument, args).then((res) => {
   if (!res.operator) return null;
   return {
     ...res.operator,
-    publicKey: globals.decodeOperatorPublicKey(res.operator.publicKey),
+    publicKey: config$1.decodeOperatorPublicKey(res.operator.publicKey),
     whitelisted: res.operator.whitelisted.map((v) => v.id)
   };
 });
 const getOperators = (client, args) => client.request(GetOperatorsDocument, args).then(
   (res) => res.operators.map((o) => ({
     ...o,
-    publicKey: globals.decodeOperatorPublicKey(o.publicKey),
+    publicKey: config$1.decodeOperatorPublicKey(o.publicKey),
     whitelisted: o.whitelisted.map((v) => v.id)
   }))
 );
@@ -382,6 +388,7 @@ const getDaoValues = (client, args) => client.request(GetDaoValuesDocument, args
 const getQueries = (client) => ({
   getOwnerNonce: getOwnerNonce.bind(null, client),
   toSolidityCluster: toSolidityCluster.bind(null, client),
+  getClusterSnapshot: getClusterSnapshot.bind(null, client),
   getCluster: getCluster.bind(null, client),
   getClusters: getClusters.bind(null, client),
   getOperator: getOperator.bind(null, client),
@@ -5729,7 +5736,7 @@ const paramsToArray = ({
   params,
   abiFunction
 }) => {
-  return globals.stringifyBigints(
+  return config$1.stringifyBigints(
     abiFunction.inputs.reduce(
       (acc, param) => {
         if (param.name && !lodashEs.isUndefined(params[param.name])) {
@@ -5852,7 +5859,7 @@ const createWriter = ({
                   acc.push(event);
                 } catch {
                   for (const eventAbi of ABIS) {
-                    globals.tryCatch(() => {
+                    config$1.tryCatch(() => {
                       const event = viem.decodeEventLog({
                         abi: eventAbi,
                         data: log.data,
@@ -5959,10 +5966,10 @@ const createContractInteractions = ({
   };
 };
 const createConfig = (props) => {
-  const { walletClient, publicClient, extendedConfig } = globals.configArgsSchema.parse(props);
+  const { walletClient, publicClient, extendedConfig } = config$1.configArgsSchema.parse(props);
   const hasAPIKey = Boolean(extendedConfig?.subgraph?.apiKey);
   const chainId = walletClient.chain.id;
-  const chainContracts = globals.contracts[chainId];
+  const chainContracts = config$1.contracts[chainId];
   const addresses = {
     setter: extendedConfig?.contracts?.setter || chainContracts.setter,
     getter: extendedConfig?.contracts?.getter || chainContracts.getter,
@@ -5973,8 +5980,8 @@ const createConfig = (props) => {
     publicClient,
     addresses
   });
-  const graphEndpoint = extendedConfig?.subgraph?.endpoint || (hasAPIKey ? globals.paid_graph_endpoints[chainId] : globals.graph_endpoints[chainId]);
-  const restEndpoint = extendedConfig?.rest?.endpoint || globals.rest_endpoints[chainId];
+  const graphEndpoint = extendedConfig?.subgraph?.endpoint || (hasAPIKey ? config$1.paid_graph_endpoints[chainId] : config$1.graph_endpoints[chainId]);
+  const restEndpoint = extendedConfig?.rest?.endpoint || config$1.rest_endpoints[chainId];
   const graphQLClient = new graphqlRequest.GraphQLClient(
     graphEndpoint,
     hasAPIKey ? {
@@ -6007,7 +6014,7 @@ const deposit = async (config2, { args: { id, amount }, ...writeOptions }) => {
   if (!cluster) {
     throw new Error("Cluster not found");
   }
-  const snapshot = globals.toSolidityCluster(cluster);
+  const snapshot = config$1.toSolidityCluster(cluster);
   return config2.contract.ssv.write.deposit({
     value: amount,
     args: {
@@ -6043,8 +6050,8 @@ const liquidateCluster = async (config2, { args: { id }, ...writeOptions }) => {
   }
   return config2.contract.ssv.write.liquidate({
     args: {
-      cluster: globals.toSolidityCluster(cluster),
-      clusterOwner: config2.walletClient.account.address,
+      cluster: config$1.toSolidityCluster(cluster),
+      clusterOwner: cluster.owner.id,
       operatorIds: cluster.operatorIds.map(BigInt)
     },
     ...writeOptions
@@ -6059,7 +6066,7 @@ const liquidateSSV = async (config2, { args: { id }, ...writeOptions }) => {
     args: {
       clusterOwner: cluster.owner.id,
       operatorIds: cluster.operatorIds.map(BigInt),
-      cluster: globals.toSolidityCluster(cluster)
+      cluster: config$1.toSolidityCluster(cluster)
     },
     ...writeOptions
   });
@@ -6073,7 +6080,7 @@ const migrateClusterToETH = async (config2, { args: { id, amount }, ...writeOpti
     value: amount,
     args: {
       operatorIds: cluster.operatorIds.map(BigInt),
-      cluster: globals.toSolidityCluster(cluster)
+      cluster: config$1.toSolidityCluster(cluster)
     },
     ...writeOptions
   });
@@ -6086,7 +6093,7 @@ const reactivateCluster = async (config2, { args: { id, amount }, ...writeOption
   return config2.contract.ssv.write.reactivate({
     value: amount,
     args: {
-      cluster: globals.toSolidityCluster(cluster),
+      cluster: config$1.toSolidityCluster(cluster),
       operatorIds: cluster.operatorIds.map(BigInt)
     },
     ...writeOptions
@@ -6097,14 +6104,14 @@ const registerValidators = async (config2, {
   ...writeOptions
 }) => {
   const shares = keyshares.map((share) => {
-    return globals.isKeySharesItem(share) ? share.payload : share;
+    return config$1.isKeySharesItem(share) ? share.payload : share;
   });
   const operatorIds = shares[0].operatorIds;
   const clusterSize = operatorIds.length;
-  const limit = globals.registerValidatorsByClusterSizeLimits[clusterSize];
+  const limit = config$1.registerValidatorsByClusterSizeLimits[clusterSize];
   if (!limit) {
     throw new Error(
-      `Invalid number of operators in keyshares: ${clusterSize}, should be one of: ${Object.keys(globals.registerValidatorsByClusterSizeLimits).join(", ")}`
+      `Invalid number of operators in keyshares: ${clusterSize}, should be one of: ${Object.keys(config$1.registerValidatorsByClusterSizeLimits).join(", ")}`
     );
   }
   if (shares.length > limit) {
@@ -6112,14 +6119,14 @@ const registerValidators = async (config2, {
       `You can't register more than ${limit} validators in a single transaction`
     );
   }
-  const clusterId = globals.createClusterId(
+  const clusterId = config$1.createClusterId(
     config2.walletClient.account.address,
     operatorIds
   );
   const cluster = await config2.api.getCluster({
     id: clusterId
   });
-  const snapshot = cluster ? globals.toSolidityCluster(cluster) : globals.createEmptyCluster();
+  const snapshot = cluster ? config$1.toSolidityCluster(cluster) : config$1.createEmptyCluster();
   if (shares.length === 1) {
     return config2.contract.ssv.write.registerValidator({
       value: depositAmount,
@@ -6143,17 +6150,16 @@ const registerValidators = async (config2, {
     ...writeOptions
   });
 };
-const registerValidatorsRawData = async (config2, { args: { keyshares, depositAmount = 0n } }) => {
-  console.log(depositAmount);
+const registerValidatorsRawData = async (config2, { args: { keyshares, ownerAddress } }) => {
   const shares = keyshares.map((share) => {
-    return globals.isKeySharesItem(share) ? share.payload : share;
+    return config$1.isKeySharesItem(share) ? share.payload : share;
   });
   const operatorIds = shares[0].operatorIds;
   const clusterSize = operatorIds.length;
-  const limit = globals.registerValidatorsByClusterSizeLimits[clusterSize];
+  const limit = config$1.registerValidatorsByClusterSizeLimits[clusterSize];
   if (!limit) {
     throw new Error(
-      `Invalid number of operators in keyshares: ${clusterSize}, should be one of: ${Object.keys(globals.registerValidatorsByClusterSizeLimits).join(", ")}`
+      `Invalid number of operators in keyshares: ${clusterSize}, should be one of: ${Object.keys(config$1.registerValidatorsByClusterSizeLimits).join(", ")}`
     );
   }
   if (shares.length > limit) {
@@ -6161,14 +6167,17 @@ const registerValidatorsRawData = async (config2, { args: { keyshares, depositAm
       `You can't register more than ${limit} validators in a single transaction`
     );
   }
-  const clusterId = globals.createClusterId(
-    config2.walletClient.account.address,
-    operatorIds
-  );
+  const resolvedOwnerAddress = ownerAddress ?? config2.walletClient.account?.address;
+  if (!resolvedOwnerAddress) {
+    throw new Error(
+      "ownerAddress is required when walletClient.account.address is not available"
+    );
+  }
+  const clusterId = config$1.createClusterId(resolvedOwnerAddress, operatorIds);
   const cluster = await config2.api.getCluster({
     id: clusterId
   });
-  const snapshot = cluster ? globals.toSolidityCluster(cluster) : globals.createEmptyCluster();
+  const snapshot = cluster ? config$1.toSolidityCluster(cluster) : config$1.createEmptyCluster();
   if (shares.length === 1) {
     return config2.contract.ssv.write.registerValidator.getTransactionData({
       cluster: snapshot,
@@ -6186,11 +6195,17 @@ const registerValidatorsRawData = async (config2, { args: { keyshares, depositAm
 };
 const ssvKeys$1 = new KeyShares.SSVKeys();
 const validateSharesPostRegistration = async (config2, args) => {
+  const ownerAddress = args.ownerAddress ?? config2.walletClient.account?.address;
+  if (!ownerAddress) {
+    throw new Error(
+      "ownerAddress is required when walletClient.account.address is not available"
+    );
+  }
   const receipt = await config2.publicClient.waitForTransactionReceipt({
     hash: args.txHash
   });
   const ownerNonce = await config2.api.getOwnerNonce({
-    owner: config2.walletClient.account.address,
+    owner: ownerAddress,
     block: Number(receipt.blockNumber) - 1
   });
   if (lodashEs.isUndefined(ownerNonce)) {
@@ -6201,7 +6216,7 @@ const validateSharesPostRegistration = async (config2, args) => {
     address: config2.contractAddresses.setter,
     eventName: "ValidatorAdded",
     args: {
-      owner: config2.walletClient.account.address
+      owner: ownerAddress
     },
     fromBlock: receipt.blockNumber,
     toBlock: receipt.blockNumber
@@ -6217,7 +6232,7 @@ const validateSharesPostRegistration = async (config2, args) => {
         blockNumber: Number(receipt.blockNumber),
         operatorsCount: e.args.operatorIds.length,
         isAccountExists: false,
-        ownerAddress: config2.walletClient.account.address,
+        ownerAddress,
         ownerNonce: Number(ownerNonce) + index,
         shares: e.args.shares,
         validatorPublicKey: e.args.publicKey
@@ -6242,7 +6257,7 @@ const removeValidators = async (config2, { args: { id, publicKeys }, ...writeOpt
   if (publicKeys.length === 1) {
     return config2.contract.ssv.write.removeValidator({
       args: {
-        cluster: globals.toSolidityCluster(cluster),
+        cluster: config$1.toSolidityCluster(cluster),
         publicKey: publicKeys[0],
         operatorIds: cluster.operatorIds.map(BigInt)
       },
@@ -6251,7 +6266,7 @@ const removeValidators = async (config2, { args: { id, publicKeys }, ...writeOpt
   }
   return config2.contract.ssv.write.bulkRemoveValidator({
     args: {
-      cluster: globals.toSolidityCluster(cluster),
+      cluster: config$1.toSolidityCluster(cluster),
       publicKeys,
       operatorIds: cluster.operatorIds.map(BigInt)
     },
@@ -6274,7 +6289,7 @@ const withdraw$1 = async (config2, { args: { id, amount }, ...writeOptions }) =>
   return config2.contract.ssv.write.withdraw({
     args: {
       amount,
-      cluster: globals.toSolidityCluster(cluster),
+      cluster: config$1.toSolidityCluster(cluster),
       operatorIds: cluster.operatorIds.map(BigInt)
     },
     ...writeOptions
@@ -6407,7 +6422,10 @@ const registerOperator = async (config2, {
   return config2.contract.ssv.write.registerOperator({
     args: {
       publicKey: viem.encodeAbiParameters(viem.parseAbiParameters("string"), [publicKey]),
-      fee: globals.roundOperatorFee(yearlyFee / globals.globals.BLOCKS_PER_YEAR),
+      fee: config$1.roundOperatorFee(
+        yearlyFee / config$1.globals.BLOCKS_PER_YEAR,
+        config$1.globals.ETH_DEDUCTED_DIGITS
+      ),
       setPrivate: isPrivate
     },
     ...writeOptions
@@ -6478,40 +6496,62 @@ const createOperatorManager = (config2) => ({
   cancelDeclaredOperatorFee: config2.contract.ssv.write.cancelDeclaredOperatorFee,
   reduceOperatorFee: config2.contract.ssv.write.reduceOperatorFee
 });
-const getClusterBalance = async (config2, { operatorIds }) => {
+const getClusterBalance = async (config2, { operatorIds, ownerAddress }) => {
+  const resolvedOwnerAddress = ownerAddress ?? config2.walletClient.account?.address;
+  if (!resolvedOwnerAddress) {
+    throw new Error(
+      "ownerAddress is required when walletClient.account.address is not available"
+    );
+  }
   const query = await config2.api.getClusterBalance({
     daoAddress: config2.contractAddresses.setter,
     operatorIds: operatorIds.map(String),
-    clusterId: globals.createClusterId(
-      config2.walletClient.account.address,
-      operatorIds
-    )
+    clusterId: config$1.createClusterId(resolvedOwnerAddress, operatorIds)
   });
   if (!query.cluster || !query.daovalues || !query._meta) {
     throw new Error("Could not fetch cluster balance");
   }
-  const scallingCoefficient = 100000n;
-  const cumulativeNetworkFee = BigInt(query.daovalues.networkFeeIndex) + (BigInt(query._meta.block.number) - BigInt(query.daovalues.networkFeeIndexBlockNumber)) * BigInt(query.daovalues.networkFee) - BigInt(query.cluster.networkFeeIndex) * scallingCoefficient;
+  const isSsvCluster = query.cluster.feeAsset === ClusterFeeAssetTypes.Ssv;
+  const networkFee = BigInt(
+    isSsvCluster ? query.daovalues.networkFeeSSV : query.daovalues.networkFee
+  );
+  const networkFeeIndex = BigInt(
+    isSsvCluster ? query.daovalues.networkFeeIndexSSV : query.daovalues.networkFeeIndex
+  );
+  const networkFeeIndexBlockNumber = BigInt(
+    isSsvCluster ? query.daovalues.networkFeeIndexBlockNumberSSV : query.daovalues.networkFeeIndexBlockNumber
+  );
+  const minimumLiquidationCollateral = BigInt(
+    isSsvCluster ? query.daovalues.minimumLiquidationCollateralSSV : query.daovalues.minimumLiquidationCollateral
+  );
+  const liquidationThreshold = BigInt(
+    isSsvCluster ? query.daovalues.liquidationThresholdSSV : query.daovalues.liquidationThreshold
+  );
+  const scallingCoefficient = isSsvCluster ? config$1.globals.SSV_DEDUCTED_DIGITS : config$1.globals.ETH_DEDUCTED_DIGITS;
+  const cumulativeNetworkFee = networkFeeIndex + (BigInt(query._meta.block.number) - networkFeeIndexBlockNumber) * networkFee - BigInt(query.cluster.networkFeeIndex) * scallingCoefficient;
   const cumulativeOperatorFee = query.operators.reduce(
     (acc, operator) => {
-      return acc + BigInt(operator.feeIndex) + (BigInt(query._meta.block.number) - BigInt(operator.feeIndexBlockNumber)) * BigInt(operator.fee);
+      const fee = isSsvCluster ? operator.ssvFee : operator.fee;
+      const feeIndex = isSsvCluster ? operator.ssvFeeIndex : operator.feeIndex;
+      const feeIndexBlockNumber = isSsvCluster ? operator.ssvFeeIndexBlockNumber : operator.feeIndexBlockNumber;
+      return acc + BigInt(feeIndex) + (BigInt(query._meta.block.number) - BigInt(feeIndexBlockNumber)) * BigInt(fee);
     },
     -BigInt(query.cluster.index) * scallingCoefficient
   );
   const operatorsFee = query.operators.reduce(
-    (acc, operator) => acc + BigInt(operator.fee),
+    (acc, operator) => acc + BigInt(isSsvCluster ? operator.ssvFee : operator.fee),
     0n
   );
-  const effectiveBalanceValidatorUnits = Number(query.cluster.effectiveBalance) / 32 * globals.globals.VUNITS_PRECISION;
-  const calculatedClusterBalance = BigInt(query.cluster.balance) - (cumulativeNetworkFee + cumulativeOperatorFee) * BigInt(effectiveBalanceValidatorUnits) / BigInt(globals.globals.VUNITS_PRECISION) || 1n;
-  const burnRate = (operatorsFee + BigInt(query.daovalues.networkFee)) * BigInt(effectiveBalanceValidatorUnits) / BigInt(globals.globals.VUNITS_PRECISION) || 1n;
-  const mLc = BigInt(query.daovalues.minimumLiquidationCollateral);
-  const LC = globals.bigintMax(
-    mLc,
-    burnRate * BigInt(query.daovalues.liquidationThreshold)
+  const effectiveBalanceValidatorUnits = BigInt(query.cluster.effectiveBalance) * BigInt(config$1.globals.VUNITS_PRECISION) / 32n;
+  const validatorUnits = effectiveBalanceValidatorUnits / BigInt(config$1.globals.VUNITS_PRECISION);
+  const calculatedClusterBalance = BigInt(query.cluster.balance) - (cumulativeNetworkFee + cumulativeOperatorFee) * validatorUnits || 1n;
+  const burnRate = (operatorsFee + networkFee) * validatorUnits || 1n;
+  const LC = config$1.bigintMax(
+    minimumLiquidationCollateral,
+    burnRate * liquidationThreshold
   );
   const runway = calculatedClusterBalance - LC;
-  const operationalRunway = runway / burnRate / globals.globals.BLOCKS_PER_DAY;
+  const operationalRunway = runway / burnRate / config$1.globals.BLOCKS_PER_DAY;
   return {
     balance: calculatedClusterBalance,
     operationalRunway
@@ -6529,30 +6569,36 @@ const buildKeysharesFromPayloads = (payloads) => {
     item.payload.update(payload);
     return item;
   });
-  globals.ensureValidatorsUniqueness(shares);
+  config$1.ensureValidatorsUniqueness(shares);
   return shares;
 };
-const validateSharesPreRegistration = async (config2, { keyshares, operatorIds }) => {
+const validateSharesPreRegistration = async (config2, { keyshares, operatorIds, ownerAddress }) => {
+  const account = ownerAddress ?? config2.walletClient.account?.address;
+  if (!account) {
+    throw new Error(
+      "ownerAddress is required when walletClient.account.address is not available"
+    );
+  }
   const operators = await config2.api.getOperators({ operatorIds });
   if (operators.length !== operatorIds.length) {
-    throw new globals.KeysharesValidationError(
-      globals.KeysharesValidationErrors.OperatorDoesNotExist
+    throw new config$1.KeysharesValidationError(
+      config$1.KeysharesValidationErrors.OperatorDoesNotExist
     );
   }
   const usesPayloads = isKeySharesPayloadList(keyshares);
   const shares = usesPayloads ? buildKeysharesFromPayloads(keyshares) : await validateKeysharesJSON({
-    account: config2.walletClient.account.address,
+    account,
     operators,
     keyshares
   });
   if (usesPayloads) {
-    const shareOperatorIds = globals.validateConsistentOperatorIds(shares);
-    const sortedOperatorIds = globals.sortNumbers(
+    const shareOperatorIds = config$1.validateConsistentOperatorIds(shares);
+    const sortedOperatorIds = config$1.sortNumbers(
       operators.map((operator) => Number(operator.id))
     );
-    if (!lodashEs.isEqual(globals.sortNumbers(shareOperatorIds), globals.sortNumbers(sortedOperatorIds))) {
-      throw new globals.KeysharesValidationError(
-        globals.KeysharesValidationErrors.ClusterMismatch
+    if (!lodashEs.isEqual(config$1.sortNumbers(shareOperatorIds), config$1.sortNumbers(sortedOperatorIds))) {
+      throw new config$1.KeysharesValidationError(
+        config$1.KeysharesValidationErrors.ClusterMismatch
       );
     }
   }
@@ -6567,7 +6613,7 @@ const validateSharesPreRegistration = async (config2, { keyshares, operatorIds }
   const shouldValidateNonce = shares.every(
     (share) => typeof share.data.ownerNonce === "number"
   );
-  const nonce = shouldValidateNonce ? await config2.api.getOwnerNonce({ owner: config2.walletClient.account.address }).then((nonce2) => {
+  const nonce = shouldValidateNonce ? await config2.api.getOwnerNonce({ owner: account }).then((nonce2) => {
     if (!nonce2) throw new Error("Failed to get owner nonce");
     return Number(nonce2);
   }) : null;
@@ -6603,7 +6649,7 @@ const validateSharesPreRegistration = async (config2, { keyshares, operatorIds }
     if (!await canAccountUseOperator(
       config2,
       operator,
-      config2.walletClient.account.address
+      account
     )) {
       throw new Error(
         `Operator ${operator.id} is private and the account is not whitelisted`
@@ -6623,9 +6669,9 @@ const validateKeysharesJSON = async ({
   keyshares
 }) => {
   const shares = (await KeyShares.KeyShares.fromJson(keyshares)).list();
-  globals.ensureNoKeysharesErrors(shares);
-  globals.ensureValidatorsUniqueness(shares);
-  globals.validateConsistentOperatorPublicKeys(shares, operators);
+  config$1.ensureNoKeysharesErrors(shares);
+  config$1.ensureValidatorsUniqueness(shares);
+  config$1.validateConsistentOperatorPublicKeys(shares, operators);
   await Promise.all(
     shares.map(
       (share) => share.validateSingleShares(share.payload.sharesData, {
@@ -6635,13 +6681,13 @@ const validateKeysharesJSON = async ({
       })
     )
   );
-  const shareOperatorIds = globals.validateConsistentOperatorIds(shares);
-  const operatorIds = globals.sortNumbers(
+  const shareOperatorIds = config$1.validateConsistentOperatorIds(shares);
+  const operatorIds = config$1.sortNumbers(
     operators.map((operator) => Number(operator.id))
   );
-  if (!lodashEs.isEqual(globals.sortNumbers(shareOperatorIds), globals.sortNumbers(operatorIds))) {
-    throw new globals.KeysharesValidationError(
-      globals.KeysharesValidationErrors.ClusterMismatch
+  if (!lodashEs.isEqual(config$1.sortNumbers(shareOperatorIds), config$1.sortNumbers(operatorIds))) {
+    throw new config$1.KeysharesValidationError(
+      config$1.KeysharesValidationErrors.ClusterMismatch
     );
   }
   return shares;
@@ -6704,7 +6750,7 @@ const getOperatorCapacity = async (config2, operatorId) => {
 const computeDailyAmount = (value, days) => {
   const scale = 10 ** 6;
   const scaledDays = BigInt(days * scale);
-  return value * scaledDays * BigInt(globals.globals.BLOCKS_PER_DAY) / BigInt(scale);
+  return value * scaledDays * BigInt(config$1.globals.BLOCKS_PER_DAY) / BigInt(scale);
 };
 const calcDepositFromRunway = async (config2, { clusterId, runway }) => {
   const cluster = await config2.api.getCluster({ id: clusterId });
@@ -6723,17 +6769,26 @@ const calcDepositFromRunway = async (config2, { clusterId, runway }) => {
   if (!daoValues) {
     throw new Error("DAO values not found");
   }
+  const isSsvCluster = cluster.feeAsset === ClusterFeeAssetTypes.Ssv;
   const operatorsFee = operators.reduce(
-    (acc, operator) => acc + BigInt(operator.fee),
+    (acc, operator) => acc + BigInt(isSsvCluster ? operator.ssvFee : operator.fee),
     0n
   );
-  const networkFee = BigInt(daoValues.networkFee);
-  const vUnits = globals.globals.VUNITS_PRECISION * Number(cluster.effectiveBalance) / 32;
-  const validatorUnits = BigInt(vUnits / globals.globals.VUNITS_PRECISION) || 1n;
+  const networkFee = BigInt(
+    isSsvCluster ? daoValues.networkFeeSSV : daoValues.networkFee
+  );
+  const minimumLiquidationCollateral = BigInt(
+    isSsvCluster ? daoValues.minimumLiquidationCollateralSSV : daoValues.minimumLiquidationCollateral
+  );
+  const liquidationThreshold = BigInt(
+    isSsvCluster ? daoValues.liquidationThresholdSSV : daoValues.liquidationThreshold
+  );
+  const effectiveBalanceValidatorUnits = BigInt(cluster.effectiveBalance) * BigInt(config$1.globals.VUNITS_PRECISION) / 32n;
+  const validatorUnits = effectiveBalanceValidatorUnits / BigInt(config$1.globals.VUNITS_PRECISION) || 1n;
   const burnRate = (operatorsFee + networkFee) * validatorUnits || 1n;
-  const liquidationCollateral = globals.bigintMax(
-    BigInt(daoValues.minimumLiquidationCollateral),
-    burnRate * BigInt(daoValues.liquidationThreshold)
+  const liquidationCollateral = config$1.bigintMax(
+    minimumLiquidationCollateral,
+    burnRate * liquidationThreshold
   );
   const residualBalance = computeDailyAmount(burnRate, runway);
   return residualBalance + liquidationCollateral;
@@ -6773,16 +6828,16 @@ class SSVSDK {
     this.utils = createUtils(this.config);
   }
 }
-exports.chainIds = globals.chainIds;
-exports.chains = globals.chains;
-exports.contracts = globals.contracts;
-exports.globals = globals.globals;
-exports.graph_endpoints = globals.graph_endpoints;
-exports.hoodi = globals.hoodi;
-exports.networks = globals.networks;
-exports.paid_graph_endpoints = globals.paid_graph_endpoints;
-exports.registerValidatorsByClusterSizeLimits = globals.registerValidatorsByClusterSizeLimits;
-exports.rest_endpoints = globals.rest_endpoints;
+exports.chainIds = config$1.chainIds;
+exports.chains = config$1.chains;
+exports.contracts = config$1.contracts;
+exports.globals = config$1.globals;
+exports.graph_endpoints = config$1.graph_endpoints;
+exports.hoodi = config$1.hoodi;
+exports.networks = config$1.networks;
+exports.paid_graph_endpoints = config$1.paid_graph_endpoints;
+exports.registerValidatorsByClusterSizeLimits = config$1.registerValidatorsByClusterSizeLimits;
+exports.rest_endpoints = config$1.rest_endpoints;
 exports.KeyShares = KeyShares.KeyShares;
 exports.KeySharesItem = KeyShares.KeySharesItem;
 exports.OperatorPublicKeyError = KeyShares.OperatorPublicKeyError;
@@ -6802,6 +6857,7 @@ exports.createUtils = createUtils;
 exports.createWriter = createWriter;
 exports.getCluster = getCluster;
 exports.getClusterBalance = getClusterBalance$1;
+exports.getClusterSnapshot = getClusterSnapshot;
 exports.getClusters = getClusters;
 exports.getDaoValues = getDaoValues;
 exports.getOperator = getOperator;

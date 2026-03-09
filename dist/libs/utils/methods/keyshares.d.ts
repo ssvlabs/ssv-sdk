@@ -6,8 +6,9 @@ import { Address, Hash } from 'viem';
 type ValidatedKeysharesArgs = {
     keyshares: string | object | IKeySharesPartialPayload[];
     operatorIds: string[];
+    ownerAddress?: Address;
 };
-export declare const validateSharesPreRegistration: (config: ConfigReturnType, { keyshares, operatorIds }: ValidatedKeysharesArgs) => Promise<{
+export declare const validateSharesPreRegistration: (config: ConfigReturnType, { keyshares, operatorIds, ownerAddress }: ValidatedKeysharesArgs) => Promise<{
     available: KeySharesItem[];
     registered: KeySharesItem[];
     incorrect: KeySharesItem[];
