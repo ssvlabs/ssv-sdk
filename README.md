@@ -83,6 +83,17 @@ const nonce = await sdk.api.getOwnerNonce({
 });
 ```
 
+### API Compatibility Notes
+
+`getClusterSnapshot` was renamed in `v1.0.0`.
+
+| SDK version | Method name                          |
+| ----------- | ------------------------------------ |
+| `0.1.x`     | `sdk.api.getClusterSnapshot({ id })` |
+| `1.x`       | `sdk.api.toSolidityCluster({ id })`  |
+
+`sdk.api.getClusterSnapshot` is available as a deprecated alias in current `1.x` releases for compatibility with `0.1.x` code.
+
 ### Cluster Management
 
 ```typescript

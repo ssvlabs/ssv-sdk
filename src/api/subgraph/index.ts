@@ -13,8 +13,8 @@ import type {
 import {
   GetClusterBalanceDocument,
   GetClusterDocument,
-  GetClusterSnapshotDocument,
   GetClustersDocument,
+  GetClusterSnapshotDocument,
   GetDaoValuesDocument,
   GetOperatorDocument,
   GetOperatorsDocument,
@@ -26,6 +26,7 @@ import {
 import type { RemoveConfigArg } from '@/types/methods';
 import { decodeOperatorPublicKey } from '@/utils/operator';
 import type { GraphQLClient } from 'graphql-request';
+
 export const getOwnerNonce = (
   client: GraphQLClient,
   args: GetOwnerNonceByBlockQueryVariables,
@@ -45,6 +46,14 @@ export const toSolidityCluster = (
   args: GetClusterSnapshotQueryVariables,
 ) =>
   client.request(GetClusterSnapshotDocument, args).then((res) => res.cluster);
+
+/**
+ * @deprecated Use `toSolidityCluster` instead.
+ */
+export const getClusterSnapshot = (
+  client: GraphQLClient,
+  args: GetClusterSnapshotQueryVariables,
+) => toSolidityCluster(client, args);
 
 export const getCluster = (
   client: GraphQLClient,
@@ -107,6 +116,9 @@ export const getQueries = (client: GraphQLClient) => ({
   >,
   toSolidityCluster: toSolidityCluster.bind(null, client) as RemoveConfigArg<
     typeof toSolidityCluster
+  >,
+  getClusterSnapshot: getClusterSnapshot.bind(null, client) as RemoveConfigArg<
+    typeof getClusterSnapshot
   >,
   getCluster: getCluster.bind(null, client) as RemoveConfigArg<
     typeof getCluster
