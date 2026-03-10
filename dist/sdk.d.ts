@@ -2,15 +2,17 @@ import { createClusterManager } from './libs/cluster';
 import { createDaoManager } from './libs/dao';
 import { createOperatorManager } from './libs/operator';
 import { createUtils } from './libs/utils';
-import { ConfigReturnType } from './config/create';
-import { ConfigArgs } from './utils/zod/config';
+import { WalletClient } from 'viem';
+import { ConfigReturnType } from './config';
+import { ConfigArgs } from './utils';
 export declare class SSVSDK {
     readonly config: ConfigReturnType;
     readonly clusters: ReturnType<typeof createClusterManager>;
     readonly dao: ReturnType<typeof createDaoManager>;
-    readonly operators: ReturnType<typeof createOperatorManager>;
+    operators: ReturnType<typeof createOperatorManager>;
     readonly api: ConfigReturnType['api'];
-    readonly contract: ConfigReturnType['contract'];
+    contract: ConfigReturnType['contract'];
     readonly utils: ReturnType<typeof createUtils>;
     constructor(props: ConfigArgs | ConfigReturnType);
+    connectWallet(walletClient: WalletClient): this;
 }

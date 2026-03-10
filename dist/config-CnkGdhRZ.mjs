@@ -123,10 +123,45 @@ const contracts = {
     token: "0x9D65fF81a3c488d585bBfb0Bfe3c7707c7917f54"
   },
   [hoodi.id]: {
-    setter: "0x1784167a4D562110B021BE66067cb81D15F2FaC4",
-    getter: "0x417a6C301b03bB577bdA4c0259e0AfeFDc2c8240",
+    setter: "0xc07B3E9671f884FDa67E1e7D43d952E0e1369fd8",
+    getter: "0x3234e84b7d1eE1AF8b586E26814d4e268336D142",
     token: "0x746c33ccc28b1363c35c09badaf41b2ffa7e6d56"
   }
+};
+const globals = {
+  MAX_WEI_AMOUNT: 115792089237316195423570985008687907853269984665640564039457584007913129639935n,
+  CLUSTER_SIZES: {
+    QUAD_CLUSTER: 4,
+    SEPT_CLUSTER: 7,
+    DECA_CLUSTER: 10,
+    TRISKAIDEKA_CLUSTER: 13
+  },
+  FIXED_VALIDATORS_COUNT_PER_CLUSTER_SIZE: {
+    QUAD_CLUSTER: 80,
+    SEPT_CLUSTER: 40,
+    DECA_CLUSTER: 30,
+    TRISKAIDEKA_CLUSTER: 20
+  },
+  BLOCKS_PER_DAY: 7160n,
+  OPERATORS_PER_PAGE: 50,
+  BLOCKS_PER_YEAR: 2613400n,
+  DEFAULT_CLUSTER_PERIOD: 730,
+  NUMBERS_OF_WEEKS_IN_YEAR: 52.1429,
+  MAX_VALIDATORS_COUNT_MULTI_FLOW: 50,
+  CLUSTER_VALIDITY_PERIOD_MINIMUM: 30,
+  OPERATOR_VALIDATORS_LIMIT_PRESERVE: 5,
+  SSV_DEDUCTED_DIGITS: 10000000n,
+  ETH_DEDUCTED_DIGITS: 100000n,
+  MINIMUM_OPERATOR_FEE_PER_BLOCK: 1000000000n,
+  MIN_VALIDATORS_COUNT_PER_BULK_REGISTRATION: 1,
+  DEFAULT_ADDRESS_WHITELIST: "0x0000000000000000000000000000000000000000",
+  VUNITS_PRECISION: 1e4
+};
+const registerValidatorsByClusterSizeLimits = {
+  [globals.CLUSTER_SIZES.QUAD_CLUSTER]: globals.FIXED_VALIDATORS_COUNT_PER_CLUSTER_SIZE.QUAD_CLUSTER,
+  [globals.CLUSTER_SIZES.SEPT_CLUSTER]: globals.FIXED_VALIDATORS_COUNT_PER_CLUSTER_SIZE.SEPT_CLUSTER,
+  [globals.CLUSTER_SIZES.DECA_CLUSTER]: globals.FIXED_VALIDATORS_COUNT_PER_CLUSTER_SIZE.DECA_CLUSTER,
+  [globals.CLUSTER_SIZES.TRISKAIDEKA_CLUSTER]: globals.FIXED_VALIDATORS_COUNT_PER_CLUSTER_SIZE.TRISKAIDEKA_CLUSTER
 };
 const bigintMax = (...args) => {
   return args.filter((x) => !isUndefined(x)).reduce((max, cur) => cur > max ? cur : max);
@@ -138,14 +173,14 @@ const bigintRound = (value, precision) => {
   const remainder = value % precision;
   return remainder >= precision / 2n ? value + (precision - remainder) : value - remainder;
 };
-const bigintFloor = (value, precision = 10000000n) => {
+const bigintFloor = (value, precision = globals.SSV_DEDUCTED_DIGITS) => {
   return value - value % precision;
 };
 const bigintAbs = (n) => n < 0n ? -n : n;
 const isBigIntChanged = (a, b, tolerance = parseUnits("0.0001", 18)) => {
   return bigintAbs(a - b) > tolerance;
 };
-const roundOperatorFee = (fee, precision = 10000000n) => {
+const roundOperatorFee = (fee, precision = globals.SSV_DEDUCTED_DIGITS) => {
   return bigintRound(fee, precision);
 };
 const stringifyBigints = (anything) => {
@@ -347,15 +382,9 @@ const configArgsSchema = z.object({
     }
     return true;
   }),
-  walletClient: z.custom().superRefine((val, ctx) => {
+  walletClient: z.custom().optional().superRefine((val, ctx) => {
     const client = val;
-    if (!client) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Wallet client must be provided"
-      });
-      return false;
-    }
+    if (!client) return true;
     if (client.chain === void 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -390,45 +419,15 @@ const configArgsSchema = z.object({
   (val) => {
     const publicClient = val.publicClient;
     const walletClient = val.walletClient;
+    if (!walletClient) {
+      return true;
+    }
     return publicClient?.chain?.id === walletClient?.chain?.id;
   },
   {
     message: "Public and wallet client chains must be the same"
   }
 );
-const globals = {
-  MAX_WEI_AMOUNT: 115792089237316195423570985008687907853269984665640564039457584007913129639935n,
-  CLUSTER_SIZES: {
-    QUAD_CLUSTER: 4,
-    SEPT_CLUSTER: 7,
-    DECA_CLUSTER: 10,
-    TRISKAIDEKA_CLUSTER: 13
-  },
-  FIXED_VALIDATORS_COUNT_PER_CLUSTER_SIZE: {
-    QUAD_CLUSTER: 80,
-    SEPT_CLUSTER: 40,
-    DECA_CLUSTER: 30,
-    TRISKAIDEKA_CLUSTER: 20
-  },
-  BLOCKS_PER_DAY: 7160n,
-  OPERATORS_PER_PAGE: 50,
-  BLOCKS_PER_YEAR: 2613400n,
-  DEFAULT_CLUSTER_PERIOD: 730,
-  NUMBERS_OF_WEEKS_IN_YEAR: 52.1429,
-  MAX_VALIDATORS_COUNT_MULTI_FLOW: 50,
-  CLUSTER_VALIDITY_PERIOD_MINIMUM: 30,
-  OPERATOR_VALIDATORS_LIMIT_PRESERVE: 5,
-  MINIMUM_OPERATOR_FEE_PER_BLOCK: 1000000000n,
-  MIN_VALIDATORS_COUNT_PER_BULK_REGISTRATION: 1,
-  DEFAULT_ADDRESS_WHITELIST: "0x0000000000000000000000000000000000000000",
-  VUNITS_PRECISION: 1e4
-};
-const registerValidatorsByClusterSizeLimits = {
-  [globals.CLUSTER_SIZES.QUAD_CLUSTER]: globals.FIXED_VALIDATORS_COUNT_PER_CLUSTER_SIZE.QUAD_CLUSTER,
-  [globals.CLUSTER_SIZES.SEPT_CLUSTER]: globals.FIXED_VALIDATORS_COUNT_PER_CLUSTER_SIZE.SEPT_CLUSTER,
-  [globals.CLUSTER_SIZES.DECA_CLUSTER]: globals.FIXED_VALIDATORS_COUNT_PER_CLUSTER_SIZE.DECA_CLUSTER,
-  [globals.CLUSTER_SIZES.TRISKAIDEKA_CLUSTER]: globals.FIXED_VALIDATORS_COUNT_PER_CLUSTER_SIZE.TRISKAIDEKA_CLUSTER
-};
 export {
   formatBigintInput as A,
   ms as B,
