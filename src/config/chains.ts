@@ -60,8 +60,8 @@ export const contracts: Record<SupportedChainsIDs, ContractAddresses> = {
     token: '0x9D65fF81a3c488d585bBfb0Bfe3c7707c7917f54',
   },
   [hoodi.id]: {
-    setter: '0x1784167a4D562110B021BE66067cb81D15F2FaC4',
-    getter: '0x417a6C301b03bB577bdA4c0259e0AfeFDc2c8240',
+    setter: '0x384AC2c8AF4Df1faD7E20F15064B2C2917fAa7a3',
+    getter: '0x92c71f0A9823789f72BAEBB2BFE39e897bDd26bd',
     token: '0x746c33ccc28b1363c35c09badaf41b2ffa7e6d56',
   },
 };
