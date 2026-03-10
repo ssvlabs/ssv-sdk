@@ -58,6 +58,9 @@ jobs:
     name: Build and Open Artifacts PR
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    concurrency:
+      group: artifacts-pr-main
+      cancel-in-progress: true
 
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
@@ -114,7 +117,7 @@ jobs:
           commit-message: "ci: update artifacts [skip ci]"
           title: "ci: update artifacts"
           body: "Automated dist update from main build for `${{ github.sha }}`."
-          branch: "ci/update-artifacts-${{ github.run_id }}"
+          branch: "ci/update-artifacts"
           base: "main"
           delete-branch: true
           sign-commits: true
