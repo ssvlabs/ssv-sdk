@@ -26,11 +26,6 @@ export const MainnetV4GetterABI = [
     type: 'error',
   },
   {
-    inputs: [],
-    name: 'CallerNotOwner',
-    type: 'error',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -44,11 +39,6 @@ export const MainnetV4GetterABI = [
       },
     ],
     name: 'CallerNotOwnerWithData',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'CallerNotWhitelisted',
     type: 'error',
   },
   {
@@ -110,17 +100,6 @@ export const MainnetV4GetterABI = [
         type: 'uint64',
       },
     ],
-    name: 'ExceedValidatorLimit',
-    type: 'error',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint64',
-        name: 'operatorId',
-        type: 'uint64',
-      },
-    ],
     name: 'ExceedValidatorLimitWithData',
     type: 'error',
   },
@@ -171,11 +150,6 @@ export const MainnetV4GetterABI = [
     type: 'error',
   },
   {
-    inputs: [],
-    name: 'IncorrectValidatorState',
-    type: 'error',
-  },
-  {
     inputs: [
       {
         internalType: 'bytes',
@@ -193,12 +167,12 @@ export const MainnetV4GetterABI = [
   },
   {
     inputs: [],
-    name: 'InvalidOperatorIdsLength',
+    name: 'InvalidContractAddress',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'InvalidOracleId',
+    name: 'InvalidOperatorIdsLength',
     type: 'error',
   },
   {
@@ -254,17 +228,17 @@ export const MainnetV4GetterABI = [
   },
   {
     inputs: [],
-    name: 'MustUseLatestRoot',
-    type: 'error',
-  },
-  {
-    inputs: [],
     name: 'NewBlockPeriodIsBelowMinimum',
     type: 'error',
   },
   {
     inputs: [],
     name: 'NoFeeDeclared',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'NotAuthorized',
     type: 'error',
   },
   {
@@ -329,11 +303,6 @@ export const MainnetV4GetterABI = [
   },
   {
     inputs: [],
-    name: 'SameOracleAddressNotAllowed',
-    type: 'error',
-  },
-  {
-    inputs: [],
     name: 'StakeTooLow',
     type: 'error',
   },
@@ -345,11 +314,6 @@ export const MainnetV4GetterABI = [
   {
     inputs: [],
     name: 'StaleUpdate',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'TargetModuleDoesNotExist',
     type: 'error',
   },
   {
@@ -384,11 +348,6 @@ export const MainnetV4GetterABI = [
     type: 'error',
   },
   {
-    inputs: [],
-    name: 'ValidatorAlreadyExists',
-    type: 'error',
-  },
-  {
     inputs: [
       {
         internalType: 'bytes',
@@ -397,22 +356,6 @@ export const MainnetV4GetterABI = [
       },
     ],
     name: 'ValidatorAlreadyExistsWithData',
-    type: 'error',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'bytes',
-        name: 'publicKey',
-        type: 'bytes',
-      },
-      {
-        internalType: 'address',
-        name: 'owner',
-        type: 'address',
-      },
-    ],
-    name: 'ValidatorAlreadyRegistered',
     type: 'error',
   },
   {
