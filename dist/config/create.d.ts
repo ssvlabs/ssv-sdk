@@ -6,7 +6,7 @@ import { Address, Chain, PublicClient, WalletClient } from 'viem';
 import { ContractAddresses } from './chains';
 export type ConfigReturnType = {
     publicClient: PublicClient;
-    walletClient: WalletClient;
+    walletClient?: WalletClient;
     chain: Chain;
     api: ReturnType<typeof createQueries> & ReturnType<typeof createSSVAPI>;
     contractAddresses: {
@@ -31,7 +31,7 @@ export type ConfigReturnType = {
 };
 export declare const isConfig: (props: unknown) => props is ConfigReturnType;
 type CreateContractInteractionsArgs = {
-    walletClient: WalletClient;
+    walletClient?: WalletClient;
     publicClient: PublicClient;
     addresses: ContractAddresses;
 };
