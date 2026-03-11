@@ -169,11 +169,6 @@ export declare const updateNetworkFeeSSV: (config: ConfigReturnType, { args: { f
                 value: bigint;
             };
         } | {
-            eventName: "MinBlocksBetweenUpdatesUpdated";
-            args: {
-                newMinBlocksBetweenUpdates: number;
-            };
-        } | {
             eventName: "MinimumLiquidationCollateralSSVUpdated";
             args: {
                 value: bigint;
@@ -289,13 +284,6 @@ export declare const updateNetworkFeeSSV: (config: ConfigReturnType, { args: { f
             };
         } | {
             eventName: "OperatorWithdrawn";
-            args: {
-                owner: `0x${string}`;
-                operatorId: bigint;
-                value: bigint;
-            };
-        } | {
-            eventName: "OperatorWithdrawnSSV";
             args: {
                 owner: `0x${string}`;
                 operatorId: bigint;
