@@ -171,11 +171,6 @@ export declare const exitValidators: (config: ConfigReturnType, { args: { public
                 value: bigint;
             };
         } | {
-            eventName: "MinBlocksBetweenUpdatesUpdated";
-            args: {
-                newMinBlocksBetweenUpdates: number;
-            };
-        } | {
             eventName: "MinimumLiquidationCollateralSSVUpdated";
             args: {
                 value: bigint;
@@ -291,13 +286,6 @@ export declare const exitValidators: (config: ConfigReturnType, { args: { public
             };
         } | {
             eventName: "OperatorWithdrawn";
-            args: {
-                owner: `0x${string}`;
-                operatorId: bigint;
-                value: bigint;
-            };
-        } | {
-            eventName: "OperatorWithdrawnSSV";
             args: {
                 owner: `0x${string}`;
                 operatorId: bigint;

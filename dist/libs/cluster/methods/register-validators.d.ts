@@ -176,11 +176,6 @@ export declare const registerValidators: (config: ConfigReturnType, { args: { ke
                 value: bigint;
             };
         } | {
-            eventName: "MinBlocksBetweenUpdatesUpdated";
-            args: {
-                newMinBlocksBetweenUpdates: number;
-            };
-        } | {
             eventName: "MinimumLiquidationCollateralSSVUpdated";
             args: {
                 value: bigint;
@@ -296,13 +291,6 @@ export declare const registerValidators: (config: ConfigReturnType, { args: { ke
             };
         } | {
             eventName: "OperatorWithdrawn";
-            args: {
-                owner: `0x${string}`;
-                operatorId: bigint;
-                value: bigint;
-            };
-        } | {
-            eventName: "OperatorWithdrawnSSV";
             args: {
                 owner: `0x${string}`;
                 operatorId: bigint;
@@ -463,10 +451,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly name: "ApprovalNotWithinTimeframe";
             readonly type: "error";
         }, {
-            readonly inputs: readonly [];
-            readonly name: "CallerNotOwner";
-            readonly type: "error";
-        }, {
             readonly inputs: readonly [{
                 readonly internalType: "address";
                 readonly name: "caller";
@@ -477,10 +461,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
                 readonly type: "address";
             }];
             readonly name: "CallerNotOwnerWithData";
-            readonly type: "error";
-        }, {
-            readonly inputs: readonly [];
-            readonly name: "CallerNotWhitelisted";
             readonly type: "error";
         }, {
             readonly inputs: readonly [{
@@ -528,14 +508,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
                 readonly name: "operatorId";
                 readonly type: "uint64";
             }];
-            readonly name: "ExceedValidatorLimit";
-            readonly type: "error";
-        }, {
-            readonly inputs: readonly [{
-                readonly internalType: "uint64";
-                readonly name: "operatorId";
-                readonly type: "uint64";
-            }];
             readonly name: "ExceedValidatorLimitWithData";
             readonly type: "error";
         }, {
@@ -575,10 +547,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly name: "IncorrectOperatorVersion";
             readonly type: "error";
         }, {
-            readonly inputs: readonly [];
-            readonly name: "IncorrectValidatorState";
-            readonly type: "error";
-        }, {
             readonly inputs: readonly [{
                 readonly internalType: "bytes";
                 readonly name: "publicKey";
@@ -592,11 +560,11 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
-            readonly name: "InvalidOperatorIdsLength";
+            readonly name: "InvalidContractAddress";
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
-            readonly name: "InvalidOracleId";
+            readonly name: "InvalidOperatorIdsLength";
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
@@ -648,15 +616,15 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
-            readonly name: "MustUseLatestRoot";
-            readonly type: "error";
-        }, {
-            readonly inputs: readonly [];
             readonly name: "NewBlockPeriodIsBelowMinimum";
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
             readonly name: "NoFeeDeclared";
+            readonly type: "error";
+        }, {
+            readonly inputs: readonly [];
+            readonly name: "NotAuthorized";
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
@@ -708,10 +676,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
-            readonly name: "SameOracleAddressNotAllowed";
-            readonly type: "error";
-        }, {
-            readonly inputs: readonly [];
             readonly name: "StakeTooLow";
             readonly type: "error";
         }, {
@@ -721,10 +685,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
         }, {
             readonly inputs: readonly [];
             readonly name: "StaleUpdate";
-            readonly type: "error";
-        }, {
-            readonly inputs: readonly [];
-            readonly name: "TargetModuleDoesNotExist";
             readonly type: "error";
         }, {
             readonly inputs: readonly [{
@@ -751,28 +711,12 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly name: "UpdateTooFrequent";
             readonly type: "error";
         }, {
-            readonly inputs: readonly [];
-            readonly name: "ValidatorAlreadyExists";
-            readonly type: "error";
-        }, {
             readonly inputs: readonly [{
                 readonly internalType: "bytes";
                 readonly name: "publicKey";
                 readonly type: "bytes";
             }];
             readonly name: "ValidatorAlreadyExistsWithData";
-            readonly type: "error";
-        }, {
-            readonly inputs: readonly [{
-                readonly internalType: "bytes";
-                readonly name: "publicKey";
-                readonly type: "bytes";
-            }, {
-                readonly internalType: "address";
-                readonly name: "owner";
-                readonly type: "address";
-            }];
-            readonly name: "ValidatorAlreadyRegistered";
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
@@ -1210,16 +1154,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly anonymous: false;
             readonly inputs: readonly [{
                 readonly indexed: false;
-                readonly internalType: "uint32";
-                readonly name: "newMinBlocksBetweenUpdates";
-                readonly type: "uint32";
-            }];
-            readonly name: "MinBlocksBetweenUpdatesUpdated";
-            readonly type: "event";
-        }, {
-            readonly anonymous: false;
-            readonly inputs: readonly [{
-                readonly indexed: false;
                 readonly internalType: "uint256";
                 readonly name: "value";
                 readonly type: "uint256";
@@ -1520,26 +1454,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
                 readonly type: "uint256";
             }];
             readonly name: "OperatorWithdrawn";
-            readonly type: "event";
-        }, {
-            readonly anonymous: false;
-            readonly inputs: readonly [{
-                readonly indexed: true;
-                readonly internalType: "address";
-                readonly name: "owner";
-                readonly type: "address";
-            }, {
-                readonly indexed: true;
-                readonly internalType: "uint64";
-                readonly name: "operatorId";
-                readonly type: "uint64";
-            }, {
-                readonly indexed: false;
-                readonly internalType: "uint256";
-                readonly name: "value";
-                readonly type: "uint256";
-            }];
-            readonly name: "OperatorWithdrawnSSV";
             readonly type: "event";
         }, {
             readonly anonymous: false;
@@ -2766,16 +2680,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
                 readonly type: "uint256";
             }];
             readonly name: "updateMaximumOperatorFee";
-            readonly outputs: readonly [];
-            readonly stateMutability: "nonpayable";
-            readonly type: "function";
-        }, {
-            readonly inputs: readonly [{
-                readonly internalType: "uint32";
-                readonly name: "blocks";
-                readonly type: "uint32";
-            }];
-            readonly name: "updateMinBlocksBetweenUpdates";
             readonly outputs: readonly [];
             readonly stateMutability: "nonpayable";
             readonly type: "function";
@@ -3015,10 +2919,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly name: "ApprovalNotWithinTimeframe";
             readonly type: "error";
         }, {
-            readonly inputs: readonly [];
-            readonly name: "CallerNotOwner";
-            readonly type: "error";
-        }, {
             readonly inputs: readonly [{
                 readonly internalType: "address";
                 readonly name: "caller";
@@ -3029,10 +2929,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
                 readonly type: "address";
             }];
             readonly name: "CallerNotOwnerWithData";
-            readonly type: "error";
-        }, {
-            readonly inputs: readonly [];
-            readonly name: "CallerNotWhitelisted";
             readonly type: "error";
         }, {
             readonly inputs: readonly [{
@@ -3080,14 +2976,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
                 readonly name: "operatorId";
                 readonly type: "uint64";
             }];
-            readonly name: "ExceedValidatorLimit";
-            readonly type: "error";
-        }, {
-            readonly inputs: readonly [{
-                readonly internalType: "uint64";
-                readonly name: "operatorId";
-                readonly type: "uint64";
-            }];
             readonly name: "ExceedValidatorLimitWithData";
             readonly type: "error";
         }, {
@@ -3127,10 +3015,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly name: "IncorrectOperatorVersion";
             readonly type: "error";
         }, {
-            readonly inputs: readonly [];
-            readonly name: "IncorrectValidatorState";
-            readonly type: "error";
-        }, {
             readonly inputs: readonly [{
                 readonly internalType: "bytes";
                 readonly name: "publicKey";
@@ -3144,11 +3028,11 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
-            readonly name: "InvalidOperatorIdsLength";
+            readonly name: "InvalidContractAddress";
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
-            readonly name: "InvalidOracleId";
+            readonly name: "InvalidOperatorIdsLength";
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
@@ -3200,15 +3084,15 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
-            readonly name: "MustUseLatestRoot";
-            readonly type: "error";
-        }, {
-            readonly inputs: readonly [];
             readonly name: "NewBlockPeriodIsBelowMinimum";
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
             readonly name: "NoFeeDeclared";
+            readonly type: "error";
+        }, {
+            readonly inputs: readonly [];
+            readonly name: "NotAuthorized";
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
@@ -3260,10 +3144,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
-            readonly name: "SameOracleAddressNotAllowed";
-            readonly type: "error";
-        }, {
-            readonly inputs: readonly [];
             readonly name: "StakeTooLow";
             readonly type: "error";
         }, {
@@ -3273,10 +3153,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
         }, {
             readonly inputs: readonly [];
             readonly name: "StaleUpdate";
-            readonly type: "error";
-        }, {
-            readonly inputs: readonly [];
-            readonly name: "TargetModuleDoesNotExist";
             readonly type: "error";
         }, {
             readonly inputs: readonly [{
@@ -3303,28 +3179,12 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly name: "UpdateTooFrequent";
             readonly type: "error";
         }, {
-            readonly inputs: readonly [];
-            readonly name: "ValidatorAlreadyExists";
-            readonly type: "error";
-        }, {
             readonly inputs: readonly [{
                 readonly internalType: "bytes";
                 readonly name: "publicKey";
                 readonly type: "bytes";
             }];
             readonly name: "ValidatorAlreadyExistsWithData";
-            readonly type: "error";
-        }, {
-            readonly inputs: readonly [{
-                readonly internalType: "bytes";
-                readonly name: "publicKey";
-                readonly type: "bytes";
-            }, {
-                readonly internalType: "address";
-                readonly name: "owner";
-                readonly type: "address";
-            }];
-            readonly name: "ValidatorAlreadyRegistered";
             readonly type: "error";
         }, {
             readonly inputs: readonly [];
@@ -3762,16 +3622,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
             readonly anonymous: false;
             readonly inputs: readonly [{
                 readonly indexed: false;
-                readonly internalType: "uint32";
-                readonly name: "newMinBlocksBetweenUpdates";
-                readonly type: "uint32";
-            }];
-            readonly name: "MinBlocksBetweenUpdatesUpdated";
-            readonly type: "event";
-        }, {
-            readonly anonymous: false;
-            readonly inputs: readonly [{
-                readonly indexed: false;
                 readonly internalType: "uint256";
                 readonly name: "value";
                 readonly type: "uint256";
@@ -4072,26 +3922,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
                 readonly type: "uint256";
             }];
             readonly name: "OperatorWithdrawn";
-            readonly type: "event";
-        }, {
-            readonly anonymous: false;
-            readonly inputs: readonly [{
-                readonly indexed: true;
-                readonly internalType: "address";
-                readonly name: "owner";
-                readonly type: "address";
-            }, {
-                readonly indexed: true;
-                readonly internalType: "uint64";
-                readonly name: "operatorId";
-                readonly type: "uint64";
-            }, {
-                readonly indexed: false;
-                readonly internalType: "uint256";
-                readonly name: "value";
-                readonly type: "uint256";
-            }];
-            readonly name: "OperatorWithdrawnSSV";
             readonly type: "event";
         }, {
             readonly anonymous: false;
@@ -5318,16 +5148,6 @@ export declare const validateSharesPostRegistration: (config: ConfigReturnType, 
                 readonly type: "uint256";
             }];
             readonly name: "updateMaximumOperatorFee";
-            readonly outputs: readonly [];
-            readonly stateMutability: "nonpayable";
-            readonly type: "function";
-        }, {
-            readonly inputs: readonly [{
-                readonly internalType: "uint32";
-                readonly name: "blocks";
-                readonly type: "uint32";
-            }];
-            readonly name: "updateMinBlocksBetweenUpdates";
             readonly outputs: readonly [];
             readonly stateMutability: "nonpayable";
             readonly type: "function";
