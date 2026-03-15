@@ -1327,6 +1327,9 @@ util$1.format = function(format) {
           parts.push("<?>");
         }
         break;
+      // FIXME: do proper formatting for numbers, etc
+      //case 'f':
+      //case 'd':
       case "%":
         parts.push("%");
         break;
@@ -9876,6 +9879,7 @@ var _readSignatureParameters = function(oid, obj, fillDefaults) {
 var _createSignatureDigest = function(options) {
   switch (oids[options.signatureOid]) {
     case "sha1WithRSAEncryption":
+    // deprecated alias
     case "sha1WithRSASignature":
       return forge$b.md.sha1.create();
     case "md5WithRSAEncryption":
@@ -9901,6 +9905,7 @@ var _verifySignature = function(options) {
   var scheme;
   switch (cert.signatureOid) {
     case oids.sha1WithRSAEncryption:
+    // deprecated alias
     case oids.sha1WithRSASignature:
       break;
     case oids["RSASSA-PSS"]:
@@ -10391,13 +10396,18 @@ pki$2.certificateExtensionFromAsn1 = function(ext) {
         };
         e.altNames.push(altName);
         switch (gn.type) {
+          // rfc822Name
           case 1:
+          // dNSName
           case 2:
+          // uniformResourceIdentifier (URI)
           case 6:
             break;
+          // IPAddress
           case 7:
             altName.ip = forge$b.util.bytesToIP(gn.value);
             break;
+          // registeredID
           case 8:
             altName.oid = asn1$4.derToOid(gn.value);
             break;
@@ -11952,6 +11962,7 @@ function _decodeSafeContents(safeContents, strict, password) {
             "Unable to decrypt PKCS#8 ShroudedKeyBag, wrong password?"
           );
         }
+      /* fall through */
       case pki$1.oids.keyBag:
         try {
           bag.key = pki$1.privateKeyFromAsn1(bagAsn1);
@@ -11960,6 +11971,7 @@ function _decodeSafeContents(safeContents, strict, password) {
           bag.asn1 = bagAsn1;
         }
         continue;
+      /* Nothing more to do. */
       case pki$1.oids.certBag:
         validator = certBagValidator;
         decoder = function() {
@@ -18002,6 +18014,7 @@ var scrypt = { exports: {} };
             arraycopy(B, Bi, XY, 0, Yi);
             state = 1;
             i1 = 0;
+          // Fall through
           case 1:
             steps = N - i1;
             if (steps > limit) {
@@ -18028,6 +18041,7 @@ var scrypt = { exports: {} };
             }
             i1 = 0;
             state = 2;
+          // Fall through
           case 2:
             steps = N - i1;
             if (steps > limit) {
@@ -19388,6 +19402,8 @@ let SemVer$2 = class SemVer {
         this.inc("patch", identifier, identifierBase);
         this.inc("pre", identifier, identifierBase);
         break;
+      // If the input is a non-prerelease version, this acts the same as
+      // prepatch.
       case "prerelease":
         if (this.prerelease.length === 0) {
           this.inc("patch", identifier, identifierBase);
@@ -19421,6 +19437,8 @@ let SemVer$2 = class SemVer {
         }
         this.prerelease = [];
         break;
+      // This probably shouldn't be used publicly.
+      // 1.0.0 'pre' would become 1.0.0-0 which is the wrong direction.
       case "pre": {
         const base = Number(identifierBase) ? 1 : 0;
         if (this.prerelease.length === 0) {

@@ -1,8 +1,7 @@
-"use strict";
-const lodashEs = require("lodash-es");
-const viem = require("viem");
-require("graphql-request");
-const zod = require("zod");
+import { isUndefined, cloneDeepWith, merge } from "lodash-es";
+import { formatUnits, decodeAbiParameters, defineChain as defineChain$1, parseUnits, isAddress } from "viem";
+import "graphql-request";
+import { z } from "zod";
 const numberFormatter = new Intl.NumberFormat("en-US", {
   useGrouping: true,
   maximumFractionDigits: 2
@@ -25,8 +24,8 @@ const ethFormatter = new Intl.NumberFormat("en-US", {
   useGrouping: true,
   maximumFractionDigits: 4
 });
-const formatSSV = (num, decimals = 18) => ethFormatter.format(+viem.formatUnits(num, decimals));
-const formatBigintInput = (num, decimals = 18) => bigintFormatter.format(+viem.formatUnits(num, decimals));
+const formatSSV = (num, decimals = 18) => ethFormatter.format(+formatUnits(num, decimals));
+const formatBigintInput = (num, decimals = 18) => bigintFormatter.format(+formatUnits(num, decimals));
 const units = {
   seconds: 1e3,
   minutes: 6e4,
@@ -46,7 +45,7 @@ const getOperatorIds = (operators) => {
   return sortNumbers(operators.map((operator) => operator.id));
 };
 const decodeOperatorPublicKey = (publicKey) => {
-  return viem.decodeAbiParameters([{ type: "string" }], publicKey)[0];
+  return decodeAbiParameters([{ type: "string" }], publicKey)[0];
 };
 function defineChain(chain) {
   return {
@@ -84,7 +83,7 @@ const mainnet = /* @__PURE__ */ defineChain({
     }
   }
 });
-const hoodi = viem.defineChain({
+const hoodi = defineChain$1({
   id: 560048,
   name: "Hoodi",
   rpcUrls: {
@@ -143,9 +142,9 @@ const globals = {
     DECA_CLUSTER: 30,
     TRISKAIDEKA_CLUSTER: 20
   },
-  BLOCKS_PER_DAY: 7160n,
+  BLOCKS_PER_DAY: 7200n,
   OPERATORS_PER_PAGE: 50,
-  BLOCKS_PER_YEAR: 2613400n,
+  BLOCKS_PER_YEAR: 2628000n,
   DEFAULT_CLUSTER_PERIOD: 730,
   NUMBERS_OF_WEEKS_IN_YEAR: 52.1429,
   MAX_VALIDATORS_COUNT_MULTI_FLOW: 50,
@@ -165,10 +164,10 @@ const registerValidatorsByClusterSizeLimits = {
   [globals.CLUSTER_SIZES.TRISKAIDEKA_CLUSTER]: globals.FIXED_VALIDATORS_COUNT_PER_CLUSTER_SIZE.TRISKAIDEKA_CLUSTER
 };
 const bigintMax = (...args) => {
-  return args.filter((x) => !lodashEs.isUndefined(x)).reduce((max, cur) => cur > max ? cur : max);
+  return args.filter((x) => !isUndefined(x)).reduce((max, cur) => cur > max ? cur : max);
 };
 const bigintMin = (...args) => {
-  return args.filter((x) => !lodashEs.isUndefined(x)).reduce((min, cur) => cur < min ? cur : min);
+  return args.filter((x) => !isUndefined(x)).reduce((min, cur) => cur < min ? cur : min);
 };
 const bigintRound = (value, precision) => {
   const remainder = value % precision;
@@ -178,31 +177,31 @@ const bigintFloor = (value, precision = globals.SSV_DEDUCTED_DIGITS) => {
   return value - value % precision;
 };
 const bigintAbs = (n) => n < 0n ? -n : n;
-const isBigIntChanged = (a, b, tolerance = viem.parseUnits("0.0001", 18)) => {
+const isBigIntChanged = (a, b, tolerance = parseUnits("0.0001", 18)) => {
   return bigintAbs(a - b) > tolerance;
 };
 const roundOperatorFee = (fee, precision = globals.SSV_DEDUCTED_DIGITS) => {
   return bigintRound(fee, precision);
 };
 const stringifyBigints = (anything) => {
-  return lodashEs.cloneDeepWith(anything, (value) => {
+  return cloneDeepWith(anything, (value) => {
     if (typeof value === "bigint") return value.toString();
   });
 };
 const bigintifyNumbers = (numbers) => {
-  return lodashEs.cloneDeepWith(numbers, (value) => {
+  return cloneDeepWith(numbers, (value) => {
     if (typeof value === "number") return BigInt(value);
   });
 };
 const createClusterId = (ownerAddress, operatorIds) => {
-  if (!viem.isAddress(ownerAddress)) {
+  if (!isAddress(ownerAddress)) {
     throw new Error("Invalid owner address");
   }
   return `${ownerAddress.toLowerCase()}-${operatorIds.join("-")}`;
 };
 const isClusterId = (clusterId) => {
   const [ownerAddress, ...operatorIds] = clusterId.split("-");
-  return viem.isAddress(ownerAddress) && operatorIds.length >= 4 && operatorIds.every((id) => !isNaN(Number(id)));
+  return isAddress(ownerAddress) && operatorIds.length >= 4 && operatorIds.every((id) => !isNaN(Number(id)));
 };
 const toSolidityCluster = (cluster) => {
   return {
@@ -213,7 +212,7 @@ const toSolidityCluster = (cluster) => {
     validatorCount: +cluster.validatorCount
   };
 };
-const createEmptyCluster = (cluster = {}) => lodashEs.merge(
+const createEmptyCluster = (cluster = {}) => merge(
   {
     validatorCount: 0,
     networkFeeIndex: 0n,
@@ -357,63 +356,63 @@ const tryCatch = (fn) => {
     return [null, e];
   }
 };
-const configArgsSchema = zod.z.object({
-  publicClient: zod.z.custom().superRefine((val, ctx) => {
+const configArgsSchema = z.object({
+  publicClient: z.custom().superRefine((val, ctx) => {
     const client = val;
     if (!client) {
       ctx.addIssue({
-        code: zod.z.ZodIssueCode.custom,
+        code: z.ZodIssueCode.custom,
         message: "Public client must be provided"
       });
       return false;
     }
     if (client.chain === void 0) {
       ctx.addIssue({
-        code: zod.z.ZodIssueCode.custom,
+        code: z.ZodIssueCode.custom,
         message: "Public client must have a chain property"
       });
       return false;
     }
     if (![...chainIds].includes(client.chain?.id)) {
       ctx.addIssue({
-        code: zod.z.ZodIssueCode.custom,
+        code: z.ZodIssueCode.custom,
         message: `Public client chain must be one of [${networks.join(", ")}]`
       });
       return false;
     }
     return true;
   }),
-  walletClient: zod.z.custom().optional().superRefine((val, ctx) => {
+  walletClient: z.custom().optional().superRefine((val, ctx) => {
     const client = val;
     if (!client) return true;
     if (client.chain === void 0) {
       ctx.addIssue({
-        code: zod.z.ZodIssueCode.custom,
+        code: z.ZodIssueCode.custom,
         message: "Wallet client must have a chain property"
       });
       return false;
     }
     if (![...chainIds].includes(client.chain?.id)) {
       ctx.addIssue({
-        code: zod.z.ZodIssueCode.custom,
+        code: z.ZodIssueCode.custom,
         message: `Wallet client chain must be one of [${networks.join(", ")}]`
       });
       return false;
     }
     return true;
   }),
-  extendedConfig: zod.z.object({
-    subgraph: zod.z.object({
-      endpoint: zod.z.string().url().optional(),
-      apiKey: zod.z.string().optional()
+  extendedConfig: z.object({
+    subgraph: z.object({
+      endpoint: z.string().url().optional(),
+      apiKey: z.string().optional()
     }).optional(),
-    rest: zod.z.object({
-      endpoint: zod.z.string().url().optional()
+    rest: z.object({
+      endpoint: z.string().url().optional()
     }).optional(),
-    contracts: zod.z.object({
-      setter: zod.z.string().optional(),
-      getter: zod.z.string().optional(),
-      token: zod.z.string().optional()
+    contracts: z.object({
+      setter: z.string().optional(),
+      getter: z.string().optional(),
+      token: z.string().optional()
     }).optional()
   }).optional()
 }).refine(
@@ -429,48 +428,50 @@ const configArgsSchema = zod.z.object({
     message: "Public and wallet client chains must be the same"
   }
 );
-exports.KeysharesValidationError = KeysharesValidationError;
-exports.KeysharesValidationErrors = KeysharesValidationErrors;
-exports.KeysharesValidationErrorsMessages = KeysharesValidationErrorsMessages;
-exports._percentageFormatter = _percentageFormatter;
-exports.add0x = add0x;
-exports.bigintAbs = bigintAbs;
-exports.bigintFloor = bigintFloor;
-exports.bigintFormatter = bigintFormatter;
-exports.bigintMax = bigintMax;
-exports.bigintMin = bigintMin;
-exports.bigintRound = bigintRound;
-exports.bigintifyNumbers = bigintifyNumbers;
-exports.chainIds = chainIds;
-exports.chains = chains;
-exports.configArgsSchema = configArgsSchema;
-exports.contracts = contracts;
-exports.createClusterId = createClusterId;
-exports.createEmptyCluster = createEmptyCluster;
-exports.decodeOperatorPublicKey = decodeOperatorPublicKey;
-exports.ensureNoKeysharesErrors = ensureNoKeysharesErrors;
-exports.ensureValidatorsUniqueness = ensureValidatorsUniqueness;
-exports.ethFormatter = ethFormatter;
-exports.formatBigintInput = formatBigintInput;
-exports.formatSSV = formatSSV;
-exports.getOperatorIds = getOperatorIds;
-exports.globals = globals;
-exports.graph_endpoints = graph_endpoints;
-exports.hoodi = hoodi;
-exports.isBigIntChanged = isBigIntChanged;
-exports.isClusterId = isClusterId;
-exports.isKeySharesItem = isKeySharesItem;
-exports.ms = ms;
-exports.networks = networks;
-exports.numberFormatter = numberFormatter;
-exports.paid_graph_endpoints = paid_graph_endpoints;
-exports.percentageFormatter = percentageFormatter;
-exports.registerValidatorsByClusterSizeLimits = registerValidatorsByClusterSizeLimits;
-exports.rest_endpoints = rest_endpoints;
-exports.roundOperatorFee = roundOperatorFee;
-exports.sortNumbers = sortNumbers;
-exports.stringifyBigints = stringifyBigints;
-exports.toSolidityCluster = toSolidityCluster;
-exports.tryCatch = tryCatch;
-exports.validateConsistentOperatorIds = validateConsistentOperatorIds;
-exports.validateConsistentOperatorPublicKeys = validateConsistentOperatorPublicKeys;
+export {
+  roundOperatorFee as A,
+  sortNumbers as B,
+  stringifyBigints as C,
+  toSolidityCluster as D,
+  tryCatch as E,
+  validateConsistentOperatorIds as F,
+  validateConsistentOperatorPublicKeys as G,
+  contracts as H,
+  paid_graph_endpoints as I,
+  graph_endpoints as J,
+  KeysharesValidationError as K,
+  rest_endpoints as L,
+  registerValidatorsByClusterSizeLimits as M,
+  globals as N,
+  chainIds as O,
+  chains as P,
+  hoodi as Q,
+  networks as R,
+  _percentageFormatter as _,
+  KeysharesValidationErrors as a,
+  KeysharesValidationErrorsMessages as b,
+  add0x as c,
+  bigintAbs as d,
+  bigintFloor as e,
+  bigintFormatter as f,
+  bigintMax as g,
+  bigintMin as h,
+  bigintRound as i,
+  bigintifyNumbers as j,
+  configArgsSchema as k,
+  createClusterId as l,
+  createEmptyCluster as m,
+  decodeOperatorPublicKey as n,
+  ensureNoKeysharesErrors as o,
+  ensureValidatorsUniqueness as p,
+  ethFormatter as q,
+  formatBigintInput as r,
+  formatSSV as s,
+  getOperatorIds as t,
+  isBigIntChanged as u,
+  isClusterId as v,
+  isKeySharesItem as w,
+  ms as x,
+  numberFormatter as y,
+  percentageFormatter as z
+};
