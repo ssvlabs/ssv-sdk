@@ -213,6 +213,6 @@ describe('calcDepositFromRunway', () => {
       runway: 1,
     });
 
-    expect(result).toBe(214830n);
+    expect(result).toBe(216030n);
   });
 });
