@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const KeyShares = require("./KeyShares-D053gZhF.js");
+const KeyShares = require("./KeyShares-D5XYNYOX.js");
 exports.KeyShares = KeyShares.KeyShares;
 exports.KeySharesItem = KeyShares.KeySharesItem;
 exports.OperatorPublicKeyError = KeyShares.OperatorPublicKeyError;

@@ -2,13 +2,13 @@ import require$$0 from "fs";
 import require$$1 from "path";
 import require$$2 from "os";
 import crypto$1 from "crypto";
-import { E as decodeOperatorPublicKey, s as stringifyBigints, F as tryCatch, G as configArgsSchema, H as contracts, I as paid_graph_endpoints, J as graph_endpoints, L as rest_endpoints, t as toSolidityCluster$1, l as isKeySharesItem, M as registerValidatorsByClusterSizeLimits, g as createClusterId, j as createEmptyCluster, r as roundOperatorFee, N as globals, b as bigintMax, n as KeysharesValidationError, K as KeysharesValidationErrors, v as validateConsistentOperatorIds, C as sortNumbers, q as ensureNoKeysharesErrors, o as ensureValidatorsUniqueness, p as validateConsistentOperatorPublicKeys } from "./config-DXho1tL2.mjs";
-import { Q, P, O, R } from "./config-DXho1tL2.mjs";
+import { n as decodeOperatorPublicKey, C as stringifyBigints, E as tryCatch, k as configArgsSchema, H as contracts, I as paid_graph_endpoints, J as graph_endpoints, L as rest_endpoints, D as toSolidityCluster$1, w as isKeySharesItem, M as registerValidatorsByClusterSizeLimits, l as createClusterId, m as createEmptyCluster, A as roundOperatorFee, N as globals, g as bigintMax, o as ensureNoKeysharesErrors, p as ensureValidatorsUniqueness, G as validateConsistentOperatorPublicKeys, F as validateConsistentOperatorIds, B as sortNumbers, K as KeysharesValidationError, a as KeysharesValidationErrors } from "./config-BgCdlVqd.mjs";
+import { O, P, Q, R } from "./config-BgCdlVqd.mjs";
 import { isUndefined, isEqual } from "lodash-es";
 import { decodeEventLog, encodeFunctionData, encodeAbiParameters, parseAbiParameters, isAddressEqual, zeroAddress } from "viem";
 import { GraphQLClient } from "graphql-request";
-import { S as SSVKeys, a as KeyShares, K as KeySharesItem } from "./KeyShares-BoKfAYOI.mjs";
-import { O as O2, c, b } from "./KeyShares-BoKfAYOI.mjs";
+import { S as SSVKeys, K as KeyShares, a as KeySharesItem } from "./KeyShares-DyzrK4kN.mjs";
+import { O as O2, b, c } from "./KeyShares-DyzrK4kN.mjs";
 var main = { exports: {} };
 const version$1 = "16.6.1";
 const require$$4 = {
@@ -426,6 +426,11 @@ const MainnetV4GetterABI = [
     type: "error"
   },
   {
+    inputs: [],
+    name: "CallerNotOwner",
+    type: "error"
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -439,6 +444,11 @@ const MainnetV4GetterABI = [
       }
     ],
     name: "CallerNotOwnerWithData",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "CallerNotWhitelisted",
     type: "error"
   },
   {
@@ -500,6 +510,17 @@ const MainnetV4GetterABI = [
         type: "uint64"
       }
     ],
+    name: "ExceedValidatorLimit",
+    type: "error"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "operatorId",
+        type: "uint64"
+      }
+    ],
     name: "ExceedValidatorLimitWithData",
     type: "error"
   },
@@ -550,6 +571,11 @@ const MainnetV4GetterABI = [
     type: "error"
   },
   {
+    inputs: [],
+    name: "IncorrectValidatorState",
+    type: "error"
+  },
+  {
     inputs: [
       {
         internalType: "bytes",
@@ -567,12 +593,27 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
-    name: "InvalidContractAddress",
+    name: "InsufficientCSSVSupply",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "InvalidOperatorFeeIncreaseLimit",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "InvalidOperatorFeeRange",
     type: "error"
   },
   {
     inputs: [],
     name: "InvalidOperatorIdsLength",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "InvalidOracleId",
     type: "error"
   },
   {
@@ -618,6 +659,11 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
+    name: "MaxPrecisionExceeded",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "MaxRequestsAmountReached",
     type: "error"
   },
@@ -628,17 +674,17 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
+    name: "MustUseLatestRoot",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "NewBlockPeriodIsBelowMinimum",
     type: "error"
   },
   {
     inputs: [],
     name: "NoFeeDeclared",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "NotAuthorized",
     type: "error"
   },
   {
@@ -683,11 +729,6 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
-    name: "OracleHasZeroWeight",
-    type: "error"
-  },
-  {
-    inputs: [],
     name: "PublicKeysSharesLengthMismatch",
     type: "error"
   },
@@ -703,6 +744,11 @@ const MainnetV4GetterABI = [
   },
   {
     inputs: [],
+    name: "SameOracleAddressNotAllowed",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "StakeTooLow",
     type: "error"
   },
@@ -714,6 +760,11 @@ const MainnetV4GetterABI = [
   {
     inputs: [],
     name: "StaleUpdate",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "TargetModuleDoesNotExist",
     type: "error"
   },
   {
@@ -748,6 +799,11 @@ const MainnetV4GetterABI = [
     type: "error"
   },
   {
+    inputs: [],
+    name: "ValidatorAlreadyExists",
+    type: "error"
+  },
+  {
     inputs: [
       {
         internalType: "bytes",
@@ -756,6 +812,22 @@ const MainnetV4GetterABI = [
       }
     ],
     name: "ValidatorAlreadyExistsWithData",
+    type: "error"
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "publicKey",
+        type: "bytes"
+      },
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address"
+      }
+    ],
+    name: "ValidatorAlreadyRegistered",
     type: "error"
   },
   {
@@ -776,6 +848,11 @@ const MainnetV4GetterABI = [
   {
     inputs: [],
     name: "ZeroAmount",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "ZeroCSSVSupply",
     type: "error"
   },
   {
@@ -2237,6 +2314,11 @@ const MainnetV4SetterABI = [
     type: "error"
   },
   {
+    inputs: [],
+    name: "CallerNotOwner",
+    type: "error"
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -2250,6 +2332,11 @@ const MainnetV4SetterABI = [
       }
     ],
     name: "CallerNotOwnerWithData",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "CallerNotWhitelisted",
     type: "error"
   },
   {
@@ -2311,6 +2398,17 @@ const MainnetV4SetterABI = [
         type: "uint64"
       }
     ],
+    name: "ExceedValidatorLimit",
+    type: "error"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "operatorId",
+        type: "uint64"
+      }
+    ],
     name: "ExceedValidatorLimitWithData",
     type: "error"
   },
@@ -2361,6 +2459,11 @@ const MainnetV4SetterABI = [
     type: "error"
   },
   {
+    inputs: [],
+    name: "IncorrectValidatorState",
+    type: "error"
+  },
+  {
     inputs: [
       {
         internalType: "bytes",
@@ -2378,12 +2481,27 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
-    name: "InvalidContractAddress",
+    name: "InsufficientCSSVSupply",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "InvalidOperatorFeeIncreaseLimit",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "InvalidOperatorFeeRange",
     type: "error"
   },
   {
     inputs: [],
     name: "InvalidOperatorIdsLength",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "InvalidOracleId",
     type: "error"
   },
   {
@@ -2444,7 +2562,7 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
-    name: "MaxValueExceeded",
+    name: "MustUseLatestRoot",
     type: "error"
   },
   {
@@ -2455,11 +2573,6 @@ const MainnetV4SetterABI = [
   {
     inputs: [],
     name: "NoFeeDeclared",
-    type: "error"
-  },
-  {
-    inputs: [],
-    name: "NotAuthorized",
     type: "error"
   },
   {
@@ -2504,11 +2617,6 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
-    name: "OracleHasZeroWeight",
-    type: "error"
-  },
-  {
-    inputs: [],
     name: "PublicKeysSharesLengthMismatch",
     type: "error"
   },
@@ -2524,6 +2632,11 @@ const MainnetV4SetterABI = [
   },
   {
     inputs: [],
+    name: "SameOracleAddressNotAllowed",
+    type: "error"
+  },
+  {
+    inputs: [],
     name: "StakeTooLow",
     type: "error"
   },
@@ -2535,6 +2648,11 @@ const MainnetV4SetterABI = [
   {
     inputs: [],
     name: "StaleUpdate",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "TargetModuleDoesNotExist",
     type: "error"
   },
   {
@@ -2569,6 +2687,11 @@ const MainnetV4SetterABI = [
     type: "error"
   },
   {
+    inputs: [],
+    name: "ValidatorAlreadyExists",
+    type: "error"
+  },
+  {
     inputs: [
       {
         internalType: "bytes",
@@ -2577,6 +2700,22 @@ const MainnetV4SetterABI = [
       }
     ],
     name: "ValidatorAlreadyExistsWithData",
+    type: "error"
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes",
+        name: "publicKey",
+        type: "bytes"
+      },
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address"
+      }
+    ],
+    name: "ValidatorAlreadyRegistered",
     type: "error"
   },
   {
@@ -2597,6 +2736,11 @@ const MainnetV4SetterABI = [
   {
     inputs: [],
     name: "ZeroAmount",
+    type: "error"
+  },
+  {
+    inputs: [],
+    name: "ZeroCSSVSupply",
     type: "error"
   },
   {
@@ -3131,6 +3275,19 @@ const MainnetV4SetterABI = [
     inputs: [
       {
         indexed: false,
+        internalType: "uint32",
+        name: "newMinBlocksBetweenUpdates",
+        type: "uint32"
+      }
+    ],
+    name: "MinBlocksBetweenUpdatesUpdated",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
         internalType: "uint256",
         name: "value",
         type: "uint256"
@@ -3510,6 +3667,31 @@ const MainnetV4SetterABI = [
       }
     ],
     name: "OperatorWithdrawn",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address"
+      },
+      {
+        indexed: true,
+        internalType: "uint64",
+        name: "operatorId",
+        type: "uint64"
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "value",
+        type: "uint256"
+      }
+    ],
+    name: "OperatorWithdrawnSSV",
     type: "event"
   },
   {
@@ -4893,32 +5075,6 @@ const MainnetV4SetterABI = [
   {
     inputs: [
       {
-        internalType: "uint16",
-        name: "quorum",
-        type: "uint16"
-      }
-    ],
-    name: "setQuorumBps",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint64",
-        name: "duration",
-        type: "uint64"
-      }
-    ],
-    name: "setUnstakeCooldownDuration",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    inputs: [
-      {
         internalType: "uint256",
         name: "amount",
         type: "uint256"
@@ -5082,6 +5238,19 @@ const MainnetV4SetterABI = [
   {
     inputs: [
       {
+        internalType: "uint32",
+        name: "blocks",
+        type: "uint32"
+      }
+    ],
+    name: "updateMinBlocksBetweenUpdates",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "amount",
         type: "uint256"
@@ -5171,6 +5340,32 @@ const MainnetV4SetterABI = [
       }
     ],
     name: "updateOperatorFeeIncreaseLimit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "quorum",
+        type: "uint16"
+      }
+    ],
+    name: "updateQuorumBps",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "duration",
+        type: "uint64"
+      }
+    ],
+    name: "updateUnstakeCooldownDuration",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function"
@@ -6866,11 +7061,11 @@ export {
   KeyShares,
   KeySharesItem,
   O2 as OperatorPublicKeyError,
-  c as OperatorsCountsMismatchError,
+  b as OperatorsCountsMismatchError,
   SSVKeys,
-  b as SSVKeysException,
+  c as SSVKeysException,
   SSVSDK,
-  Q as chainIds,
+  O as chainIds,
   P as chains,
   contracts,
   createClusterManager,
@@ -6896,7 +7091,7 @@ export {
   getValidators,
   globals,
   graph_endpoints,
-  O as hoodi,
+  Q as hoodi,
   isConfig,
   R as networks,
   paid_graph_endpoints,

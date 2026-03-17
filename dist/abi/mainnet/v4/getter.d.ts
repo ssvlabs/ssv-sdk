@@ -19,6 +19,10 @@ export declare const MainnetV4GetterABI: readonly [{
     readonly name: "ApprovalNotWithinTimeframe";
     readonly type: "error";
 }, {
+    readonly inputs: readonly [];
+    readonly name: "CallerNotOwner";
+    readonly type: "error";
+}, {
     readonly inputs: readonly [{
         readonly internalType: "address";
         readonly name: "caller";
@@ -29,6 +33,10 @@ export declare const MainnetV4GetterABI: readonly [{
         readonly type: "address";
     }];
     readonly name: "CallerNotOwnerWithData";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "CallerNotWhitelisted";
     readonly type: "error";
 }, {
     readonly inputs: readonly [{
@@ -76,6 +84,14 @@ export declare const MainnetV4GetterABI: readonly [{
         readonly name: "operatorId";
         readonly type: "uint64";
     }];
+    readonly name: "ExceedValidatorLimit";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "uint64";
+        readonly name: "operatorId";
+        readonly type: "uint64";
+    }];
     readonly name: "ExceedValidatorLimitWithData";
     readonly type: "error";
 }, {
@@ -115,6 +131,10 @@ export declare const MainnetV4GetterABI: readonly [{
     readonly name: "IncorrectOperatorVersion";
     readonly type: "error";
 }, {
+    readonly inputs: readonly [];
+    readonly name: "IncorrectValidatorState";
+    readonly type: "error";
+}, {
     readonly inputs: readonly [{
         readonly internalType: "bytes";
         readonly name: "publicKey";
@@ -128,11 +148,23 @@ export declare const MainnetV4GetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
-    readonly name: "InvalidContractAddress";
+    readonly name: "InsufficientCSSVSupply";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "InvalidOperatorFeeIncreaseLimit";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "InvalidOperatorFeeRange";
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
     readonly name: "InvalidOperatorIdsLength";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "InvalidOracleId";
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
@@ -168,6 +200,10 @@ export declare const MainnetV4GetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
+    readonly name: "MaxPrecisionExceeded";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
     readonly name: "MaxRequestsAmountReached";
     readonly type: "error";
 }, {
@@ -176,15 +212,15 @@ export declare const MainnetV4GetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
+    readonly name: "MustUseLatestRoot";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
     readonly name: "NewBlockPeriodIsBelowMinimum";
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
     readonly name: "NoFeeDeclared";
-    readonly type: "error";
-}, {
-    readonly inputs: readonly [];
-    readonly name: "NotAuthorized";
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
@@ -220,10 +256,6 @@ export declare const MainnetV4GetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
-    readonly name: "OracleHasZeroWeight";
-    readonly type: "error";
-}, {
-    readonly inputs: readonly [];
     readonly name: "PublicKeysSharesLengthMismatch";
     readonly type: "error";
 }, {
@@ -236,6 +268,10 @@ export declare const MainnetV4GetterABI: readonly [{
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
+    readonly name: "SameOracleAddressNotAllowed";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
     readonly name: "StakeTooLow";
     readonly type: "error";
 }, {
@@ -245,6 +281,10 @@ export declare const MainnetV4GetterABI: readonly [{
 }, {
     readonly inputs: readonly [];
     readonly name: "StaleUpdate";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "TargetModuleDoesNotExist";
     readonly type: "error";
 }, {
     readonly inputs: readonly [{
@@ -271,12 +311,28 @@ export declare const MainnetV4GetterABI: readonly [{
     readonly name: "UpdateTooFrequent";
     readonly type: "error";
 }, {
+    readonly inputs: readonly [];
+    readonly name: "ValidatorAlreadyExists";
+    readonly type: "error";
+}, {
     readonly inputs: readonly [{
         readonly internalType: "bytes";
         readonly name: "publicKey";
         readonly type: "bytes";
     }];
     readonly name: "ValidatorAlreadyExistsWithData";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [{
+        readonly internalType: "bytes";
+        readonly name: "publicKey";
+        readonly type: "bytes";
+    }, {
+        readonly internalType: "address";
+        readonly name: "owner";
+        readonly type: "address";
+    }];
+    readonly name: "ValidatorAlreadyRegistered";
     readonly type: "error";
 }, {
     readonly inputs: readonly [];
@@ -293,6 +349,10 @@ export declare const MainnetV4GetterABI: readonly [{
 }, {
     readonly inputs: readonly [];
     readonly name: "ZeroAmount";
+    readonly type: "error";
+}, {
+    readonly inputs: readonly [];
+    readonly name: "ZeroCSSVSupply";
     readonly type: "error";
 }, {
     readonly anonymous: false;

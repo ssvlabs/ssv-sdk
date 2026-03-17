@@ -172,6 +172,11 @@ export declare const withdraw: (config: ConfigReturnType, { args: { operatorId, 
                 value: bigint;
             };
         } | {
+            eventName: "MinBlocksBetweenUpdatesUpdated";
+            args: {
+                newMinBlocksBetweenUpdates: number;
+            };
+        } | {
             eventName: "MinimumLiquidationCollateralSSVUpdated";
             args: {
                 value: bigint;
@@ -287,6 +292,13 @@ export declare const withdraw: (config: ConfigReturnType, { args: { operatorId, 
             };
         } | {
             eventName: "OperatorWithdrawn";
+            args: {
+                owner: `0x${string}`;
+                operatorId: bigint;
+                value: bigint;
+            };
+        } | {
+            eventName: "OperatorWithdrawnSSV";
             args: {
                 owner: `0x${string}`;
                 operatorId: bigint;
@@ -588,6 +600,11 @@ export declare const withdrawOperatorEarningsSSV: (config: ConfigReturnType, { a
                 value: bigint;
             };
         } | {
+            eventName: "MinBlocksBetweenUpdatesUpdated";
+            args: {
+                newMinBlocksBetweenUpdates: number;
+            };
+        } | {
             eventName: "MinimumLiquidationCollateralSSVUpdated";
             args: {
                 value: bigint;
@@ -703,6 +720,13 @@ export declare const withdrawOperatorEarningsSSV: (config: ConfigReturnType, { a
             };
         } | {
             eventName: "OperatorWithdrawn";
+            args: {
+                owner: `0x${string}`;
+                operatorId: bigint;
+                value: bigint;
+            };
+        } | {
+            eventName: "OperatorWithdrawnSSV";
             args: {
                 owner: `0x${string}`;
                 operatorId: bigint;
@@ -1003,6 +1027,11 @@ export declare const withdrawAllOperatorEarningsSSV: (config: ConfigReturnType, 
                 value: bigint;
             };
         } | {
+            eventName: "MinBlocksBetweenUpdatesUpdated";
+            args: {
+                newMinBlocksBetweenUpdates: number;
+            };
+        } | {
             eventName: "MinimumLiquidationCollateralSSVUpdated";
             args: {
                 value: bigint;
@@ -1118,6 +1147,13 @@ export declare const withdrawAllOperatorEarningsSSV: (config: ConfigReturnType, 
             };
         } | {
             eventName: "OperatorWithdrawn";
+            args: {
+                owner: `0x${string}`;
+                operatorId: bigint;
+                value: bigint;
+            };
+        } | {
+            eventName: "OperatorWithdrawnSSV";
             args: {
                 owner: `0x${string}`;
                 operatorId: bigint;
@@ -1418,6 +1454,11 @@ export declare const withdrawAllVersionOperatorEarnings: (config: ConfigReturnTy
                 value: bigint;
             };
         } | {
+            eventName: "MinBlocksBetweenUpdatesUpdated";
+            args: {
+                newMinBlocksBetweenUpdates: number;
+            };
+        } | {
             eventName: "MinimumLiquidationCollateralSSVUpdated";
             args: {
                 value: bigint;
@@ -1533,6 +1574,13 @@ export declare const withdrawAllVersionOperatorEarnings: (config: ConfigReturnTy
             };
         } | {
             eventName: "OperatorWithdrawn";
+            args: {
+                owner: `0x${string}`;
+                operatorId: bigint;
+                value: bigint;
+            };
+        } | {
+            eventName: "OperatorWithdrawnSSV";
             args: {
                 owner: `0x${string}`;
                 operatorId: bigint;
@@ -1835,6 +1883,11 @@ export declare const registerOperator: (config: ConfigReturnType, { args: { isPr
                 value: bigint;
             };
         } | {
+            eventName: "MinBlocksBetweenUpdatesUpdated";
+            args: {
+                newMinBlocksBetweenUpdates: number;
+            };
+        } | {
             eventName: "MinimumLiquidationCollateralSSVUpdated";
             args: {
                 value: bigint;
@@ -1950,6 +2003,13 @@ export declare const registerOperator: (config: ConfigReturnType, { args: { isPr
             };
         } | {
             eventName: "OperatorWithdrawn";
+            args: {
+                owner: `0x${string}`;
+                operatorId: bigint;
+                value: bigint;
+            };
+        } | {
+            eventName: "OperatorWithdrawnSSV";
             args: {
                 owner: `0x${string}`;
                 operatorId: bigint;
@@ -2251,6 +2311,11 @@ export declare const setOperatorWhitelists: (config: ConfigReturnType, { args: {
                 value: bigint;
             };
         } | {
+            eventName: "MinBlocksBetweenUpdatesUpdated";
+            args: {
+                newMinBlocksBetweenUpdates: number;
+            };
+        } | {
             eventName: "MinimumLiquidationCollateralSSVUpdated";
             args: {
                 value: bigint;
@@ -2366,6 +2431,13 @@ export declare const setOperatorWhitelists: (config: ConfigReturnType, { args: {
             };
         } | {
             eventName: "OperatorWithdrawn";
+            args: {
+                owner: `0x${string}`;
+                operatorId: bigint;
+                value: bigint;
+            };
+        } | {
+            eventName: "OperatorWithdrawnSSV";
             args: {
                 owner: `0x${string}`;
                 operatorId: bigint;
