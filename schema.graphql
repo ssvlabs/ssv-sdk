@@ -101,16 +101,6 @@ enum Account_orderBy {
   validators
 }
 
-"""
-Indicates whether the current, partially filled bucket should be included in the response. Defaults to `exclude`
-"""
-enum Aggregation_current {
-  """Exclude the current, partially filled bucket from the response"""
-  exclude
-  """Include the current, partially filled bucket in the response"""
-  include
-}
-
 enum Aggregation_interval {
   day
   hour
@@ -251,8 +241,10 @@ input ClusterBalanceUpdated_filter {
   id_starts_with_nocase: String
   operatorIds: [BigInt!]
   operatorIds_contains: [BigInt!]
+  operatorIds_contains_nocase: [BigInt!]
   operatorIds_not: [BigInt!]
   operatorIds_not_contains: [BigInt!]
+  operatorIds_not_contains_nocase: [BigInt!]
   or: [ClusterBalanceUpdated_filter]
   owner: Bytes
   owner_contains: Bytes
@@ -384,8 +376,10 @@ input ClusterDeposited_filter {
   id_starts_with_nocase: String
   operatorIds: [BigInt!]
   operatorIds_contains: [BigInt!]
+  operatorIds_contains_nocase: [BigInt!]
   operatorIds_not: [BigInt!]
   operatorIds_not_contains: [BigInt!]
+  operatorIds_not_contains_nocase: [BigInt!]
   or: [ClusterDeposited_filter]
   owner: Bytes
   owner_contains: Bytes
@@ -529,8 +523,10 @@ input ClusterLiquidated_filter {
   id_starts_with_nocase: String
   operatorIds: [BigInt!]
   operatorIds_contains: [BigInt!]
+  operatorIds_contains_nocase: [BigInt!]
   operatorIds_not: [BigInt!]
   operatorIds_not_contains: [BigInt!]
+  operatorIds_not_contains_nocase: [BigInt!]
   or: [ClusterLiquidated_filter]
   owner: Bytes
   owner_contains: Bytes
@@ -679,8 +675,10 @@ input ClusterMigratedToETH_filter {
   id_starts_with_nocase: String
   operatorIds: [BigInt!]
   operatorIds_contains: [BigInt!]
+  operatorIds_contains_nocase: [BigInt!]
   operatorIds_not: [BigInt!]
   operatorIds_not_contains: [BigInt!]
+  operatorIds_not_contains_nocase: [BigInt!]
   or: [ClusterMigratedToETH_filter]
   owner: Bytes
   owner_contains: Bytes
@@ -821,8 +819,10 @@ input ClusterReactivated_filter {
   id_starts_with_nocase: String
   operatorIds: [BigInt!]
   operatorIds_contains: [BigInt!]
+  operatorIds_contains_nocase: [BigInt!]
   operatorIds_not: [BigInt!]
   operatorIds_not_contains: [BigInt!]
+  operatorIds_not_contains_nocase: [BigInt!]
   or: [ClusterReactivated_filter]
   owner: Bytes
   owner_contains: Bytes
@@ -953,8 +953,10 @@ input ClusterWithdrawn_filter {
   id_starts_with_nocase: String
   operatorIds: [BigInt!]
   operatorIds_contains: [BigInt!]
+  operatorIds_contains_nocase: [BigInt!]
   operatorIds_not: [BigInt!]
   operatorIds_not_contains: [BigInt!]
+  operatorIds_not_contains_nocase: [BigInt!]
   or: [ClusterWithdrawn_filter]
   owner: Bytes
   owner_contains: Bytes
@@ -1093,8 +1095,10 @@ input Cluster_filter {
   networkFeeIndex_not_in: [BigInt!]
   operatorIds: [BigInt!]
   operatorIds_contains: [BigInt!]
+  operatorIds_contains_nocase: [BigInt!]
   operatorIds_not: [BigInt!]
   operatorIds_not_contains: [BigInt!]
+  operatorIds_not_contains_nocase: [BigInt!]
   or: [Cluster_filter]
   owner: String
   owner_: Account_filter
@@ -1643,8 +1647,10 @@ input DelegationUpdated_filter {
   _change_block: BlockChangedFilter
   amounts: [BigInt!]
   amounts_contains: [BigInt!]
+  amounts_contains_nocase: [BigInt!]
   amounts_not: [BigInt!]
   amounts_not_contains: [BigInt!]
+  amounts_not_contains_nocase: [BigInt!]
   and: [DelegationUpdated_filter]
   blockNumber: BigInt
   blockNumber_gt: BigInt
@@ -1685,8 +1691,10 @@ input DelegationUpdated_filter {
   or: [DelegationUpdated_filter]
   oracleIds: [BigInt!]
   oracleIds_contains: [BigInt!]
+  oracleIds_contains_nocase: [BigInt!]
   oracleIds_not: [BigInt!]
   oracleIds_not_contains: [BigInt!]
+  oracleIds_not_contains_nocase: [BigInt!]
   transactionHash: Bytes
   transactionHash_contains: Bytes
   transactionHash_gt: Bytes
@@ -3278,8 +3286,10 @@ input OperatorMultipleWhitelistRemoved_filter {
   id_starts_with_nocase: String
   operatorIds: [BigInt!]
   operatorIds_contains: [BigInt!]
+  operatorIds_contains_nocase: [BigInt!]
   operatorIds_not: [BigInt!]
   operatorIds_not_contains: [BigInt!]
+  operatorIds_not_contains_nocase: [BigInt!]
   or: [OperatorMultipleWhitelistRemoved_filter]
   transactionHash: Bytes
   transactionHash_contains: Bytes
@@ -3293,8 +3303,10 @@ input OperatorMultipleWhitelistRemoved_filter {
   transactionHash_not_in: [Bytes!]
   whitelistAddresses: [Bytes!]
   whitelistAddresses_contains: [Bytes!]
+  whitelistAddresses_contains_nocase: [Bytes!]
   whitelistAddresses_not: [Bytes!]
   whitelistAddresses_not_contains: [Bytes!]
+  whitelistAddresses_not_contains_nocase: [Bytes!]
 }
 
 enum OperatorMultipleWhitelistRemoved_orderBy {
@@ -3357,8 +3369,10 @@ input OperatorMultipleWhitelistUpdated_filter {
   id_starts_with_nocase: String
   operatorIds: [BigInt!]
   operatorIds_contains: [BigInt!]
+  operatorIds_contains_nocase: [BigInt!]
   operatorIds_not: [BigInt!]
   operatorIds_not_contains: [BigInt!]
+  operatorIds_not_contains_nocase: [BigInt!]
   or: [OperatorMultipleWhitelistUpdated_filter]
   transactionHash: Bytes
   transactionHash_contains: Bytes
@@ -3372,8 +3386,10 @@ input OperatorMultipleWhitelistUpdated_filter {
   transactionHash_not_in: [Bytes!]
   whitelistAddresses: [Bytes!]
   whitelistAddresses_contains: [Bytes!]
+  whitelistAddresses_contains_nocase: [Bytes!]
   whitelistAddresses_not: [Bytes!]
   whitelistAddresses_not_contains: [Bytes!]
+  whitelistAddresses_not_contains_nocase: [Bytes!]
 }
 
 enum OperatorMultipleWhitelistUpdated_orderBy {
@@ -3436,8 +3452,10 @@ input OperatorPrivacyStatusUpdated_filter {
   id_starts_with_nocase: String
   operatorIds: [BigInt!]
   operatorIds_contains: [BigInt!]
+  operatorIds_contains_nocase: [BigInt!]
   operatorIds_not: [BigInt!]
   operatorIds_not_contains: [BigInt!]
+  operatorIds_not_contains_nocase: [BigInt!]
   or: [OperatorPrivacyStatusUpdated_filter]
   toPrivate: Boolean
   toPrivate_in: [Boolean!]
@@ -3681,8 +3699,10 @@ input OperatorWhitelistingContractUpdated_filter {
   id_starts_with_nocase: String
   operatorIds: [BigInt!]
   operatorIds_contains: [BigInt!]
+  operatorIds_contains_nocase: [BigInt!]
   operatorIds_not: [BigInt!]
   operatorIds_not_contains: [BigInt!]
+  operatorIds_not_contains_nocase: [BigInt!]
   or: [OperatorWhitelistingContractUpdated_filter]
   transactionHash: Bytes
   transactionHash_contains: Bytes
@@ -4014,8 +4034,10 @@ input Operator_filter {
   whitelistedContract_not_in: [Bytes!]
   whitelisted_: Account_filter
   whitelisted_contains: [String!]
+  whitelisted_contains_nocase: [String!]
   whitelisted_not: [String!]
   whitelisted_not_contains: [String!]
+  whitelisted_not_contains_nocase: [String!]
 }
 
 enum Operator_orderBy {
@@ -6592,8 +6614,10 @@ input ValidatorAdded_filter {
   id_starts_with_nocase: String
   operatorIds: [BigInt!]
   operatorIds_contains: [BigInt!]
+  operatorIds_contains_nocase: [BigInt!]
   operatorIds_not: [BigInt!]
   operatorIds_not_contains: [BigInt!]
+  operatorIds_not_contains_nocase: [BigInt!]
   or: [ValidatorAdded_filter]
   owner: Bytes
   owner_contains: Bytes
@@ -6746,8 +6770,10 @@ input ValidatorRemoved_filter {
   id_starts_with_nocase: String
   operatorIds: [BigInt!]
   operatorIds_contains: [BigInt!]
+  operatorIds_contains_nocase: [BigInt!]
   operatorIds_not: [BigInt!]
   operatorIds_not_contains: [BigInt!]
+  operatorIds_not_contains_nocase: [BigInt!]
   or: [ValidatorRemoved_filter]
   owner: Bytes
   owner_contains: Bytes
