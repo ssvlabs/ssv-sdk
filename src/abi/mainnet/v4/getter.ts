@@ -193,6 +193,11 @@ export const MainnetV4GetterABI = [
   },
   {
     inputs: [],
+    name: 'InsufficientCSSVSupply',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'InvalidOperatorFeeIncreaseLimit',
     type: 'error',
   },
@@ -324,11 +329,6 @@ export const MainnetV4GetterABI = [
   },
   {
     inputs: [],
-    name: 'OracleHasZeroWeight',
-    type: 'error',
-  },
-  {
-    inputs: [],
     name: 'PublicKeysSharesLengthMismatch',
     type: 'error',
   },
@@ -448,6 +448,11 @@ export const MainnetV4GetterABI = [
   {
     inputs: [],
     name: 'ZeroAmount',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'ZeroCSSVSupply',
     type: 'error',
   },
   {
