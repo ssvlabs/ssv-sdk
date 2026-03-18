@@ -170,6 +170,13 @@ export declare enum Account_OrderBy {
     ValidatorCount = "validatorCount",
     Validators = "validators"
 }
+/** Indicates whether the current, partially filled bucket should be included in the response. Defaults to `exclude` */
+export declare enum Aggregation_Current {
+    /** Exclude the current, partially filled bucket from the response */
+    Exclude = "exclude",
+    /** Include the current, partially filled bucket in the response */
+    Include = "include"
+}
 export declare enum Aggregation_Interval {
     Day = "day",
     Hour = "hour"
@@ -306,10 +313,8 @@ export type ClusterBalanceUpdated_Filter = {
     id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
     operatorIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     or?: InputMaybe<Array<InputMaybe<ClusterBalanceUpdated_Filter>>>;
     owner?: InputMaybe<Scalars['Bytes']['input']>;
     owner_contains?: InputMaybe<Scalars['Bytes']['input']>;
@@ -438,10 +443,8 @@ export type ClusterDeposited_Filter = {
     id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
     operatorIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     or?: InputMaybe<Array<InputMaybe<ClusterDeposited_Filter>>>;
     owner?: InputMaybe<Scalars['Bytes']['input']>;
     owner_contains?: InputMaybe<Scalars['Bytes']['input']>;
@@ -581,10 +584,8 @@ export type ClusterLiquidated_Filter = {
     id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
     operatorIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     or?: InputMaybe<Array<InputMaybe<ClusterLiquidated_Filter>>>;
     owner?: InputMaybe<Scalars['Bytes']['input']>;
     owner_contains?: InputMaybe<Scalars['Bytes']['input']>;
@@ -730,10 +731,8 @@ export type ClusterMigratedToEth_Filter = {
     id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
     operatorIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     or?: InputMaybe<Array<InputMaybe<ClusterMigratedToEth_Filter>>>;
     owner?: InputMaybe<Scalars['Bytes']['input']>;
     owner_contains?: InputMaybe<Scalars['Bytes']['input']>;
@@ -871,10 +870,8 @@ export type ClusterReactivated_Filter = {
     id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
     operatorIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     or?: InputMaybe<Array<InputMaybe<ClusterReactivated_Filter>>>;
     owner?: InputMaybe<Scalars['Bytes']['input']>;
     owner_contains?: InputMaybe<Scalars['Bytes']['input']>;
@@ -1002,10 +999,8 @@ export type ClusterWithdrawn_Filter = {
     id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
     operatorIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     or?: InputMaybe<Array<InputMaybe<ClusterWithdrawn_Filter>>>;
     owner?: InputMaybe<Scalars['Bytes']['input']>;
     owner_contains?: InputMaybe<Scalars['Bytes']['input']>;
@@ -1142,10 +1137,8 @@ export type Cluster_Filter = {
     networkFeeIndex_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     or?: InputMaybe<Array<InputMaybe<Cluster_Filter>>>;
     owner?: InputMaybe<Scalars['String']['input']>;
     owner_?: InputMaybe<Account_Filter>;
@@ -1684,10 +1677,8 @@ export type DelegationUpdated_Filter = {
     _change_block?: InputMaybe<BlockChangedFilter>;
     amounts?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     amounts_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    amounts_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     amounts_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     amounts_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    amounts_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     and?: InputMaybe<Array<InputMaybe<DelegationUpdated_Filter>>>;
     blockNumber?: InputMaybe<Scalars['BigInt']['input']>;
     blockNumber_gt?: InputMaybe<Scalars['BigInt']['input']>;
@@ -1728,10 +1719,8 @@ export type DelegationUpdated_Filter = {
     or?: InputMaybe<Array<InputMaybe<DelegationUpdated_Filter>>>;
     oracleIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     oracleIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    oracleIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     oracleIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     oracleIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    oracleIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     transactionHash?: InputMaybe<Scalars['Bytes']['input']>;
     transactionHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
     transactionHash_gt?: InputMaybe<Scalars['Bytes']['input']>;
@@ -3279,10 +3268,8 @@ export type OperatorMultipleWhitelistRemoved_Filter = {
     id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
     operatorIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     or?: InputMaybe<Array<InputMaybe<OperatorMultipleWhitelistRemoved_Filter>>>;
     transactionHash?: InputMaybe<Scalars['Bytes']['input']>;
     transactionHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
@@ -3296,10 +3283,8 @@ export type OperatorMultipleWhitelistRemoved_Filter = {
     transactionHash_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
     whitelistAddresses?: InputMaybe<Array<Scalars['Bytes']['input']>>;
     whitelistAddresses_contains?: InputMaybe<Array<Scalars['Bytes']['input']>>;
-    whitelistAddresses_contains_nocase?: InputMaybe<Array<Scalars['Bytes']['input']>>;
     whitelistAddresses_not?: InputMaybe<Array<Scalars['Bytes']['input']>>;
     whitelistAddresses_not_contains?: InputMaybe<Array<Scalars['Bytes']['input']>>;
-    whitelistAddresses_not_contains_nocase?: InputMaybe<Array<Scalars['Bytes']['input']>>;
 };
 export declare enum OperatorMultipleWhitelistRemoved_OrderBy {
     BlockNumber = "blockNumber",
@@ -3359,10 +3344,8 @@ export type OperatorMultipleWhitelistUpdated_Filter = {
     id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
     operatorIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     or?: InputMaybe<Array<InputMaybe<OperatorMultipleWhitelistUpdated_Filter>>>;
     transactionHash?: InputMaybe<Scalars['Bytes']['input']>;
     transactionHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
@@ -3376,10 +3359,8 @@ export type OperatorMultipleWhitelistUpdated_Filter = {
     transactionHash_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
     whitelistAddresses?: InputMaybe<Array<Scalars['Bytes']['input']>>;
     whitelistAddresses_contains?: InputMaybe<Array<Scalars['Bytes']['input']>>;
-    whitelistAddresses_contains_nocase?: InputMaybe<Array<Scalars['Bytes']['input']>>;
     whitelistAddresses_not?: InputMaybe<Array<Scalars['Bytes']['input']>>;
     whitelistAddresses_not_contains?: InputMaybe<Array<Scalars['Bytes']['input']>>;
-    whitelistAddresses_not_contains_nocase?: InputMaybe<Array<Scalars['Bytes']['input']>>;
 };
 export declare enum OperatorMultipleWhitelistUpdated_OrderBy {
     BlockNumber = "blockNumber",
@@ -3439,10 +3420,8 @@ export type OperatorPrivacyStatusUpdated_Filter = {
     id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
     operatorIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     or?: InputMaybe<Array<InputMaybe<OperatorPrivacyStatusUpdated_Filter>>>;
     toPrivate?: InputMaybe<Scalars['Boolean']['input']>;
     toPrivate_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
@@ -3677,10 +3656,8 @@ export type OperatorWhitelistingContractUpdated_Filter = {
     id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
     operatorIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     or?: InputMaybe<Array<InputMaybe<OperatorWhitelistingContractUpdated_Filter>>>;
     transactionHash?: InputMaybe<Scalars['Bytes']['input']>;
     transactionHash_contains?: InputMaybe<Scalars['Bytes']['input']>;
@@ -4007,10 +3984,8 @@ export type Operator_Filter = {
     whitelistedContract_not_in?: InputMaybe<Array<Scalars['Bytes']['input']>>;
     whitelisted_?: InputMaybe<Account_Filter>;
     whitelisted_contains?: InputMaybe<Array<Scalars['String']['input']>>;
-    whitelisted_contains_nocase?: InputMaybe<Array<Scalars['String']['input']>>;
     whitelisted_not?: InputMaybe<Array<Scalars['String']['input']>>;
     whitelisted_not_contains?: InputMaybe<Array<Scalars['String']['input']>>;
-    whitelisted_not_contains_nocase?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 export declare enum Operator_OrderBy {
     DeclaredFee = "declaredFee",
@@ -6032,10 +6007,8 @@ export type ValidatorAdded_Filter = {
     id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
     operatorIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     or?: InputMaybe<Array<InputMaybe<ValidatorAdded_Filter>>>;
     owner?: InputMaybe<Scalars['Bytes']['input']>;
     owner_contains?: InputMaybe<Scalars['Bytes']['input']>;
@@ -6185,10 +6158,8 @@ export type ValidatorRemoved_Filter = {
     id_starts_with_nocase?: InputMaybe<Scalars['String']['input']>;
     operatorIds?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     operatorIds_not_contains?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-    operatorIds_not_contains_nocase?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     or?: InputMaybe<Array<InputMaybe<ValidatorRemoved_Filter>>>;
     owner?: InputMaybe<Scalars['Bytes']['input']>;
     owner_contains?: InputMaybe<Scalars['Bytes']['input']>;
