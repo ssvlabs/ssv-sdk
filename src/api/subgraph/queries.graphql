@@ -70,7 +70,7 @@ query GetOperators($operatorIds: [String!]!) {
     isPrivate
     whitelistedContract
     fee
-    ssvFee
+    feeSSV
     whitelisted {
       id
     }
@@ -115,9 +115,9 @@ query GetClusterBalance(
     fee
     feeIndex
     feeIndexBlockNumber
-    ssvFee
-    ssvFeeIndex
-    ssvFeeIndexBlockNumber
+    feeSSV
+    feeIndexSSV
+    feeIndexBlockNumberSSV
   }
   cluster(id: $clusterId) {
     feeAsset

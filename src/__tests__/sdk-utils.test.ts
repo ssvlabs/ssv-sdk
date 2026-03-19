@@ -35,11 +35,11 @@ const mockOperators = _mockOperators.map((o) => ({
   publicKey: o.operatorKey,
   validatorCount: '5',
   fee: '1000000',
-  ssvFee: '1000000',
+  feeSSV: '1000000',
   feeIndex: '0',
   feeIndexBlockNumber: '1000',
-  ssvFeeIndex: '0',
-  ssvFeeIndexBlockNumber: '1000',
+  feeIndexSSV: '0',
+  feeIndexBlockNumberSSV: '1000',
   isPrivate: false,
   whitelisted: [],
   whitelistedContract: mockAddress,
@@ -47,7 +47,7 @@ const mockOperators = _mockOperators.map((o) => ({
 
 const mockClusterBalanceData = {
   cluster: {
-    feeAsset: ClusterFeeAssetTypes.Eth,
+    feeAsset: ClusterFeeAssetTypes.ETH,
     validatorCount: '1',
     networkFeeIndex: '0',
     index: '0',
@@ -207,7 +207,7 @@ describe('SDK Utils', () => {
       ).rejects.toThrow('Could not fetch cluster balance');
     });
 
-    it('should use ssvFee fields for SSV clusters', async () => {
+    it('should use fee fields for SSV clusters', async () => {
       const { getClusterBalance } = await import(
         '../libs/utils/methods/get-cluster-balance'
       );
@@ -231,16 +231,16 @@ describe('SDK Utils', () => {
             },
             operators: [
               {
-                fee: '100',
+                fee: '1',
                 feeIndex: '0',
                 feeIndexBlockNumber: '0',
-                ssvFee: '1',
-                ssvFeeIndex: '0',
-                ssvFeeIndexBlockNumber: '0',
+                feeSSV: '1',
+                feeIndexSSV: '0',
+                feeIndexBlockNumberSSV: '0',
               },
             ],
             cluster: {
-              feeAsset: ClusterFeeAssetTypes.Ssv,
+              feeAsset: ClusterFeeAssetTypes.SSV,
               validatorCount: '1',
               networkFeeIndex: '0',
               index: '0',

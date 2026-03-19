@@ -8,7 +8,7 @@ const mockAddress = '0x012f55B6Cc5D57F943F1E79cF00214B652513f88' as Address;
 
 const mockCluster = {
   owner: { id: mockAddress },
-  feeAsset: ClusterFeeAssetTypes.Eth,
+  feeAsset: ClusterFeeAssetTypes.ETH,
   active: true,
   validatorCount: '1',
   balance: '1000000000000000',
@@ -22,28 +22,28 @@ const mockOperators = [
   {
     id: '1',
     fee: '1000000000',
-    ssvFee: '1000000000',
+    feeSSV: '1000000000',
     publicKey: '0x01',
     whitelisted: [],
   },
   {
     id: '2',
     fee: '2000000000',
-    ssvFee: '2000000000',
+    feeSSV: '2000000000',
     publicKey: '0x02',
     whitelisted: [],
   },
   {
     id: '3',
     fee: '1500000000',
-    ssvFee: '1500000000',
+    feeSSV: '1500000000',
     publicKey: '0x03',
     whitelisted: [],
   },
   {
     id: '4',
     fee: '500000000',
-    ssvFee: '500000000',
+    feeSSV: '500000000',
     publicKey: '0x04',
     whitelisted: [],
   },
@@ -185,7 +185,7 @@ describe('calcDepositFromRunway', () => {
     expect(result).toBeGreaterThan(0n);
   });
 
-  it('should use ssvFee for SSV clusters', async () => {
+  it('should use feeSSV for SSV clusters', async () => {
     const { calcDepositFromRunway } = await import(
       '../libs/utils/methods/calc-deposit-from-runway'
     );
@@ -193,11 +193,11 @@ describe('calcDepositFromRunway', () => {
       api: {
         getCluster: vi.fn().mockResolvedValue({
           ...mockCluster,
-          feeAsset: ClusterFeeAssetTypes.Ssv,
+          feeAsset: ClusterFeeAssetTypes.SSV,
         }),
         getOperators: vi.fn().mockResolvedValue([
-          { id: '1', fee: '1000', ssvFee: '10', publicKey: '0x01' },
-          { id: '2', fee: '2000', ssvFee: '20', publicKey: '0x02' },
+          { id: '1', fee: '1000', feeSSV: '10', publicKey: '0x01' },
+          { id: '2', fee: '2000', feeSSV: '20', publicKey: '0x02' },
         ]),
         getDaoValues: vi.fn().mockResolvedValue({
           ...mockDaoValues,

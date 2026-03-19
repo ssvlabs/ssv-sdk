@@ -1,10 +1,8 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
-  // schema:
-  //   'https://api.studio.thegraph.com/query/71118/ssv-network-ethereum/version/latest',
   schema:
-    'https://api.studio.thegraph.com/query/71118/ssv-network-hoodi-stage/version/latest', // Changed to hoodi to get the latest schema
+    'https://api.studio.thegraph.com/query/71118/ssv-network-hoodi/version/latest',
   documents: ['src/**/*.graphql'],
   ignoreNoDocuments: true,
   generates: {
@@ -16,6 +14,9 @@ const config: CodegenConfig = {
           BigDecimal: 'string',
           Bytes: 'Address',
           Account: 'Address',
+        },
+        namingConvention: {
+          enumValues: 'keep',
         },
         additionalImports: ['import { type Address } from "viem"'],
         skipTypename: true,

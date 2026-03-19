@@ -7,8 +7,8 @@ import {
 import {
   ClusterFeeAssetTypes,
   GetClusterDocument,
-  GetClusterSnapshotDocument,
   GetClustersDocument,
+  GetClusterSnapshotDocument,
 } from '@/graphql/graphql';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -18,7 +18,7 @@ describe('Subgraph API', () => {
       request: vi.fn().mockResolvedValue({
         cluster: {
           owner: { id: '0x1234567890123456789012345678901234567890' },
-          feeAsset: ClusterFeeAssetTypes.Eth,
+          feeAsset: ClusterFeeAssetTypes.ETH,
           active: true,
           validatorCount: '1',
           balance: '100',
@@ -35,7 +35,7 @@ describe('Subgraph API', () => {
     expect(client.request).toHaveBeenCalledWith(GetClusterDocument, {
       id: 'cluster-1',
     });
-    expect(cluster?.feeAsset).toBe(ClusterFeeAssetTypes.Eth);
+    expect(cluster?.feeAsset).toBe(ClusterFeeAssetTypes.ETH);
   });
 
   it('returns feeAsset in getClusters response', async () => {
@@ -44,7 +44,7 @@ describe('Subgraph API', () => {
         clusters: [
           {
             id: 'cluster-eth',
-            feeAsset: ClusterFeeAssetTypes.Eth,
+            feeAsset: ClusterFeeAssetTypes.ETH,
             active: true,
             validatorCount: '1',
             balance: '100',
@@ -55,7 +55,7 @@ describe('Subgraph API', () => {
           },
           {
             id: 'cluster-ssv',
-            feeAsset: ClusterFeeAssetTypes.Ssv,
+            feeAsset: ClusterFeeAssetTypes.SSV,
             active: true,
             validatorCount: '2',
             balance: '200',
@@ -74,8 +74,8 @@ describe('Subgraph API', () => {
       owner: '0xabc',
     });
     expect(clusters.map((cluster) => cluster.feeAsset)).toEqual([
-      ClusterFeeAssetTypes.Eth,
-      ClusterFeeAssetTypes.Ssv,
+      ClusterFeeAssetTypes.ETH,
+      ClusterFeeAssetTypes.SSV,
     ]);
   });
 
@@ -118,7 +118,9 @@ describe('Subgraph API', () => {
 
     const api = getQueries(client as never);
     const snapshotFromAlias = await api.getClusterSnapshot({ id: 'cluster-1' });
-    const snapshotFromCurrent = await api.toSolidityCluster({ id: 'cluster-1' });
+    const snapshotFromCurrent = await api.toSolidityCluster({
+      id: 'cluster-1',
+    });
 
     expect(client.request).toHaveBeenNthCalledWith(
       1,
