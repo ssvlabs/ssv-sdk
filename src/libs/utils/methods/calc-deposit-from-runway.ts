@@ -34,10 +34,10 @@ export const calcDepositFromRunway = async (
   if (!daoValues) {
     throw new Error('DAO values not found');
   }
-  const isSsvCluster = cluster.feeAsset === ClusterFeeAssetTypes.Ssv;
+  const isSsvCluster = cluster.feeAsset === ClusterFeeAssetTypes.SSV;
   const operatorsFee = operators.reduce(
     (acc, operator) =>
-      acc + BigInt(isSsvCluster ? operator.ssvFee : operator.fee),
+      acc + BigInt(isSsvCluster ? operator.feeSSV : operator.fee),
     0n,
   );
 

@@ -31,7 +31,7 @@ export const getClusterBalance = async (
     throw new Error('Could not fetch cluster balance');
   }
 
-  const isSsvCluster = query.cluster.feeAsset === ClusterFeeAssetTypes.Ssv;
+  const isSsvCluster = query.cluster.feeAsset === ClusterFeeAssetTypes.SSV;
   const networkFee = BigInt(
     isSsvCluster ? query.daovalues.networkFeeSSV : query.daovalues.networkFee,
   );
@@ -68,10 +68,10 @@ export const getClusterBalance = async (
 
   const cumulativeOperatorFee = query.operators.reduce(
     (acc, operator) => {
-      const fee = isSsvCluster ? operator.ssvFee : operator.fee;
-      const feeIndex = isSsvCluster ? operator.ssvFeeIndex : operator.feeIndex;
+      const fee = isSsvCluster ? operator.feeSSV : operator.fee;
+      const feeIndex = isSsvCluster ? operator.feeIndexSSV : operator.feeIndex;
       const feeIndexBlockNumber = isSsvCluster
-        ? operator.ssvFeeIndexBlockNumber
+        ? operator.feeIndexBlockNumberSSV
         : operator.feeIndexBlockNumber;
       return (
         acc +
@@ -85,7 +85,7 @@ export const getClusterBalance = async (
 
   const operatorsFee = query.operators.reduce(
     (acc, operator) =>
-      acc + BigInt(isSsvCluster ? operator.ssvFee : operator.fee),
+      acc + BigInt(isSsvCluster ? operator.feeSSV : operator.fee),
     0n,
   );
 
