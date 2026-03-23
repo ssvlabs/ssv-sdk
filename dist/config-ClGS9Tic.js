@@ -107,7 +107,7 @@ const chainIds = Object.values(chains).map((chain) => chain.id);
 const networks = Object.values(chains).map((chain) => chain.name);
 const graph_endpoints = {
   [mainnet.id]: "https://api.studio.thegraph.com/query/71118/ssv-network-ethereum/version/latest",
-  [hoodi.id]: "https://api.studio.thegraph.com/query/71118/ssv-network-hoodi-stage/version/latest"
+  [hoodi.id]: "https://api.studio.thegraph.com/query/71118/ssv-network-hoodi/version/latest"
 };
 const paid_graph_endpoints = {
   [mainnet.id]: "https://gateway.thegraph.com/api/subgraphs/id/7V45fKPugp9psQjgrGsfif98gWzCyC6ChN7CW98VyQnr",
