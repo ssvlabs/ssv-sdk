@@ -61,7 +61,7 @@ export declare const getOperators: (client: GraphQLClient, args: GetOperatorsQue
     isPrivate: boolean;
     whitelistedContract: import('viem').Address;
     fee: string;
-    ssvFee: string;
+    feeSSV: string;
 }[]>;
 export declare const getValidators: (client: GraphQLClient, args: GetValidatorsQueryVariables) => Promise<{
     id: import('viem').Address;
