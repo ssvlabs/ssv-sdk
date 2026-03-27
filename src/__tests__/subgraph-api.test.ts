@@ -1,6 +1,7 @@
 import {
   getCluster,
   getClusters,
+  getOwnerNonce,
   getQueries,
   toSolidityCluster,
 } from '@/api/subgraph';
@@ -8,6 +9,8 @@ import {
   ClusterFeeAssetTypes,
   GetClusterDocument,
   GetClustersDocument,
+  GetOwnerNonceByBlockDocument,
+  GetOwnerNonceDocument,
   GetClusterSnapshotDocument,
 } from '@/graphql/graphql';
 import { describe, expect, it, vi } from 'vitest';
@@ -101,6 +104,53 @@ describe('Subgraph API', () => {
       id: 'cluster-1',
     });
     expect(cluster?.effectiveBalance).toBe('32');
+  });
+
+  it('returns 0 when owner account is missing', async () => {
+    const client = {
+      request: vi.fn().mockResolvedValue({
+        account: null,
+      }),
+    };
+
+    const nonce = await getOwnerNonce(client as never, { owner: '0xabc' });
+
+    expect(client.request).toHaveBeenCalledWith(GetOwnerNonceDocument, {
+      owner: '0xabc',
+    });
+    expect(nonce).toBe('0');
+  });
+
+  it('uses the by-block query when block is provided', async () => {
+    const client = {
+      request: vi.fn().mockResolvedValue({
+        account: {
+          nonce: '12',
+        },
+      }),
+    };
+
+    const nonce = await getOwnerNonce(client as never, {
+      owner: '0xabc',
+      block: 42,
+    });
+
+    expect(client.request).toHaveBeenCalledWith(GetOwnerNonceByBlockDocument, {
+      owner: '0xabc',
+      block: 42,
+    });
+    expect(nonce).toBe('12');
+  });
+
+  it('propagates owner nonce request failures', async () => {
+    const failure = new Error('subgraph unavailable');
+    const client = {
+      request: vi.fn().mockRejectedValue(failure),
+    };
+
+    await expect(
+      getOwnerNonce(client as never, { owner: '0xabc' }),
+    ).rejects.toThrow('subgraph unavailable');
   });
 
   it('supports deprecated getClusterSnapshot alias', async () => {

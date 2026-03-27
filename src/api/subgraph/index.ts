@@ -35,10 +35,7 @@ export const getOwnerNonce = (
     typeof args.block === 'number'
       ? GetOwnerNonceByBlockDocument
       : GetOwnerNonceDocument;
-  return client
-    .request(document, args)
-    .then((r) => r.account?.nonce || '0')
-    .catch(() => '0');
+  return client.request(document, args).then((r) => r.account?.nonce ?? '0');
 };
 
 export const toSolidityCluster = (
