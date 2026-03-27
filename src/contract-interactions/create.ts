@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter';
-import { TokenABI } from '@/abi/token';
 import { paramsToArray } from '@/types/contract-interactions';
 import { tryCatch } from '@/utils';
 import type { AbiFunction, WalletClient, WriteContractParameters } from 'viem';
-import { decodeEventLog, encodeFunctionData } from 'viem';
+import { decodeEventLog, encodeFunctionData, isAddressEqual } from 'viem';
 import type {
   ContractNames,
   Contracts,
@@ -14,8 +12,6 @@ import type {
   WriteProps,
   WriterFunctions,
 } from './types';
-
-const ABIS = [TokenABI, MainnetV4SetterABI];
 
 const ensureWritableWallet = (
   walletClient: WalletClient | undefined,
@@ -41,6 +37,7 @@ export const createWriter = <T extends ContractNames>({
   publicClient,
   walletClient,
   contractAddress,
+  eventSources = [{ abi, address: contractAddress }],
 }: WriteProps): WriterFunctions<T> => {
   const writeFnsMainnet = abi.filter(
     (item) =>
@@ -88,23 +85,23 @@ export const createWriter = <T extends ContractNames>({
                 ...receipt,
                 events: receipt.logs.reduce(
                   (acc, log) => {
-                    try {
-                      const event = decodeEventLog({
-                        abi: abi,
-                        data: log.data,
-                        topics: log.topics,
-                      }) as unknown as Contracts[T]['events'];
-                      acc.push(event);
-                    } catch {
-                      for (const eventAbi of ABIS) {
-                        tryCatch(() => {
-                          const event = decodeEventLog({
-                            abi: eventAbi,
+                    for (const eventSource of eventSources) {
+                      if (!isAddressEqual(log.address, eventSource.address)) {
+                        continue;
+                      }
+
+                      const [event] = tryCatch(
+                        () =>
+                          decodeEventLog({
+                            abi: eventSource.abi,
                             data: log.data,
                             topics: log.topics,
-                          });
-                          acc.push(event);
-                        });
+                          }) as unknown as Contracts[T]['events'],
+                      );
+
+                      if (event) {
+                        acc.push(event);
+                        break;
                       }
                     }
 

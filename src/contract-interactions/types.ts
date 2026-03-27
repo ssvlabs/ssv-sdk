@@ -109,11 +109,17 @@ export type SmartFnWriteOptions<K extends Record<string, unknown>> = Omit<
   value?: bigint;
 };
 
+export type EventSource = {
+  abi: Abi;
+  address: Address;
+};
+
 export type WriteProps = {
   abi: Abi;
   publicClient: PublicClient;
   walletClient?: WalletClient;
   contractAddress: Address;
+  eventSources?: EventSource[];
 };
 export type ReadProps = {
   abi: SupportedAbis;
