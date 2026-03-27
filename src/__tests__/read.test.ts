@@ -5,8 +5,6 @@ import { chains } from '@/config';
 import { createPublicClient, createWalletClient, http } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 
-const runExternalReadTests = import.meta.env.VITE_RUN_EXTERNAL_READ_TESTS === 'true';
-
 describe('Communications', () => {
   test.skipIf(!import.meta.env.VITE_CUSTOM_RPC_URL)(
     'can communicate with mainnet contract',
@@ -105,7 +103,7 @@ describe('Communications', () => {
     },
   );
 
-  test.skipIf(!runExternalReadTests)('can communicate with hoodi contract', async () => {
+  test('can communicate with hoodi contract', async () => {
     const chain = chains.hoodi;
     const transport = http();
 
@@ -133,9 +131,7 @@ describe('Communications', () => {
     expect(result).toBeTypeOf('bigint');
   });
 
-  test.skipIf(!runExternalReadTests)(
-    'can communicate with hoodi the subgraph',
-    async () => {
+  test('can communicate with hoodi the subgraph', async () => {
     const chain = chains.hoodi; // or chains.mainnet
     const transport = http();
 
@@ -167,8 +163,7 @@ describe('Communications', () => {
         if (err.response?.status === 200) return { publicKey: 123 };
       });
     expect(result).toHaveProperty('publicKey');
-    },
-  );
+  });
   test.skipIf(!import.meta.env.VITE_SUBGRAPH_API_KEY)(
     'can communicate with hoodi the subgraph(apikey)',
     async () => {
