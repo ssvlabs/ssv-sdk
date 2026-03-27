@@ -7,6 +7,7 @@ export default defineConfig({
   test: {
     testTimeout: 60000,
     include: ['**/*.test.ts'],
+    globalSetup: ['./vitest.global-setup.ts'],
     // Avoid Node 22 worker-thread crashes during coverage on Linux CI.
     pool: 'forks',
     env: process.env as Record<string, string>, // This line makes environment variables available in tests
