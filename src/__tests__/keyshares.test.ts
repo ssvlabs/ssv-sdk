@@ -260,6 +260,26 @@ describe('Keyshares', async () => {
     ).rejects.toThrow();
   });
 
+  it('should throw when validator lookup fails', async () => {
+    const { validateSharesPreRegistration } = await import(
+      '../libs/utils/methods'
+    );
+
+    const unavailableSubgraphConfig = merge({}, mockConfig, {
+      api: {
+        ...mockConfig.api,
+        getValidator: vi.fn().mockRejectedValue(new Error('rate limited')),
+      },
+    } satisfies Partial<ConfigReturnType>);
+
+    await expect(
+      validateSharesPreRegistration(unavailableSubgraphConfig, {
+        operatorIds: mockOperators.ids.map(String),
+        keyshares: valid_keyshares,
+      }),
+    ).rejects.toThrow('rate limited');
+  });
+
   it('should throw for invalid operator key', async () => {
     await expect(
       sdk.utils.validateKeysharesJSON({

@@ -102,8 +102,7 @@ export const validateSharesPreRegistration = async (
     shares.map((share) => {
       return config.api
         .getValidator({ id: share.data.publicKey as `0x${string}` })
-        .then((res) => [share, Boolean(res)] as [KeySharesItem, boolean])
-        .catch(() => [share, false] as [KeySharesItem, boolean]);
+        .then((res) => [share, Boolean(res)] as [KeySharesItem, boolean]);
     }),
   );
 
