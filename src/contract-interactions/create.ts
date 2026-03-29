@@ -3,6 +3,7 @@ import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter';
 import { TokenABI } from '@/abi/token';
 import { paramsToArray } from '@/types/contract-interactions';
 import { tryCatch } from '@/utils';
+import type { AbiType, AbiTypeToPrimitiveType } from 'abitype';
 import type { AbiFunction, WalletClient, WriteContractParameters } from 'viem';
 import { decodeEventLog, encodeFunctionData } from 'viem';
 import type {
@@ -51,7 +52,20 @@ export const createWriter = <T extends ContractNames>({
 
   return Object.fromEntries(
     writeFnsMainnet.map((fn) => {
-      const simulate = async (options: any) => {
+      const getWriteArgs = (
+        params?: Record<string, AbiTypeToPrimitiveType<AbiType>>,
+      ) => {
+        if (fn.inputs.length === 0) {
+          return undefined;
+        }
+
+        return paramsToArray({
+          params: params ?? {},
+          abiFunction: fn,
+        });
+      };
+
+      const simulate = async (options: any = {}) => {
         const writableWallet = ensureWritableWallet(walletClient, fn.name);
 
         return publicClient.simulateContract({
@@ -59,7 +73,7 @@ export const createWriter = <T extends ContractNames>({
           address: contractAddress,
           abi,
           functionName: fn.name,
-          args: paramsToArray({ params: options.args, abiFunction: fn }),
+          args: getWriteArgs(options.args),
           account: writableWallet.account!,
         });
       };
@@ -68,11 +82,11 @@ export const createWriter = <T extends ContractNames>({
         return encodeFunctionData({
           abi,
           functionName: fn.name,
-          args: paramsToArray({ params, abiFunction: fn }),
+          args: getWriteArgs(params),
         });
       };
 
-      const func = async (options: any) => {
+      const func = async (options: any = {}) => {
         const writableWallet = ensureWritableWallet(walletClient, fn.name);
         const { request } = await simulate(options);
 
