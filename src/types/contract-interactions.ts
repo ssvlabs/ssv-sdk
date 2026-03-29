@@ -38,6 +38,31 @@ export type AbiInputsToParams<T extends readonly AbiParameter[]> = {
     : never]: AbiParameterToPrimitiveType<K>;
 };
 
+export class MissingAbiParameterError extends Error {
+  readonly code = 'MISSING_ABI_PARAMETER';
+  readonly functionName: string;
+  readonly parameterName: string;
+  readonly parameterIndex: number;
+
+  constructor({
+    functionName,
+    parameterName,
+    parameterIndex,
+  }: {
+    functionName: string;
+    parameterName: string;
+    parameterIndex: number;
+  }) {
+    super(
+      `Missing required ABI parameter "${parameterName}" for function "${functionName}" at index ${parameterIndex}.`,
+    );
+    this.name = 'MissingAbiParameterError';
+    this.functionName = functionName;
+    this.parameterName = parameterName;
+    this.parameterIndex = parameterIndex;
+  }
+}
+
 export const paramsToArray = <
   Fn extends AbiFunction,
   Params extends Record<string, AbiTypeToPrimitiveType<AbiType>>,
@@ -48,19 +73,19 @@ export const paramsToArray = <
   params: Params;
   abiFunction: Fn;
 }) => {
-  return stringifyBigints(
-    abiFunction.inputs.reduce(
-      (acc, param) => {
-        if (param.name && !isUndefined(params[param.name])) {
-          return [...acc, params[param.name]] as AbiParametersToPrimitiveTypes<
-            Fn['inputs']
-          >;
-        } else {
-          console.error(`Missing argument for ${param}`);
-        }
-        return acc;
-      },
-      [] as AbiParametersToPrimitiveTypes<Fn['inputs']>,
-    ),
-  ) as AbiParametersToPrimitiveTypes<Fn['inputs']>;
+  const args = abiFunction.inputs.map((param, parameterIndex) => {
+    const parameterName = param.name;
+
+    if (!parameterName || isUndefined(params[parameterName])) {
+      throw new MissingAbiParameterError({
+        functionName: abiFunction.name,
+        parameterName: parameterName || `<unnamed_${parameterIndex}>`,
+        parameterIndex,
+      });
+    }
+
+    return params[parameterName];
+  });
+
+  return stringifyBigints(args) as AbiParametersToPrimitiveTypes<Fn['inputs']>;
 };
