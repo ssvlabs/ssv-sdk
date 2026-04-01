@@ -14,6 +14,17 @@ export type ClusterSnapshot = AbiParameterToPrimitiveType<Extract<DepositFN['inp
 export type AbiInputsToParams<T extends readonly AbiParameter[]> = {
     [K in T[number] as K['name'] extends string ? K['name'] : never]: AbiParameterToPrimitiveType<K>;
 };
+export declare class MissingAbiParameterError extends Error {
+    readonly code = "MISSING_ABI_PARAMETER";
+    readonly functionName: string;
+    readonly parameterName: string;
+    readonly parameterIndex: number;
+    constructor({ functionName, parameterName, parameterIndex, }: {
+        functionName: string;
+        parameterName: string;
+        parameterIndex: number;
+    });
+}
 export declare const paramsToArray: <Fn extends AbiFunction, Params extends Record<string, AbiTypeToPrimitiveType<AbiType>>>({ params, abiFunction, }: {
     params: Params;
     abiFunction: Fn;
