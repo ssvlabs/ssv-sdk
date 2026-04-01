@@ -29,7 +29,6 @@ export default defineConfig({
         'abitype',
         'bls-eth-wasm',
         'class-validator',
-        'dotenv',
         'graphql-request',
         'lodash-es',
         'tslib',
