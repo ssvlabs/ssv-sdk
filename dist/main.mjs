@@ -1,347 +1,10 @@
-import require$$0 from "fs";
-import require$$1 from "path";
-import require$$2 from "os";
-import crypto$1 from "crypto";
 import { n as decodeOperatorPublicKey, C as stringifyBigints, E as tryCatch, k as configArgsSchema, H as contracts, I as paid_graph_endpoints, J as graph_endpoints, L as rest_endpoints, D as toSolidityCluster$1, w as isKeySharesItem, M as registerValidatorsByClusterSizeLimits, l as createClusterId, m as createEmptyCluster, A as roundOperatorFee, N as globals, g as bigintMax, o as ensureNoKeysharesErrors, p as ensureValidatorsUniqueness, G as validateConsistentOperatorPublicKeys, F as validateConsistentOperatorIds, B as sortNumbers, K as KeysharesValidationError, a as KeysharesValidationErrors } from "./config-BdEJjnYA.mjs";
 import { O, P, Q, R } from "./config-BdEJjnYA.mjs";
 import { isUndefined, isEqual } from "lodash-es";
-import { decodeEventLog, encodeFunctionData, encodeAbiParameters, parseAbiParameters, isAddressEqual, zeroAddress } from "viem";
+import { isAddressEqual, decodeEventLog, encodeFunctionData, encodeAbiParameters, parseAbiParameters, zeroAddress } from "viem";
 import { GraphQLClient } from "graphql-request";
-import { S as SSVKeys, K as KeyShares, a as KeySharesItem } from "./KeyShares-DyzrK4kN.mjs";
-import { O as O2, b, c } from "./KeyShares-DyzrK4kN.mjs";
-var main = { exports: {} };
-const version$1 = "16.6.1";
-const require$$4 = {
-  version: version$1
-};
-const fs = require$$0;
-const path = require$$1;
-const os = require$$2;
-const crypto = crypto$1;
-const packageJson = require$$4;
-const version = packageJson.version;
-const LINE = /(?:^|^)\s*(?:export\s+)?([\w.-]+)(?:\s*=\s*?|:\s+?)(\s*'(?:\\'|[^'])*'|\s*"(?:\\"|[^"])*"|\s*`(?:\\`|[^`])*`|[^#\r\n]+)?\s*(?:#.*)?(?:$|$)/mg;
-function parse(src) {
-  const obj = {};
-  let lines = src.toString();
-  lines = lines.replace(/\r\n?/mg, "\n");
-  let match;
-  while ((match = LINE.exec(lines)) != null) {
-    const key = match[1];
-    let value = match[2] || "";
-    value = value.trim();
-    const maybeQuote = value[0];
-    value = value.replace(/^(['"`])([\s\S]*)\1$/mg, "$2");
-    if (maybeQuote === '"') {
-      value = value.replace(/\\n/g, "\n");
-      value = value.replace(/\\r/g, "\r");
-    }
-    obj[key] = value;
-  }
-  return obj;
-}
-function _parseVault(options2) {
-  options2 = options2 || {};
-  const vaultPath = _vaultPath(options2);
-  options2.path = vaultPath;
-  const result = DotenvModule.configDotenv(options2);
-  if (!result.parsed) {
-    const err = new Error(`MISSING_DATA: Cannot parse ${vaultPath} for an unknown reason`);
-    err.code = "MISSING_DATA";
-    throw err;
-  }
-  const keys = _dotenvKey(options2).split(",");
-  const length = keys.length;
-  let decrypted;
-  for (let i = 0; i < length; i++) {
-    try {
-      const key = keys[i].trim();
-      const attrs = _instructions(result, key);
-      decrypted = DotenvModule.decrypt(attrs.ciphertext, attrs.key);
-      break;
-    } catch (error) {
-      if (i + 1 >= length) {
-        throw error;
-      }
-    }
-  }
-  return DotenvModule.parse(decrypted);
-}
-function _warn(message) {
-  console.log(`[dotenv@${version}][WARN] ${message}`);
-}
-function _debug(message) {
-  console.log(`[dotenv@${version}][DEBUG] ${message}`);
-}
-function _log(message) {
-  console.log(`[dotenv@${version}] ${message}`);
-}
-function _dotenvKey(options2) {
-  if (options2 && options2.DOTENV_KEY && options2.DOTENV_KEY.length > 0) {
-    return options2.DOTENV_KEY;
-  }
-  if (process.env.DOTENV_KEY && process.env.DOTENV_KEY.length > 0) {
-    return process.env.DOTENV_KEY;
-  }
-  return "";
-}
-function _instructions(result, dotenvKey) {
-  let uri;
-  try {
-    uri = new URL(dotenvKey);
-  } catch (error) {
-    if (error.code === "ERR_INVALID_URL") {
-      const err = new Error("INVALID_DOTENV_KEY: Wrong format. Must be in valid uri format like dotenv://:key_1234@dotenvx.com/vault/.env.vault?environment=development");
-      err.code = "INVALID_DOTENV_KEY";
-      throw err;
-    }
-    throw error;
-  }
-  const key = uri.password;
-  if (!key) {
-    const err = new Error("INVALID_DOTENV_KEY: Missing key part");
-    err.code = "INVALID_DOTENV_KEY";
-    throw err;
-  }
-  const environment = uri.searchParams.get("environment");
-  if (!environment) {
-    const err = new Error("INVALID_DOTENV_KEY: Missing environment part");
-    err.code = "INVALID_DOTENV_KEY";
-    throw err;
-  }
-  const environmentKey = `DOTENV_VAULT_${environment.toUpperCase()}`;
-  const ciphertext = result.parsed[environmentKey];
-  if (!ciphertext) {
-    const err = new Error(`NOT_FOUND_DOTENV_ENVIRONMENT: Cannot locate environment ${environmentKey} in your .env.vault file.`);
-    err.code = "NOT_FOUND_DOTENV_ENVIRONMENT";
-    throw err;
-  }
-  return { ciphertext, key };
-}
-function _vaultPath(options2) {
-  let possibleVaultPath = null;
-  if (options2 && options2.path && options2.path.length > 0) {
-    if (Array.isArray(options2.path)) {
-      for (const filepath of options2.path) {
-        if (fs.existsSync(filepath)) {
-          possibleVaultPath = filepath.endsWith(".vault") ? filepath : `${filepath}.vault`;
-        }
-      }
-    } else {
-      possibleVaultPath = options2.path.endsWith(".vault") ? options2.path : `${options2.path}.vault`;
-    }
-  } else {
-    possibleVaultPath = path.resolve(process.cwd(), ".env.vault");
-  }
-  if (fs.existsSync(possibleVaultPath)) {
-    return possibleVaultPath;
-  }
-  return null;
-}
-function _resolveHome(envPath) {
-  return envPath[0] === "~" ? path.join(os.homedir(), envPath.slice(1)) : envPath;
-}
-function _configVault(options2) {
-  const debug = Boolean(options2 && options2.debug);
-  const quiet = options2 && "quiet" in options2 ? options2.quiet : true;
-  if (debug || !quiet) {
-    _log("Loading env from encrypted .env.vault");
-  }
-  const parsed = DotenvModule._parseVault(options2);
-  let processEnv = process.env;
-  if (options2 && options2.processEnv != null) {
-    processEnv = options2.processEnv;
-  }
-  DotenvModule.populate(processEnv, parsed, options2);
-  return { parsed };
-}
-function configDotenv(options2) {
-  const dotenvPath = path.resolve(process.cwd(), ".env");
-  let encoding = "utf8";
-  const debug = Boolean(options2 && options2.debug);
-  const quiet = options2 && "quiet" in options2 ? options2.quiet : true;
-  if (options2 && options2.encoding) {
-    encoding = options2.encoding;
-  } else {
-    if (debug) {
-      _debug("No encoding is specified. UTF-8 is used by default");
-    }
-  }
-  let optionPaths = [dotenvPath];
-  if (options2 && options2.path) {
-    if (!Array.isArray(options2.path)) {
-      optionPaths = [_resolveHome(options2.path)];
-    } else {
-      optionPaths = [];
-      for (const filepath of options2.path) {
-        optionPaths.push(_resolveHome(filepath));
-      }
-    }
-  }
-  let lastError;
-  const parsedAll = {};
-  for (const path2 of optionPaths) {
-    try {
-      const parsed = DotenvModule.parse(fs.readFileSync(path2, { encoding }));
-      DotenvModule.populate(parsedAll, parsed, options2);
-    } catch (e) {
-      if (debug) {
-        _debug(`Failed to load ${path2} ${e.message}`);
-      }
-      lastError = e;
-    }
-  }
-  let processEnv = process.env;
-  if (options2 && options2.processEnv != null) {
-    processEnv = options2.processEnv;
-  }
-  DotenvModule.populate(processEnv, parsedAll, options2);
-  if (debug || !quiet) {
-    const keysCount = Object.keys(parsedAll).length;
-    const shortPaths = [];
-    for (const filePath of optionPaths) {
-      try {
-        const relative = path.relative(process.cwd(), filePath);
-        shortPaths.push(relative);
-      } catch (e) {
-        if (debug) {
-          _debug(`Failed to load ${filePath} ${e.message}`);
-        }
-        lastError = e;
-      }
-    }
-    _log(`injecting env (${keysCount}) from ${shortPaths.join(",")}`);
-  }
-  if (lastError) {
-    return { parsed: parsedAll, error: lastError };
-  } else {
-    return { parsed: parsedAll };
-  }
-}
-function config(options2) {
-  if (_dotenvKey(options2).length === 0) {
-    return DotenvModule.configDotenv(options2);
-  }
-  const vaultPath = _vaultPath(options2);
-  if (!vaultPath) {
-    _warn(`You set DOTENV_KEY but you are missing a .env.vault file at ${vaultPath}. Did you forget to build it?`);
-    return DotenvModule.configDotenv(options2);
-  }
-  return DotenvModule._configVault(options2);
-}
-function decrypt(encrypted, keyStr) {
-  const key = Buffer.from(keyStr.slice(-64), "hex");
-  let ciphertext = Buffer.from(encrypted, "base64");
-  const nonce = ciphertext.subarray(0, 12);
-  const authTag = ciphertext.subarray(-16);
-  ciphertext = ciphertext.subarray(12, -16);
-  try {
-    const aesgcm = crypto.createDecipheriv("aes-256-gcm", key, nonce);
-    aesgcm.setAuthTag(authTag);
-    return `${aesgcm.update(ciphertext)}${aesgcm.final()}`;
-  } catch (error) {
-    const isRange = error instanceof RangeError;
-    const invalidKeyLength = error.message === "Invalid key length";
-    const decryptionFailed = error.message === "Unsupported state or unable to authenticate data";
-    if (isRange || invalidKeyLength) {
-      const err = new Error("INVALID_DOTENV_KEY: It must be 64 characters long (or more)");
-      err.code = "INVALID_DOTENV_KEY";
-      throw err;
-    } else if (decryptionFailed) {
-      const err = new Error("DECRYPTION_FAILED: Please check your DOTENV_KEY");
-      err.code = "DECRYPTION_FAILED";
-      throw err;
-    } else {
-      throw error;
-    }
-  }
-}
-function populate(processEnv, parsed, options2 = {}) {
-  const debug = Boolean(options2 && options2.debug);
-  const override = Boolean(options2 && options2.override);
-  if (typeof parsed !== "object") {
-    const err = new Error("OBJECT_REQUIRED: Please check the processEnv argument being passed to populate");
-    err.code = "OBJECT_REQUIRED";
-    throw err;
-  }
-  for (const key of Object.keys(parsed)) {
-    if (Object.prototype.hasOwnProperty.call(processEnv, key)) {
-      if (override === true) {
-        processEnv[key] = parsed[key];
-      }
-      if (debug) {
-        if (override === true) {
-          _debug(`"${key}" is already defined and WAS overwritten`);
-        } else {
-          _debug(`"${key}" is already defined and was NOT overwritten`);
-        }
-      }
-    } else {
-      processEnv[key] = parsed[key];
-    }
-  }
-}
-const DotenvModule = {
-  configDotenv,
-  _configVault,
-  _parseVault,
-  config,
-  decrypt,
-  parse,
-  populate
-};
-main.exports.configDotenv = DotenvModule.configDotenv;
-main.exports._configVault = DotenvModule._configVault;
-main.exports._parseVault = DotenvModule._parseVault;
-main.exports.config = DotenvModule.config;
-main.exports.decrypt = DotenvModule.decrypt;
-main.exports.parse = DotenvModule.parse;
-main.exports.populate = DotenvModule.populate;
-main.exports = DotenvModule;
-var mainExports = main.exports;
-const options = {};
-if (process.env.DOTENV_CONFIG_ENCODING != null) {
-  options.encoding = process.env.DOTENV_CONFIG_ENCODING;
-}
-if (process.env.DOTENV_CONFIG_PATH != null) {
-  options.path = process.env.DOTENV_CONFIG_PATH;
-}
-if (process.env.DOTENV_CONFIG_QUIET != null) {
-  options.quiet = process.env.DOTENV_CONFIG_QUIET;
-}
-if (process.env.DOTENV_CONFIG_DEBUG != null) {
-  options.debug = process.env.DOTENV_CONFIG_DEBUG;
-}
-if (process.env.DOTENV_CONFIG_OVERRIDE != null) {
-  options.override = process.env.DOTENV_CONFIG_OVERRIDE;
-}
-if (process.env.DOTENV_CONFIG_DOTENV_KEY != null) {
-  options.DOTENV_KEY = process.env.DOTENV_CONFIG_DOTENV_KEY;
-}
-var envOptions = options;
-const re = /^dotenv_config_(encoding|path|quiet|debug|override|DOTENV_KEY)=(.+)$/;
-var cliOptions = function optionMatcher(args) {
-  const options2 = args.reduce(function(acc, cur) {
-    const matches = cur.match(re);
-    if (matches) {
-      acc[matches[1]] = matches[2];
-    }
-    return acc;
-  }, {});
-  if (!("quiet" in options2)) {
-    options2.quiet = "true";
-  }
-  return options2;
-};
-(function() {
-  mainExports.config(
-    Object.assign(
-      {},
-      envOptions,
-      cliOptions(process.argv)
-    )
-  );
-})();
+import { S as SSVKeys, K as KeyShares, a as KeySharesItem } from "./KeyShares-Dlp4Pa3b.mjs";
+import { O as O2, b, c } from "./KeyShares-Dlp4Pa3b.mjs";
 var ClusterFeeAssetTypes = /* @__PURE__ */ ((ClusterFeeAssetTypes2) => {
   ClusterFeeAssetTypes2["ETH"] = "ETH";
   ClusterFeeAssetTypes2["SSV"] = "SSV";
@@ -360,7 +23,7 @@ const GetClusterBalanceDocument = { "kind": "Document", "definitions": [{ "kind"
 const GetDaoValuesDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetDaoValues" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "ID" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "daovalues" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "daoAddress" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "networkFee" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndex" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexBlockNumber" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeSSV" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexSSV" } }, { "kind": "Field", "name": { "kind": "Name", "value": "networkFeeIndexBlockNumberSSV" } }, { "kind": "Field", "name": { "kind": "Name", "value": "liquidationThreshold" } }, { "kind": "Field", "name": { "kind": "Name", "value": "liquidationThresholdSSV" } }, { "kind": "Field", "name": { "kind": "Name", "value": "minimumLiquidationCollateral" } }, { "kind": "Field", "name": { "kind": "Name", "value": "minimumLiquidationCollateralSSV" } }] } }] } }] };
 const getOwnerNonce = (client, args) => {
   const document = typeof args.block === "number" ? GetOwnerNonceByBlockDocument : GetOwnerNonceDocument;
-  return client.request(document, args).then((r) => r.account?.nonce || "0").catch(() => "0");
+  return client.request(document, args).then((r) => r.account?.nonce ?? "0");
 };
 const toSolidityCluster = (client, args) => client.request(GetClusterSnapshotDocument, args).then((res) => res.cluster);
 const getClusterSnapshot = (client, args) => toSolidityCluster(client, args);
@@ -5927,23 +5590,41 @@ const TokenABI = [
     type: "function"
   }
 ];
+class MissingAbiParameterError extends Error {
+  code = "MISSING_ABI_PARAMETER";
+  functionName;
+  parameterName;
+  parameterIndex;
+  constructor({
+    functionName,
+    parameterName,
+    parameterIndex
+  }) {
+    super(
+      `Missing required ABI parameter "${parameterName}" for function "${functionName}" at index ${parameterIndex}.`
+    );
+    this.name = "MissingAbiParameterError";
+    this.functionName = functionName;
+    this.parameterName = parameterName;
+    this.parameterIndex = parameterIndex;
+  }
+}
 const paramsToArray = ({
   params,
   abiFunction
 }) => {
-  return stringifyBigints(
-    abiFunction.inputs.reduce(
-      (acc, param) => {
-        if (param.name && !isUndefined(params[param.name])) {
-          return [...acc, params[param.name]];
-        } else {
-          console.error(`Missing argument for ${param}`);
-        }
-        return acc;
-      },
-      []
-    )
-  );
+  const args = abiFunction.inputs.map((param, parameterIndex) => {
+    const parameterName = param.name;
+    if (!parameterName || isUndefined(params[parameterName])) {
+      throw new MissingAbiParameterError({
+        functionName: abiFunction.name,
+        parameterName: parameterName || `<unnamed_${parameterIndex}>`,
+        parameterIndex
+      });
+    }
+    return params[parameterName];
+  });
+  return stringifyBigints(args);
 };
 function normalize(strArray) {
   const resultArray = [];
@@ -6007,7 +5688,6 @@ function urlJoin(...args) {
   const parts = Array.from(Array.isArray(args[0]) ? args[0] : args);
   return normalize(parts);
 }
-const ABIS = [TokenABI, MainnetV4SetterABI];
 const ensureWritableWallet = (walletClient, functionName) => {
   if (!walletClient) {
     throw new Error(
@@ -6025,21 +5705,31 @@ const createWriter = ({
   abi,
   publicClient,
   walletClient,
-  contractAddress
+  contractAddress,
+  eventSources = [{ abi, address: contractAddress }]
 }) => {
   const writeFnsMainnet = abi.filter(
     (item) => item.type === "function" && (item.stateMutability === "nonpayable" || item.stateMutability === "payable")
   );
   return Object.fromEntries(
     writeFnsMainnet.map((fn) => {
-      const simulate = async (options2) => {
+      const getWriteArgs = (params) => {
+        if (fn.inputs.length === 0) {
+          return void 0;
+        }
+        return paramsToArray({
+          params: params ?? {},
+          abiFunction: fn
+        });
+      };
+      const simulate = async (options = {}) => {
         const writableWallet = ensureWritableWallet(walletClient, fn.name);
         return publicClient.simulateContract({
-          ...options2,
+          ...options,
           address: contractAddress,
           abi,
           functionName: fn.name,
-          args: paramsToArray({ params: options2.args, abiFunction: fn }),
+          args: getWriteArgs(options.args),
           account: writableWallet.account
         });
       };
@@ -6047,12 +5737,12 @@ const createWriter = ({
         return encodeFunctionData({
           abi,
           functionName: fn.name,
-          args: paramsToArray({ params, abiFunction: fn })
+          args: getWriteArgs(params)
         });
       };
-      const func = async (options2) => {
+      const func = async (options = {}) => {
         const writableWallet = ensureWritableWallet(walletClient, fn.name);
-        const { request } = await simulate(options2);
+        const { request } = await simulate(options);
         const hash = await writableWallet.writeContract(
           request
         );
@@ -6062,23 +5752,20 @@ const createWriter = ({
             ...receipt,
             events: receipt.logs.reduce(
               (acc, log) => {
-                try {
-                  const event = decodeEventLog({
-                    abi,
-                    data: log.data,
-                    topics: log.topics
-                  });
-                  acc.push(event);
-                } catch {
-                  for (const eventAbi of ABIS) {
-                    tryCatch(() => {
-                      const event = decodeEventLog({
-                        abi: eventAbi,
-                        data: log.data,
-                        topics: log.topics
-                      });
-                      acc.push(event);
-                    });
+                for (const eventSource of eventSources) {
+                  if (!isAddressEqual(log.address, eventSource.address)) {
+                    continue;
+                  }
+                  const [event] = tryCatch(
+                    () => decodeEventLog({
+                      abi: eventSource.abi,
+                      data: log.data,
+                      topics: log.topics
+                    })
+                  );
+                  if (event) {
+                    acc.push(event);
+                    break;
                   }
                 }
                 return acc;
@@ -6154,7 +5841,17 @@ const createContractInteractions = ({
         abi: MainnetV4SetterABI,
         walletClient,
         publicClient,
-        contractAddress: addresses.setter
+        contractAddress: addresses.setter,
+        eventSources: [
+          {
+            abi: MainnetV4SetterABI,
+            address: addresses.setter
+          },
+          {
+            abi: TokenABI,
+            address: addresses.token
+          }
+        ]
       }),
       read: createReader({
         abi: MainnetV4GetterABI,
@@ -6172,7 +5869,13 @@ const createContractInteractions = ({
         abi: TokenABI,
         walletClient,
         publicClient,
-        contractAddress: addresses.token
+        contractAddress: addresses.token,
+        eventSources: [
+          {
+            abi: TokenABI,
+            address: addresses.token
+          }
+        ]
       })
     }
   };
@@ -6221,13 +5924,13 @@ const createConfig = (props) => {
     contract
   };
 };
-const deposit = async (config2, { args: { id, amount }, ...writeOptions }) => {
-  const cluster = await config2.api.getCluster({ id });
+const deposit = async (config, { args: { id, amount }, ...writeOptions }) => {
+  const cluster = await config.api.getCluster({ id });
   if (!cluster) {
     throw new Error("Cluster not found");
   }
   const snapshot = toSolidityCluster$1(cluster);
-  return config2.contract.ssv.write.deposit({
+  return config.contract.ssv.write.deposit({
     value: amount,
     args: {
       cluster: snapshot,
@@ -6237,9 +5940,9 @@ const deposit = async (config2, { args: { id, amount }, ...writeOptions }) => {
     ...writeOptions
   });
 };
-const exitValidators = async (config2, { args: { publicKeys, operatorIds }, ...writeOptions }) => {
+const exitValidators = async (config, { args: { publicKeys, operatorIds }, ...writeOptions }) => {
   if (publicKeys.length === 1) {
-    return config2.contract.ssv.write.exitValidator({
+    return config.contract.ssv.write.exitValidator({
       args: {
         publicKey: publicKeys[0],
         operatorIds: [operatorIds[0]]
@@ -6247,7 +5950,7 @@ const exitValidators = async (config2, { args: { publicKeys, operatorIds }, ...w
       ...writeOptions
     });
   }
-  return config2.contract.ssv.write.bulkExitValidator({
+  return config.contract.ssv.write.bulkExitValidator({
     args: {
       publicKeys,
       operatorIds
@@ -6255,12 +5958,12 @@ const exitValidators = async (config2, { args: { publicKeys, operatorIds }, ...w
     ...writeOptions
   });
 };
-const liquidateCluster = async (config2, { args: { id }, ...writeOptions }) => {
-  const cluster = await config2.api.getCluster({ id });
+const liquidateCluster = async (config, { args: { id }, ...writeOptions }) => {
+  const cluster = await config.api.getCluster({ id });
   if (!cluster) {
     throw new Error("Cluster not found");
   }
-  return config2.contract.ssv.write.liquidate({
+  return config.contract.ssv.write.liquidate({
     args: {
       cluster: toSolidityCluster$1(cluster),
       clusterOwner: cluster.owner.id,
@@ -6269,12 +5972,12 @@ const liquidateCluster = async (config2, { args: { id }, ...writeOptions }) => {
     ...writeOptions
   });
 };
-const liquidateSSV = async (config2, { args: { id }, ...writeOptions }) => {
-  const cluster = await config2.api.getCluster({ id });
+const liquidateSSV = async (config, { args: { id }, ...writeOptions }) => {
+  const cluster = await config.api.getCluster({ id });
   if (!cluster) {
     throw new Error("Cluster not found");
   }
-  return config2.contract.ssv.write.liquidateSSV({
+  return config.contract.ssv.write.liquidateSSV({
     args: {
       clusterOwner: cluster.owner.id,
       operatorIds: cluster.operatorIds.map(BigInt),
@@ -6283,12 +5986,12 @@ const liquidateSSV = async (config2, { args: { id }, ...writeOptions }) => {
     ...writeOptions
   });
 };
-const migrateClusterToETH = async (config2, { args: { id, amount }, ...writeOptions }) => {
-  const cluster = await config2.api.getCluster({ id });
+const migrateClusterToETH = async (config, { args: { id, amount }, ...writeOptions }) => {
+  const cluster = await config.api.getCluster({ id });
   if (!cluster) {
     throw new Error("Cluster not found");
   }
-  return config2.contract.ssv.write.migrateClusterToETH({
+  return config.contract.ssv.write.migrateClusterToETH({
     value: amount,
     args: {
       operatorIds: cluster.operatorIds.map(BigInt),
@@ -6297,12 +6000,12 @@ const migrateClusterToETH = async (config2, { args: { id, amount }, ...writeOpti
     ...writeOptions
   });
 };
-const reactivateCluster = async (config2, { args: { id, amount }, ...writeOptions }) => {
-  const cluster = await config2.api.getCluster({ id });
+const reactivateCluster = async (config, { args: { id, amount }, ...writeOptions }) => {
+  const cluster = await config.api.getCluster({ id });
   if (!cluster) {
     throw new Error("Cluster not found");
   }
-  return config2.contract.ssv.write.reactivate({
+  return config.contract.ssv.write.reactivate({
     value: amount,
     args: {
       cluster: toSolidityCluster$1(cluster),
@@ -6311,7 +6014,7 @@ const reactivateCluster = async (config2, { args: { id, amount }, ...writeOption
     ...writeOptions
   });
 };
-const registerValidators = async (config2, {
+const registerValidators = async (config, {
   args: { keyshares, depositAmount = 0n },
   ...writeOptions
 }) => {
@@ -6331,19 +6034,19 @@ const registerValidators = async (config2, {
       `You can't register more than ${limit} validators in a single transaction`
     );
   }
-  const ownerAddress = config2.walletClient?.account?.address;
+  const ownerAddress = config.walletClient?.account?.address;
   if (!ownerAddress) {
     throw new Error(
       "walletClient with account is required for write operations"
     );
   }
   const clusterId = createClusterId(ownerAddress, operatorIds);
-  const cluster = await config2.api.getCluster({
+  const cluster = await config.api.getCluster({
     id: clusterId
   });
   const snapshot = cluster ? toSolidityCluster$1(cluster) : createEmptyCluster();
   if (shares.length === 1) {
-    return config2.contract.ssv.write.registerValidator({
+    return config.contract.ssv.write.registerValidator({
       value: depositAmount,
       args: {
         cluster: snapshot,
@@ -6354,7 +6057,7 @@ const registerValidators = async (config2, {
       ...writeOptions
     });
   }
-  return config2.contract.ssv.write.bulkRegisterValidator({
+  return config.contract.ssv.write.bulkRegisterValidator({
     value: depositAmount,
     args: {
       cluster: snapshot,
@@ -6365,7 +6068,7 @@ const registerValidators = async (config2, {
     ...writeOptions
   });
 };
-const registerValidatorsRawData = async (config2, { args: { keyshares, ownerAddress } }) => {
+const registerValidatorsRawData = async (config, { args: { keyshares, ownerAddress } }) => {
   const shares = keyshares.map((share) => {
     return isKeySharesItem(share) ? share.payload : share;
   });
@@ -6382,26 +6085,26 @@ const registerValidatorsRawData = async (config2, { args: { keyshares, ownerAddr
       `You can't register more than ${limit} validators in a single transaction`
     );
   }
-  const resolvedOwnerAddress = ownerAddress ?? config2.walletClient?.account?.address;
+  const resolvedOwnerAddress = ownerAddress ?? config.walletClient?.account?.address;
   if (!resolvedOwnerAddress) {
     throw new Error(
       "ownerAddress is required when walletClient.account.address is not available"
     );
   }
   const clusterId = createClusterId(resolvedOwnerAddress, operatorIds);
-  const cluster = await config2.api.getCluster({
+  const cluster = await config.api.getCluster({
     id: clusterId
   });
   const snapshot = cluster ? toSolidityCluster$1(cluster) : createEmptyCluster();
   if (shares.length === 1) {
-    return config2.contract.ssv.write.registerValidator.getTransactionData({
+    return config.contract.ssv.write.registerValidator.getTransactionData({
       cluster: snapshot,
       operatorIds: operatorIds.map(BigInt),
       publicKey: shares[0].publicKey,
       sharesData: shares[0].sharesData
     });
   }
-  return config2.contract.ssv.write.bulkRegisterValidator.getTransactionData({
+  return config.contract.ssv.write.bulkRegisterValidator.getTransactionData({
     cluster: snapshot,
     operatorIds: operatorIds.map(BigInt),
     publicKeys: shares.map((share) => share.publicKey),
@@ -6409,26 +6112,26 @@ const registerValidatorsRawData = async (config2, { args: { keyshares, ownerAddr
   });
 };
 const ssvKeys$1 = new SSVKeys();
-const validateSharesPostRegistration = async (config2, args) => {
-  const ownerAddress = args.ownerAddress ?? config2.walletClient?.account?.address;
+const validateSharesPostRegistration = async (config, args) => {
+  const ownerAddress = args.ownerAddress ?? config.walletClient?.account?.address;
   if (!ownerAddress) {
     throw new Error(
       "ownerAddress is required when walletClient.account.address is not available"
     );
   }
-  const receipt = await config2.publicClient.waitForTransactionReceipt({
+  const receipt = await config.publicClient.waitForTransactionReceipt({
     hash: args.txHash
   });
-  const ownerNonce = await config2.api.getOwnerNonce({
+  const ownerNonce = await config.api.getOwnerNonce({
     owner: ownerAddress,
     block: Number(receipt.blockNumber) - 1
   });
   if (isUndefined(ownerNonce)) {
     throw new Error("Could not fetch owner nonce");
   }
-  const validatorAddedEvents = await config2.publicClient.getContractEvents({
+  const validatorAddedEvents = await config.publicClient.getContractEvents({
     abi: MainnetV4SetterABI,
-    address: config2.contractAddresses.setter,
+    address: config.contractAddresses.setter,
     eventName: "ValidatorAdded",
     args: {
       owner: ownerAddress
@@ -6464,13 +6167,13 @@ const validateSharesPostRegistration = async (config2, args) => {
     block: Number(receipt.blockNumber)
   };
 };
-const removeValidators = async (config2, { args: { id, publicKeys }, ...writeOptions }) => {
-  const cluster = await config2.api.getCluster({ id });
+const removeValidators = async (config, { args: { id, publicKeys }, ...writeOptions }) => {
+  const cluster = await config.api.getCluster({ id });
   if (!cluster) {
     throw new Error("Cluster not found");
   }
   if (publicKeys.length === 1) {
-    return config2.contract.ssv.write.removeValidator({
+    return config.contract.ssv.write.removeValidator({
       args: {
         cluster: toSolidityCluster$1(cluster),
         publicKey: publicKeys[0],
@@ -6479,7 +6182,7 @@ const removeValidators = async (config2, { args: { id, publicKeys }, ...writeOpt
       ...writeOptions
     });
   }
-  return config2.contract.ssv.write.bulkRemoveValidator({
+  return config.contract.ssv.write.bulkRemoveValidator({
     args: {
       cluster: toSolidityCluster$1(cluster),
       publicKeys,
@@ -6488,20 +6191,20 @@ const removeValidators = async (config2, { args: { id, publicKeys }, ...writeOpt
     ...writeOptions
   });
 };
-const setFeeRecipient = async (config2, { args: { recipient }, ...writeOptions }) => {
-  return config2.contract.ssv.write.setFeeRecipientAddress({
+const setFeeRecipient = async (config, { args: { recipient }, ...writeOptions }) => {
+  return config.contract.ssv.write.setFeeRecipientAddress({
     args: {
       recipientAddress: recipient
     },
     ...writeOptions
   });
 };
-const withdraw$1 = async (config2, { args: { id, amount }, ...writeOptions }) => {
-  const cluster = await config2.api.getCluster({ id });
+const withdraw$1 = async (config, { args: { id, amount }, ...writeOptions }) => {
+  const cluster = await config.api.getCluster({ id });
   if (!cluster) {
     throw new Error("Cluster not found");
   }
-  return config2.contract.ssv.write.withdraw({
+  return config.contract.ssv.write.withdraw({
     args: {
       amount,
       cluster: toSolidityCluster$1(cluster),
@@ -6510,31 +6213,31 @@ const withdraw$1 = async (config2, { args: { id, amount }, ...writeOptions }) =>
     ...writeOptions
   });
 };
-const createClusterManager = (config2) => ({
-  deposit: deposit.bind(null, config2),
-  withdraw: withdraw$1.bind(null, config2),
-  liquidate: liquidateCluster.bind(null, config2),
-  liquidateSSV: liquidateSSV.bind(null, config2),
-  reactivate: reactivateCluster.bind(null, config2),
+const createClusterManager = (config) => ({
+  deposit: deposit.bind(null, config),
+  withdraw: withdraw$1.bind(null, config),
+  liquidate: liquidateCluster.bind(null, config),
+  liquidateSSV: liquidateSSV.bind(null, config),
+  reactivate: reactivateCluster.bind(null, config),
   migrateClusterToETH: migrateClusterToETH.bind(
     null,
-    config2
+    config
   ),
-  removeValidators: removeValidators.bind(null, config2),
-  setFeeRecipient: setFeeRecipient.bind(null, config2),
-  exitValidators: exitValidators.bind(null, config2),
-  registerValidators: registerValidators.bind(null, config2),
+  removeValidators: removeValidators.bind(null, config),
+  setFeeRecipient: setFeeRecipient.bind(null, config),
+  exitValidators: exitValidators.bind(null, config),
+  registerValidators: registerValidators.bind(null, config),
   registerValidatorsRawData: registerValidatorsRawData.bind(
     null,
-    config2
+    config
   ),
   validateSharesPostRegistration: validateSharesPostRegistration.bind(
     null,
-    config2
+    config
   )
 });
-const commitRoot = async (config2, { args: { merkleRoot, blockNum }, ...writeOptions }) => {
-  return config2.contract.ssv.write.commitRoot({
+const commitRoot = async (config, { args: { merkleRoot, blockNum }, ...writeOptions }) => {
+  return config.contract.ssv.write.commitRoot({
     args: {
       merkleRoot,
       blockNum
@@ -6542,47 +6245,47 @@ const commitRoot = async (config2, { args: { merkleRoot, blockNum }, ...writeOpt
     ...writeOptions
   });
 };
-const updateNetworkFeeSSV = async (config2, { args: { fee }, ...writeOptions }) => {
-  return config2.contract.ssv.write.updateNetworkFeeSSV({
+const updateNetworkFeeSSV = async (config, { args: { fee }, ...writeOptions }) => {
+  return config.contract.ssv.write.updateNetworkFeeSSV({
     args: {
       fee
     },
     ...writeOptions
   });
 };
-const withdrawNetworkSSVEarnings = async (config2, { args: { amount }, ...writeOptions }) => {
-  return config2.contract.ssv.write.withdrawNetworkSSVEarnings({
+const withdrawNetworkSSVEarnings = async (config, { args: { amount }, ...writeOptions }) => {
+  return config.contract.ssv.write.withdrawNetworkSSVEarnings({
     args: {
       amount
     },
     ...writeOptions
   });
 };
-const createDaoManager = (config2) => ({
-  commitRoot: commitRoot.bind(null, config2),
+const createDaoManager = (config) => ({
+  commitRoot: commitRoot.bind(null, config),
   updateNetworkFeeSSV: updateNetworkFeeSSV.bind(
     null,
-    config2
+    config
   ),
   withdrawNetworkSSVEarnings: withdrawNetworkSSVEarnings.bind(
     null,
-    config2
+    config
   )
 });
-const withdraw = async (config2, { args: { operatorId, amount }, ...writeOptions }) => {
-  const balance = await config2.contract.ssv.read.getOperatorEarnings({
+const withdraw = async (config, { args: { operatorId, amount }, ...writeOptions }) => {
+  const balance = await config.contract.ssv.read.getOperatorEarnings({
     id: BigInt(operatorId)
   });
   const isWithdrawingAll = amount >= balance;
   if (isWithdrawingAll) {
-    return config2.contract.ssv.write.withdrawAllOperatorEarnings({
+    return config.contract.ssv.write.withdrawAllOperatorEarnings({
       args: {
         operatorId: BigInt(operatorId)
       },
       ...writeOptions
     });
   }
-  return config2.contract.ssv.write.withdrawOperatorEarnings({
+  return config.contract.ssv.write.withdrawOperatorEarnings({
     args: {
       operatorId: BigInt(operatorId),
       amount
@@ -6590,23 +6293,23 @@ const withdraw = async (config2, { args: { operatorId, amount }, ...writeOptions
     ...writeOptions
   });
 };
-const withdrawOperatorEarningsSSV = async (config2, {
+const withdrawOperatorEarningsSSV = async (config, {
   args: { operatorId, amount },
   ...writeOptions
 }) => {
-  const balance = await config2.contract.ssv.read.getOperatorEarningsSSV({
+  const balance = await config.contract.ssv.read.getOperatorEarningsSSV({
     id: BigInt(operatorId)
   });
   const isWithdrawingAll = amount >= balance;
   if (isWithdrawingAll) {
-    return config2.contract.ssv.write.withdrawAllOperatorEarningsSSV({
+    return config.contract.ssv.write.withdrawAllOperatorEarningsSSV({
       args: {
         operatorId: BigInt(operatorId)
       },
       ...writeOptions
     });
   }
-  return config2.contract.ssv.write.withdrawOperatorEarningsSSV({
+  return config.contract.ssv.write.withdrawOperatorEarningsSSV({
     args: {
       operatorId: BigInt(operatorId),
       amount
@@ -6614,30 +6317,30 @@ const withdrawOperatorEarningsSSV = async (config2, {
     ...writeOptions
   });
 };
-const withdrawAllOperatorEarningsSSV = async (config2, { args: { operatorId }, ...writeOptions }) => {
-  return config2.contract.ssv.write.withdrawAllOperatorEarningsSSV({
+const withdrawAllOperatorEarningsSSV = async (config, { args: { operatorId }, ...writeOptions }) => {
+  return config.contract.ssv.write.withdrawAllOperatorEarningsSSV({
     args: {
       operatorId: BigInt(operatorId)
     },
     ...writeOptions
   });
 };
-const withdrawAllVersionOperatorEarnings = async (config2, {
+const withdrawAllVersionOperatorEarnings = async (config, {
   args: { operatorId },
   ...writeOptions
 }) => {
-  return config2.contract.ssv.write.withdrawAllVersionOperatorEarnings({
+  return config.contract.ssv.write.withdrawAllVersionOperatorEarnings({
     args: {
       operatorId: BigInt(operatorId)
     },
     ...writeOptions
   });
 };
-const registerOperator = async (config2, {
+const registerOperator = async (config, {
   args: { isPrivate, yearlyFee, publicKey },
   ...writeOptions
 }) => {
-  return config2.contract.ssv.write.registerOperator({
+  return config.contract.ssv.write.registerOperator({
     args: {
       publicKey: encodeAbiParameters(parseAbiParameters("string"), [publicKey]),
       fee: roundOperatorFee(
@@ -6649,17 +6352,17 @@ const registerOperator = async (config2, {
     ...writeOptions
   });
 };
-const setOperatorWhitelists = async (config2, {
+const setOperatorWhitelists = async (config, {
   args: { operatorIds, contractAddress },
   ...writeOptions
 }) => {
-  const isWhitelistingContract = await config2.contract.ssv.read.isWhitelistingContract({
+  const isWhitelistingContract = await config.contract.ssv.read.isWhitelistingContract({
     contractAddress
   });
   if (!isWhitelistingContract) {
     throw new Error("The provided contract is not whitelisting contract");
   }
-  return config2.contract.ssv.write.setOperatorsWhitelists({
+  return config.contract.ssv.write.setOperatorsWhitelists({
     args: {
       operatorIds: operatorIds.map(BigInt),
       whitelistAddresses: [contractAddress]
@@ -6667,7 +6370,7 @@ const setOperatorWhitelists = async (config2, {
     ...writeOptions
   });
 };
-const canAccountUseOperator = async (config2, operator, account) => {
+const canAccountUseOperator = async (config, operator, account) => {
   if (!operator) return false;
   if (!operator.isPrivate) return true;
   const isWhitelisted = operator.whitelisted.some(
@@ -6678,51 +6381,51 @@ const canAccountUseOperator = async (config2, operator, account) => {
     operator.whitelistedContract && operator.whitelistedContract !== zeroAddress
   );
   if (!hasExternalContract) return false;
-  return config2.contract.ssv.read.isAddressWhitelistedInWhitelistingContract({
+  return config.contract.ssv.read.isAddressWhitelistedInWhitelistingContract({
     addressToCheck: account,
     operatorId: BigInt(operator.id),
     whitelistingContract: operator.whitelistedContract
   });
 };
-const createOperatorManager = (config2) => ({
-  registerOperator: registerOperator.bind(null, config2),
-  removeOperator: config2.contract.ssv.write.removeOperator,
-  withdraw: withdraw.bind(null, config2),
+const createOperatorManager = (config) => ({
+  registerOperator: registerOperator.bind(null, config),
+  removeOperator: config.contract.ssv.write.removeOperator,
+  withdraw: withdraw.bind(null, config),
   withdrawOperatorEarningsSSV: withdrawOperatorEarningsSSV.bind(
     null,
-    config2
+    config
   ),
   withdrawAllOperatorEarningsSSV: withdrawAllOperatorEarningsSSV.bind(
     null,
-    config2
+    config
   ),
   withdrawAllVersionOperatorEarnings: withdrawAllVersionOperatorEarnings.bind(
     null,
-    config2
+    config
   ),
-  setOperatorWhitelists: config2.contract.ssv.write.setOperatorsWhitelists,
-  removeOperatorWhitelists: config2.contract.ssv.write.removeOperatorsWhitelists,
-  setOperatorsPrivate: config2.contract.ssv.write.setOperatorsPrivateUnchecked,
-  setOperatorsPublic: config2.contract.ssv.write.setOperatorsPublicUnchecked,
+  setOperatorWhitelists: config.contract.ssv.write.setOperatorsWhitelists,
+  removeOperatorWhitelists: config.contract.ssv.write.removeOperatorsWhitelists,
+  setOperatorsPrivate: config.contract.ssv.write.setOperatorsPrivateUnchecked,
+  setOperatorsPublic: config.contract.ssv.write.setOperatorsPublicUnchecked,
   setOperatorWhitelistingContract: setOperatorWhitelists.bind(
     null,
-    config2
+    config
   ),
-  removeOperatorWhitelistingContract: config2.contract.ssv.write.removeOperatorsWhitelists,
-  declareOperatorFee: config2.contract.ssv.write.declareOperatorFee,
-  executeOperatorFee: config2.contract.ssv.write.executeOperatorFee,
-  cancelDeclaredOperatorFee: config2.contract.ssv.write.cancelDeclaredOperatorFee,
-  reduceOperatorFee: config2.contract.ssv.write.reduceOperatorFee
+  removeOperatorWhitelistingContract: config.contract.ssv.write.removeOperatorsWhitelists,
+  declareOperatorFee: config.contract.ssv.write.declareOperatorFee,
+  executeOperatorFee: config.contract.ssv.write.executeOperatorFee,
+  cancelDeclaredOperatorFee: config.contract.ssv.write.cancelDeclaredOperatorFee,
+  reduceOperatorFee: config.contract.ssv.write.reduceOperatorFee
 });
-const getClusterBalance = async (config2, { operatorIds, ownerAddress }) => {
-  const resolvedOwnerAddress = ownerAddress ?? config2.walletClient?.account?.address;
+const getClusterBalance = async (config, { operatorIds, ownerAddress }) => {
+  const resolvedOwnerAddress = ownerAddress ?? config.walletClient?.account?.address;
   if (!resolvedOwnerAddress) {
     throw new Error(
       "ownerAddress is required when walletClient.account.address is not available"
     );
   }
-  const query = await config2.api.getClusterBalance({
-    daoAddress: config2.contractAddresses.setter,
+  const query = await config.api.getClusterBalance({
+    daoAddress: config.contractAddresses.setter,
     operatorIds: operatorIds.map(String),
     clusterId: createClusterId(resolvedOwnerAddress, operatorIds)
   });
@@ -6790,14 +6493,14 @@ const buildKeysharesFromPayloads = (payloads) => {
   ensureValidatorsUniqueness(shares);
   return shares;
 };
-const validateSharesPreRegistration = async (config2, { keyshares, operatorIds, ownerAddress }) => {
-  const account = ownerAddress ?? config2.walletClient?.account?.address;
+const validateSharesPreRegistration = async (config, { keyshares, operatorIds, ownerAddress }) => {
+  const account = ownerAddress ?? config.walletClient?.account?.address;
   if (!account) {
     throw new Error(
       "ownerAddress is required when walletClient.account.address is not available"
     );
   }
-  const operators = await config2.api.getOperators({ operatorIds });
+  const operators = await config.api.getOperators({ operatorIds });
   if (operators.length !== operatorIds.length) {
     throw new KeysharesValidationError(
       KeysharesValidationErrors.OperatorDoesNotExist
@@ -6822,7 +6525,7 @@ const validateSharesPreRegistration = async (config2, { keyshares, operatorIds, 
   }
   const statuses = await Promise.all(
     shares.map((share) => {
-      return config2.api.getValidator({ id: share.data.publicKey }).then((res) => [share, Boolean(res)]).catch(() => [share, false]);
+      return config.api.getValidator({ id: share.data.publicKey }).then((res) => [share, Boolean(res)]);
     })
   );
   if (statuses.every(([, isRegistered]) => isRegistered)) {
@@ -6831,7 +6534,7 @@ const validateSharesPreRegistration = async (config2, { keyshares, operatorIds, 
   const shouldValidateNonce = shares.every(
     (share) => typeof share.data.ownerNonce === "number"
   );
-  const nonce = shouldValidateNonce ? await config2.api.getOwnerNonce({ owner: account }).then((nonce2) => {
+  const nonce = shouldValidateNonce ? await config.api.getOwnerNonce({ owner: account }).then((nonce2) => {
     if (!nonce2) throw new Error("Failed to get owner nonce");
     return Number(nonce2);
   }) : null;
@@ -6862,9 +6565,9 @@ const validateSharesPreRegistration = async (config2, { keyshares, operatorIds, 
       `No available keyshares to register. ${sharesWithStatuses.incorrect.length} keyshares have incorrect nonce and ${sharesWithStatuses.registered.length} are already registered`
     );
   }
-  const limit = await config2.contract.ssv.read.getValidatorsPerOperatorLimit();
+  const limit = await config.contract.ssv.read.getValidatorsPerOperatorLimit();
   for (const operator of operators) {
-    if (!await canAccountUseOperator(config2, operator, account)) {
+    if (!await canAccountUseOperator(config, operator, account)) {
       throw new Error(
         `Operator ${operator.id} is private and the account is not whitelisted`
       );
@@ -6951,12 +6654,12 @@ const generateKeyShares = async (args) => {
   }
   return shares;
 };
-const getOperatorCapacity = async (config2, operatorId) => {
+const getOperatorCapacity = async (config, operatorId) => {
   const [operator, limit] = await Promise.all([
-    config2.api.getOperator({
+    config.api.getOperator({
       id: operatorId
     }),
-    config2.contract.ssv.read.getValidatorsPerOperatorLimit()
+    config.contract.ssv.read.getValidatorsPerOperatorLimit()
   ]);
   if (!operator) return 0;
   return limit - Number(operator.validatorCount);
@@ -6966,19 +6669,19 @@ const computeDailyAmount = (value, days) => {
   const scaledDays = BigInt(days * scale);
   return value * scaledDays * BigInt(globals.BLOCKS_PER_DAY) / BigInt(scale);
 };
-const calcDepositFromRunway = async (config2, { clusterId, runway }) => {
-  const cluster = await config2.api.getCluster({ id: clusterId });
+const calcDepositFromRunway = async (config, { clusterId, runway }) => {
+  const cluster = await config.api.getCluster({ id: clusterId });
   if (!cluster) {
     throw new Error("Cluster not found");
   }
-  const operators = await config2.api.getOperators({
+  const operators = await config.api.getOperators({
     operatorIds: cluster.operatorIds
   });
   if (!operators) {
     throw new Error("Operators not found");
   }
-  const daoValues = await config2.api.getDaoValues({
-    daoAddress: config2.contractAddresses.setter
+  const daoValues = await config.api.getDaoValues({
+    daoAddress: config.contractAddresses.setter
   });
   if (!daoValues) {
     throw new Error("DAO values not found");
@@ -7007,21 +6710,21 @@ const calcDepositFromRunway = async (config2, { clusterId, runway }) => {
   const residualBalance = computeDailyAmount(burnRate, runway);
   return residualBalance + liquidationCollateral;
 };
-const createUtils = (config2) => ({
+const createUtils = (config) => ({
   generateKeyShares,
   validateKeysharesJSON,
   validateSharesPreRegistration: validateSharesPreRegistration.bind(
     null,
-    config2
+    config
   ),
   getOperatorCapacity: getOperatorCapacity.bind(
     null,
-    config2
+    config
   ),
-  getClusterBalance: getClusterBalance.bind(null, config2),
+  getClusterBalance: getClusterBalance.bind(null, config),
   calcDepositFromRunway: calcDepositFromRunway.bind(
     null,
-    config2
+    config
   )
 });
 class SSVSDK {

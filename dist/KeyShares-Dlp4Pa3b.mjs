@@ -1,12 +1,7 @@
-"use strict";
-const bls = require("bls-eth-wasm");
-const crypto$1 = require("crypto");
-const viem = require("viem");
-const classValidator = require("class-validator");
-var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
-function getDefaultExportFromCjs(x) {
-  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
-}
+import bls from "bls-eth-wasm";
+import crypto$1 from "crypto";
+import { keccak256, toHex, sha256 as sha256$1, toBytes, fromHex, getAddress } from "viem";
+import { ValidatorConstraint, registerDecorator, IsNotEmpty, IsDefined, IsInt, IsString, validateSync, IsOptional, IsNumber, Length, ValidateNested } from "class-validator";
 (async () => {
   await bls.init(bls.BLS12_381);
 })();
@@ -64,6 +59,10 @@ class OwnerNonceFormatError extends SSVKeysException {
     super(message);
     this.data = data;
   }
+}
+var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
+function getDefaultExportFromCjs(x) {
+  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
 }
 var forge$C = {
   // default options
@@ -17674,7 +17673,7 @@ class Threshold {
   }
 }
 var scrypt = { exports: {} };
-(function(module2, exports$1) {
+(function(module, exports$1) {
   (function(root) {
     const MAX_VALUE = 2147483647;
     function SHA256(m) {
@@ -18128,7 +18127,7 @@ var scrypt = { exports: {} };
       }
     };
     {
-      module2.exports = lib2;
+      module.exports = lib2;
     }
   })();
 })(scrypt);
@@ -18214,7 +18213,7 @@ class EthereumKeyStore {
       Buffer.from(derivedKey.slice(16, 32)),
       ciphertext
     ]);
-    const mac = viem.keccak256(viem.toHex(macCheck)).replace(/^0x/, "");
+    const mac = keccak256(toHex(macCheck)).replace(/^0x/, "");
     if (mac !== json.crypto.mac.toLowerCase()) {
       throw new EthereumWalletError("Invalid password");
     }
@@ -18257,8 +18256,8 @@ class EthereumKeyStore {
       Buffer.from(derivedKey.slice(16, 32)),
       ciphertext
     ]);
-    const hashFn = checksum.function === "sha256" ? viem.sha256 : viem.keccak256;
-    const calculatedMac = hashFn(viem.toHex(checksumBuffer));
+    const hashFn = checksum.function === "sha256" ? sha256$1 : keccak256;
+    const calculatedMac = hashFn(toHex(checksumBuffer));
     if (calculatedMac.replace(/^0x/, "") !== checksum.message.toLowerCase()) {
       throw new EthereumWalletError("Invalid password");
     }
@@ -18330,11 +18329,11 @@ let OperatorPublicKeyValidatorConstraint = class {
   }
 };
 OperatorPublicKeyValidatorConstraint = __decorateClass$a([
-  classValidator.ValidatorConstraint({ name: "operatorKey", async: false })
+  ValidatorConstraint({ name: "operatorKey", async: false })
 ], OperatorPublicKeyValidatorConstraint);
 function OperatorPublicKeyValidator(validationOptions) {
   return function(object, propertyName) {
-    classValidator.registerDecorator({
+    registerDecorator({
       target: object.constructor,
       propertyName,
       options: validationOptions,
@@ -18364,18 +18363,18 @@ class OperatorData {
    * Validate operator id and public key
    */
   validate() {
-    classValidator.validateSync(this);
+    validateSync(this);
   }
 }
 __decorateClass$9([
-  classValidator.IsNotEmpty({ message: "The operator id is null" }),
-  classValidator.IsDefined({ message: "The operator id is undefined" }),
-  classValidator.IsInt({ message: "The operator id must be an integer" })
+  IsNotEmpty({ message: "The operator id is null" }),
+  IsDefined({ message: "The operator id is undefined" }),
+  IsInt({ message: "The operator id must be an integer" })
 ], OperatorData.prototype, "id");
 __decorateClass$9([
-  classValidator.IsNotEmpty({ message: "The operator public key is null" }),
-  classValidator.IsDefined({ message: "The operator public key is undefined" }),
-  classValidator.IsString({ message: "The operator public key must be a string" }),
+  IsNotEmpty({ message: "The operator public key is null" }),
+  IsDefined({ message: "The operator public key is undefined" }),
+  IsString({ message: "The operator public key must be a string" }),
   OperatorPublicKeyValidator()
 ], OperatorData.prototype, "operatorKey");
 const operatorSortedList = (operators) => {
@@ -18418,7 +18417,7 @@ class SingleSharesSignatureInvalid extends SSVKeysException {
 }
 const hexArrayToBytes = (hexArr) => {
   const uint8Array = new Uint8Array(
-    hexArr.flatMap((hex) => Array.from(viem.toBytes(hex)))
+    hexArr.flatMap((hex) => Array.from(toBytes(hex)))
   );
   return Buffer.from(uint8Array);
 };
@@ -18429,8 +18428,8 @@ const buildSignature = async (dataToSign, privateKeyHex) => {
   const privateKey = bls.deserializeHexStrToSecretKey(
     privateKeyHex.replace("0x", "")
   );
-  const messageHash = viem.keccak256(viem.toBytes(dataToSign));
-  const messageBytes = viem.fromHex(messageHash, "bytes");
+  const messageHash = keccak256(toBytes(dataToSign));
+  const messageBytes = fromHex(messageHash, "bytes");
   const signature = privateKey.sign(messageBytes);
   const signatureHex = signature.serializeToHexStr();
   return `0x${signatureHex}`;
@@ -18442,8 +18441,8 @@ const validateSignature = async (signedData, signatureHex, publicKey) => {
   const signature = bls.deserializeHexStrToSignature(
     signatureHex.replace("0x", "")
   );
-  const messageHashHex = viem.keccak256(viem.toBytes(signedData));
-  const messageHashBytes = viem.fromHex(messageHashHex, "bytes");
+  const messageHashHex = keccak256(toBytes(signedData));
+  const messageHashBytes = fromHex(messageHashHex, "bytes");
   if (!blsPublicKey.verify(signature, messageHashBytes)) {
     throw new SingleSharesSignatureInvalid(
       signatureHex,
@@ -18491,11 +18490,11 @@ let OpeatorsListValidatorConstraint = class {
   }
 };
 OpeatorsListValidatorConstraint = __decorateClass$8([
-  classValidator.ValidatorConstraint({ name: "uniqueList", async: false })
+  ValidatorConstraint({ name: "uniqueList", async: false })
 ], OpeatorsListValidatorConstraint);
 function OpeatorsListValidator(validationOptions) {
   return function(object, propertyName) {
-    classValidator.registerDecorator({
+    registerDecorator({
       target: object.constructor,
       propertyName,
       options: validationOptions,
@@ -18535,7 +18534,7 @@ let PublicKeyValidatorConstraint = class {
   }
 };
 PublicKeyValidatorConstraint = __decorateClass$7([
-  classValidator.ValidatorConstraint({ name: "publicKey", async: true })
+  ValidatorConstraint({ name: "publicKey", async: true })
 ], PublicKeyValidatorConstraint);
 function PublicKeyValidator(validationOptions) {
   return function(object, propertyName) {
@@ -18544,7 +18543,7 @@ function PublicKeyValidator(validationOptions) {
         `@PublicKeyValidator must be used on a class property — received ${typeof object} for ${propertyName}`
       );
     }
-    classValidator.registerDecorator({
+    registerDecorator({
       target: object.constructor,
       propertyName,
       options: validationOptions,
@@ -18564,7 +18563,7 @@ var __decorateClass$6 = (decorators, target, key, kind) => {
 let OwnerAddressValidatorConstraint = class {
   validate(value) {
     try {
-      viem.getAddress(value);
+      getAddress(value);
     } catch {
       throw new OwnerAddressFormatError(
         value,
@@ -18578,11 +18577,11 @@ let OwnerAddressValidatorConstraint = class {
   }
 };
 OwnerAddressValidatorConstraint = __decorateClass$6([
-  classValidator.ValidatorConstraint({ name: "ownerAddress", async: false })
+  ValidatorConstraint({ name: "ownerAddress", async: false })
 ], OwnerAddressValidatorConstraint);
 function OwnerAddressValidator(validationOptions) {
   return function(object, propertyName) {
-    classValidator.registerDecorator({
+    registerDecorator({
       target: object.constructor,
       propertyName,
       options: validationOptions,
@@ -18614,11 +18613,11 @@ let OwnerNonceValidatorConstraint = class {
   }
 };
 OwnerNonceValidatorConstraint = __decorateClass$5([
-  classValidator.ValidatorConstraint({ name: "ownerNonce", async: false })
+  ValidatorConstraint({ name: "ownerNonce", async: false })
 ], OwnerNonceValidatorConstraint);
 function OwnerNonceValidator(validationOptions) {
   return function(object, propertyName) {
-    classValidator.registerDecorator({
+    registerDecorator({
       target: object.constructor,
       propertyName,
       options: validationOptions,
@@ -18665,7 +18664,7 @@ let MatchLengthValidatorConstraint = class {
   }
 };
 MatchLengthValidatorConstraint = __decorateClass$4([
-  classValidator.ValidatorConstraint({ name: "matchLength", async: false })
+  ValidatorConstraint({ name: "matchLength", async: false })
 ], MatchLengthValidatorConstraint);
 var __defProp$3 = Object.defineProperty;
 var __decorateClass$3 = (decorators, target, key, kind) => {
@@ -18699,7 +18698,7 @@ class KeySharesData {
    * Do all possible validations.
    */
   async validate() {
-    classValidator.validateSync(this);
+    validateSync(this);
   }
   /**
    * Get the list of operators IDs.
@@ -18721,24 +18720,24 @@ class KeySharesData {
   }
 }
 __decorateClass$3([
-  classValidator.IsOptional(),
-  classValidator.IsNumber(),
+  IsOptional(),
+  IsNumber(),
   OwnerNonceValidator()
 ], KeySharesData.prototype, "ownerNonce");
 __decorateClass$3([
-  classValidator.IsOptional(),
-  classValidator.IsString(),
+  IsOptional(),
+  IsString(),
   OwnerAddressValidator()
 ], KeySharesData.prototype, "ownerAddress");
 __decorateClass$3([
-  classValidator.IsOptional(),
-  classValidator.IsString(),
-  classValidator.Length(98, 98),
+  IsOptional(),
+  IsString(),
+  Length(98, 98),
   PublicKeyValidator()
 ], KeySharesData.prototype, "publicKey");
 __decorateClass$3([
-  classValidator.IsOptional(),
-  classValidator.ValidateNested({ each: true }),
+  IsOptional(),
+  ValidateNested({ each: true }),
   OpeatorsListValidator()
 ], KeySharesData.prototype, "operators");
 var __defProp$2 = Object.defineProperty;
@@ -18782,7 +18781,7 @@ class KeySharesPayload {
    * @returns {void | ValidationError[]} Validation errors if any, otherwise undefined.
    */
   validate() {
-    classValidator.validateSync(this);
+    validateSync(this);
   }
   /**
    * Builds the payload from the given data.
@@ -18800,15 +18799,15 @@ class KeySharesPayload {
   }
 }
 __decorateClass$2([
-  classValidator.IsString()
+  IsString()
 ], KeySharesPayload.prototype, "sharesData");
 __decorateClass$2([
-  classValidator.IsString(),
-  classValidator.Length(98, 98),
+  IsString(),
+  Length(98, 98),
   PublicKeyValidator()
 ], KeySharesPayload.prototype, "publicKey");
 __decorateClass$2([
-  classValidator.IsNumber({}, { each: true })
+  IsNumber({}, { each: true })
 ], KeySharesPayload.prototype, "operatorIds");
 var __defProp$1 = Object.defineProperty;
 var __decorateClass$1 = (decorators, target, key, kind) => {
@@ -18842,7 +18841,7 @@ const _KeySharesItem = class _KeySharesItem2 {
     }
     let address;
     try {
-      address = viem.getAddress(ownerAddress);
+      address = getAddress(ownerAddress);
     } catch {
       throw new OwnerAddressFormatError(
         ownerAddress,
@@ -18877,7 +18876,7 @@ const _KeySharesItem = class _KeySharesItem2 {
         "Owner nonce is not positive integer"
       );
     }
-    const address = viem.getAddress(ownerAddress);
+    const address = getAddress(ownerAddress);
     const signaturePt = shares.replace("0x", "").substring(0, SIGNATURE_LENGTH);
     await validateSignature(
       `${address}:${ownerNonce}`,
@@ -18899,14 +18898,14 @@ const _KeySharesItem = class _KeySharesItem2 {
     }
     const sharesPt = bytes.slice(2 + SIGNATURE_LENGTH);
     const pkSplit = sharesPt.substring(0, operatorCount * PUBLIC_KEY_LENGTH);
-    const pkBytes = viem.toBytes("0x" + pkSplit);
+    const pkBytes = toBytes("0x" + pkSplit);
     const sharesPublicKeys = this.splitArray(operatorCount, pkBytes).map(
-      (item) => viem.toHex(item)
+      (item) => toHex(item)
     );
     const eSplit = bytes.substring(operatorCount * PUBLIC_KEY_LENGTH);
-    const eBytes = viem.toBytes("0x" + eSplit);
+    const eBytes = toBytes("0x" + eSplit);
     const encryptedKeys = this.splitArray(operatorCount, eBytes).map(
-      (item) => Buffer.from(viem.toHex(item).slice(2), "hex").toString("base64")
+      (item) => Buffer.from(toHex(item).slice(2), "hex").toString("base64")
     );
     return { sharesPublicKeys, encryptedKeys };
   }
@@ -18921,7 +18920,7 @@ const _KeySharesItem = class _KeySharesItem2 {
    * Validate everything
    */
   validate() {
-    classValidator.validateSync(this);
+    validateSync(this);
   }
   /**
    * Stringify key shares to be ready for saving in file.
@@ -18968,15 +18967,15 @@ const _KeySharesItem = class _KeySharesItem2 {
   }
 };
 __decorateClass$1([
-  classValidator.IsOptional(),
-  classValidator.ValidateNested()
+  IsOptional(),
+  ValidateNested()
 ], _KeySharesItem.prototype, "data");
 __decorateClass$1([
-  classValidator.IsOptional(),
-  classValidator.ValidateNested()
+  IsOptional(),
+  ValidateNested()
 ], _KeySharesItem.prototype, "payload");
 __decorateClass$1([
-  classValidator.IsOptional()
+  IsOptional()
 ], _KeySharesItem.prototype, "error");
 let KeySharesItem = _KeySharesItem;
 class SSVKeys {
@@ -19121,14 +19120,14 @@ var constants = {
   MAX_SAFE_INTEGER: MAX_SAFE_INTEGER$1
 };
 var re$1 = { exports: {} };
-(function(module2, exports$1) {
+(function(module, exports$1) {
   const {
     MAX_SAFE_COMPONENT_LENGTH: MAX_SAFE_COMPONENT_LENGTH2,
     MAX_SAFE_BUILD_LENGTH: MAX_SAFE_BUILD_LENGTH2,
     MAX_LENGTH: MAX_LENGTH2
   } = constants;
   const debug2 = debug_1;
-  exports$1 = module2.exports = {};
+  exports$1 = module.exports = {};
   const re2 = exports$1.re = [];
   const safeRe = exports$1.safeRe = [];
   const src = exports$1.src = [];
@@ -19542,7 +19541,7 @@ const _KeyShares = class _KeyShares2 {
    * @returns The validation result.
    */
   validate() {
-    classValidator.validateSync(this);
+    validateSync(this);
   }
   /**
    * Converts the KeyShares instance to a JSON string.
@@ -19590,13 +19589,15 @@ const _KeyShares = class _KeyShares2 {
   }
 };
 __decorateClass([
-  classValidator.IsOptional(),
-  classValidator.ValidateNested({ each: true })
+  IsOptional(),
+  ValidateNested({ each: true })
 ], _KeyShares.prototype, "shares");
 let KeyShares = _KeyShares;
-exports.KeyShares = KeyShares;
-exports.KeySharesItem = KeySharesItem;
-exports.OperatorPublicKeyError = OperatorPublicKeyError;
-exports.OperatorsCountsMismatchError = OperatorsCountsMismatchError;
-exports.SSVKeys = SSVKeys;
-exports.SSVKeysException = SSVKeysException;
+export {
+  KeyShares as K,
+  OperatorPublicKeyError as O,
+  SSVKeys as S,
+  KeySharesItem as a,
+  OperatorsCountsMismatchError as b,
+  SSVKeysException as c
+};
