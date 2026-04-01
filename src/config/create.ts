@@ -78,6 +78,16 @@ export const createContractInteractions = ({
         walletClient,
         publicClient,
         contractAddress: addresses.setter,
+        eventSources: [
+          {
+            abi: MainnetV4SetterABI,
+            address: addresses.setter,
+          },
+          {
+            abi: TokenABI,
+            address: addresses.token,
+          },
+        ],
       }),
       read: createReader<'getter'>({
         abi: MainnetV4GetterABI,
@@ -96,6 +106,12 @@ export const createContractInteractions = ({
         walletClient,
         publicClient,
         contractAddress: addresses.token,
+        eventSources: [
+          {
+            abi: TokenABI,
+            address: addresses.token,
+          },
+        ],
       }),
     },
   };
