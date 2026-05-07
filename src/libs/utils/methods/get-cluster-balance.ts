@@ -110,6 +110,7 @@ export const getClusterBalance = async (
   const operationalRunway = runway / burnRate / globals.BLOCKS_PER_DAY;
 
   return {
+    blockNumber: query._meta.block.number,
     balance: calculatedClusterBalance,
     operationalRunway,
   };
