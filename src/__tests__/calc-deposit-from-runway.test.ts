@@ -66,9 +66,15 @@ const createMockConfig = (overrides?: Partial<ConfigReturnType>) =>
   merge(
     {
       api: {
-        getCluster: vi.fn().mockResolvedValue(mockCluster),
-        getOperators: vi.fn().mockResolvedValue(mockOperators),
-        getDaoValues: vi.fn().mockResolvedValue(mockDaoValues),
+        getCluster: vi
+          .fn()
+          .mockResolvedValue({ blockNumber: 1, cluster: mockCluster }),
+        getOperators: vi
+          .fn()
+          .mockResolvedValue({ blockNumber: 1, operators: mockOperators }),
+        getDaoValues: vi
+          .fn()
+          .mockResolvedValue({ blockNumber: 1, daovalues: mockDaoValues }),
       },
       contractAddresses: {
         setter: mockAddress,
@@ -105,7 +111,7 @@ describe('calcDepositFromRunway', () => {
       '../libs/utils/methods/calc-deposit-from-runway'
     );
     const config = createMockConfig({
-      api: { getCluster: vi.fn().mockResolvedValue(null) },
+      api: { getCluster: vi.fn().mockResolvedValue({ blockNumber: 1, cluster: null }) },
     } as unknown as Partial<ConfigReturnType>);
 
     await expect(
@@ -118,7 +124,7 @@ describe('calcDepositFromRunway', () => {
       '../libs/utils/methods/calc-deposit-from-runway'
     );
     const config = createMockConfig({
-      api: { getOperators: vi.fn().mockResolvedValue(null) },
+      api: { getOperators: vi.fn().mockResolvedValue({ blockNumber: 1, operators: null }) },
     } as unknown as Partial<ConfigReturnType>);
 
     await expect(
@@ -131,7 +137,7 @@ describe('calcDepositFromRunway', () => {
       '../libs/utils/methods/calc-deposit-from-runway'
     );
     const config = createMockConfig({
-      api: { getDaoValues: vi.fn().mockResolvedValue(null) },
+      api: { getDaoValues: vi.fn().mockResolvedValue({ blockNumber: 1, daovalues: null }) },
     } as unknown as Partial<ConfigReturnType>);
 
     await expect(
@@ -192,18 +198,27 @@ describe('calcDepositFromRunway', () => {
     const config = createMockConfig({
       api: {
         getCluster: vi.fn().mockResolvedValue({
-          ...mockCluster,
-          feeAsset: ClusterFeeAssetTypes.SSV,
+          blockNumber: 1,
+          cluster: {
+            ...mockCluster,
+            feeAsset: ClusterFeeAssetTypes.SSV,
+          },
         }),
-        getOperators: vi.fn().mockResolvedValue([
-          { id: '1', fee: '1000', feeSSV: '10', publicKey: '0x01' },
-          { id: '2', fee: '2000', feeSSV: '20', publicKey: '0x02' },
-        ]),
+        getOperators: vi.fn().mockResolvedValue({
+          blockNumber: 1,
+          operators: [
+            { id: '1', fee: '1000', feeSSV: '10', publicKey: '0x01' },
+            { id: '2', fee: '2000', feeSSV: '20', publicKey: '0x02' },
+          ],
+        }),
         getDaoValues: vi.fn().mockResolvedValue({
-          ...mockDaoValues,
-          networkFeeSSV: '0',
-          liquidationThresholdSSV: '1',
-          minimumLiquidationCollateralSSV: '0',
+          blockNumber: 1,
+          daovalues: {
+            ...mockDaoValues,
+            networkFeeSSV: '0',
+            liquidationThresholdSSV: '1',
+            minimumLiquidationCollateralSSV: '0',
+          },
         }),
       },
     } as unknown as Partial<ConfigReturnType>);

@@ -30,10 +30,11 @@ const mockConfig = {
     },
   },
   api: {
-    getOwnerNonce: vi.fn().mockResolvedValue(833),
-    getValidator: vi.fn().mockResolvedValue(false),
-    getOperators: vi.fn().mockResolvedValue(
-      mockFetchedOperators.map(
+    getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
+    getValidator: vi.fn().mockResolvedValue({ blockNumber: 1, validator: null }),
+    getOperators: vi.fn().mockResolvedValue({
+      blockNumber: 1,
+      operators: mockFetchedOperators.map(
         (o) =>
           ({
             id: String(o.id),
@@ -44,7 +45,7 @@ const mockConfig = {
             whitelistedContract: zeroAddress,
           }) satisfies Operator,
       ),
-    ),
+    }),
   },
 } as unknown as ConfigReturnType;
 
@@ -65,7 +66,7 @@ describe('Keyshares', async () => {
     }),
   );
 
-  const operators = await sdk.api.getOperators({
+  const { operators } = await sdk.api.getOperators({
     operatorIds: mockOperators.ids.map(String),
   });
 
@@ -99,7 +100,7 @@ describe('Keyshares', async () => {
       },
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue(833),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
       },
     }) as unknown as ConfigReturnType;
 
@@ -123,8 +124,8 @@ describe('Keyshares', async () => {
     const payloadConfig = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue(833),
-        getValidator: vi.fn().mockResolvedValue(false),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
+        getValidator: vi.fn().mockResolvedValue({ blockNumber: 1, validator: null }),
       },
     } satisfies Partial<ConfigReturnType>);
 
@@ -150,8 +151,8 @@ describe('Keyshares', async () => {
     const payloadConfig = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue(833),
-        getValidator: vi.fn().mockResolvedValue(false),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
+        getValidator: vi.fn().mockResolvedValue({ blockNumber: 1, validator: null }),
       },
     } satisfies Partial<ConfigReturnType>);
 
@@ -176,7 +177,7 @@ describe('Keyshares', async () => {
     const invalidNonceConfig = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue(832),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '832' }),
       },
     } satisfies Partial<ConfigReturnType>);
 
@@ -196,7 +197,7 @@ describe('Keyshares', async () => {
     const noNonceConfig = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue(null),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '' }),
       },
     } satisfies Partial<ConfigReturnType>);
 
@@ -216,12 +217,16 @@ describe('Keyshares', async () => {
     const registeredValidatorsConfig = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue(833),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
         getValidator: vi.fn().mockImplementation(({ id }) => {
           // return true for the last validator as if it is registered
-          return Promise.resolve(
-            id === valid_keyshares.shares.at(-1)?.data.publicKey,
-          );
+          return Promise.resolve({
+            blockNumber: 1,
+            validator:
+              id === valid_keyshares.shares.at(-1)?.data.publicKey
+                ? { id }
+                : null,
+          });
         }),
       },
     } satisfies Partial<ConfigReturnType>);
@@ -247,8 +252,10 @@ describe('Keyshares', async () => {
     const registeredValidatorsConfig = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue(833),
-        getValidator: vi.fn().mockResolvedValue(true),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
+        getValidator: vi
+          .fn()
+          .mockResolvedValue({ blockNumber: 1, validator: { id: '0x1' } }),
       },
     } satisfies Partial<ConfigReturnType>);
 
@@ -330,8 +337,9 @@ describe('Keyshares', async () => {
     const privateOperatorConfig = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOperators: vi.fn().mockResolvedValue(
-          mockFetchedOperators.map(
+        getOperators: vi.fn().mockResolvedValue({
+          blockNumber: 1,
+          operators: mockFetchedOperators.map(
             (o) =>
               ({
                 id: String(o.id),
@@ -342,7 +350,7 @@ describe('Keyshares', async () => {
                 whitelistedContract: zeroAddress,
               }) satisfies Operator,
           ),
-        ),
+        }),
       },
     } satisfies Partial<ConfigReturnType>);
 
@@ -358,8 +366,9 @@ describe('Keyshares', async () => {
     const maxedOutOperators = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOperators: vi.fn().mockResolvedValue(
-          mockFetchedOperators.map(
+        getOperators: vi.fn().mockResolvedValue({
+          blockNumber: 1,
+          operators: mockFetchedOperators.map(
             (o) =>
               ({
                 id: String(o.id),
@@ -370,7 +379,7 @@ describe('Keyshares', async () => {
                 whitelistedContract: zeroAddress,
               }) satisfies Operator,
           ),
-        ),
+        }),
       },
     } satisfies Partial<ConfigReturnType>);
 

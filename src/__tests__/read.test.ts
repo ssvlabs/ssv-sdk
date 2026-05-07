@@ -64,7 +64,7 @@ describe('Communications', () => {
     const result = await sdk.api.getOperator({
       id: '1',
     });
-    expect(result).toHaveProperty('publicKey');
+    expect(result.operator).toHaveProperty('publicKey');
   });
   test.skipIf(!import.meta.env.VITE_SUBGRAPH_API_KEY)(
     'can communicate with mainnet the subgraph(apikey)',
@@ -99,7 +99,7 @@ describe('Communications', () => {
       const result = await sdk.api.getOperator({
         id: '1',
       });
-      expect(result).toHaveProperty('publicKey');
+      expect(result.operator).toHaveProperty('publicKey');
     },
   );
 
@@ -160,9 +160,11 @@ describe('Communications', () => {
       })
       .catch((err) => {
         // if there is an error but status is 200, there had to be other error than wrong communication
-        if (err.response?.status === 200) return { publicKey: 123 };
+        if (err.response?.status === 200)
+          return { blockNumber: 0, operator: { publicKey: 123 } };
       });
-    expect(result).toHaveProperty('publicKey');
+    expect(result).toBeDefined();
+    expect(result?.operator).toHaveProperty('publicKey');
   });
   test.skipIf(!import.meta.env.VITE_SUBGRAPH_API_KEY)(
     'can communicate with hoodi the subgraph(apikey)',
@@ -197,7 +199,7 @@ describe('Communications', () => {
       const result = await sdk.api.getOperator({
         id: '1',
       });
-      expect(result).toHaveProperty('publicKey');
+      expect(result.operator).toHaveProperty('publicKey');
     },
   );
 
