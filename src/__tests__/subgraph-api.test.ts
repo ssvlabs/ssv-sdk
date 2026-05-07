@@ -1,11 +1,11 @@
 import {
   getCluster,
+  getClusterSnapshot,
   getClusters,
   getDaoValues,
   getOperator,
   getOwnerNonce,
   getQueries,
-  toSolidityCluster,
 } from '@/api/subgraph';
 import {
   ClusterFeeAssetTypes,
@@ -99,7 +99,7 @@ describe('Subgraph API', () => {
     ]);
   });
 
-  it('returns effectiveBalance in toSolidityCluster response', async () => {
+  it('returns effectiveBalance in getClusterSnapshot response', async () => {
     const client = {
       request: vi.fn().mockResolvedValue({
         _meta: {
@@ -118,7 +118,7 @@ describe('Subgraph API', () => {
       }),
     };
 
-    const cluster = await toSolidityCluster(client as never, {
+    const cluster = await getClusterSnapshot(client as never, {
       id: 'cluster-1',
     });
 
@@ -286,7 +286,7 @@ describe('Subgraph API', () => {
     ).rejects.toThrow('subgraph unavailable');
   });
 
-  it('supports deprecated getClusterSnapshot alias', async () => {
+  it('exposes getClusterSnapshot as the canonical cluster snapshot API', async () => {
     const cluster = {
       active: true,
       validatorCount: '1',
@@ -307,23 +307,14 @@ describe('Subgraph API', () => {
     };
 
     const api = getQueries(client as never);
-    const snapshotFromAlias = await api.getClusterSnapshot({ id: 'cluster-1' });
-    const snapshotFromCurrent = await api.toSolidityCluster({
+    const snapshot = await api.getClusterSnapshot({
       id: 'cluster-1',
     });
 
-    expect(client.request).toHaveBeenNthCalledWith(
-      1,
-      GetClusterSnapshotDocument,
-      { id: 'cluster-1' },
-    );
-    expect(client.request).toHaveBeenNthCalledWith(
-      2,
-      GetClusterSnapshotDocument,
-      { id: 'cluster-1' },
-    );
-    expect(snapshotFromAlias).toEqual({ blockNumber: 5, cluster });
-    expect(snapshotFromCurrent).toEqual({ blockNumber: 5, cluster });
+    expect(client.request).toHaveBeenCalledWith(GetClusterSnapshotDocument, {
+      id: 'cluster-1',
+    });
+    expect(snapshot).toEqual({ blockNumber: 5, cluster });
   });
 
   it('returns cluster data together with block number', async () => {

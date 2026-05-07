@@ -22,7 +22,7 @@ const cluster = {
 
 const toMockApi = (api: unknown) =>
   api as {
-    toSolidityCluster: (args: { owner: string }) => Promise<{
+    getClusterSnapshot: (args: { owner: string }) => Promise<{
       cluster: {
         active: boolean;
         validatorCount: string;
@@ -87,7 +87,7 @@ describe('Mock API event completeness', () => {
     onLogs!([{ data: '0x', topics: [] }]);
 
     const clusterId = createClusterId(owner, operatorIds.map(Number));
-    const snapshot = await toMockApi(api).toSolidityCluster({
+    const snapshot = await toMockApi(api).getClusterSnapshot({
       owner: clusterId,
     });
 
@@ -134,7 +134,7 @@ describe('Mock API event completeness', () => {
     ]);
 
     const clusterId = createClusterId(owner, operatorIds.map(Number));
-    const snapshot = await toMockApi(api).toSolidityCluster({
+    const snapshot = await toMockApi(api).getClusterSnapshot({
       owner: clusterId,
     });
 

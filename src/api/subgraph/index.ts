@@ -115,7 +115,7 @@ export const getOwnerNonce = async (
   });
 };
 
-export const toSolidityCluster = async (
+export const getClusterSnapshot = async (
   client: GraphQLClient,
   args: GetClusterSnapshotQueryVariables,
 ): Promise<
@@ -132,14 +132,6 @@ export const toSolidityCluster = async (
     cluster: response.cluster,
   });
 };
-
-/**
- * @deprecated Use `toSolidityCluster` instead.
- */
-export const getClusterSnapshot = (
-  client: GraphQLClient,
-  args: GetClusterSnapshotQueryVariables,
-) => toSolidityCluster(client, args);
 
 export const getCluster = async (
   client: GraphQLClient,
@@ -280,9 +272,6 @@ export const getDaoValues = async (
 export const getQueries = (client: GraphQLClient) => ({
   getOwnerNonce: getOwnerNonce.bind(null, client) as RemoveConfigArg<
     typeof getOwnerNonce
-  >,
-  toSolidityCluster: toSolidityCluster.bind(null, client) as RemoveConfigArg<
-    typeof toSolidityCluster
   >,
   getClusterSnapshot: getClusterSnapshot.bind(null, client) as RemoveConfigArg<
     typeof getClusterSnapshot

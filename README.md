@@ -85,14 +85,14 @@ const nonce = await sdk.api.getOwnerNonce({
 
 ### API Compatibility Notes
 
-`getClusterSnapshot` was renamed in `v1.0.0`.
+`getClusterSnapshot` is the canonical cluster snapshot API.
 
 | SDK version | Method name                          |
 | ----------- | ------------------------------------ |
 | `0.1.x`     | `sdk.api.getClusterSnapshot({ id })` |
-| `1.x`       | `sdk.api.toSolidityCluster({ id })`  |
+| `1.x`       | `sdk.api.getClusterSnapshot({ id })` |
 
-`sdk.api.getClusterSnapshot` is available as a deprecated alias in current `1.x` releases for compatibility with `0.1.x` code.
+`sdk.api.toSolidityCluster` is no longer part of the public subgraph API. The internal utility `toSolidityCluster(...)` in `utils/cluster` still exists for converting cluster data into the Solidity struct shape used by contract calls.
 
 ### Cluster Management
 

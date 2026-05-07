@@ -90,7 +90,7 @@ export const createMockApi = (
     },
   });
 
-  const toSolidityClusterMock = vi.fn().mockImplementation((args) => {
+  const getClusterSnapshotMock = vi.fn().mockImplementation((args) => {
     const snapshot = clusterSnapshots.get(args.owner);
     return Promise.resolve({
       blockNumber: 1,
@@ -112,8 +112,7 @@ export const createMockApi = (
         nonce: (nonces.get(args.owner) ?? 0).toString(),
       }),
     ),
-    toSolidityCluster: toSolidityClusterMock,
-    getClusterSnapshot: toSolidityClusterMock,
+    getClusterSnapshot: getClusterSnapshotMock,
     getCluster: vi.fn().mockImplementation((args) =>
       Promise.resolve({
         blockNumber: 1,
