@@ -60,7 +60,7 @@ export const registerValidators = async (
   }
 
   const clusterId = createClusterId(ownerAddress, operatorIds);
-  const cluster = await config.api.getCluster({
+  const { cluster } = await config.api.getCluster({
     id: clusterId,
   });
 
@@ -125,7 +125,7 @@ export const registerValidatorsRawData = async (
   }
 
   const clusterId = createClusterId(resolvedOwnerAddress, operatorIds);
-  const cluster = await config.api.getCluster({
+  const { cluster } = await config.api.getCluster({
     id: clusterId,
   });
 
@@ -169,10 +169,11 @@ export const validateSharesPostRegistration = async (
     hash: args.txHash,
   });
 
-  const ownerNonce = await config.api.getOwnerNonce({
+  const ownerNonceResponse = await config.api.getOwnerNonce({
     owner: ownerAddress,
     block: Number(receipt.blockNumber) - 1,
   });
+  const ownerNonce = ownerNonceResponse?.nonce;
 
   if (isUndefined(ownerNonce)) {
     throw new Error('Could not fetch owner nonce');

@@ -67,7 +67,7 @@ export const validateSharesPreRegistration = async (
     );
   }
 
-  const operators = await config.api.getOperators({ operatorIds });
+  const { operators } = await config.api.getOperators({ operatorIds });
   if (operators.length !== operatorIds.length) {
     throw new KeysharesValidationError(
       KeysharesValidationErrors.OperatorDoesNotExist,
@@ -102,7 +102,10 @@ export const validateSharesPreRegistration = async (
     shares.map((share) => {
       return config.api
         .getValidator({ id: share.data.publicKey as `0x${string}` })
-        .then((res) => [share, Boolean(res)] as [KeySharesItem, boolean]);
+        .then(
+          ({ validator }) =>
+            [share, Boolean(validator)] as [KeySharesItem, boolean],
+        );
     }),
   );
 
@@ -114,7 +117,7 @@ export const validateSharesPreRegistration = async (
     (share) => typeof share.data.ownerNonce === 'number',
   );
   const nonce = shouldValidateNonce
-    ? await config.api.getOwnerNonce({ owner: account }).then((nonce) => {
+    ? await config.api.getOwnerNonce({ owner: account }).then(({ nonce }) => {
         if (!nonce) throw new Error('Failed to get owner nonce');
         return Number(nonce);
       })

@@ -35,11 +35,9 @@ try {
     'LS0...operator_key_4...',
   ];
 
-  const nonce = Number(
-    await sdk.api.getOwnerNonce({
-      owner: ownerAddress,
-    }),
-  );
+  const { nonce } = await sdk.api.getOwnerNonce({
+    owner: ownerAddress,
+  });
 
   const keysharesPayload = await sdk.utils.generateKeyShares({
     keystore: JSON.stringify(keystores),
@@ -47,7 +45,7 @@ try {
     operator_keys: operatorKeys,
     operator_ids: operatorIds,
     owner_address: ownerAddress,
-    nonce,
+    nonce: Number(nonce),
   });
 
   const payloadPath = './keyshares-payloads.json';

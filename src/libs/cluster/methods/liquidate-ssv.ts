@@ -10,7 +10,7 @@ export const liquidateSSV = async (
   config: ConfigReturnType,
   { args: { id }, ...writeOptions }: LiquidateSSVProps,
 ) => {
-  const cluster = await config.api.getCluster({ id });
+  const { cluster } = await config.api.getCluster({ id });
 
   if (!cluster) {
     throw new Error('Cluster not found');

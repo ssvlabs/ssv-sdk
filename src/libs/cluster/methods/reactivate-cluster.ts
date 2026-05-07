@@ -11,7 +11,7 @@ export const reactivateCluster = async (
   config: ConfigReturnType,
   { args: { id, amount }, ...writeOptions }: ReactivateClusterProps,
 ) => {
-  const cluster = await config.api.getCluster({ id });
+  const { cluster } = await config.api.getCluster({ id });
 
   if (!cluster) {
     throw new Error('Cluster not found');
