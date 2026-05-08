@@ -41,11 +41,11 @@ try {
 
   const keysharesPayload = await sdk.utils.generateKeyShares({
     keystore: JSON.stringify(keystores),
-    keystore_password: 'your_password',
-    operator_keys: operatorKeys,
-    operator_ids: operatorIds,
-    owner_address: ownerAddress,
-    nonce: Number(nonce),
+    keystorePassword: 'your_password',
+    operatorKeys,
+    operatorIds,
+    ownerAddress,
+    nonce,
   });
 
   const payloadPath = './keyshares-webapp.json';
@@ -53,7 +53,7 @@ try {
     path: payloadPath,
     shares: keysharesPayload,
     ownerAddress,
-    nonce: Number(nonce),
+    nonce,
   });
 
   const storedPayloads = JSON.parse(await readFile(payloadPath, 'utf-8'));

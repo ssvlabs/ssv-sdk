@@ -196,7 +196,7 @@ describe('Subgraph API', () => {
     });
     expect(nonce).toEqual({
       blockNumber: 321,
-      nonce: '0',
+      nonce: 0,
     });
   });
 
@@ -223,7 +223,7 @@ describe('Subgraph API', () => {
     });
     expect(result).toEqual({
       blockNumber: 321,
-      nonce: '15',
+      nonce: 15,
     });
   });
 
@@ -247,7 +247,7 @@ describe('Subgraph API', () => {
     });
     expect(nonce).toEqual({
       blockNumber: 42,
-      nonce: '12',
+      nonce: 12,
     });
   });
 
@@ -271,7 +271,7 @@ describe('Subgraph API', () => {
     });
     expect(result).toEqual({
       blockNumber: 42,
-      nonce: '12',
+      nonce: 12,
     });
   });
 

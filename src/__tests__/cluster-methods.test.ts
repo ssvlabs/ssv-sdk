@@ -86,7 +86,7 @@ const mockApi = {
     .mockImplementation(async () => ({ blockNumber: 1, cluster: mockClusterFromApi })),
   getOwnerNonce: vi
     .fn()
-    .mockImplementation(async () => ({ blockNumber: 0, nonce: '1' })),
+    .mockImplementation(async () => ({ blockNumber: 0, nonce: 1 })),
 };
 
 const mockConfig = {

@@ -118,8 +118,10 @@ export const validateSharesPreRegistration = async (
   );
   const nonce = shouldValidateNonce
     ? await config.api.getOwnerNonce({ owner: account }).then(({ nonce }) => {
-        if (!nonce) throw new Error('Failed to get owner nonce');
-        return Number(nonce);
+        if (typeof nonce !== 'number') {
+          throw new Error('Failed to get owner nonce');
+        }
+        return nonce;
       })
     : null;
 

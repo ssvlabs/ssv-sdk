@@ -43,19 +43,20 @@ type SnapshotResult<T> = {
   blockNumber: number;
 } & T;
 
-const parseBlockNumber = (
-  rawBlockNumber: number | string | null | undefined,
+const parseSafeNumber = (
+  rawValue: number | string | null | undefined,
+  fieldName: string,
 ) => {
-  if (rawBlockNumber === null || typeof rawBlockNumber === 'undefined') {
-    throw new Error('Could not resolve snapshot block number');
+  if (rawValue === null || typeof rawValue === 'undefined') {
+    throw new Error(`Could not resolve ${fieldName}`);
   }
 
-  const blockNumber = BigInt(rawBlockNumber);
-  if (blockNumber > BigInt(Number.MAX_SAFE_INTEGER)) {
-    throw new Error('Snapshot block number exceeds MAX_SAFE_INTEGER');
+  const value = BigInt(rawValue);
+  if (value > BigInt(Number.MAX_SAFE_INTEGER)) {
+    throw new Error(`${fieldName} exceeds MAX_SAFE_INTEGER`);
   }
 
-  return Number(blockNumber);
+  return Number(value);
 };
 
 const mapOperator = <
@@ -86,14 +87,14 @@ const withSnapshotBlock = <
   },
   payload: R,
 ): SnapshotResult<R> => ({
-  blockNumber: parseBlockNumber(response._meta?.block.number),
+  blockNumber: parseSafeNumber(response._meta?.block.number, 'snapshot block number'),
   ...payload,
 });
 
 export const getOwnerNonce = async (
   client: GraphQLClient,
   args: GetOwnerNonceByBlockQueryVariables,
-): Promise<SnapshotResult<{ nonce: string }>> => {
+): Promise<SnapshotResult<{ nonce: number }>> => {
   if (typeof args.block === 'number') {
     const response = await client.request<GetOwnerNonceByBlockQuery>(
       GetOwnerNonceByBlockDocument,
@@ -101,8 +102,8 @@ export const getOwnerNonce = async (
     );
 
     return {
-      blockNumber: parseBlockNumber(args.block),
-      nonce: response.account?.nonce ?? '0',
+      blockNumber: parseSafeNumber(args.block, 'snapshot block number'),
+      nonce: parseSafeNumber(response.account?.nonce ?? '0', 'owner nonce'),
     };
   }
 
@@ -112,7 +113,7 @@ export const getOwnerNonce = async (
   );
 
   return withSnapshotBlock(response, {
-    nonce: response.account?.nonce ?? '0',
+    nonce: parseSafeNumber(response.account?.nonce ?? '0', 'owner nonce'),
   });
 };
 

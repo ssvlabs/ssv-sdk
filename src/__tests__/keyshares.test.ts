@@ -30,7 +30,7 @@ const mockConfig = {
     },
   },
   api: {
-    getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
+    getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: 833 }),
     getValidator: vi.fn().mockResolvedValue({ blockNumber: 1, validator: null }),
     getOperators: vi.fn().mockResolvedValue({
       blockNumber: 1,
@@ -100,7 +100,7 @@ describe('Keyshares', async () => {
       },
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: 833 }),
       },
     }) as unknown as ConfigReturnType;
 
@@ -124,7 +124,7 @@ describe('Keyshares', async () => {
     const payloadConfig = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: 833 }),
         getValidator: vi.fn().mockResolvedValue({ blockNumber: 1, validator: null }),
       },
     } satisfies Partial<ConfigReturnType>);
@@ -151,7 +151,7 @@ describe('Keyshares', async () => {
     const payloadConfig = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: 833 }),
         getValidator: vi.fn().mockResolvedValue({ blockNumber: 1, validator: null }),
       },
     } satisfies Partial<ConfigReturnType>);
@@ -177,7 +177,7 @@ describe('Keyshares', async () => {
     const invalidNonceConfig = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '832' }),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: 832 }),
       },
     } satisfies Partial<ConfigReturnType>);
 
@@ -197,7 +197,7 @@ describe('Keyshares', async () => {
     const noNonceConfig = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '' }),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: undefined }),
       },
     } satisfies Partial<ConfigReturnType>);
 
@@ -217,7 +217,7 @@ describe('Keyshares', async () => {
     const registeredValidatorsConfig = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: 833 }),
         getValidator: vi.fn().mockImplementation(({ id }) => {
           // return true for the last validator as if it is registered
           return Promise.resolve({
@@ -252,7 +252,7 @@ describe('Keyshares', async () => {
     const registeredValidatorsConfig = merge({}, mockConfig, {
       api: {
         ...mockConfig.api,
-        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
+        getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: 833 }),
         getValidator: vi
           .fn()
           .mockResolvedValue({ blockNumber: 1, validator: { id: '0x1' } }),

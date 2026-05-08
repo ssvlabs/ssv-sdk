@@ -209,7 +209,7 @@ export const validateSharesPostRegistration = async (
         operatorsCount: e.args.operatorIds!.length,
         isAccountExists: false,
         ownerAddress,
-        ownerNonce: Number(ownerNonce) + index,
+        ownerNonce: ownerNonce + index,
         shares: e.args.shares!,
         validatorPublicKey: e.args.publicKey!,
       }),
@@ -223,7 +223,7 @@ export const validateSharesPostRegistration = async (
     isValid,
     validations,
     invalids,
-    ownerNonceAtBlock: Number(ownerNonce),
+    ownerNonceAtBlock: ownerNonce,
     block: Number(receipt.blockNumber),
   };
 };

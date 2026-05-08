@@ -109,7 +109,7 @@ export const createMockApi = (
     getOwnerNonce: vi.fn().mockImplementation((args) =>
       Promise.resolve({
         blockNumber: typeof args.block === 'number' ? args.block : 1,
-        nonce: (nonces.get(args.owner) ?? 0).toString(),
+        nonce: nonces.get(args.owner) ?? 0,
       }),
     ),
     getClusterSnapshot: getClusterSnapshotMock,

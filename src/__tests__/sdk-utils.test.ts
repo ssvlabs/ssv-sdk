@@ -78,7 +78,7 @@ const mockApi = {
     .fn()
     .mockResolvedValue({ blockNumber: 1, operators: mockOperators }),
   getValidator: vi.fn().mockResolvedValue({ blockNumber: 1, validator: null }),
-  getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
+  getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: 833 }),
   getClusterBalance: vi.fn().mockResolvedValue(mockClusterBalanceData),
 };
 const mockConfig = {
@@ -119,7 +119,7 @@ const mockConfig = {
       .fn()
       .mockResolvedValue({ blockNumber: 1, operators: mockOperators }),
     getValidator: vi.fn().mockResolvedValue({ blockNumber: 1, validator: null }),
-    getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: '833' }),
+    getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: 833 }),
     getClusterBalance: vi.fn().mockResolvedValue(mockClusterBalanceData),
   },
   contractAddresses: {
@@ -138,7 +138,7 @@ describe('SDK Utils', () => {
       operators: mockOperators,
     });
     mockApi.getValidator.mockResolvedValue({ blockNumber: 1, validator: null });
-    mockApi.getOwnerNonce.mockResolvedValue({ blockNumber: 1, nonce: '1' });
+    mockApi.getOwnerNonce.mockResolvedValue({ blockNumber: 1, nonce: 1 });
     mockApi.getClusterBalance.mockResolvedValue(mockClusterBalanceData);
   });
 

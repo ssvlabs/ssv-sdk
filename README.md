@@ -73,12 +73,12 @@ const sdk = new SSVSDK({
 
 ```typescript
 // Query operators
-const operators = await sdk.api.getOperators({
+const { operators } = await sdk.api.getOperators({
   operatorIds: ['220', '221', '223', '224'],
 });
 
 // Get owner nonce
-const nonce = await sdk.api.getOwnerNonce({
+const { nonce } = await sdk.api.getOwnerNonce({
   owner: 'your_wallet_address',
 });
 
@@ -87,13 +87,19 @@ await sdk.utils.writeKeysharesFile({
   path: './keyshares-webapp.json',
   shares,
   ownerAddress: 'your_wallet_address',
-  nonce: Number(nonce),
+  nonce,
 });
 ```
 
 ### API Compatibility Notes
 
 `getClusterSnapshot` is the canonical cluster snapshot API.
+
+Snapshot-aware SDK read methods return the queried data together with the subgraph snapshot block number, for example:
+
+- `sdk.api.getOwnerNonce(...) -> { blockNumber, nonce }`
+- `sdk.api.getOperators(...) -> { blockNumber, operators }`
+- `sdk.api.getClusterSnapshot(...) -> { blockNumber, cluster }`
 
 | SDK version | Method name                          |
 | ----------- | ------------------------------------ |
