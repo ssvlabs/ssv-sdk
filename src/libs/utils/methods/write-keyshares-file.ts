@@ -50,6 +50,7 @@ const isPayloadOnlyShare = (
 };
 
 const toWebappOperatorKey = (operatorKey: string) => {
+  // Webapp-ready operator keys are base64-encoded PEM strings ("-----BEGIN..." => "LS0tLS1CRUdJTi...").
   if (operatorKey.startsWith('LS0tLS1CRUdJTi')) {
     return operatorKey;
   }
