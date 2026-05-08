@@ -27,7 +27,7 @@ export const getClusterBalance = async (
     clusterId: createClusterId(resolvedOwnerAddress, operatorIds),
   });
 
-  if (!query.cluster || !query.daovalues || !query._meta) {
+  if (!query.cluster || !query.daovalues) {
     throw new Error('Could not fetch cluster balance');
   }
 
@@ -62,7 +62,7 @@ export const getClusterBalance = async (
 
   const cumulativeNetworkFee =
     networkFeeIndex +
-    (BigInt(query._meta.block.number) - networkFeeIndexBlockNumber) *
+    (BigInt(query.blockNumber) - networkFeeIndexBlockNumber) *
       networkFee -
     BigInt(query.cluster.networkFeeIndex) * scallingCoefficient;
 
@@ -76,7 +76,7 @@ export const getClusterBalance = async (
       return (
         acc +
         BigInt(feeIndex) +
-        (BigInt(query._meta!.block.number) - BigInt(feeIndexBlockNumber)) *
+        (BigInt(query.blockNumber) - BigInt(feeIndexBlockNumber)) *
           BigInt(fee)
       );
     },
@@ -110,7 +110,7 @@ export const getClusterBalance = async (
   const operationalRunway = runway / burnRate / globals.BLOCKS_PER_DAY;
 
   return {
-    blockNumber: query._meta.block.number,
+    blockNumber: query.blockNumber,
     balance: calculatedClusterBalance,
     operationalRunway,
   };

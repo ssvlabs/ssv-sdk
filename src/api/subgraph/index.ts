@@ -1,4 +1,5 @@
 import type {
+  GetClusterBalanceQuery,
   GetClusterBalanceQueryVariables,
   GetClusterQuery,
   GetClusterQueryVariables,
@@ -246,10 +247,27 @@ export const getValidator = async (
   });
 };
 
-export const getClusterBalance = (
+export const getClusterBalance = async (
   client: GraphQLClient,
   args: GetClusterBalanceQueryVariables,
-) => client.request(GetClusterBalanceDocument, args);
+): Promise<
+  SnapshotResult<{
+    cluster: GetClusterBalanceQuery['cluster'];
+    daovalues: GetClusterBalanceQuery['daovalues'];
+    operators: GetClusterBalanceQuery['operators'];
+  }>
+> => {
+  const response = await client.request<GetClusterBalanceQuery>(
+    GetClusterBalanceDocument,
+    args,
+  );
+
+  return withSnapshotBlock(response, {
+    cluster: response.cluster,
+    daovalues: response.daovalues,
+    operators: response.operators,
+  });
+};
 
 export const getDaoValues = async (
   client: GraphQLClient,

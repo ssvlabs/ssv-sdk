@@ -200,7 +200,7 @@ export const createMockApi = (
     getClusterBalance: vi.fn().mockImplementation((args) => {
       const snapshot = clusterSnapshots.get(args.owner);
       return Promise.resolve({
-        _meta: { block: { number: 1 } },
+        blockNumber: 1,
         daovalues: {
           networkFee: '100000000000000000',
           networkFeeIndex: '0',

@@ -54,6 +54,7 @@ const createGetClusterBalanceConfig = (effectiveBalance: bigint) => {
     },
     api: {
       getClusterBalance: vi.fn().mockResolvedValue({
+        blockNumber: 0,
         cluster: {
           validatorCount: '1',
           networkFeeIndex: '0',
@@ -69,11 +70,6 @@ const createGetClusterBalanceConfig = (effectiveBalance: bigint) => {
           liquidationThreshold: '0',
         },
         operators: [],
-        _meta: {
-          block: {
-            number: 0,
-          },
-        },
       }),
     },
   } as unknown as ConfigReturnType;

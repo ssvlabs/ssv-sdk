@@ -46,6 +46,7 @@ const mockOperators = _mockOperators.map((o) => ({
 }));
 
 const mockClusterBalanceData = {
+  blockNumber: 2000,
   cluster: {
     feeAsset: ClusterFeeAssetTypes.ETH,
     validatorCount: '1',
@@ -67,11 +68,6 @@ const mockClusterBalanceData = {
     liquidationThresholdSSV: '100',
   },
   operators: mockOperators,
-  _meta: {
-    block: {
-      number: 2000,
-    },
-  },
 };
 
 const mockApi = {
@@ -212,8 +208,8 @@ describe('SDK Utils', () => {
         api: {
           ...mockConfig.api,
           getClusterBalance: vi.fn().mockResolvedValue({
+            blockNumber: 2000,
             operators: [],
-            _meta: { block: { number: 2000 } },
           }),
         },
       } satisfies Partial<ConfigReturnType>);
@@ -234,7 +230,7 @@ describe('SDK Utils', () => {
         api: {
           ...mockConfig.api,
           getClusterBalance: vi.fn().mockResolvedValue({
-            _meta: { block: { number: 10 } },
+            blockNumber: 10,
             daovalues: {
               networkFeeIndex: '0',
               networkFeeIndexBlockNumber: '10',
