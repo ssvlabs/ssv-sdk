@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://ssv.network/wp-content/uploads/2024/06/full_logo_white.svg" alt="SSV Network" width="300"/>
+  <img src="https://framerusercontent.com/assets/SxrtOSpELBgEtirWSlWPnBE0cd4.png" alt="SSV Network" width="300"/>
 </p>
 
 <h1 align="center">SSV SDK</h1>
