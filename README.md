@@ -81,6 +81,14 @@ const operators = await sdk.api.getOperators({
 const nonce = await sdk.api.getOwnerNonce({
   owner: 'your_wallet_address',
 });
+
+// Export SDK-generated payloads into a webapp-ready keyshares JSON file (Node.js only)
+await sdk.utils.writeKeysharesFile({
+  path: './keyshares-webapp.json',
+  shares,
+  ownerAddress: 'your_wallet_address',
+  nonce: Number(nonce),
+});
 ```
 
 ### API Compatibility Notes
@@ -93,6 +101,8 @@ const nonce = await sdk.api.getOwnerNonce({
 | `1.x`       | `sdk.api.getClusterSnapshot({ id })` |
 
 `sdk.api.toSolidityCluster` is no longer part of the public subgraph API. The internal utility `toSolidityCluster(...)` in `utils/cluster` still exists for converting cluster data into the Solidity struct shape used by contract calls.
+
+`sdk.utils.writeKeysharesFile(...)` is a Node.js utility and relies on filesystem access.
 
 ### Cluster Management
 

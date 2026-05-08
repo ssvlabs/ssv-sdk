@@ -1,4 +1,4 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { chains, SSVSDK } from '@ssv-labs/ssv-sdk';
 import { createPublicClient, createWalletClient, http, parseEther } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
@@ -48,8 +48,13 @@ try {
     nonce: Number(nonce),
   });
 
-  const payloadPath = './keyshares-payloads.json';
-  await writeFile(payloadPath, JSON.stringify(keysharesPayload, null, 2));
+  const payloadPath = './keyshares-webapp.json';
+  await sdk.utils.writeKeysharesFile({
+    path: payloadPath,
+    shares: keysharesPayload,
+    ownerAddress,
+    nonce: Number(nonce),
+  });
 
   const storedPayloads = JSON.parse(await readFile(payloadPath, 'utf-8'));
 

@@ -34,6 +34,7 @@ export default defineConfig({
         'tslib',
         'zod',
         'fs',
+        'node:fs/promises',
         'path',
         'crypto',
         'url',

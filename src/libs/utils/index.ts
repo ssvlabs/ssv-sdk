@@ -6,10 +6,15 @@ import {
   validateSharesPreRegistration,
 } from '@/libs/utils/methods/keyshares';
 import { generateKeyShares } from '@/libs/utils/methods/keystores';
+import { writeKeysharesFile } from '@/libs/utils/methods/write-keyshares-file';
 import type { RemoveConfigArg } from '@/types/methods';
 
 export const createUtils = (config: ConfigReturnType) => ({
   generateKeyShares,
+  writeKeysharesFile: writeKeysharesFile.bind(
+    null,
+    config,
+  ) as RemoveConfigArg<typeof writeKeysharesFile>,
   validateKeysharesJSON,
   validateSharesPreRegistration: validateSharesPreRegistration.bind(
     null,
