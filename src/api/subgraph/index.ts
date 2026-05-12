@@ -43,7 +43,7 @@ type SnapshotResult<T> = {
   blockNumber: number;
 } & T;
 
-const parseSafeNumber = (
+const requireSafeNumber = (
   rawValue: number | string | null | undefined,
   fieldName: string,
 ) => {
@@ -57,6 +57,22 @@ const parseSafeNumber = (
   }
 
   return Number(value);
+};
+
+const getSnapshotBlockNumber = (response: {
+  _meta?: {
+    block: {
+      number: number;
+    };
+  } | null;
+}) => {
+  if (response._meta?.block.number === null || typeof response._meta?.block.number === 'undefined') {
+    throw new Error(
+      'Subgraph endpoint must support _meta.block.number for snapshot-aware SDK reads.',
+    );
+  }
+
+  return requireSafeNumber(response._meta.block.number, 'snapshot block number');
 };
 
 const mapOperator = <
@@ -87,7 +103,7 @@ const withSnapshotBlock = <
   },
   payload: R,
 ): SnapshotResult<R> => ({
-  blockNumber: parseSafeNumber(response._meta?.block.number, 'snapshot block number'),
+  blockNumber: getSnapshotBlockNumber(response),
   ...payload,
 });
 
@@ -102,8 +118,8 @@ export const getOwnerNonce = async (
     );
 
     return {
-      blockNumber: parseSafeNumber(args.block, 'snapshot block number'),
-      nonce: parseSafeNumber(response.account?.nonce ?? '0', 'owner nonce'),
+      blockNumber: requireSafeNumber(args.block, 'snapshot block number'),
+      nonce: requireSafeNumber(response.account?.nonce ?? '0', 'owner nonce'),
     };
   }
 
@@ -113,7 +129,7 @@ export const getOwnerNonce = async (
   );
 
   return withSnapshotBlock(response, {
-    nonce: parseSafeNumber(response.account?.nonce ?? '0', 'owner nonce'),
+    nonce: requireSafeNumber(response.account?.nonce ?? '0', 'owner nonce'),
   });
 };
 

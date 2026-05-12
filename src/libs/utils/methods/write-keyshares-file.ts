@@ -15,7 +15,7 @@ export type KeySharesFileShare = {
 type SerializedKeySharesFile = {
   version: 'v1.1.0';
   createdAt: string;
-  shares: KeySharesFileShare[] | null;
+  shares: KeySharesFileShare[];
 };
 
 type WriteKeysharesFileArgs = {
@@ -187,7 +187,7 @@ export const writeKeysharesFile = async (
   const keySharesFile: SerializedKeySharesFile = {
     version: 'v1.1.0',
     createdAt: new Date().toISOString(),
-    shares: normalizedShares.length > 0 ? normalizedShares : null,
+    shares: normalizedShares,
   };
   const { mkdir, writeFile } = await import('node:fs/promises');
 

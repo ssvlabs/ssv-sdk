@@ -286,6 +286,28 @@ describe('Subgraph API', () => {
     ).rejects.toThrow('subgraph unavailable');
   });
 
+  it('throws a clear error when snapshot metadata is unavailable', async () => {
+    const client = {
+      request: vi.fn().mockResolvedValue({
+        _meta: null,
+        cluster: {
+          active: true,
+          validatorCount: '1',
+          balance: '100',
+          index: '1',
+          networkFeeIndex: '1',
+          effectiveBalance: '32',
+        },
+      }),
+    };
+
+    await expect(
+      getClusterSnapshot(client as never, { id: 'cluster-1' }),
+    ).rejects.toThrow(
+      'Subgraph endpoint must support _meta.block.number for snapshot-aware SDK reads.',
+    );
+  });
+
   it('exposes getClusterSnapshot as the canonical cluster snapshot API', async () => {
     const cluster = {
       active: true,
