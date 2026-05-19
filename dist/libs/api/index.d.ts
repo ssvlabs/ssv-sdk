@@ -1,7 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 export declare const createQueries: (graphqlClient: GraphQLClient) => {
     getOwnerNonce: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').getOwnerNonce>;
-    toSolidityCluster: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').toSolidityCluster>;
     getClusterSnapshot: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').getClusterSnapshot>;
     getCluster: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').getCluster>;
     getClusters: import('../../types/methods').RemoveConfigArg<typeof import('../../api/subgraph').getClusters>;

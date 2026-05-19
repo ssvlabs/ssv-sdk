@@ -68,6 +68,7 @@ export type Scalars = {
 };
 export type Account = {
     clusters?: Maybe<Array<Cluster>>;
+    effectiveBalance: Scalars['BigInt']['output'];
     feeRecipient: Scalars['Bytes']['output'];
     id: Scalars['Bytes']['output'];
     nonce: Scalars['BigInt']['output'];
@@ -103,6 +104,14 @@ export type Account_Filter = {
     _change_block?: InputMaybe<BlockChangedFilter>;
     and?: InputMaybe<Array<InputMaybe<Account_Filter>>>;
     clusters_?: InputMaybe<Cluster_Filter>;
+    effectiveBalance?: InputMaybe<Scalars['BigInt']['input']>;
+    effectiveBalance_gt?: InputMaybe<Scalars['BigInt']['input']>;
+    effectiveBalance_gte?: InputMaybe<Scalars['BigInt']['input']>;
+    effectiveBalance_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+    effectiveBalance_lt?: InputMaybe<Scalars['BigInt']['input']>;
+    effectiveBalance_lte?: InputMaybe<Scalars['BigInt']['input']>;
+    effectiveBalance_not?: InputMaybe<Scalars['BigInt']['input']>;
+    effectiveBalance_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     feeRecipient?: InputMaybe<Scalars['Bytes']['input']>;
     feeRecipient_contains?: InputMaybe<Scalars['Bytes']['input']>;
     feeRecipient_gt?: InputMaybe<Scalars['Bytes']['input']>;
@@ -161,6 +170,7 @@ export type Account_Filter = {
 };
 export declare enum Account_OrderBy {
     clusters = "clusters",
+    effectiveBalance = "effectiveBalance",
     feeRecipient = "feeRecipient",
     id = "id",
     nonce = "nonce",
@@ -1297,6 +1307,7 @@ export declare enum Cluster_OrderBy {
     networkFeeIndex = "networkFeeIndex",
     operatorIds = "operatorIds",
     owner = "owner",
+    owner__effectiveBalance = "owner__effectiveBalance",
     owner__feeRecipient = "owner__feeRecipient",
     owner__id = "owner__id",
     owner__nonce = "owner__nonce",
@@ -1333,6 +1344,7 @@ export declare enum DaoUpdateTypes {
 export type DaoValues = {
     accEthPerShare: Scalars['BigInt']['output'];
     declareOperatorFeePeriod: Scalars['BigInt']['output'];
+    effectiveBalanceETH: Scalars['BigInt']['output'];
     executeOperatorFeePeriod: Scalars['BigInt']['output'];
     id: Scalars['Bytes']['output'];
     lastUpdateBlockNumber: Scalars['BigInt']['output'];
@@ -1386,6 +1398,14 @@ export type DaoValues_Filter = {
     declareOperatorFeePeriod_lte?: InputMaybe<Scalars['BigInt']['input']>;
     declareOperatorFeePeriod_not?: InputMaybe<Scalars['BigInt']['input']>;
     declareOperatorFeePeriod_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+    effectiveBalanceETH?: InputMaybe<Scalars['BigInt']['input']>;
+    effectiveBalanceETH_gt?: InputMaybe<Scalars['BigInt']['input']>;
+    effectiveBalanceETH_gte?: InputMaybe<Scalars['BigInt']['input']>;
+    effectiveBalanceETH_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+    effectiveBalanceETH_lt?: InputMaybe<Scalars['BigInt']['input']>;
+    effectiveBalanceETH_lte?: InputMaybe<Scalars['BigInt']['input']>;
+    effectiveBalanceETH_not?: InputMaybe<Scalars['BigInt']['input']>;
+    effectiveBalanceETH_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
     executeOperatorFeePeriod?: InputMaybe<Scalars['BigInt']['input']>;
     executeOperatorFeePeriod_gt?: InputMaybe<Scalars['BigInt']['input']>;
     executeOperatorFeePeriod_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -1661,6 +1681,7 @@ export type DaoValues_Filter = {
 export declare enum DaoValues_OrderBy {
     accEthPerShare = "accEthPerShare",
     declareOperatorFeePeriod = "declareOperatorFeePeriod",
+    effectiveBalanceETH = "effectiveBalanceETH",
     executeOperatorFeePeriod = "executeOperatorFeePeriod",
     id = "id",
     lastUpdateBlockNumber = "lastUpdateBlockNumber",
@@ -2347,6 +2368,22 @@ export declare enum LiquidationThresholdPeriodUpdated_OrderBy {
     id = "id",
     transactionHash = "transactionHash",
     value = "value"
+}
+/**
+ * The severity level of a log entry.
+ * Log levels are ordered from most to least severe: CRITICAL > ERROR > WARNING > INFO > DEBUG
+ */
+export declare enum LogLevel {
+    /** Critical errors that require immediate attention */
+    CRITICAL = "CRITICAL",
+    /** Detailed diagnostic information for debugging */
+    DEBUG = "DEBUG",
+    /** Error conditions that indicate a failure */
+    ERROR = "ERROR",
+    /** Informational messages about normal operations */
+    INFO = "INFO",
+    /** Warning conditions that may require attention */
+    WARNING = "WARNING"
 }
 export type MinimumLiquidationCollateralSsvUpdated = {
     blockNumber: Scalars['BigInt']['output'];
@@ -4213,6 +4250,7 @@ export declare enum Operator_OrderBy {
     lastUpdateTransactionHash = "lastUpdateTransactionHash",
     operatorId = "operatorId",
     owner = "owner",
+    owner__effectiveBalance = "owner__effectiveBalance",
     owner__feeRecipient = "owner__feeRecipient",
     owner__id = "owner__id",
     owner__nonce = "owner__nonce",
@@ -4419,6 +4457,8 @@ export declare enum OrderDirection {
     desc = "desc"
 }
 export type Query = {
+    /** Query execution logs emitted by the subgraph during indexing. Results are sorted by timestamp in descending order (newest first). */
+    _logs: Array<_Log_>;
     /** Access to subgraph metadata */
     _meta?: Maybe<_Meta_>;
     account?: Maybe<Account>;
@@ -4527,6 +4567,15 @@ export type Query = {
     validators: Array<Validator>;
     weightedRootProposed?: Maybe<WeightedRootProposed>;
     weightedRootProposeds: Array<WeightedRootProposed>;
+};
+export type Query_LogsArgs = {
+    first?: InputMaybe<Scalars['Int']['input']>;
+    from?: InputMaybe<Scalars['String']['input']>;
+    level?: InputMaybe<LogLevel>;
+    orderDirection?: InputMaybe<OrderDirection>;
+    search?: InputMaybe<Scalars['String']['input']>;
+    skip?: InputMaybe<Scalars['Int']['input']>;
+    to?: InputMaybe<Scalars['String']['input']>;
 };
 export type Query_MetaArgs = {
     block?: InputMaybe<Block_Height>;
@@ -6628,6 +6677,7 @@ export declare enum Validator_OrderBy {
     lastUpdateTransactionHash = "lastUpdateTransactionHash",
     operators = "operators",
     owner = "owner",
+    owner__effectiveBalance = "owner__effectiveBalance",
     owner__feeRecipient = "owner__feeRecipient",
     owner__id = "owner__id",
     owner__nonce = "owner__nonce",
@@ -6765,6 +6815,48 @@ export type _Block_ = {
     /** Integer representation of the timestamp stored in blocks for the chain */
     timestamp?: Maybe<Scalars['Int']['output']>;
 };
+/**
+ * A key-value pair of additional data associated with a log entry.
+ * These correspond to arguments passed to the log function in the subgraph code.
+ */
+export type _LogArgument_ = {
+    /** The parameter name */
+    key: Scalars['String']['output'];
+    /** The parameter value, serialized as a string */
+    value: Scalars['String']['output'];
+};
+/**
+ * Source code location metadata for a log entry.
+ * Indicates where in the subgraph's AssemblyScript code the log statement was executed.
+ */
+export type _LogMeta_ = {
+    /** The column number in the source file */
+    column: Scalars['Int']['output'];
+    /** The line number in the source file */
+    line: Scalars['Int']['output'];
+    /** The module or file path where the log was emitted */
+    module: Scalars['String']['output'];
+};
+/**
+ * A log entry emitted by a subgraph during indexing.
+ * Logs can be generated by the subgraph's AssemblyScript code using the `log.*` functions.
+ */
+export type _Log_ = {
+    /** Additional structured data passed to the log function as key-value pairs */
+    arguments: Array<_LogArgument_>;
+    /** Unique identifier for this log entry */
+    id: Scalars['String']['output'];
+    /** The severity level of the log entry */
+    level: LogLevel;
+    /** Metadata about the source location in the subgraph code where the log was emitted */
+    meta: _LogMeta_;
+    /** The deployment hash of the subgraph that emitted this log */
+    subgraphId: Scalars['String']['output'];
+    /** The log message text */
+    text: Scalars['String']['output'];
+    /** The timestamp when the log was emitted, in RFC3339 format (e.g., '2024-01-15T10:30:00Z') */
+    timestamp: Scalars['String']['output'];
+};
 /** The type for the top-level _meta field */
 export type _Meta_ = {
     /**
@@ -6789,6 +6881,11 @@ export type GetClusterSnapshotQueryVariables = Exact<{
     id: Scalars['ID']['input'];
 }>;
 export type GetClusterSnapshotQuery = {
+    _meta?: {
+        block: {
+            number: number;
+        };
+    } | null;
     cluster?: {
         active: boolean;
         validatorCount: string;
@@ -6802,6 +6899,11 @@ export type GetClusterQueryVariables = Exact<{
     id: Scalars['ID']['input'];
 }>;
 export type GetClusterQuery = {
+    _meta?: {
+        block: {
+            number: number;
+        };
+    } | null;
     cluster?: {
         feeAsset: ClusterFeeAssetTypes;
         active: boolean;
@@ -6820,6 +6922,11 @@ export type GetClustersQueryVariables = Exact<{
     owner: Scalars['String']['input'];
 }>;
 export type GetClustersQuery = {
+    _meta?: {
+        block: {
+            number: number;
+        };
+    } | null;
     clusters: Array<{
         id: string;
         feeAsset: ClusterFeeAssetTypes;
@@ -6836,6 +6943,11 @@ export type GetOwnerNonceQueryVariables = Exact<{
     owner: Scalars['ID']['input'];
 }>;
 export type GetOwnerNonceQuery = {
+    _meta?: {
+        block: {
+            number: number;
+        };
+    } | null;
     account?: {
         nonce: string;
     } | null;
@@ -6853,6 +6965,11 @@ export type GetOperatorQueryVariables = Exact<{
     id: Scalars['ID']['input'];
 }>;
 export type GetOperatorQuery = {
+    _meta?: {
+        block: {
+            number: number;
+        };
+    } | null;
     operator?: {
         id: string;
         publicKey: Address;
@@ -6868,6 +6985,11 @@ export type GetOperatorsQueryVariables = Exact<{
     operatorIds: Array<Scalars['String']['input']> | Scalars['String']['input'];
 }>;
 export type GetOperatorsQuery = {
+    _meta?: {
+        block: {
+            number: number;
+        };
+    } | null;
     operators: Array<{
         id: string;
         publicKey: Address;
@@ -6885,6 +7007,11 @@ export type GetValidatorsQueryVariables = Exact<{
     ids: Array<Scalars['Bytes']['input']> | Scalars['Bytes']['input'];
 }>;
 export type GetValidatorsQuery = {
+    _meta?: {
+        block: {
+            number: number;
+        };
+    } | null;
     validators: Array<{
         id: Address;
     }>;
@@ -6893,6 +7020,11 @@ export type GetValidatorQueryVariables = Exact<{
     id: Scalars['ID']['input'];
 }>;
 export type GetValidatorQuery = {
+    _meta?: {
+        block: {
+            number: number;
+        };
+    } | null;
     validator?: {
         id: Address;
     } | null;
@@ -6941,6 +7073,11 @@ export type GetDaoValuesQueryVariables = Exact<{
     daoAddress: Scalars['ID']['input'];
 }>;
 export type GetDaoValuesQuery = {
+    _meta?: {
+        block: {
+            number: number;
+        };
+    } | null;
     daovalues?: {
         networkFee: string;
         networkFeeIndex: string;
