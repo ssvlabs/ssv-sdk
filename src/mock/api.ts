@@ -90,9 +90,10 @@ export const createMockApi = (
     },
   });
 
-  const toSolidityClusterMock = vi.fn().mockImplementation((args) => {
+  const getClusterSnapshotMock = vi.fn().mockImplementation((args) => {
     const snapshot = clusterSnapshots.get(args.owner);
     return Promise.resolve({
+      blockNumber: 1,
       cluster: snapshot ?? {
         active: true,
         validatorCount: '0',
@@ -107,13 +108,14 @@ export const createMockApi = (
   return {
     getOwnerNonce: vi.fn().mockImplementation((args) =>
       Promise.resolve({
-        account: { nonce: (nonces.get(args.owner) ?? 0).toString() },
+        blockNumber: typeof args.block === 'number' ? args.block : 1,
+        nonce: nonces.get(args.owner) ?? 0,
       }),
     ),
-    toSolidityCluster: toSolidityClusterMock,
-    getClusterSnapshot: toSolidityClusterMock,
+    getClusterSnapshot: getClusterSnapshotMock,
     getCluster: vi.fn().mockImplementation((args) =>
       Promise.resolve({
+        blockNumber: 1,
         cluster: {
           active: true,
           validatorCount:
@@ -130,6 +132,7 @@ export const createMockApi = (
     ),
     getClusters: vi.fn().mockImplementation(() =>
       Promise.resolve({
+        blockNumber: 1,
         clusters: Array.from(clusterSnapshots.entries()).map(
           ([owner, snapshot]) => ({
             id: owner,
@@ -147,6 +150,7 @@ export const createMockApi = (
     getOperator: vi.fn().mockImplementation((args) => {
       const operator = operators.get(args.operatorId);
       return Promise.resolve({
+        blockNumber: 1,
         operator: operator
           ? {
               id: operator.id,
@@ -161,6 +165,7 @@ export const createMockApi = (
     }),
     getOperators: vi.fn().mockImplementation(() =>
       Promise.resolve({
+        blockNumber: 1,
         operators: Array.from(operators.values()).map((operator) => ({
           id: operator.id,
           publicKey: operator.publicKey,
@@ -173,6 +178,7 @@ export const createMockApi = (
     ),
     getValidators: vi.fn().mockImplementation(() =>
       Promise.resolve({
+        blockNumber: 1,
         validators: Array.from(operators.values()).map((operator) => ({
           id: operator.publicKey,
         })),
@@ -183,6 +189,7 @@ export const createMockApi = (
         (op) => op.publicKey === args.validatorId,
       );
       return Promise.resolve({
+        blockNumber: 1,
         validator: validator
           ? {
               id: validator.publicKey,
@@ -193,7 +200,7 @@ export const createMockApi = (
     getClusterBalance: vi.fn().mockImplementation((args) => {
       const snapshot = clusterSnapshots.get(args.owner);
       return Promise.resolve({
-        _meta: { block: { number: 1 } },
+        blockNumber: 1,
         daovalues: {
           networkFee: '100000000000000000',
           networkFeeIndex: '0',

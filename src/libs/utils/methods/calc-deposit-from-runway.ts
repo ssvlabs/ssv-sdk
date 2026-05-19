@@ -16,19 +16,19 @@ export const calcDepositFromRunway = async (
   config: ConfigReturnType,
   { clusterId, runway }: CalcDepositFromRunwayArgs,
 ) => {
-  const cluster = await config.api.getCluster({ id: clusterId });
+  const { cluster } = await config.api.getCluster({ id: clusterId });
   if (!cluster) {
     throw new Error('Cluster not found');
   }
 
-  const operators = await config.api.getOperators({
+  const { operators } = await config.api.getOperators({
     operatorIds: cluster.operatorIds,
   });
   if (!operators) {
     throw new Error('Operators not found');
   }
 
-  const daoValues = await config.api.getDaoValues({
+  const { daovalues: daoValues } = await config.api.getDaoValues({
     daoAddress: config.contractAddresses.setter,
   });
   if (!daoValues) {

@@ -46,6 +46,7 @@ const mockOperators = _mockOperators.map((o) => ({
 }));
 
 const mockClusterBalanceData = {
+  blockNumber: 2000,
   cluster: {
     feeAsset: ClusterFeeAssetTypes.ETH,
     validatorCount: '1',
@@ -67,18 +68,17 @@ const mockClusterBalanceData = {
     liquidationThresholdSSV: '100',
   },
   operators: mockOperators,
-  _meta: {
-    block: {
-      number: 2000,
-    },
-  },
 };
 
 const mockApi = {
-  getOperator: vi.fn().mockResolvedValue(mockOperators[0]),
-  getOperators: vi.fn().mockResolvedValue(mockOperators),
-  getValidator: vi.fn().mockResolvedValue(null),
-  getOwnerNonce: vi.fn().mockResolvedValue('833'),
+  getOperator: vi
+    .fn()
+    .mockResolvedValue({ blockNumber: 1, operator: mockOperators[0] }),
+  getOperators: vi
+    .fn()
+    .mockResolvedValue({ blockNumber: 1, operators: mockOperators }),
+  getValidator: vi.fn().mockResolvedValue({ blockNumber: 1, validator: null }),
+  getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: 833 }),
   getClusterBalance: vi.fn().mockResolvedValue(mockClusterBalanceData),
 };
 const mockConfig = {
@@ -112,10 +112,14 @@ const mockConfig = {
     },
   },
   api: {
-    getOperator: vi.fn().mockResolvedValue(mockOperators[0]),
-    getOperators: vi.fn().mockResolvedValue(mockOperators),
-    getValidator: vi.fn().mockResolvedValue(null),
-    getOwnerNonce: vi.fn().mockResolvedValue('833'),
+    getOperator: vi
+      .fn()
+      .mockResolvedValue({ blockNumber: 1, operator: mockOperators[0] }),
+    getOperators: vi
+      .fn()
+      .mockResolvedValue({ blockNumber: 1, operators: mockOperators }),
+    getValidator: vi.fn().mockResolvedValue({ blockNumber: 1, validator: null }),
+    getOwnerNonce: vi.fn().mockResolvedValue({ blockNumber: 1, nonce: 833 }),
     getClusterBalance: vi.fn().mockResolvedValue(mockClusterBalanceData),
   },
   contractAddresses: {
@@ -125,10 +129,16 @@ const mockConfig = {
 
 describe('SDK Utils', () => {
   beforeEach(() => {
-    mockApi.getOperator.mockResolvedValue(mockOperators[0]);
-    mockApi.getOperators.mockResolvedValue(mockOperators);
-    mockApi.getValidator.mockResolvedValue(null);
-    mockApi.getOwnerNonce.mockResolvedValue('1');
+    mockApi.getOperator.mockResolvedValue({
+      blockNumber: 1,
+      operator: mockOperators[0],
+    });
+    mockApi.getOperators.mockResolvedValue({
+      blockNumber: 1,
+      operators: mockOperators,
+    });
+    mockApi.getValidator.mockResolvedValue({ blockNumber: 1, validator: null });
+    mockApi.getOwnerNonce.mockResolvedValue({ blockNumber: 1, nonce: 1 });
     mockApi.getClusterBalance.mockResolvedValue(mockClusterBalanceData);
   });
 
@@ -152,12 +162,15 @@ describe('SDK Utils', () => {
         '../libs/utils/methods/methods'
       );
 
-      mockApi.getOperator.mockResolvedValue(null);
+      mockApi.getOperator.mockResolvedValue({ blockNumber: 1, operator: null });
 
       const noOperatorConfig = merge({}, mockConfig, {
         api: {
           ...mockConfig.api,
-          getOperator: vi.fn().mockResolvedValue(null),
+          getOperator: vi.fn().mockResolvedValue({
+            blockNumber: 1,
+            operator: null,
+          }),
         },
       } satisfies Partial<ConfigReturnType>);
       const result = await getOperatorCapacity(noOperatorConfig, '999');
@@ -177,6 +190,7 @@ describe('SDK Utils', () => {
       });
 
       expect(result).toHaveProperty('balance');
+      expect(result).toHaveProperty('blockNumber', 2000);
       expect(result).toHaveProperty('operationalRunway');
       expect(mockConfig.api.getClusterBalance).toHaveBeenCalledWith({
         daoAddress: mockAddress,
@@ -194,8 +208,8 @@ describe('SDK Utils', () => {
         api: {
           ...mockConfig.api,
           getClusterBalance: vi.fn().mockResolvedValue({
+            blockNumber: 2000,
             operators: [],
-            _meta: { block: { number: 2000 } },
           }),
         },
       } satisfies Partial<ConfigReturnType>);
@@ -216,7 +230,7 @@ describe('SDK Utils', () => {
         api: {
           ...mockConfig.api,
           getClusterBalance: vi.fn().mockResolvedValue({
-            _meta: { block: { number: 10 } },
+            blockNumber: 10,
             daovalues: {
               networkFeeIndex: '0',
               networkFeeIndexBlockNumber: '10',

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://ssv.network/wp-content/uploads/2024/06/full_logo_white.svg" alt="SSV Network" width="300"/>
+  <img src="https://framerusercontent.com/assets/SxrtOSpELBgEtirWSlWPnBE0cd4.png" alt="SSV Network" width="300"/>
 </p>
 
 <h1 align="center">SSV SDK</h1>
@@ -73,26 +73,42 @@ const sdk = new SSVSDK({
 
 ```typescript
 // Query operators
-const operators = await sdk.api.getOperators({
+const { operators } = await sdk.api.getOperators({
   operatorIds: ['220', '221', '223', '224'],
 });
 
 // Get owner nonce
-const nonce = await sdk.api.getOwnerNonce({
+const { nonce } = await sdk.api.getOwnerNonce({
   owner: 'your_wallet_address',
+});
+
+// Export SDK-generated payloads into a webapp-ready keyshares JSON file (Node.js only)
+await sdk.utils.writeKeysharesFile({
+  path: './keyshares-webapp.json',
+  shares,
+  ownerAddress: 'your_wallet_address',
+  nonce,
 });
 ```
 
 ### API Compatibility Notes
 
-`getClusterSnapshot` was renamed in `v1.0.0`.
+`getClusterSnapshot` is the canonical cluster snapshot API.
+
+Snapshot-aware SDK read methods return the queried data together with the subgraph snapshot block number, for example:
+
+- `sdk.api.getOwnerNonce(...) -> { blockNumber, nonce }`
+- `sdk.api.getOperators(...) -> { blockNumber, operators }`
+- `sdk.api.getClusterSnapshot(...) -> { blockNumber, cluster }`
 
 | SDK version | Method name                          |
 | ----------- | ------------------------------------ |
 | `0.1.x`     | `sdk.api.getClusterSnapshot({ id })` |
-| `1.x`       | `sdk.api.toSolidityCluster({ id })`  |
+| `1.x`       | `sdk.api.getClusterSnapshot({ id })` |
 
-`sdk.api.getClusterSnapshot` is available as a deprecated alias in current `1.x` releases for compatibility with `0.1.x` code.
+`sdk.api.toSolidityCluster` is no longer part of the public subgraph API. The internal utility `toSolidityCluster(...)` in `utils/cluster` still exists for converting cluster data into the Solidity struct shape used by contract calls.
+
+`sdk.utils.writeKeysharesFile(...)` is a Node.js utility and relies on filesystem access.
 
 ### Cluster Management
 

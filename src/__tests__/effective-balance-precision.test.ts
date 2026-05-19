@@ -16,14 +16,22 @@ const createCalcDepositConfig = (effectiveBalance: bigint) =>
   ({
     api: {
       getCluster: vi.fn().mockResolvedValue({
-        operatorIds: ['1'],
-        effectiveBalance: effectiveBalance.toString(),
+        blockNumber: 1,
+        cluster: {
+          operatorIds: ['1'],
+          effectiveBalance: effectiveBalance.toString(),
+        },
       }),
-      getOperators: vi.fn().mockResolvedValue([{ fee: '1' }]),
+      getOperators: vi
+        .fn()
+        .mockResolvedValue({ blockNumber: 1, operators: [{ fee: '1' }] }),
       getDaoValues: vi.fn().mockResolvedValue({
-        networkFee: '0',
-        liquidationThreshold: '1',
-        minimumLiquidationCollateral: '0',
+        blockNumber: 1,
+        daovalues: {
+          networkFee: '0',
+          liquidationThreshold: '1',
+          minimumLiquidationCollateral: '0',
+        },
       }),
     },
     contractAddresses: {
@@ -46,6 +54,7 @@ const createGetClusterBalanceConfig = (effectiveBalance: bigint) => {
     },
     api: {
       getClusterBalance: vi.fn().mockResolvedValue({
+        blockNumber: 0,
         cluster: {
           validatorCount: '1',
           networkFeeIndex: '0',
@@ -61,11 +70,6 @@ const createGetClusterBalanceConfig = (effectiveBalance: bigint) => {
           liquidationThreshold: '0',
         },
         operators: [],
-        _meta: {
-          block: {
-            number: 0,
-          },
-        },
       }),
     },
   } as unknown as ConfigReturnType;

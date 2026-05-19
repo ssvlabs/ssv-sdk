@@ -63,7 +63,7 @@ const mockConfig = {
 
 // Mock operator data
 const createMockOperator = (
-  overrides?: Partial<Awaited<ReturnType<typeof getOperator>>>,
+  overrides?: Partial<NonNullable<Awaited<ReturnType<typeof getOperator>>['operator']>>,
 ) => ({
   id: mockOperatorId,
   publicKey:

@@ -168,14 +168,14 @@ export const setOperatorWhitelists = async (
 
 export const canAccountUseOperator = async (
   config: ConfigReturnType,
-  operator: Awaited<ReturnType<typeof getOperator>>,
+  operator: Awaited<ReturnType<typeof getOperator>>['operator'],
   account: Address,
 ) => {
   if (!operator) return false;
   if (!operator.isPrivate) return true;
 
   const isWhitelisted = operator.whitelisted.some((addr) =>
-    isAddressEqual(addr as Address, account),
+    isAddressEqual(addr, account),
   );
 
   if (isWhitelisted) return true;

@@ -1,13 +1,24 @@
 import type {
+  GetClusterBalanceQuery,
   GetClusterBalanceQueryVariables,
+  GetClusterQuery,
   GetClusterQueryVariables,
+  GetClusterSnapshotQuery,
   GetClusterSnapshotQueryVariables,
+  GetClustersQuery,
   GetClustersQueryVariables,
+  GetDaoValuesQuery,
   GetDaoValuesQueryVariables,
+  GetOperatorQuery,
   GetOperatorQueryVariables,
+  GetOperatorsQuery,
   GetOperatorsQueryVariables,
+  GetOwnerNonceByBlockQuery,
   GetOwnerNonceByBlockQueryVariables,
+  GetOwnerNonceQuery,
+  GetValidatorQuery,
   GetValidatorQueryVariables,
+  GetValidatorsQuery,
   GetValidatorsQueryVariables,
 } from '@/graphql/graphql';
 import {
@@ -26,93 +37,276 @@ import {
 import type { RemoveConfigArg } from '@/types/methods';
 import { decodeOperatorPublicKey } from '@/utils/operator';
 import type { GraphQLClient } from 'graphql-request';
+import type { Address } from 'viem';
 
-export const getOwnerNonce = (
-  client: GraphQLClient,
-  args: GetOwnerNonceByBlockQueryVariables,
+type SnapshotResult<T> = {
+  blockNumber: number;
+} & T;
+
+const requireSafeNumber = (
+  rawValue: number | string | null | undefined,
+  fieldName: string,
 ) => {
-  const document =
-    typeof args.block === 'number'
-      ? GetOwnerNonceByBlockDocument
-      : GetOwnerNonceDocument;
-  return client.request(document, args).then((r) => r.account?.nonce ?? '0');
+  if (rawValue === null || typeof rawValue === 'undefined') {
+    throw new Error(`Could not resolve ${fieldName}`);
+  }
+
+  const value = BigInt(rawValue);
+  if (value > BigInt(Number.MAX_SAFE_INTEGER)) {
+    throw new Error(`${fieldName} exceeds MAX_SAFE_INTEGER`);
+  }
+
+  return Number(value);
 };
 
-export const toSolidityCluster = (
-  client: GraphQLClient,
-  args: GetClusterSnapshotQueryVariables,
-) =>
-  client.request(GetClusterSnapshotDocument, args).then((res) => res.cluster);
-
-/**
- * @deprecated Use `toSolidityCluster` instead.
- */
-export const getClusterSnapshot = (
-  client: GraphQLClient,
-  args: GetClusterSnapshotQueryVariables,
-) => toSolidityCluster(client, args);
-
-export const getCluster = (
-  client: GraphQLClient,
-  args: GetClusterQueryVariables,
-) => client.request(GetClusterDocument, args).then((res) => res.cluster);
-
-export const getClusters = (
-  client: GraphQLClient,
-  args: GetClustersQueryVariables,
-) => client.request(GetClustersDocument, args).then((res) => res.clusters);
-
-export const getOperator = (
-  client: GraphQLClient,
-  args: GetOperatorQueryVariables,
-) =>
-  client.request(GetOperatorDocument, args).then((res) => {
-    if (!res.operator) return null;
-    return {
-      ...res.operator,
-      publicKey: decodeOperatorPublicKey(res.operator.publicKey),
-      whitelisted: res.operator.whitelisted.map((v) => v.id),
+const getSnapshotBlockNumber = (response: {
+  _meta?: {
+    block: {
+      number: number;
     };
-  });
+  } | null;
+}) => {
+  if (response._meta?.block.number === null || typeof response._meta?.block.number === 'undefined') {
+    throw new Error(
+      'Subgraph endpoint must support _meta.block.number for snapshot-aware SDK reads.',
+    );
+  }
 
-export const getOperators = (
+  return requireSafeNumber(response._meta.block.number, 'snapshot block number');
+};
+
+const mapOperator = <
+  T extends {
+    publicKey: Address;
+    whitelisted: { id: Address }[];
+  },
+>(
+  operator: T,
+): Omit<T, 'publicKey' | 'whitelisted'> & {
+  publicKey: string;
+  whitelisted: Address[];
+} => ({
+  ...operator,
+  publicKey: decodeOperatorPublicKey(operator.publicKey),
+  whitelisted: operator.whitelisted.map((v) => v.id),
+});
+
+const withSnapshotBlock = <
+  R,
+>(
+  response: {
+    _meta?: {
+      block: {
+        number: number;
+      };
+    } | null;
+  },
+  payload: R,
+): SnapshotResult<R> => ({
+  blockNumber: getSnapshotBlockNumber(response),
+  ...payload,
+});
+
+export const getOwnerNonce = async (
   client: GraphQLClient,
-  args: GetOperatorsQueryVariables,
-) =>
-  client.request(GetOperatorsDocument, args).then((res) =>
-    res.operators.map((o) => ({
-      ...o,
-      publicKey: decodeOperatorPublicKey(o.publicKey),
-      whitelisted: o.whitelisted.map((v) => v.id),
-    })),
+  args: GetOwnerNonceByBlockQueryVariables,
+): Promise<SnapshotResult<{ nonce: number }>> => {
+  if (typeof args.block === 'number') {
+    const response = await client.request<GetOwnerNonceByBlockQuery>(
+      GetOwnerNonceByBlockDocument,
+      args,
+    );
+
+    return {
+      blockNumber: requireSafeNumber(args.block, 'snapshot block number'),
+      nonce: requireSafeNumber(response.account?.nonce ?? '0', 'owner nonce'),
+    };
+  }
+
+  const response = await client.request<GetOwnerNonceQuery>(
+    GetOwnerNonceDocument,
+    args,
   );
 
-export const getValidators = (
+  return withSnapshotBlock(response, {
+    nonce: requireSafeNumber(response.account?.nonce ?? '0', 'owner nonce'),
+  });
+};
+
+export const getClusterSnapshot = async (
+  client: GraphQLClient,
+  args: GetClusterSnapshotQueryVariables,
+): Promise<
+  SnapshotResult<{
+    cluster: GetClusterSnapshotQuery['cluster'];
+  }>
+> => {
+  const response = await client.request<GetClusterSnapshotQuery>(
+    GetClusterSnapshotDocument,
+    args,
+  );
+
+  return withSnapshotBlock(response, {
+    cluster: response.cluster,
+  });
+};
+
+export const getCluster = async (
+  client: GraphQLClient,
+  args: GetClusterQueryVariables,
+): Promise<
+  SnapshotResult<{
+    cluster: GetClusterQuery['cluster'];
+  }>
+> => {
+  const response = await client.request<GetClusterQuery>(
+    GetClusterDocument,
+    args,
+  );
+
+  return withSnapshotBlock(response, {
+    cluster: response.cluster,
+  });
+};
+
+export const getClusters = async (
+  client: GraphQLClient,
+  args: GetClustersQueryVariables,
+): Promise<
+  SnapshotResult<{
+    clusters: GetClustersQuery['clusters'];
+  }>
+> => {
+  const response = await client.request<GetClustersQuery>(
+    GetClustersDocument,
+    args,
+  );
+
+  return withSnapshotBlock(response, {
+    clusters: response.clusters,
+  });
+};
+
+export const getOperator = async (
+  client: GraphQLClient,
+  args: GetOperatorQueryVariables,
+): Promise<
+  SnapshotResult<{
+    operator:
+      | (Omit<NonNullable<GetOperatorQuery['operator']>, 'publicKey' | 'whitelisted'> & {
+          publicKey: string;
+          whitelisted: Address[];
+        })
+      | null;
+  }>
+> => {
+  const response = await client.request<GetOperatorQuery>(
+    GetOperatorDocument,
+    args,
+  );
+
+  return withSnapshotBlock(response, {
+    operator: response.operator ? mapOperator(response.operator) : null,
+  });
+};
+
+export const getOperators = async (
+  client: GraphQLClient,
+  args: GetOperatorsQueryVariables,
+): Promise<
+  SnapshotResult<{
+    operators: ReturnType<typeof mapOperator<NonNullable<GetOperatorsQuery['operators'][number]>>>[];
+  }>
+> => {
+  const response = await client.request<GetOperatorsQuery>(
+    GetOperatorsDocument,
+    args,
+  );
+
+  return withSnapshotBlock(response, {
+    operators: response.operators.map(mapOperator),
+  });
+};
+
+export const getValidators = async (
   client: GraphQLClient,
   args: GetValidatorsQueryVariables,
-) => client.request(GetValidatorsDocument, args).then((res) => res.validators);
+): Promise<
+  SnapshotResult<{
+    validators: GetValidatorsQuery['validators'];
+  }>
+> => {
+  const response = await client.request<GetValidatorsQuery>(
+    GetValidatorsDocument,
+    args,
+  );
 
-export const getValidator = (
+  return withSnapshotBlock(response, {
+    validators: response.validators,
+  });
+};
+
+export const getValidator = async (
   client: GraphQLClient,
   args: GetValidatorQueryVariables,
-) => client.request(GetValidatorDocument, args).then((res) => res.validator);
+): Promise<
+  SnapshotResult<{
+    validator: GetValidatorQuery['validator'];
+  }>
+> => {
+  const response = await client.request<GetValidatorQuery>(
+    GetValidatorDocument,
+    args,
+  );
 
-export const getClusterBalance = (
+  return withSnapshotBlock(response, {
+    validator: response.validator,
+  });
+};
+
+export const getClusterBalance = async (
   client: GraphQLClient,
   args: GetClusterBalanceQueryVariables,
-) => client.request(GetClusterBalanceDocument, args);
+): Promise<
+  SnapshotResult<{
+    cluster: GetClusterBalanceQuery['cluster'];
+    daovalues: GetClusterBalanceQuery['daovalues'];
+    operators: GetClusterBalanceQuery['operators'];
+  }>
+> => {
+  const response = await client.request<GetClusterBalanceQuery>(
+    GetClusterBalanceDocument,
+    args,
+  );
 
-export const getDaoValues = (
+  return withSnapshotBlock(response, {
+    cluster: response.cluster,
+    daovalues: response.daovalues,
+    operators: response.operators,
+  });
+};
+
+export const getDaoValues = async (
   client: GraphQLClient,
   args: GetDaoValuesQueryVariables,
-) => client.request(GetDaoValuesDocument, args).then((res) => res.daovalues);
+): Promise<
+  SnapshotResult<{
+    daovalues: GetDaoValuesQuery['daovalues'];
+  }>
+> => {
+  const response = await client.request<GetDaoValuesQuery>(
+    GetDaoValuesDocument,
+    args,
+  );
+
+  return withSnapshotBlock(response, {
+    daovalues: response.daovalues,
+  });
+};
 
 export const getQueries = (client: GraphQLClient) => ({
   getOwnerNonce: getOwnerNonce.bind(null, client) as RemoveConfigArg<
     typeof getOwnerNonce
-  >,
-  toSolidityCluster: toSolidityCluster.bind(null, client) as RemoveConfigArg<
-    typeof toSolidityCluster
   >,
   getClusterSnapshot: getClusterSnapshot.bind(null, client) as RemoveConfigArg<
     typeof getClusterSnapshot

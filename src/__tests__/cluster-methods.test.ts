@@ -81,8 +81,12 @@ const mockPublicClient = {
 };
 
 const mockApi = {
-  getCluster: vi.fn().mockImplementation(async () => mockClusterFromApi),
-  getOwnerNonce: vi.fn().mockImplementation(async () => 1),
+  getCluster: vi
+    .fn()
+    .mockImplementation(async () => ({ blockNumber: 1, cluster: mockClusterFromApi })),
+  getOwnerNonce: vi
+    .fn()
+    .mockImplementation(async () => ({ blockNumber: 0, nonce: 1 })),
 };
 
 const mockConfig = {

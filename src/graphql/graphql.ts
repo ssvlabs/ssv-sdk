@@ -26,6 +26,7 @@ export type Scalars = {
 
 export type Account = {
   clusters?: Maybe<Array<Cluster>>;
+  effectiveBalance: Scalars['BigInt']['output'];
   feeRecipient: Scalars['Bytes']['output'];
   id: Scalars['Bytes']['output'];
   nonce: Scalars['BigInt']['output'];
@@ -68,6 +69,14 @@ export type Account_Filter = {
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Account_Filter>>>;
   clusters_?: InputMaybe<Cluster_Filter>;
+  effectiveBalance?: InputMaybe<Scalars['BigInt']['input']>;
+  effectiveBalance_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  effectiveBalance_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  effectiveBalance_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  effectiveBalance_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  effectiveBalance_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  effectiveBalance_not?: InputMaybe<Scalars['BigInt']['input']>;
+  effectiveBalance_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   feeRecipient?: InputMaybe<Scalars['Bytes']['input']>;
   feeRecipient_contains?: InputMaybe<Scalars['Bytes']['input']>;
   feeRecipient_gt?: InputMaybe<Scalars['Bytes']['input']>;
@@ -127,6 +136,7 @@ export type Account_Filter = {
 
 export enum Account_OrderBy {
   clusters = 'clusters',
+  effectiveBalance = 'effectiveBalance',
   feeRecipient = 'feeRecipient',
   id = 'id',
   nonce = 'nonce',
@@ -1291,6 +1301,7 @@ export enum Cluster_OrderBy {
   networkFeeIndex = 'networkFeeIndex',
   operatorIds = 'operatorIds',
   owner = 'owner',
+  owner__effectiveBalance = 'owner__effectiveBalance',
   owner__feeRecipient = 'owner__feeRecipient',
   owner__id = 'owner__id',
   owner__nonce = 'owner__nonce',
@@ -1329,6 +1340,7 @@ export enum DaoUpdateTypes {
 export type DaoValues = {
   accEthPerShare: Scalars['BigInt']['output'];
   declareOperatorFeePeriod: Scalars['BigInt']['output'];
+  effectiveBalanceETH: Scalars['BigInt']['output'];
   executeOperatorFeePeriod: Scalars['BigInt']['output'];
   id: Scalars['Bytes']['output'];
   lastUpdateBlockNumber: Scalars['BigInt']['output'];
@@ -1383,6 +1395,14 @@ export type DaoValues_Filter = {
   declareOperatorFeePeriod_lte?: InputMaybe<Scalars['BigInt']['input']>;
   declareOperatorFeePeriod_not?: InputMaybe<Scalars['BigInt']['input']>;
   declareOperatorFeePeriod_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  effectiveBalanceETH?: InputMaybe<Scalars['BigInt']['input']>;
+  effectiveBalanceETH_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  effectiveBalanceETH_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  effectiveBalanceETH_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  effectiveBalanceETH_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  effectiveBalanceETH_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  effectiveBalanceETH_not?: InputMaybe<Scalars['BigInt']['input']>;
+  effectiveBalanceETH_not_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   executeOperatorFeePeriod?: InputMaybe<Scalars['BigInt']['input']>;
   executeOperatorFeePeriod_gt?: InputMaybe<Scalars['BigInt']['input']>;
   executeOperatorFeePeriod_gte?: InputMaybe<Scalars['BigInt']['input']>;
@@ -1659,6 +1679,7 @@ export type DaoValues_Filter = {
 export enum DaoValues_OrderBy {
   accEthPerShare = 'accEthPerShare',
   declareOperatorFeePeriod = 'declareOperatorFeePeriod',
+  effectiveBalanceETH = 'effectiveBalanceETH',
   executeOperatorFeePeriod = 'executeOperatorFeePeriod',
   id = 'id',
   lastUpdateBlockNumber = 'lastUpdateBlockNumber',
@@ -2369,6 +2390,23 @@ export enum LiquidationThresholdPeriodUpdated_OrderBy {
   id = 'id',
   transactionHash = 'transactionHash',
   value = 'value'
+}
+
+/**
+ * The severity level of a log entry.
+ * Log levels are ordered from most to least severe: CRITICAL > ERROR > WARNING > INFO > DEBUG
+ */
+export enum LogLevel {
+  /** Critical errors that require immediate attention */
+  CRITICAL = 'CRITICAL',
+  /** Detailed diagnostic information for debugging */
+  DEBUG = 'DEBUG',
+  /** Error conditions that indicate a failure */
+  ERROR = 'ERROR',
+  /** Informational messages about normal operations */
+  INFO = 'INFO',
+  /** Warning conditions that may require attention */
+  WARNING = 'WARNING'
 }
 
 export type MinimumLiquidationCollateralSsvUpdated = {
@@ -4299,6 +4337,7 @@ export enum Operator_OrderBy {
   lastUpdateTransactionHash = 'lastUpdateTransactionHash',
   operatorId = 'operatorId',
   owner = 'owner',
+  owner__effectiveBalance = 'owner__effectiveBalance',
   owner__feeRecipient = 'owner__feeRecipient',
   owner__id = 'owner__id',
   owner__nonce = 'owner__nonce',
@@ -4513,6 +4552,8 @@ export enum OrderDirection {
 }
 
 export type Query = {
+  /** Query execution logs emitted by the subgraph during indexing. Results are sorted by timestamp in descending order (newest first). */
+  _logs: Array<_Log_>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
   account?: Maybe<Account>;
@@ -4621,6 +4662,17 @@ export type Query = {
   validators: Array<Validator>;
   weightedRootProposed?: Maybe<WeightedRootProposed>;
   weightedRootProposeds: Array<WeightedRootProposed>;
+};
+
+
+export type Query_LogsArgs = {
+  first?: InputMaybe<Scalars['Int']['input']>;
+  from?: InputMaybe<Scalars['String']['input']>;
+  level?: InputMaybe<LogLevel>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  search?: InputMaybe<Scalars['String']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  to?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -6977,6 +7029,7 @@ export enum Validator_OrderBy {
   lastUpdateTransactionHash = 'lastUpdateTransactionHash',
   operators = 'operators',
   owner = 'owner',
+  owner__effectiveBalance = 'owner__effectiveBalance',
   owner__feeRecipient = 'owner__feeRecipient',
   owner__id = 'owner__id',
   owner__nonce = 'owner__nonce',
@@ -7119,6 +7172,51 @@ export type _Block_ = {
   timestamp?: Maybe<Scalars['Int']['output']>;
 };
 
+/**
+ * A key-value pair of additional data associated with a log entry.
+ * These correspond to arguments passed to the log function in the subgraph code.
+ */
+export type _LogArgument_ = {
+  /** The parameter name */
+  key: Scalars['String']['output'];
+  /** The parameter value, serialized as a string */
+  value: Scalars['String']['output'];
+};
+
+/**
+ * Source code location metadata for a log entry.
+ * Indicates where in the subgraph's AssemblyScript code the log statement was executed.
+ */
+export type _LogMeta_ = {
+  /** The column number in the source file */
+  column: Scalars['Int']['output'];
+  /** The line number in the source file */
+  line: Scalars['Int']['output'];
+  /** The module or file path where the log was emitted */
+  module: Scalars['String']['output'];
+};
+
+/**
+ * A log entry emitted by a subgraph during indexing.
+ * Logs can be generated by the subgraph's AssemblyScript code using the `log.*` functions.
+ */
+export type _Log_ = {
+  /** Additional structured data passed to the log function as key-value pairs */
+  arguments: Array<_LogArgument_>;
+  /** Unique identifier for this log entry */
+  id: Scalars['String']['output'];
+  /** The severity level of the log entry */
+  level: LogLevel;
+  /** Metadata about the source location in the subgraph code where the log was emitted */
+  meta: _LogMeta_;
+  /** The deployment hash of the subgraph that emitted this log */
+  subgraphId: Scalars['String']['output'];
+  /** The log message text */
+  text: Scalars['String']['output'];
+  /** The timestamp when the log was emitted, in RFC3339 format (e.g., '2024-01-15T10:30:00Z') */
+  timestamp: Scalars['String']['output'];
+};
+
 /** The type for the top-level _meta field */
 export type _Meta_ = {
   /**
@@ -7146,28 +7244,28 @@ export type GetClusterSnapshotQueryVariables = Exact<{
 }>;
 
 
-export type GetClusterSnapshotQuery = { cluster?: { active: boolean, validatorCount: string, balance: string, index: string, networkFeeIndex: string, effectiveBalance: string } | null };
+export type GetClusterSnapshotQuery = { _meta?: { block: { number: number } } | null, cluster?: { active: boolean, validatorCount: string, balance: string, index: string, networkFeeIndex: string, effectiveBalance: string } | null };
 
 export type GetClusterQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetClusterQuery = { cluster?: { feeAsset: ClusterFeeAssetTypes, active: boolean, validatorCount: string, balance: string, index: string, networkFeeIndex: string, operatorIds: Array<string>, effectiveBalance: string, owner: { id: Address } } | null };
+export type GetClusterQuery = { _meta?: { block: { number: number } } | null, cluster?: { feeAsset: ClusterFeeAssetTypes, active: boolean, validatorCount: string, balance: string, index: string, networkFeeIndex: string, operatorIds: Array<string>, effectiveBalance: string, owner: { id: Address } } | null };
 
 export type GetClustersQueryVariables = Exact<{
   owner: Scalars['String']['input'];
 }>;
 
 
-export type GetClustersQuery = { clusters: Array<{ id: string, feeAsset: ClusterFeeAssetTypes, active: boolean, validatorCount: string, balance: string, index: string, networkFeeIndex: string, operatorIds: Array<string>, effectiveBalance: string }> };
+export type GetClustersQuery = { _meta?: { block: { number: number } } | null, clusters: Array<{ id: string, feeAsset: ClusterFeeAssetTypes, active: boolean, validatorCount: string, balance: string, index: string, networkFeeIndex: string, operatorIds: Array<string>, effectiveBalance: string }> };
 
 export type GetOwnerNonceQueryVariables = Exact<{
   owner: Scalars['ID']['input'];
 }>;
 
 
-export type GetOwnerNonceQuery = { account?: { nonce: string } | null };
+export type GetOwnerNonceQuery = { _meta?: { block: { number: number } } | null, account?: { nonce: string } | null };
 
 export type GetOwnerNonceByBlockQueryVariables = Exact<{
   owner: Scalars['ID']['input'];
@@ -7182,28 +7280,28 @@ export type GetOperatorQueryVariables = Exact<{
 }>;
 
 
-export type GetOperatorQuery = { operator?: { id: string, publicKey: Address, validatorCount: string, isPrivate: boolean, whitelistedContract: Address, whitelisted: Array<{ id: Address }> } | null };
+export type GetOperatorQuery = { _meta?: { block: { number: number } } | null, operator?: { id: string, publicKey: Address, validatorCount: string, isPrivate: boolean, whitelistedContract: Address, whitelisted: Array<{ id: Address }> } | null };
 
 export type GetOperatorsQueryVariables = Exact<{
   operatorIds: Array<Scalars['String']['input']> | Scalars['String']['input'];
 }>;
 
 
-export type GetOperatorsQuery = { operators: Array<{ id: string, publicKey: Address, validatorCount: string, isPrivate: boolean, whitelistedContract: Address, fee: string, feeSSV: string, whitelisted: Array<{ id: Address }> }> };
+export type GetOperatorsQuery = { _meta?: { block: { number: number } } | null, operators: Array<{ id: string, publicKey: Address, validatorCount: string, isPrivate: boolean, whitelistedContract: Address, fee: string, feeSSV: string, whitelisted: Array<{ id: Address }> }> };
 
 export type GetValidatorsQueryVariables = Exact<{
   ids: Array<Scalars['Bytes']['input']> | Scalars['Bytes']['input'];
 }>;
 
 
-export type GetValidatorsQuery = { validators: Array<{ id: Address }> };
+export type GetValidatorsQuery = { _meta?: { block: { number: number } } | null, validators: Array<{ id: Address }> };
 
 export type GetValidatorQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetValidatorQuery = { validator?: { id: Address } | null };
+export type GetValidatorQuery = { _meta?: { block: { number: number } } | null, validator?: { id: Address } | null };
 
 export type GetClusterBalanceQueryVariables = Exact<{
   clusterId: Scalars['ID']['input'];
@@ -7219,17 +7317,17 @@ export type GetDaoValuesQueryVariables = Exact<{
 }>;
 
 
-export type GetDaoValuesQuery = { daovalues?: { networkFee: string, networkFeeIndex: string, networkFeeIndexBlockNumber: string, networkFeeSSV: string, networkFeeIndexSSV: string, networkFeeIndexBlockNumberSSV: string, liquidationThreshold: string, liquidationThresholdSSV: string, minimumLiquidationCollateral: string, minimumLiquidationCollateralSSV: string } | null };
+export type GetDaoValuesQuery = { _meta?: { block: { number: number } } | null, daovalues?: { networkFee: string, networkFeeIndex: string, networkFeeIndexBlockNumber: string, networkFeeSSV: string, networkFeeIndexSSV: string, networkFeeIndexBlockNumberSSV: string, liquidationThreshold: string, liquidationThresholdSSV: string, minimumLiquidationCollateral: string, minimumLiquidationCollateralSSV: string } | null };
 
 
-export const GetClusterSnapshotDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetClusterSnapshot"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cluster"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"validatorCount"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}},{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndex"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveBalance"}}]}}]}}]} as unknown as DocumentNode<GetClusterSnapshotQuery, GetClusterSnapshotQueryVariables>;
-export const GetClusterDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCluster"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cluster"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"owner"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"feeAsset"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"validatorCount"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}},{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndex"}},{"kind":"Field","name":{"kind":"Name","value":"operatorIds"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveBalance"}}]}}]}}]} as unknown as DocumentNode<GetClusterQuery, GetClusterQueryVariables>;
-export const GetClustersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetClusters"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"owner"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clusters"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"owner"},"value":{"kind":"Variable","name":{"kind":"Name","value":"owner"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"feeAsset"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"validatorCount"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}},{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndex"}},{"kind":"Field","name":{"kind":"Name","value":"operatorIds"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveBalance"}}]}}]}}]} as unknown as DocumentNode<GetClustersQuery, GetClustersQueryVariables>;
-export const GetOwnerNonceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOwnerNonce"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"owner"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"owner"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nonce"}}]}}]}}]} as unknown as DocumentNode<GetOwnerNonceQuery, GetOwnerNonceQueryVariables>;
+export const GetClusterSnapshotDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetClusterSnapshot"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_meta"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"block"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"cluster"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"validatorCount"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}},{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndex"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveBalance"}}]}}]}}]} as unknown as DocumentNode<GetClusterSnapshotQuery, GetClusterSnapshotQueryVariables>;
+export const GetClusterDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCluster"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_meta"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"block"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"cluster"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"owner"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"feeAsset"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"validatorCount"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}},{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndex"}},{"kind":"Field","name":{"kind":"Name","value":"operatorIds"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveBalance"}}]}}]}}]} as unknown as DocumentNode<GetClusterQuery, GetClusterQueryVariables>;
+export const GetClustersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetClusters"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"owner"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_meta"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"block"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"clusters"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"owner"},"value":{"kind":"Variable","name":{"kind":"Name","value":"owner"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"feeAsset"}},{"kind":"Field","name":{"kind":"Name","value":"active"}},{"kind":"Field","name":{"kind":"Name","value":"validatorCount"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}},{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndex"}},{"kind":"Field","name":{"kind":"Name","value":"operatorIds"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveBalance"}}]}}]}}]} as unknown as DocumentNode<GetClustersQuery, GetClustersQueryVariables>;
+export const GetOwnerNonceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOwnerNonce"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"owner"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_meta"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"block"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"owner"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nonce"}}]}}]}}]} as unknown as DocumentNode<GetOwnerNonceQuery, GetOwnerNonceQueryVariables>;
 export const GetOwnerNonceByBlockDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOwnerNonceByBlock"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"owner"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"block"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"account"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"owner"}}},{"kind":"Argument","name":{"kind":"Name","value":"block"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"number"},"value":{"kind":"Variable","name":{"kind":"Name","value":"block"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nonce"}}]}}]}}]} as unknown as DocumentNode<GetOwnerNonceByBlockQuery, GetOwnerNonceByBlockQueryVariables>;
-export const GetOperatorDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOperator"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"operator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"publicKey"}},{"kind":"Field","name":{"kind":"Name","value":"validatorCount"}},{"kind":"Field","name":{"kind":"Name","value":"isPrivate"}},{"kind":"Field","name":{"kind":"Name","value":"whitelistedContract"}},{"kind":"Field","name":{"kind":"Name","value":"whitelisted"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<GetOperatorQuery, GetOperatorQueryVariables>;
-export const GetOperatorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOperators"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"operatorIds"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"operators"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id_in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"operatorIds"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"publicKey"}},{"kind":"Field","name":{"kind":"Name","value":"validatorCount"}},{"kind":"Field","name":{"kind":"Name","value":"isPrivate"}},{"kind":"Field","name":{"kind":"Name","value":"whitelistedContract"}},{"kind":"Field","name":{"kind":"Name","value":"fee"}},{"kind":"Field","name":{"kind":"Name","value":"feeSSV"}},{"kind":"Field","name":{"kind":"Name","value":"whitelisted"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<GetOperatorsQuery, GetOperatorsQueryVariables>;
-export const GetValidatorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetValidators"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Bytes"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"validators"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id_in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GetValidatorsQuery, GetValidatorsQueryVariables>;
-export const GetValidatorDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetValidator"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"validator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GetValidatorQuery, GetValidatorQueryVariables>;
+export const GetOperatorDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOperator"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_meta"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"block"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"operator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"publicKey"}},{"kind":"Field","name":{"kind":"Name","value":"validatorCount"}},{"kind":"Field","name":{"kind":"Name","value":"isPrivate"}},{"kind":"Field","name":{"kind":"Name","value":"whitelistedContract"}},{"kind":"Field","name":{"kind":"Name","value":"whitelisted"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<GetOperatorQuery, GetOperatorQueryVariables>;
+export const GetOperatorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOperators"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"operatorIds"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_meta"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"block"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"operators"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id_in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"operatorIds"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"publicKey"}},{"kind":"Field","name":{"kind":"Name","value":"validatorCount"}},{"kind":"Field","name":{"kind":"Name","value":"isPrivate"}},{"kind":"Field","name":{"kind":"Name","value":"whitelistedContract"}},{"kind":"Field","name":{"kind":"Name","value":"fee"}},{"kind":"Field","name":{"kind":"Name","value":"feeSSV"}},{"kind":"Field","name":{"kind":"Name","value":"whitelisted"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<GetOperatorsQuery, GetOperatorsQueryVariables>;
+export const GetValidatorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetValidators"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Bytes"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_meta"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"block"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"validators"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id_in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GetValidatorsQuery, GetValidatorsQueryVariables>;
+export const GetValidatorDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetValidator"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_meta"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"block"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"validator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GetValidatorQuery, GetValidatorQueryVariables>;
 export const GetClusterBalanceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetClusterBalance"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"clusterId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"daoAddress"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"operatorIds"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_meta"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"block"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"daovalues"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"daoAddress"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"networkFee"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndex"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndexBlockNumber"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeSSV"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndexSSV"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndexBlockNumberSSV"}},{"kind":"Field","name":{"kind":"Name","value":"liquidationThreshold"}},{"kind":"Field","name":{"kind":"Name","value":"liquidationThresholdSSV"}},{"kind":"Field","name":{"kind":"Name","value":"minimumLiquidationCollateral"}},{"kind":"Field","name":{"kind":"Name","value":"minimumLiquidationCollateralSSV"}}]}},{"kind":"Field","name":{"kind":"Name","value":"operators"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id_in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"operatorIds"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fee"}},{"kind":"Field","name":{"kind":"Name","value":"feeIndex"}},{"kind":"Field","name":{"kind":"Name","value":"feeIndexBlockNumber"}},{"kind":"Field","name":{"kind":"Name","value":"feeSSV"}},{"kind":"Field","name":{"kind":"Name","value":"feeIndexSSV"}},{"kind":"Field","name":{"kind":"Name","value":"feeIndexBlockNumberSSV"}}]}},{"kind":"Field","name":{"kind":"Name","value":"cluster"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"clusterId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"feeAsset"}},{"kind":"Field","name":{"kind":"Name","value":"validatorCount"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndex"}},{"kind":"Field","name":{"kind":"Name","value":"index"}},{"kind":"Field","name":{"kind":"Name","value":"balance"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveBalance"}}]}}]}}]} as unknown as DocumentNode<GetClusterBalanceQuery, GetClusterBalanceQueryVariables>;
-export const GetDaoValuesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDaoValues"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"daoAddress"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"daovalues"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"daoAddress"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"networkFee"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndex"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndexBlockNumber"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeSSV"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndexSSV"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndexBlockNumberSSV"}},{"kind":"Field","name":{"kind":"Name","value":"liquidationThreshold"}},{"kind":"Field","name":{"kind":"Name","value":"liquidationThresholdSSV"}},{"kind":"Field","name":{"kind":"Name","value":"minimumLiquidationCollateral"}},{"kind":"Field","name":{"kind":"Name","value":"minimumLiquidationCollateralSSV"}}]}}]}}]} as unknown as DocumentNode<GetDaoValuesQuery, GetDaoValuesQueryVariables>;
+export const GetDaoValuesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDaoValues"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"daoAddress"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_meta"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"block"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"daovalues"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"daoAddress"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"networkFee"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndex"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndexBlockNumber"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeSSV"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndexSSV"}},{"kind":"Field","name":{"kind":"Name","value":"networkFeeIndexBlockNumberSSV"}},{"kind":"Field","name":{"kind":"Name","value":"liquidationThreshold"}},{"kind":"Field","name":{"kind":"Name","value":"liquidationThresholdSSV"}},{"kind":"Field","name":{"kind":"Name","value":"minimumLiquidationCollateral"}},{"kind":"Field","name":{"kind":"Name","value":"minimumLiquidationCollateralSSV"}}]}}]}}]} as unknown as DocumentNode<GetDaoValuesQuery, GetDaoValuesQueryVariables>;

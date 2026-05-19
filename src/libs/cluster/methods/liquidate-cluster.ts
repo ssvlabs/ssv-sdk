@@ -10,7 +10,7 @@ export const liquidateCluster = async (
   config: ConfigReturnType,
   { args: { id }, ...writeOptions }: LiquidateClusterProps,
 ) => {
-  const cluster = await config.api.getCluster({ id });
+  const { cluster } = await config.api.getCluster({ id });
 
   if (!cluster) {
     throw new Error('Cluster not found');

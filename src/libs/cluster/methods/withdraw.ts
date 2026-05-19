@@ -11,7 +11,7 @@ export const withdraw = async (
   config: ConfigReturnType,
   { args: { id, amount }, ...writeOptions }: WithdrawProps,
 ) => {
-  const cluster = await config.api.getCluster({ id });
+  const { cluster } = await config.api.getCluster({ id });
 
   if (!cluster) {
     throw new Error('Cluster not found');

@@ -12,7 +12,7 @@ export const removeValidators = async (
   config: ConfigReturnType,
   { args: { id, publicKeys }, ...writeOptions }: RemoveValidatorsProps,
 ) => {
-  const cluster = await config.api.getCluster({ id });
+  const { cluster } = await config.api.getCluster({ id });
 
   if (!cluster) {
     throw new Error('Cluster not found');

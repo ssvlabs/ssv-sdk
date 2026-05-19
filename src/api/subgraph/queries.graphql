@@ -1,4 +1,9 @@
 query GetClusterSnapshot($id: ID!) {
+  _meta {
+    block {
+      number
+    }
+  }
   cluster(id: $id) {
     active
     validatorCount
@@ -10,6 +15,11 @@ query GetClusterSnapshot($id: ID!) {
 }
 
 query GetCluster($id: ID!) {
+  _meta {
+    block {
+      number
+    }
+  }
   cluster(id: $id) {
     owner {
       id
@@ -26,6 +36,11 @@ query GetCluster($id: ID!) {
 }
 
 query GetClusters($owner: String!) {
+  _meta {
+    block {
+      number
+    }
+  }
   clusters(where: { owner: $owner }) {
     id
     feeAsset
@@ -40,16 +55,28 @@ query GetClusters($owner: String!) {
 }
 
 query GetOwnerNonce($owner: ID!) {
+  _meta {
+    block {
+      number
+    }
+  }
   account(id: $owner) {
     nonce
   }
 }
+
 query GetOwnerNonceByBlock($owner: ID!, $block: Int) {
   account(id: $owner, block: { number: $block }) {
     nonce
   }
 }
+
 query GetOperator($id: ID!) {
+  _meta {
+    block {
+      number
+    }
+  }
   operator(id: $id) {
     id
     publicKey
@@ -63,6 +90,11 @@ query GetOperator($id: ID!) {
 }
 
 query GetOperators($operatorIds: [String!]!) {
+  _meta {
+    block {
+      number
+    }
+  }
   operators(where: { id_in: $operatorIds }) {
     id
     publicKey
@@ -78,12 +110,22 @@ query GetOperators($operatorIds: [String!]!) {
 }
 
 query GetValidators($ids: [Bytes!]!) {
+  _meta {
+    block {
+      number
+    }
+  }
   validators(where: { id_in: $ids }) {
     id
   }
 }
 
 query GetValidator($id: ID!) {
+  _meta {
+    block {
+      number
+    }
+  }
   validator(id: $id) {
     id
   }
@@ -130,6 +172,11 @@ query GetClusterBalance(
 }
 
 query GetDaoValues($daoAddress: ID!) {
+  _meta {
+    block {
+      number
+    }
+  }
   daovalues(id: $daoAddress) {
     networkFee
     networkFeeIndex

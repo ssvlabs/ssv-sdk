@@ -11,7 +11,7 @@ export const migrateClusterToETH = async (
   config: ConfigReturnType,
   { args: { id, amount }, ...writeOptions }: MigrateClusterToETHProps,
 ) => {
-  const cluster = await config.api.getCluster({ id });
+  const { cluster } = await config.api.getCluster({ id });
 
   if (!cluster) {
     throw new Error('Cluster not found');

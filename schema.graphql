@@ -17,6 +17,7 @@ directive @subgraphId(id: String!) on OBJECT
 
 type Account {
   clusters(first: Int = 100, orderBy: Cluster_orderBy, orderDirection: OrderDirection, skip: Int = 0, where: Cluster_filter): [Cluster!]
+  effectiveBalance: BigInt!
   feeRecipient: Bytes!
   id: Bytes!
   nonce: BigInt!
@@ -32,6 +33,14 @@ input Account_filter {
   _change_block: BlockChangedFilter
   and: [Account_filter]
   clusters_: Cluster_filter
+  effectiveBalance: BigInt
+  effectiveBalance_gt: BigInt
+  effectiveBalance_gte: BigInt
+  effectiveBalance_in: [BigInt!]
+  effectiveBalance_lt: BigInt
+  effectiveBalance_lte: BigInt
+  effectiveBalance_not: BigInt
+  effectiveBalance_not_in: [BigInt!]
   feeRecipient: Bytes
   feeRecipient_contains: Bytes
   feeRecipient_gt: Bytes
@@ -91,6 +100,7 @@ input Account_filter {
 
 enum Account_orderBy {
   clusters
+  effectiveBalance
   feeRecipient
   id
   nonce
@@ -1254,6 +1264,7 @@ enum Cluster_orderBy {
   networkFeeIndex
   operatorIds
   owner
+  owner__effectiveBalance
   owner__feeRecipient
   owner__id
   owner__nonce
@@ -1292,6 +1303,7 @@ enum DAOUpdateTypes {
 type DAOValues {
   accEthPerShare: BigInt!
   declareOperatorFeePeriod: BigInt!
+  effectiveBalanceETH: BigInt!
   executeOperatorFeePeriod: BigInt!
   id: Bytes!
   lastUpdateBlockNumber: BigInt!
@@ -1346,6 +1358,14 @@ input DAOValues_filter {
   declareOperatorFeePeriod_lte: BigInt
   declareOperatorFeePeriod_not: BigInt
   declareOperatorFeePeriod_not_in: [BigInt!]
+  effectiveBalanceETH: BigInt
+  effectiveBalanceETH_gt: BigInt
+  effectiveBalanceETH_gte: BigInt
+  effectiveBalanceETH_in: [BigInt!]
+  effectiveBalanceETH_lt: BigInt
+  effectiveBalanceETH_lte: BigInt
+  effectiveBalanceETH_not: BigInt
+  effectiveBalanceETH_not_in: [BigInt!]
   executeOperatorFeePeriod: BigInt
   executeOperatorFeePeriod_gt: BigInt
   executeOperatorFeePeriod_gte: BigInt
@@ -1622,6 +1642,7 @@ input DAOValues_filter {
 enum DAOValues_orderBy {
   accEthPerShare
   declareOperatorFeePeriod
+  effectiveBalanceETH
   executeOperatorFeePeriod
   id
   lastUpdateBlockNumber
@@ -2335,6 +2356,23 @@ enum LiquidationThresholdPeriodUpdated_orderBy {
   id
   transactionHash
   value
+}
+
+"""
+The severity level of a log entry.
+Log levels are ordered from most to least severe: CRITICAL > ERROR > WARNING > INFO > DEBUG
+"""
+enum LogLevel {
+  """Critical errors that require immediate attention"""
+  CRITICAL
+  """Detailed diagnostic information for debugging"""
+  DEBUG
+  """Error conditions that indicate a failure"""
+  ERROR
+  """Informational messages about normal operations"""
+  INFO
+  """Warning conditions that may require attention"""
+  WARNING
 }
 
 type MinimumLiquidationCollateralSSVUpdated {
@@ -4247,6 +4285,7 @@ enum Operator_orderBy {
   lastUpdateTransactionHash
   operatorId
   owner
+  owner__effectiveBalance
   owner__feeRecipient
   owner__id
   owner__nonce
@@ -4461,6 +4500,33 @@ enum OrderDirection {
 }
 
 type Query {
+  """
+  Query execution logs emitted by the subgraph during indexing. Results are sorted by timestamp in descending order (newest first).
+  """
+  _logs(
+    """Maximum number of logs to return. Default: 100, Maximum: 1000."""
+    first: Int = 100
+    """
+    Filter logs from this timestamp onwards (inclusive). Must be in RFC3339 format (e.g., '2024-01-15T10:30:00Z').
+    """
+    from: String
+    """
+    Filter logs by severity level. Only logs at this level will be returned.
+    """
+    level: LogLevel
+    """Sort direction for results. Default: desc (newest first)."""
+    orderDirection: OrderDirection = desc
+    """
+    Search for logs containing this text in the message. Case-insensitive substring match. Maximum length: 1000 characters.
+    """
+    search: String
+    """Number of logs to skip (for pagination). Default: 0, Maximum: 10000."""
+    skip: Int = 0
+    """
+    Filter logs until this timestamp (inclusive). Must be in RFC3339 format (e.g., '2024-01-15T23:59:59Z').
+    """
+    to: String
+  ): [_Log_!]!
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_
   account(
@@ -7232,6 +7298,7 @@ enum Validator_orderBy {
   lastUpdateTransactionHash
   operators
   owner
+  owner__effectiveBalance
   owner__feeRecipient
   owner__id
   owner__nonce
@@ -7372,6 +7439,57 @@ type _Block_ {
   parentHash: Bytes
   """Integer representation of the timestamp stored in blocks for the chain"""
   timestamp: Int
+}
+
+"""
+A key-value pair of additional data associated with a log entry.
+These correspond to arguments passed to the log function in the subgraph code.
+"""
+type _LogArgument_ {
+  """The parameter name"""
+  key: String!
+  """The parameter value, serialized as a string"""
+  value: String!
+}
+
+"""
+Source code location metadata for a log entry.
+Indicates where in the subgraph's AssemblyScript code the log statement was executed.
+"""
+type _LogMeta_ {
+  """The column number in the source file"""
+  column: Int!
+  """The line number in the source file"""
+  line: Int!
+  """The module or file path where the log was emitted"""
+  module: String!
+}
+
+"""
+A log entry emitted by a subgraph during indexing.
+Logs can be generated by the subgraph's AssemblyScript code using the `log.*` functions.
+"""
+type _Log_ {
+  """
+  Additional structured data passed to the log function as key-value pairs
+  """
+  arguments: [_LogArgument_!]!
+  """Unique identifier for this log entry"""
+  id: String!
+  """The severity level of the log entry"""
+  level: LogLevel!
+  """
+  Metadata about the source location in the subgraph code where the log was emitted
+  """
+  meta: _LogMeta_!
+  """The deployment hash of the subgraph that emitted this log"""
+  subgraphId: String!
+  """The log message text"""
+  text: String!
+  """
+  The timestamp when the log was emitted, in RFC3339 format (e.g., '2024-01-15T10:30:00Z')
+  """
+  timestamp: String!
 }
 
 """The type for the top-level _meta field"""
