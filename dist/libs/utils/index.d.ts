@@ -2,6 +2,7 @@ import { ConfigReturnType } from '../../config/create';
 import { getClusterBalance, getOperatorCapacity } from './methods';
 import { calcDepositFromRunway } from './methods/calc-deposit-from-runway';
 import { validateSharesPreRegistration } from './methods/keyshares';
+import { writeKeysharesFile } from './methods/write-keyshares-file';
 import { RemoveConfigArg } from '../../types/methods';
 export declare const createUtils: (config: ConfigReturnType) => {
     generateKeyShares: (args: {
@@ -12,6 +13,7 @@ export declare const createUtils: (config: ConfigReturnType) => {
         ownerAddress: string;
         nonce: number;
     }) => Promise<import('../ssv-keys/KeyShares/KeySharesData/KeySharesPayload').KeySharesPayload[]>;
+    writeKeysharesFile: RemoveConfigArg<typeof writeKeysharesFile>;
     validateKeysharesJSON: ({ account, operators, keyshares, }: {
         account: import('viem').Address;
         operators: Pick<import('../../types/operator').Operator, "id" | "publicKey">[];

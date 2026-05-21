@@ -1,90 +1,56 @@
-import { GetClusterBalanceQueryVariables, GetClusterQueryVariables, GetClusterSnapshotQueryVariables, GetClustersQueryVariables, GetDaoValuesQueryVariables, GetOperatorQueryVariables, GetOperatorsQueryVariables, GetOwnerNonceByBlockQueryVariables, GetValidatorQueryVariables, GetValidatorsQueryVariables } from '../../graphql/graphql';
+import { GetClusterBalanceQuery, GetClusterBalanceQueryVariables, GetClusterQuery, GetClusterQueryVariables, GetClusterSnapshotQuery, GetClusterSnapshotQueryVariables, GetClustersQuery, GetClustersQueryVariables, GetDaoValuesQuery, GetDaoValuesQueryVariables, GetOperatorQuery, GetOperatorQueryVariables, GetOperatorsQuery, GetOperatorsQueryVariables, GetOwnerNonceByBlockQueryVariables, GetValidatorQuery, GetValidatorQueryVariables, GetValidatorsQuery, GetValidatorsQueryVariables } from '../../graphql/graphql';
 import { RemoveConfigArg } from '../../types/methods';
 import { GraphQLClient } from 'graphql-request';
-export declare const getOwnerNonce: (client: GraphQLClient, args: GetOwnerNonceByBlockQueryVariables) => Promise<string>;
-export declare const toSolidityCluster: (client: GraphQLClient, args: GetClusterSnapshotQueryVariables) => Promise<{
-    active: boolean;
-    validatorCount: string;
-    balance: string;
-    index: string;
-    networkFeeIndex: string;
-    effectiveBalance: string;
-} | null | undefined>;
-/**
- * @deprecated Use `toSolidityCluster` instead.
- */
-export declare const getClusterSnapshot: (client: GraphQLClient, args: GetClusterSnapshotQueryVariables) => Promise<{
-    active: boolean;
-    validatorCount: string;
-    balance: string;
-    index: string;
-    networkFeeIndex: string;
-    effectiveBalance: string;
-} | null | undefined>;
-export declare const getCluster: (client: GraphQLClient, args: GetClusterQueryVariables) => Promise<{
-    feeAsset: import('../../graphql/graphql').ClusterFeeAssetTypes;
-    active: boolean;
-    validatorCount: string;
-    balance: string;
-    index: string;
-    networkFeeIndex: string;
-    operatorIds: Array<string>;
-    effectiveBalance: string;
-    owner: {
-        id: import('viem').Address;
-    };
-} | null | undefined>;
-export declare const getClusters: (client: GraphQLClient, args: GetClustersQueryVariables) => Promise<{
-    id: string;
-    feeAsset: import('../../graphql/graphql').ClusterFeeAssetTypes;
-    active: boolean;
-    validatorCount: string;
-    balance: string;
-    index: string;
-    networkFeeIndex: string;
-    operatorIds: Array<string>;
-    effectiveBalance: string;
-}[]>;
-export declare const getOperator: (client: GraphQLClient, args: GetOperatorQueryVariables) => Promise<{
+import { Address } from 'viem';
+type SnapshotResult<T> = {
+    blockNumber: number;
+} & T;
+declare const mapOperator: <T extends {
+    publicKey: Address;
+    whitelisted: {
+        id: Address;
+    }[];
+}>(operator: T) => Omit<T, "publicKey" | "whitelisted"> & {
     publicKey: string;
-    whitelisted: `0x${string}`[];
-    id: string;
-    validatorCount: string;
-    isPrivate: boolean;
-    whitelistedContract: import('viem').Address;
-} | null>;
-export declare const getOperators: (client: GraphQLClient, args: GetOperatorsQueryVariables) => Promise<{
-    publicKey: string;
-    whitelisted: `0x${string}`[];
-    id: string;
-    validatorCount: string;
-    isPrivate: boolean;
-    whitelistedContract: import('viem').Address;
-    fee: string;
-    feeSSV: string;
-}[]>;
-export declare const getValidators: (client: GraphQLClient, args: GetValidatorsQueryVariables) => Promise<{
-    id: import('viem').Address;
-}[]>;
-export declare const getValidator: (client: GraphQLClient, args: GetValidatorQueryVariables) => Promise<{
-    id: import('viem').Address;
-} | null | undefined>;
-export declare const getClusterBalance: (client: GraphQLClient, args: GetClusterBalanceQueryVariables) => Promise<import('../../graphql/graphql').GetClusterBalanceQuery>;
-export declare const getDaoValues: (client: GraphQLClient, args: GetDaoValuesQueryVariables) => Promise<{
-    networkFee: string;
-    networkFeeIndex: string;
-    networkFeeIndexBlockNumber: string;
-    networkFeeSSV: string;
-    networkFeeIndexSSV: string;
-    networkFeeIndexBlockNumberSSV: string;
-    liquidationThreshold: string;
-    liquidationThresholdSSV: string;
-    minimumLiquidationCollateral: string;
-    minimumLiquidationCollateralSSV: string;
-} | null | undefined>;
+    whitelisted: Address[];
+};
+export declare const getOwnerNonce: (client: GraphQLClient, args: GetOwnerNonceByBlockQueryVariables) => Promise<SnapshotResult<{
+    nonce: number;
+}>>;
+export declare const getClusterSnapshot: (client: GraphQLClient, args: GetClusterSnapshotQueryVariables) => Promise<SnapshotResult<{
+    cluster: GetClusterSnapshotQuery["cluster"];
+}>>;
+export declare const getCluster: (client: GraphQLClient, args: GetClusterQueryVariables) => Promise<SnapshotResult<{
+    cluster: GetClusterQuery["cluster"];
+}>>;
+export declare const getClusters: (client: GraphQLClient, args: GetClustersQueryVariables) => Promise<SnapshotResult<{
+    clusters: GetClustersQuery["clusters"];
+}>>;
+export declare const getOperator: (client: GraphQLClient, args: GetOperatorQueryVariables) => Promise<SnapshotResult<{
+    operator: (Omit<NonNullable<GetOperatorQuery["operator"]>, "publicKey" | "whitelisted"> & {
+        publicKey: string;
+        whitelisted: Address[];
+    }) | null;
+}>>;
+export declare const getOperators: (client: GraphQLClient, args: GetOperatorsQueryVariables) => Promise<SnapshotResult<{
+    operators: ReturnType<typeof mapOperator<NonNullable<GetOperatorsQuery["operators"][number]>>>[];
+}>>;
+export declare const getValidators: (client: GraphQLClient, args: GetValidatorsQueryVariables) => Promise<SnapshotResult<{
+    validators: GetValidatorsQuery["validators"];
+}>>;
+export declare const getValidator: (client: GraphQLClient, args: GetValidatorQueryVariables) => Promise<SnapshotResult<{
+    validator: GetValidatorQuery["validator"];
+}>>;
+export declare const getClusterBalance: (client: GraphQLClient, args: GetClusterBalanceQueryVariables) => Promise<SnapshotResult<{
+    cluster: GetClusterBalanceQuery["cluster"];
+    daovalues: GetClusterBalanceQuery["daovalues"];
+    operators: GetClusterBalanceQuery["operators"];
+}>>;
+export declare const getDaoValues: (client: GraphQLClient, args: GetDaoValuesQueryVariables) => Promise<SnapshotResult<{
+    daovalues: GetDaoValuesQuery["daovalues"];
+}>>;
 export declare const getQueries: (client: GraphQLClient) => {
     getOwnerNonce: RemoveConfigArg<typeof getOwnerNonce>;
-    toSolidityCluster: RemoveConfigArg<typeof toSolidityCluster>;
     getClusterSnapshot: RemoveConfigArg<typeof getClusterSnapshot>;
     getCluster: RemoveConfigArg<typeof getCluster>;
     getClusters: RemoveConfigArg<typeof getClusters>;
@@ -95,3 +61,4 @@ export declare const getQueries: (client: GraphQLClient) => {
     getClusterBalance: RemoveConfigArg<typeof getClusterBalance>;
     getDaoValues: RemoveConfigArg<typeof getDaoValues>;
 };
+export {};

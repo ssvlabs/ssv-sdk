@@ -2569,5 +2569,5 @@ export declare const setOperatorWhitelists: (config: ConfigReturnType, { args: {
         })[];
     }>;
 }>;
-export declare const canAccountUseOperator: (config: ConfigReturnType, operator: Awaited<ReturnType<typeof getOperator>>, account: Address) => Promise<boolean>;
+export declare const canAccountUseOperator: (config: ConfigReturnType, operator: Awaited<ReturnType<typeof getOperator>>["operator"], account: Address) => Promise<boolean>;
 export {};
