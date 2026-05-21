@@ -1,3 +1,30 @@
+# 1.0.2 (2026-05-21)
+
+### Features
+
+- export SDK keyshares in webapp-ready file format
+- return snapshot block numbers from SDK read methods
+
+### Fixes
+
+- normalize snapshot-aware subgraph responses, including `getClusterBalance`
+- tighten snapshot and keyshares export helpers
+- update internal SDK consumers for snapshot-aware read responses
+
+### Refactors
+
+- make `getClusterSnapshot` the canonical snapshot API
+- return owner nonce as a number
+
+### Tests
+
+- add coverage for snapshot-aware subgraph read responses
+
+### Docs
+
+- clarify webapp operator key format checks
+- update broken README logo asset
+
 # 1.0.1 (2026-04-20)
 
 ### Fixes
