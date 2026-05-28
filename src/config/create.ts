@@ -7,7 +7,7 @@ import type {
   ReaderFunctions,
   WriterFunctions,
 } from '@/contract-interactions/types';
-import { createQueries, createSSVAPI } from '@/libs/api';
+import { createBeaconAPI, createQueries, createSSVAPI } from '@/libs/api';
 import type { ConfigArgs } from '@/utils/zod/config';
 import { configArgsSchema } from '@/utils/zod/config';
 import { GraphQLClient } from 'graphql-request';
@@ -24,7 +24,9 @@ export type ConfigReturnType = {
   publicClient: PublicClient;
   walletClient?: WalletClient;
   chain: Chain;
-  api: ReturnType<typeof createQueries> & ReturnType<typeof createSSVAPI>;
+  api: ReturnType<typeof createQueries> &
+    ReturnType<typeof createSSVAPI> &
+    ReturnType<typeof createBeaconAPI>;
   contractAddresses: {
     setter: Address;
     getter: Address;
@@ -44,6 +46,9 @@ export type ConfigReturnType = {
   rest: {
     endpoint: string;
   };
+  beacon: {
+    endpoint?: string;
+  };
 };
 
 export const isConfig = (props: unknown): props is ConfigReturnType => {
@@ -56,7 +61,8 @@ export const isConfig = (props: unknown): props is ConfigReturnType => {
     'contractAddresses' in props &&
     'contract' in props &&
     'subgraph' in props &&
-    'rest' in props
+    'rest' in props &&
+    'beacon' in props
   );
 };
 
@@ -144,6 +150,8 @@ export const createConfig = (props: ConfigArgs): ConfigReturnType => {
   const restEndpoint =
     extendedConfig?.rest?.endpoint || rest_endpoints[chainId];
 
+  const beaconEndpoint = extendedConfig?.beacon?.endpoint;
+
   const graphQLClient = new GraphQLClient(
     graphEndpoint,
     hasAPIKey
@@ -162,6 +170,7 @@ export const createConfig = (props: ConfigArgs): ConfigReturnType => {
     api: {
       ...createQueries(graphQLClient),
       ...createSSVAPI(restEndpoint),
+      ...createBeaconAPI(beaconEndpoint),
     },
     subgraph: {
       client: graphQLClient,
@@ -169,6 +178,9 @@ export const createConfig = (props: ConfigArgs): ConfigReturnType => {
     },
     rest: {
       endpoint: restEndpoint,
+    },
+    beacon: {
+      endpoint: beaconEndpoint,
     },
     contractAddresses: addresses,
     contract,

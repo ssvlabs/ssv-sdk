@@ -70,6 +70,9 @@ describe('SDK Initiation', async () => {
       rest: {
         endpoint: 'https://custom-rest-endpoint.com/api',
       },
+      beacon: {
+        endpoint: 'https://custom-beacon-endpoint.com',
+      },
       contracts: customAddresses,
     } satisfies ConfigArgs['extendedConfig'];
 
@@ -84,7 +87,28 @@ describe('SDK Initiation', async () => {
     // Verify custom endpoints are used
     expect(sdk.config.subgraph.endpoint).toBe(extended.subgraph.endpoint);
     expect(sdk.config.rest.endpoint).toBe(extended.rest.endpoint);
+    expect(sdk.config.beacon.endpoint).toBe(extended.beacon.endpoint);
   });
+
+  it('should expose bound beacon helpers on sdk.api', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const sdk = new SSVSDK({
+      publicClient,
+    });
+
+    expect(sdk.api.getBeaconValidator).toBeTypeOf('function');
+    expect(sdk.api.getBeaconValidators).toBeTypeOf('function');
+    expect(sdk.api.getBeaconValidatorState).toBeTypeOf('function');
+    expect(sdk.api.getBeaconValidatorStates).toBeTypeOf('function');
+    expect(sdk.api.getBeaconValidatorLifecycleStage).toBeTypeOf('function');
+    expect(sdk.api.waitForBeaconValidatorActivation).toBeTypeOf('function');
+  });
+
   it('should initialize with paid subgraph', async () => {
     const transport = http(hoodi.rpcUrls.default.http[0]);
     const walletClient = createWalletClient({
@@ -134,6 +158,25 @@ describe('SDK Initiation', async () => {
           walletClient,
         });
       }).toThrowError('Public client must be provided');
+    });
+
+    it('should throw error when beacon endpoint is invalid', () => {
+      const transport = http(hoodi.rpcUrls.default.http[0]);
+      const publicClient = createPublicClient({
+        chain: hoodi,
+        transport,
+      });
+
+      expect(() => {
+        new SSVSDK({
+          publicClient,
+          extendedConfig: {
+            beacon: {
+              endpoint: 'not-a-url',
+            },
+          },
+        });
+      }).toThrowError('Invalid url');
     });
 
     it('should initialize without walletClient', () => {

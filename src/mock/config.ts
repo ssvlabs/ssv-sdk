@@ -32,6 +32,9 @@ export const createMockConfig = (args: MockConfigArgs): ConfigReturnType => {
     rest: {
       endpoint: {} as unknown as ConfigReturnType['rest']['endpoint'],
     },
+    beacon: {
+      endpoint: undefined,
+    },
     contractAddresses: args.addresses,
   };
 };

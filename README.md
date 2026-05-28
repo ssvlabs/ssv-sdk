@@ -66,6 +66,11 @@ const walletClient = createWalletClient({
 const sdk = new SSVSDK({
   publicClient,
   walletClient,
+  extendedConfig: {
+    beacon: {
+      endpoint: 'https://your-beacon-node.example',
+    },
+  },
 });
 ```
 
@@ -89,6 +94,18 @@ await sdk.utils.writeKeysharesFile({
   ownerAddress: 'your_wallet_address',
   nonce,
 });
+
+// Read normalized beacon validator state
+const validator = await sdk.api.getBeaconValidatorState({
+  validatorId: '0xvalidator_public_key',
+});
+
+// Wait for a validator to become active
+await sdk.api.waitForBeaconValidatorActivation({
+  validatorId: '0xvalidator_public_key',
+  pollIntervalMs: 12_000,
+  timeoutMs: 30 * 60 * 1000,
+});
 ```
 
 ### API Compatibility Notes
@@ -109,6 +126,8 @@ Snapshot-aware SDK read methods return the queried data together with the subgra
 `sdk.api.toSolidityCluster` is no longer part of the public subgraph API. The internal utility `toSolidityCluster(...)` in `utils/cluster` still exists for converting cluster data into the Solidity struct shape used by contract calls.
 
 `sdk.utils.writeKeysharesFile(...)` is a Node.js utility and relies on filesystem access.
+
+Beacon validator helpers require `extendedConfig.beacon.endpoint` to be configured. `sdk.api.getBeaconValidatorState(...)` and `sdk.api.getBeaconValidatorStates(...)` return normalized beacon validator data, and `sdk.api.waitForBeaconValidatorActivation(...)` can be used to poll until a validator becomes active.
 
 ### Cluster Management
 

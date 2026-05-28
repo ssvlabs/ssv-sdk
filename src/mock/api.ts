@@ -1,3 +1,7 @@
+import {
+  getBeaconValidatorLifecycleStage,
+  type BeaconValidatorState,
+} from '@/api/beacon';
 import { MainnetV4SetterABI } from '@/abi/mainnet/v4/setter';
 import type { ConfigReturnType } from '@/config';
 import { createClusterId } from '@/utils';
@@ -7,6 +11,20 @@ import { vi } from 'vitest';
 export const createMockApi = (
   publicClient: PublicClient,
 ): ConfigReturnType['api'] => {
+  const defaultBeaconValidatorState: BeaconValidatorState = {
+    publicKey: '0xmock-beacon-validator',
+    validatorIndex: 0,
+    status: 'active',
+    rawStatus: 'active_ongoing',
+    balanceGwei: 0n,
+    effectiveBalanceGwei: 0n,
+    slashed: false,
+    activationEligibilityEpoch: 0,
+    activationEpoch: 0,
+    exitEpoch: null,
+    withdrawableEpoch: null,
+  };
+
   const nonces = new Map<string, number>();
   const operators = new Map<
     string,
@@ -106,6 +124,15 @@ export const createMockApi = (
   });
 
   return {
+    checkOperatorDKGEnabled: vi.fn().mockImplementation(
+      (dkgAddresses: Array<{ id: string; address: string }>) =>
+      Promise.resolve(
+        dkgAddresses.map(({ id }) => ({
+          id,
+          isHealthy: true,
+        })),
+      ),
+    ),
     getOwnerNonce: vi.fn().mockImplementation((args) =>
       Promise.resolve({
         blockNumber: typeof args.block === 'number' ? args.block : 1,
@@ -222,5 +249,28 @@ export const createMockApi = (
         },
       });
     }),
-  } as unknown as ConfigReturnType['api'];
+    getDaoValues: vi.fn().mockResolvedValue({
+      blockNumber: 1,
+      daovalues: {
+        networkFee: '100000000000000000',
+        networkFeeIndex: '0',
+        networkFeeIndexBlockNumber: '1',
+        networkFeeSSV: '100000000000000000',
+        networkFeeIndexSSV: '0',
+        networkFeeIndexBlockNumberSSV: '1',
+        liquidationThreshold: '1000000000000000000',
+        liquidationThresholdSSV: '1000000000000000000',
+        minimumLiquidationCollateral: '2000000000000000000',
+        minimumLiquidationCollateralSSV: '2000000000000000000',
+      },
+    }),
+    getBeaconValidator: vi.fn().mockResolvedValue(null),
+    getBeaconValidators: vi.fn().mockResolvedValue([]),
+    getBeaconValidatorState: vi.fn().mockResolvedValue(null),
+    getBeaconValidatorStates: vi.fn().mockResolvedValue([]),
+    getBeaconValidatorLifecycleStage,
+    waitForBeaconValidatorActivation: vi
+      .fn()
+      .mockResolvedValue(defaultBeaconValidatorState),
+  };
 };

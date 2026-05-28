@@ -147,4 +147,33 @@ describe('Mock API event completeness', () => {
       effectiveBalance: '32',
     });
   });
+
+  it('includes the full beacon helper surface', async () => {
+    const { createMockApi } = await import('@/mock/api');
+    const api = createMockApi(publicClient as never);
+
+    expect(api.checkOperatorDKGEnabled).toBeTypeOf('function');
+    expect(api.getDaoValues).toBeTypeOf('function');
+    expect(api.getBeaconValidator).toBeTypeOf('function');
+    expect(api.getBeaconValidators).toBeTypeOf('function');
+    expect(api.getBeaconValidatorState).toBeTypeOf('function');
+    expect(api.getBeaconValidatorStates).toBeTypeOf('function');
+    expect(api.getBeaconValidatorLifecycleStage).toBeTypeOf('function');
+    expect(api.waitForBeaconValidatorActivation).toBeTypeOf('function');
+
+    await expect(
+      api.waitForBeaconValidatorActivation({
+        validatorId: '1',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).resolves.toMatchObject({
+      status: 'active',
+      rawStatus: 'active_ongoing',
+    });
+
+    expect(
+      api.getBeaconValidatorLifecycleStage({ status: 'withdrawal_done' }),
+    ).toBe('withdrawn');
+  });
 });
