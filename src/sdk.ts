@@ -18,7 +18,18 @@ export class SSVSDK {
   readonly utils: ReturnType<typeof createUtils>;
 
   constructor(props: ConfigArgs | ConfigReturnType) {
-    this.config = isConfig(props) ? props : createConfig(props);
+    if (isConfig(props)) {
+      this.config = props;
+    } else {
+      if (hasIncompletePrebuiltConfigShape(props)) {
+        throw new Error(
+          'Incomplete prebuilt config object: normalized SDK configs must include a beacon field. The normalized beacon shape is required even when beacon.endpoint is undefined.',
+        );
+      }
+
+      this.config = createConfig(props);
+    }
+
     this.clusters = createClusterManager(this.config);
     this.dao = createDaoManager(this.config);
     this.operators = createOperatorManager(this.config);
@@ -44,3 +55,26 @@ export class SSVSDK {
     return this;
   }
 }
+
+const isNonNullObject = (
+  value: unknown,
+): value is Record<PropertyKey, unknown> => {
+  return typeof value === 'object' && value !== null;
+};
+
+const hasIncompletePrebuiltConfigShape = (props: unknown): boolean => {
+  if (!isNonNullObject(props)) {
+    return false;
+  }
+
+  return (
+    'publicClient' in props &&
+    'chain' in props &&
+    'api' in props &&
+    'contractAddresses' in props &&
+    'contract' in props &&
+    'subgraph' in props &&
+    'rest' in props &&
+    !('beacon' in props)
+  );
+};

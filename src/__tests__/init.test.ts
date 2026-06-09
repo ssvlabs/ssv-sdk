@@ -1,3 +1,4 @@
+import { isConfig } from '@/config';
 import { chains, hoodi, paid_graph_endpoints } from '@/config/chains';
 import { SSVSDK } from '@/sdk';
 import type { ConfigArgs } from '@/utils';
@@ -109,7 +110,62 @@ describe('SDK Initiation', async () => {
     expect(sdk.api.waitForBeaconValidatorActivation).toBeTypeOf('function');
   });
 
-  it('should accept a prebuilt config without beacon', () => {
+  it('should initialize without beacon endpoint in normal config args', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const sdk = new SSVSDK({
+      publicClient,
+    });
+
+    expect(sdk.config.beacon.endpoint).toBeUndefined();
+  });
+
+  it('should only treat normalized configs as ConfigReturnType', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const sdk = new SSVSDK({
+      publicClient,
+    });
+    const { beacon: _beacon, ...legacyConfig } = sdk.config;
+
+    expect(isConfig(sdk.config)).toBe(true);
+    expect(isConfig(legacyConfig)).toBe(false);
+  });
+
+  it('should reject malformed configs with an invalid beacon shape', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const sdk = new SSVSDK({
+      publicClient,
+    });
+
+    expect(
+      isConfig({
+        ...sdk.config,
+        beacon: undefined,
+      }),
+    ).toBe(false);
+    expect(
+      isConfig({
+        ...sdk.config,
+        beacon: null,
+      }),
+    ).toBe(false);
+  });
+
+  it('should reject an incomplete prebuilt config object missing beacon', () => {
     const transport = http(hoodi.rpcUrls.default.http[0]);
     const publicClient = createPublicClient({
       chain: hoodi,
@@ -119,15 +175,17 @@ describe('SDK Initiation', async () => {
     const originalSdk = new SSVSDK({
       publicClient,
     });
-    const { beacon: _beacon, ...legacyConfig } = originalSdk.config;
+    const { beacon: _beacon, ...incompleteConfig } = originalSdk.config;
 
-    const sdk = new SSVSDK(legacyConfig as unknown as typeof originalSdk.config);
-
-    expect(sdk.config).toBe(legacyConfig);
-    expect('beacon' in sdk.config).toBe(false);
+    expect(isConfig(incompleteConfig)).toBe(false);
+    expect(
+      () => new SSVSDK(incompleteConfig as unknown as typeof originalSdk.config),
+    ).toThrowError(
+      'Incomplete prebuilt config object: normalized SDK configs must include a beacon field. The normalized beacon shape is required even when beacon.endpoint is undefined.',
+    );
   });
 
-  it('should accept a prebuilt config with beacon', () => {
+  it('should accept a fully normalized prebuilt config with beacon', () => {
     const transport = http(hoodi.rpcUrls.default.http[0]);
     const publicClient = createPublicClient({
       chain: hoodi,

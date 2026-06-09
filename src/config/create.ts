@@ -51,17 +51,34 @@ export type ConfigReturnType = {
   };
 };
 
+const isNonNullObject = (
+  value: unknown,
+): value is Record<PropertyKey, unknown> => {
+  return typeof value === 'object' && value !== null;
+};
+
 export const isConfig = (props: unknown): props is ConfigReturnType => {
+  if (!isNonNullObject(props)) {
+    return false;
+  }
+
   return (
-    typeof props === 'object' &&
-    props !== null &&
     'publicClient' in props &&
+    isNonNullObject(props.publicClient) &&
     'chain' in props &&
+    isNonNullObject(props.chain) &&
     'api' in props &&
+    isNonNullObject(props.api) &&
     'contractAddresses' in props &&
+    isNonNullObject(props.contractAddresses) &&
     'contract' in props &&
+    isNonNullObject(props.contract) &&
     'subgraph' in props &&
-    'rest' in props
+    isNonNullObject(props.subgraph) &&
+    'rest' in props &&
+    isNonNullObject(props.rest) &&
+    'beacon' in props &&
+    isNonNullObject(props.beacon)
   );
 };
 
