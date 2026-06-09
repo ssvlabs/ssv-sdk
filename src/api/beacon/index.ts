@@ -1,7 +1,7 @@
 import join from '@/utils/url-join';
 
 export type BeaconValidator = {
-  index: string;
+  index: string | null;
   balance: string;
   status: string;
   validator: {
@@ -59,6 +59,7 @@ export type WaitForBeaconValidatorActivationArgs = {
   validatorId: string;
   pollIntervalMs: number;
   timeoutMs: number;
+  failOnNotFound?: boolean;
 };
 
 type BeaconResponse<T> = {
@@ -68,6 +69,7 @@ type BeaconResponse<T> = {
 // Beacon APIs use the uint64 max value as a sentinel for epochs that are not set yet.
 const BEACON_FAR_FUTURE_EPOCH = 18446744073709551615n;
 const BEACON_VALIDATORS_PATH = '/eth/v1/beacon/states/head/validators';
+const BEACON_GET_VALIDATORS_MAX_URL_LENGTH = 7000;
 
 const missingBeaconEndpointError = () =>
   new Error(
@@ -298,6 +300,31 @@ const getBeaconValidatorsURL = (
     .join('&')}`;
 };
 
+const getBeaconValidatorsRequest = (
+  endpoint: string,
+  validatorIds: string[],
+): { url: string; init?: RequestInit } => {
+  const url = getBeaconValidatorsURL(endpoint, validatorIds);
+
+  // Long validator ids can exceed provider or proxy URL limits before batch size does.
+  if (url.length <= BEACON_GET_VALIDATORS_MAX_URL_LENGTH) {
+    return {
+      url,
+    };
+  }
+
+  return {
+    url: join(endpoint, BEACON_VALIDATORS_PATH),
+    init: {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ids: validatorIds }),
+    },
+  };
+};
+
 export const getBeaconValidator = async (
   endpoint: string | undefined,
   args: { validatorId: string },
@@ -341,9 +368,10 @@ export const getBeaconValidators = async (
     return [];
   }
 
-  const response = await fetch(
-    getBeaconValidatorsURL(endpoint, args.validatorIds),
-  );
+  const request = getBeaconValidatorsRequest(endpoint, args.validatorIds);
+  const response = request.init
+    ? await fetch(request.url, request.init)
+    : await fetch(request.url);
 
   if (response.status === 404) {
     return [];
@@ -386,10 +414,6 @@ export const getBeaconValidatorStates = async (
   endpoint: string | undefined,
   args: { validatorIds: string[] },
 ): Promise<Array<BeaconValidatorState | null>> => {
-  if (args.validatorIds.length === 0) {
-    return [];
-  }
-
   const validators = await getBeaconValidators(endpoint, args);
   const validatorsById = new Map<string, BeaconValidatorState>();
 
@@ -440,6 +464,12 @@ export const waitForBeaconValidatorActivation = async (
       validatorId: args.validatorId,
     });
     lastObservedState = state;
+
+    if (state === null && args.failOnNotFound) {
+      throw new Error(
+        `Beacon validator ${args.validatorId} was not found while waiting for activation`,
+      );
+    }
 
     if (state !== null) {
       const lifecycleStage = getBeaconValidatorLifecycleStage(state);

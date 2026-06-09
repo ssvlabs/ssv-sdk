@@ -61,8 +61,7 @@ export const isConfig = (props: unknown): props is ConfigReturnType => {
     'contractAddresses' in props &&
     'contract' in props &&
     'subgraph' in props &&
-    'rest' in props &&
-    'beacon' in props
+    'rest' in props
   );
 };
 

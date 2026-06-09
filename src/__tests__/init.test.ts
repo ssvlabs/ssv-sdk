@@ -109,6 +109,48 @@ describe('SDK Initiation', async () => {
     expect(sdk.api.waitForBeaconValidatorActivation).toBeTypeOf('function');
   });
 
+  it('should accept a prebuilt config without beacon', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const originalSdk = new SSVSDK({
+      publicClient,
+    });
+    const { beacon: _beacon, ...legacyConfig } = originalSdk.config;
+
+    const sdk = new SSVSDK(legacyConfig as unknown as typeof originalSdk.config);
+
+    expect(sdk.config).toBe(legacyConfig);
+    expect('beacon' in sdk.config).toBe(false);
+  });
+
+  it('should accept a prebuilt config with beacon', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const existingConfig = new SSVSDK({
+      publicClient,
+      extendedConfig: {
+        beacon: {
+          endpoint: 'https://custom-beacon-endpoint.com',
+        },
+      },
+    }).config;
+
+    const sdk = new SSVSDK(existingConfig);
+
+    expect(sdk.config).toBe(existingConfig);
+    expect(sdk.config.beacon.endpoint).toBe(
+      'https://custom-beacon-endpoint.com',
+    );
+  });
+
   it('should initialize with paid subgraph', async () => {
     const transport = http(hoodi.rpcUrls.default.http[0]);
     const walletClient = createWalletClient({
