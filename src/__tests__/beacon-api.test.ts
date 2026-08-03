@@ -121,7 +121,7 @@ describe('Beacon API', () => {
     expect(fetchMock.mock.calls[0]).toHaveLength(1);
   });
 
-  it('uses GET for beacon validator batches when the URL stays short enough', async () => {
+  it('uses GET for up to 64 deduplicated validator ids with a short URL', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(
         JSON.stringify({
@@ -132,7 +132,7 @@ describe('Beacon API', () => {
     );
     vi.stubGlobal('fetch', fetchMock);
 
-    const validatorIds = Array.from({ length: 100 }, (_, index) => `${index}`);
+    const validatorIds = Array.from({ length: 64 }, (_, index) => `${index}`);
 
     await getBeaconValidators('https://beacon.example/api', {
       validatorIds,
@@ -144,6 +144,80 @@ describe('Beacon API', () => {
         .join('&')}`,
     );
     expect(fetchMock.mock.calls[0]).toHaveLength(1);
+  });
+
+  it('uses POST once the deduplicated id count exceeds 64, even with a short URL', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [],
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    // The Beacon API GET endpoint caps id[] at 64 items (maxItems: 64,
+    // documented 414 above that) regardless of URL length.
+    const validatorIds = Array.from({ length: 65 }, (_, index) => `${index}`);
+
+    await getBeaconValidators('https://beacon.example/api', {
+      validatorIds,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/api/eth/v1/beacon/states/head/validators',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: validatorIds }),
+      },
+    );
+  });
+
+  it('deduplicates transport ids while preserving repeated aligned outputs', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [
+            createRawValidator({ index: '5', validator: { pubkey: '0xaaa' } }),
+            createRawValidator({ index: '7', validator: { pubkey: '0xbbb' } }),
+          ],
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const states = await getBeaconValidatorStates('https://beacon.example', {
+      validatorIds: ['5', '5', '7'],
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/eth/v1/beacon/states/head/validators?id=5&id=7',
+    );
+    expect(states.map((state) => state?.publicKey)).toEqual([
+      '0xaaa',
+      '0xaaa',
+      '0xbbb',
+    ]);
+  });
+
+  it('rejects a blank validatorId in a batch request instead of sending it', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidators('https://beacon.example', {
+        validatorIds: ['1', '   '],
+      }),
+    ).rejects.toThrow(
+      'getBeaconValidators requires every validatorId to be non-empty',
+    );
+
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it('uses POST for beacon validator batches when the GET URL would be too long', async () => {
@@ -400,6 +474,138 @@ describe('Beacon API', () => {
     );
   });
 
+  it.each([
+    ['empty string', ''],
+    ['whitespace', '   '],
+    ['negative', '-1'],
+    ['explicitly signed', '+1'],
+    ['hexadecimal', '0x10'],
+    ['leading zero', '007'],
+  ] as const)(
+    'rejects a non-canonical balance value (%s)',
+    async (_label, balance) => {
+      const fetchMock = vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({ data: createRawValidator({ balance }) }),
+          { status: 200 },
+        ),
+      );
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+      ).rejects.toThrow(
+        'Beacon API returned an invalid response for getBeaconValidatorState: balance must be a canonical non-negative integer string',
+      );
+    },
+  );
+
+  it('rejects a balance value exceeding the uint64 range', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({ balance: '18446744073709551616' }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorState: balance exceeds the uint64 range',
+    );
+  });
+
+  it.each([
+    ['empty string', ''],
+    ['negative', '-1'],
+    ['hexadecimal', '0x1'],
+  ] as const)(
+    'rejects a non-canonical validator index value (%s)',
+    async (_label, index) => {
+      const fetchMock = vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({ data: createRawValidator({ index }) }),
+          { status: 200 },
+        ),
+      );
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+      ).rejects.toThrow(
+        'Beacon API returned an invalid response for getBeaconValidatorState: index must be a canonical non-negative integer string',
+      );
+    },
+  );
+
+  it('throws instead of treating a validator index equal to the far-future sentinel as absent', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({ data: createRawValidator({ index: FAR_FUTURE_EPOCH }) }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    // index has no far-future-sentinel semantics (unlike the epoch fields),
+    // so a value that large is just out of range, not "not yet set".
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorState: index exceeds MAX_SAFE_INTEGER',
+    );
+  });
+
+  it.each([
+    ['empty string', ''],
+    ['negative', '-1'],
+    ['hexadecimal', '0x3'],
+  ] as const)(
+    'rejects a non-canonical exit_epoch value (%s)',
+    async (_label, exitEpoch) => {
+      const fetchMock = vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({
+              validator: { exit_epoch: exitEpoch as never },
+            }),
+          }),
+          { status: 200 },
+        ),
+      );
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+      ).rejects.toThrow(
+        'Beacon API returned an invalid response for getBeaconValidatorState: validator.exit_epoch must be a canonical non-negative integer string',
+      );
+    },
+  );
+
+  it('rejects an epoch value exceeding the uint64 range', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({
+            validator: { exit_epoch: '18446744073709551616' as never },
+          }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorState: validator.exit_epoch exceeds the uint64 range',
+    );
+  });
+
   it('converts optional numeric fields to null when unavailable', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(
@@ -617,6 +823,17 @@ describe('Beacon API', () => {
     ).rejects.toThrow('Beacon API returned an invalid response for getBeaconValidator');
   });
 
+  it('throws a clear error when the response body is not valid JSON', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response('not json', { status: 200 }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: '1' }),
+    ).rejects.toThrow('Beacon API returned invalid JSON for getBeaconValidator');
+  });
+
   it('throws a clear error when batch validator response data is invalid', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(
@@ -773,17 +990,58 @@ describe('Beacon API', () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
-  it('aborts a request that stalls past its remaining budget instead of hanging past timeoutMs', async () => {
+  const stallUntilAborted = (_url: string, init?: RequestInit) =>
+    new Promise((_resolve, reject) => {
+      init?.signal?.addEventListener('abort', () => {
+        reject(init.signal!.reason);
+      });
+    });
+
+  it('aborts a stalled first attempt well before a large overall deadline and retries', async () => {
     vi.useFakeTimers();
 
-    const fetchMock = vi.fn().mockImplementation(
-      (_url: string, init?: RequestInit) =>
-        new Promise((_resolve, reject) => {
-          init?.signal?.addEventListener('abort', () => {
-            reject(init.signal!.reason);
-          });
-        }),
+    const fetchMock = vi
+      .fn()
+      .mockImplementationOnce(stallUntilAborted)
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ status: 'active_ongoing' }),
+          }),
+          { status: 200 },
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const timeoutMs = 30 * 60 * 1_000; // 30 minutes
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs,
+      },
     );
+    const activationExpectation = expect(activationPromise).resolves.toMatchObject(
+      {
+        status: 'active',
+        rawStatus: 'active_ongoing',
+      },
+    );
+
+    // requestTimeoutMs defaults to pollIntervalMs (1s), so the stalled first
+    // attempt is aborted and retried almost immediately — not after the full
+    // 30-minute deadline.
+    await vi.advanceTimersByTimeAsync(2_000);
+
+    await activationExpectation;
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps retrying across a sequence of stalled requests until the overall deadline elapses', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn().mockImplementation(stallUntilAborted);
     vi.stubGlobal('fetch', fetchMock);
 
     const activationPromise = waitForBeaconValidatorActivation(
@@ -801,7 +1059,11 @@ describe('Beacon API', () => {
     await vi.advanceTimersByTimeAsync(2_500);
 
     await activationExpectation;
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    // requestTimeoutMs defaults to pollIntervalMs (1000ms): attempt 1 stalls
+    // for 1000ms then sleeps 1000ms, attempt 2 stalls for the remaining
+    // 500ms and lands exactly on the overall deadline — two bounded attempts
+    // total, never a single stall consuming the whole 2500ms budget.
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
   it('throws immediately in strict mode when a validator is not found', async () => {
@@ -820,6 +1082,74 @@ describe('Beacon API', () => {
     );
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('throws immediately on a non-retryable HTTP status instead of retrying until timeout', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 401 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('https://beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Beacon API request failed for getBeaconValidator with status 401',
+    );
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('throws immediately on a malformed response instead of retrying until timeout', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({ status: 'mystery_status' as never }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('https://beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorState: unsupported status mystery_status',
+    );
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('preserves the last retryable error when repeated failures exhaust the deadline', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 503 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 2_500,
+      },
+    );
+    const activationExpectation = expect(activationPromise).rejects.toThrow(
+      'Beacon API request failed for getBeaconValidator with status 503',
+    );
+
+    await vi.advanceTimersByTimeAsync(2_500);
+
+    await activationExpectation;
   });
 
   it('waits while pending validators contain far-future epoch sentinels', async () => {

@@ -60,16 +60,38 @@ export type WaitForBeaconValidatorActivationArgs = {
   pollIntervalMs: number;
   timeoutMs: number;
   failOnNotFound?: boolean;
+  // Caps each individual poll attempt so one stalled request can't consume
+  // the whole activation budget. Defaults to pollIntervalMs.
+  requestTimeoutMs?: number;
 };
 
 type BeaconResponse<T> = {
   data?: T;
 };
 
-// Beacon APIs use the uint64 max value as a sentinel for epochs that are not set yet.
+export class BeaconHttpError extends Error {
+  readonly status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = 'BeaconHttpError';
+    this.status = status;
+  }
+}
+
+export class BeaconValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'BeaconValidationError';
+  }
+}
+
+// Beacon APIs use the uint64 max value as a sentinel for epochs that are not
+// set yet; the same bound doubles as the valid range ceiling for uint64 fields.
 const BEACON_FAR_FUTURE_EPOCH = 18446744073709551615n;
 const BEACON_VALIDATORS_PATH = '/eth/v1/beacon/states/head/validators';
 const BEACON_GET_VALIDATORS_MAX_URL_LENGTH = 7000;
+const BEACON_GET_VALIDATORS_MAX_COUNT = 64;
 
 const missingBeaconEndpointError = () =>
   new Error(
@@ -81,19 +103,36 @@ const assertBeaconData = <T>(
   methodName: string,
 ): T => {
   if (typeof payload !== 'object' || payload === null || !('data' in payload)) {
-    throw new Error(`Beacon API returned an invalid response for ${methodName}`);
+    throw new BeaconValidationError(
+      `Beacon API returned an invalid response for ${methodName}`,
+    );
   }
 
   if (typeof payload.data === 'undefined') {
-    throw new Error(`Beacon API response is missing data for ${methodName}`);
+    throw new BeaconValidationError(
+      `Beacon API response is missing data for ${methodName}`,
+    );
   }
 
   return payload.data;
 };
 
+const parseBeaconJSON = async <T>(
+  response: Response,
+  methodName: string,
+): Promise<BeaconResponse<T>> => {
+  try {
+    return (await response.json()) as BeaconResponse<T>;
+  } catch {
+    throw new BeaconValidationError(
+      `Beacon API returned invalid JSON for ${methodName}`,
+    );
+  }
+};
+
 const assertString = (value: unknown, fieldName: string, methodName: string) => {
   if (typeof value !== 'string') {
-    throw new Error(
+    throw new BeaconValidationError(
       `Beacon API returned an invalid response for ${methodName}: ${fieldName} must be a string`,
     );
   }
@@ -107,7 +146,7 @@ const assertBoolean = (
   methodName: string,
 ) => {
   if (typeof value !== 'boolean') {
-    throw new Error(
+    throw new BeaconValidationError(
       `Beacon API returned an invalid response for ${methodName}: ${fieldName} must be a boolean`,
     );
   }
@@ -127,11 +166,72 @@ const mapOptionalString = (
   return assertString(value, fieldName, methodName);
 };
 
+// The Beacon API's uint64 primitive is a decimal string; BigInt() itself is
+// far more permissive (accepts '', whitespace, signs, and hex), so malformed
+// or adversarial responses must be rejected before reaching BigInt().
+const CANONICAL_UNSIGNED_INTEGER_PATTERN = /^(0|[1-9][0-9]*)$/;
+
+const parseCanonicalUint64String = (
+  rawValue: string,
+  fieldName: string,
+  methodName: string,
+): bigint => {
+  if (!CANONICAL_UNSIGNED_INTEGER_PATTERN.test(rawValue)) {
+    throw new BeaconValidationError(
+      `Beacon API returned an invalid response for ${methodName}: ${fieldName} must be a canonical non-negative integer string`,
+    );
+  }
+
+  const parsedValue = BigInt(rawValue);
+
+  if (parsedValue > BEACON_FAR_FUTURE_EPOCH) {
+    throw new BeaconValidationError(
+      `Beacon API returned an invalid response for ${methodName}: ${fieldName} exceeds the uint64 range`,
+    );
+  }
+
+  return parsedValue;
+};
+
 const parseBigIntString = (
   value: unknown,
   fieldName: string,
   methodName: string,
-) => BigInt(assertString(value, fieldName, methodName));
+) =>
+  parseCanonicalUint64String(
+    assertString(value, fieldName, methodName),
+    fieldName,
+    methodName,
+  );
+
+// For fields where the far-future sentinel means "not set yet" (epochs only —
+// see parseOptionalSafeNumberString for fields like index that have no such
+// sentinel semantics).
+const parseOptionalSafeEpochString = (
+  value: unknown,
+  fieldName: string,
+  methodName: string,
+) => {
+  const rawValue = mapOptionalString(value, fieldName, methodName);
+
+  if (rawValue === null) {
+    return null;
+  }
+
+  const parsedValue = parseCanonicalUint64String(rawValue, fieldName, methodName);
+
+  if (parsedValue === BEACON_FAR_FUTURE_EPOCH) {
+    return null;
+  }
+
+  if (parsedValue > BigInt(Number.MAX_SAFE_INTEGER)) {
+    throw new BeaconValidationError(
+      `Beacon API returned an invalid response for ${methodName}: ${fieldName} exceeds MAX_SAFE_INTEGER`,
+    );
+  }
+
+  return Number(parsedValue);
+};
 
 const parseOptionalSafeNumberString = (
   value: unknown,
@@ -144,14 +244,10 @@ const parseOptionalSafeNumberString = (
     return null;
   }
 
-  const parsedValue = BigInt(rawValue);
-
-  if (parsedValue === BEACON_FAR_FUTURE_EPOCH) {
-    return null;
-  }
+  const parsedValue = parseCanonicalUint64String(rawValue, fieldName, methodName);
 
   if (parsedValue > BigInt(Number.MAX_SAFE_INTEGER)) {
-    throw new Error(
+    throw new BeaconValidationError(
       `Beacon API returned an invalid response for ${methodName}: ${fieldName} exceeds MAX_SAFE_INTEGER`,
     );
   }
@@ -180,7 +276,7 @@ const mapBeaconValidatorStatus = (
     case 'withdrawal_done':
       return normalizedStatus;
     default:
-      throw new Error(
+      throw new BeaconValidationError(
         `Beacon API returned an invalid response for ${methodName}: unsupported status ${normalizedStatus}`,
       );
   }
@@ -222,6 +318,24 @@ const createBudgetSignal = (budgetMs: number) => {
   };
 };
 
+// 408/429/5xx and network-level failures (including our own attempt-timeout
+// abort) are worth retrying; other 4xx statuses and response-validation
+// failures are permanent for a given input and would otherwise spin silently
+// until timeout, hiding the actionable error.
+const RETRYABLE_HTTP_STATUSES = new Set([408, 429]);
+
+const isRetryableActivationError = (error: unknown): boolean => {
+  if (error instanceof BeaconValidationError) {
+    return false;
+  }
+
+  if (error instanceof BeaconHttpError) {
+    return RETRYABLE_HTTP_STATUSES.has(error.status) || error.status >= 500;
+  }
+
+  return true;
+};
+
 const describeActivationWaitState = (state: BeaconValidatorState | null) => {
   if (state === null) {
     return 'not found';
@@ -252,11 +366,13 @@ const mapBeaconValidatorState = (
   methodName: string,
 ): BeaconValidatorState => {
   if (typeof validator !== 'object' || validator === null) {
-    throw new Error(`Beacon API returned an invalid response for ${methodName}`);
+    throw new BeaconValidationError(
+      `Beacon API returned an invalid response for ${methodName}`,
+    );
   }
 
   if (typeof validator.validator !== 'object' || validator.validator === null) {
-    throw new Error(
+    throw new BeaconValidationError(
       `Beacon API returned an invalid response for ${methodName}: validator must be an object`,
     );
   }
@@ -277,22 +393,22 @@ const mapBeaconValidatorState = (
       methodName,
     ),
     slashed: assertBoolean(validator.validator.slashed, 'validator.slashed', methodName),
-    activationEligibilityEpoch: parseOptionalSafeNumberString(
+    activationEligibilityEpoch: parseOptionalSafeEpochString(
       validator.validator.activation_eligibility_epoch,
       'validator.activation_eligibility_epoch',
       methodName,
     ),
-    activationEpoch: parseOptionalSafeNumberString(
+    activationEpoch: parseOptionalSafeEpochString(
       validator.validator.activation_epoch,
       'validator.activation_epoch',
       methodName,
     ),
-    exitEpoch: parseOptionalSafeNumberString(
+    exitEpoch: parseOptionalSafeEpochString(
       validator.validator.exit_epoch,
       'validator.exit_epoch',
       methodName,
     ),
-    withdrawableEpoch: parseOptionalSafeNumberString(
+    withdrawableEpoch: parseOptionalSafeEpochString(
       validator.validator.withdrawable_epoch,
       'validator.withdrawable_epoch',
       methodName,
@@ -301,6 +417,14 @@ const mapBeaconValidatorState = (
 };
 
 const toValidatorLookupKey = (validatorId: string) => validatorId.toLowerCase();
+
+// Both the GET and POST validator-batch endpoints require unique transport
+// ids; deduping here (rather than in getBeaconValidatorStates) keeps this a
+// transport-only concern — per-input-position output alignment already comes
+// from the lookup-map pass in getBeaconValidatorStates below, independent of
+// how many times an id was repeated on the wire.
+const dedupeValidatorIds = (validatorIds: string[]): string[] =>
+  Array.from(new Set(validatorIds));
 
 const getBeaconValidatorsURL = (
   endpoint: string,
@@ -323,8 +447,15 @@ const getBeaconValidatorsRequest = (
 ): { url: string; init?: RequestInit } => {
   const url = getBeaconValidatorsURL(endpoint, validatorIds);
 
-  // Long validator ids can exceed provider or proxy URL limits before batch size does.
-  if (url.length <= BEACON_GET_VALIDATORS_MAX_URL_LENGTH) {
+  // The GET endpoint's id[] query param is capped at 64 unique items by the
+  // spec (maxItems: 64, and a documented 414 above that); long validator ids
+  // can also exceed provider/proxy URL limits before that count is reached.
+  // The POST body has no such count cap and exists precisely to support
+  // larger batches.
+  if (
+    validatorIds.length <= BEACON_GET_VALIDATORS_MAX_COUNT &&
+    url.length <= BEACON_GET_VALIDATORS_MAX_URL_LENGTH
+  ) {
     return {
       url,
     };
@@ -351,7 +482,7 @@ export const getBeaconValidator = async (
   }
 
   if (args.validatorId.trim().length === 0) {
-    throw new Error(
+    throw new BeaconValidationError(
       'getBeaconValidator requires a non-empty validatorId; an empty value would request the unfiltered validator list instead',
     );
   }
@@ -369,13 +500,14 @@ export const getBeaconValidator = async (
   }
 
   if (!response.ok) {
-    throw new Error(
+    throw new BeaconHttpError(
+      response.status,
       `Beacon API request failed for getBeaconValidator with status ${response.status}`,
     );
   }
 
   return assertBeaconData<BeaconValidator>(
-    (await response.json()) as BeaconResponse<BeaconValidator>,
+    await parseBeaconJSON<BeaconValidator>(response, 'getBeaconValidator'),
     'getBeaconValidator',
   );
 };
@@ -392,7 +524,14 @@ export const getBeaconValidators = async (
     return [];
   }
 
-  const request = getBeaconValidatorsRequest(endpoint, args.validatorIds);
+  if (args.validatorIds.some((validatorId) => validatorId.trim().length === 0)) {
+    throw new BeaconValidationError(
+      'getBeaconValidators requires every validatorId to be non-empty',
+    );
+  }
+
+  const dedupedValidatorIds = dedupeValidatorIds(args.validatorIds);
+  const request = getBeaconValidatorsRequest(endpoint, dedupedValidatorIds);
   const response = request.init
     ? await fetch(request.url, request.init)
     : await fetch(request.url);
@@ -402,18 +541,19 @@ export const getBeaconValidators = async (
   // here means the state/route itself is wrong (e.g. misconfigured
   // endpoint), so it must not be swallowed into an empty result.
   if (!response.ok) {
-    throw new Error(
+    throw new BeaconHttpError(
+      response.status,
       `Beacon API request failed for getBeaconValidators with status ${response.status}`,
     );
   }
 
   const data = assertBeaconData<BeaconValidator[]>(
-    (await response.json()) as BeaconResponse<BeaconValidator[]>,
+    await parseBeaconJSON<BeaconValidator[]>(response, 'getBeaconValidators'),
     'getBeaconValidators',
   );
 
   if (!Array.isArray(data)) {
-    throw new Error(
+    throw new BeaconValidationError(
       'Beacon API returned an invalid response for getBeaconValidators',
     );
   }
@@ -480,10 +620,17 @@ export const waitForBeaconValidatorActivation = async (
     methodName,
   );
   const timeoutMs = assertPositiveInteger(args.timeoutMs, 'timeoutMs', methodName);
+  const requestTimeoutMs = assertPositiveInteger(
+    args.requestTimeoutMs ?? pollIntervalMs,
+    'requestTimeoutMs',
+    methodName,
+  );
   const deadline = Date.now() + timeoutMs;
   let lastObservedState: BeaconValidatorState | null = null;
+  let lastRetryableError: unknown = null;
 
   const timeoutError = () =>
+    lastRetryableError ??
     new Error(
       `Timed out waiting for beacon validator activation for ${args.validatorId} after ${timeoutMs}ms; last observed state: ${describeActivationWaitState(lastObservedState)}`,
     );
@@ -495,11 +642,11 @@ export const waitForBeaconValidatorActivation = async (
       throw timeoutError();
     }
 
-    // Bound each attempt by the remaining budget so a stalled request can't
-    // block the wait past timeoutMs, and retry transient fetch failures
-    // (network errors, 429/5xx, this abort) instead of rejecting the whole
-    // wait on a single blip.
-    const { signal, dispose } = createBudgetSignal(remainingBudgetMs);
+    // Bound each attempt by the smaller of the remaining deadline and
+    // requestTimeoutMs — not the full remaining budget — so a single stalled
+    // request can't consume the entire wait with zero retries in between.
+    const attemptBudgetMs = Math.min(remainingBudgetMs, requestTimeoutMs);
+    const { signal, dispose } = createBudgetSignal(attemptBudgetMs);
     let state: BeaconValidatorState | null;
 
     try {
@@ -508,6 +655,12 @@ export const waitForBeaconValidatorActivation = async (
         signal,
       });
     } catch (error) {
+      if (!isRetryableActivationError(error)) {
+        throw error;
+      }
+
+      lastRetryableError = error;
+
       const remainingMs = deadline - Date.now();
 
       if (remainingMs <= 0) {
@@ -520,6 +673,7 @@ export const waitForBeaconValidatorActivation = async (
       dispose();
     }
 
+    lastRetryableError = null;
     lastObservedState = state;
 
     if (state === null && args.failOnNotFound) {
