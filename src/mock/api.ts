@@ -267,7 +267,11 @@ export const createMockApi = (
     getBeaconValidator: vi.fn().mockResolvedValue(null),
     getBeaconValidators: vi.fn().mockResolvedValue([]),
     getBeaconValidatorState: vi.fn().mockResolvedValue(null),
-    getBeaconValidatorStates: vi.fn().mockResolvedValue([]),
+    getBeaconValidatorStates: vi
+      .fn()
+      .mockImplementation((args: { validatorIds: string[] }) =>
+        Promise.resolve(args.validatorIds.map(() => null)),
+      ),
     getBeaconValidatorLifecycleStage,
     waitForBeaconValidatorActivation: vi
       .fn()

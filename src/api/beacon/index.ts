@@ -205,6 +205,23 @@ const sleep = (delayMs: number) =>
     setTimeout(resolve, delayMs);
   });
 
+// Native AbortSignal.timeout() schedules through an internal timer rather
+// than the global setTimeout, so it can't be advanced deterministically by
+// swapping the timer implementation in tests. Building it from setTimeout
+// keeps a stalled request abortable within the caller's time budget while
+// staying controllable by such tests.
+const createBudgetSignal = (budgetMs: number) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    controller.abort(new Error(`Beacon request exceeded its ${budgetMs}ms time budget`));
+  }, budgetMs);
+
+  return {
+    signal: controller.signal,
+    dispose: () => clearTimeout(timeoutId),
+  };
+};
+
 const describeActivationWaitState = (state: BeaconValidatorState | null) => {
   if (state === null) {
     return 'not found';
@@ -327,18 +344,25 @@ const getBeaconValidatorsRequest = (
 
 export const getBeaconValidator = async (
   endpoint: string | undefined,
-  args: { validatorId: string },
+  args: { validatorId: string; signal?: AbortSignal },
 ): Promise<BeaconValidator | null> => {
   if (!endpoint) {
     throw missingBeaconEndpointError();
   }
 
-  const response = await fetch(
-    join(
-      endpoint,
-      `/eth/v1/beacon/states/head/validators/${encodeURIComponent(args.validatorId)}`,
-    ),
+  if (args.validatorId.trim().length === 0) {
+    throw new Error(
+      'getBeaconValidator requires a non-empty validatorId; an empty value would request the unfiltered validator list instead',
+    );
+  }
+
+  const url = join(
+    endpoint,
+    `/eth/v1/beacon/states/head/validators/${encodeURIComponent(args.validatorId)}`,
   );
+  const response = args.signal
+    ? await fetch(url, { signal: args.signal })
+    : await fetch(url);
 
   if (response.status === 404) {
     return null;
@@ -373,10 +397,10 @@ export const getBeaconValidators = async (
     ? await fetch(request.url, request.init)
     : await fetch(request.url);
 
-  if (response.status === 404) {
-    return [];
-  }
-
+  // Unlike the single-validator route, the batch route returns 200 with a
+  // filtered (possibly empty) list for validators that don't exist. A 404
+  // here means the state/route itself is wrong (e.g. misconfigured
+  // endpoint), so it must not be swallowed into an empty result.
   if (!response.ok) {
     throw new Error(
       `Beacon API request failed for getBeaconValidators with status ${response.status}`,
@@ -399,7 +423,7 @@ export const getBeaconValidators = async (
 
 export const getBeaconValidatorState = async (
   endpoint: string | undefined,
-  args: { validatorId: string },
+  args: { validatorId: string; signal?: AbortSignal },
 ): Promise<BeaconValidatorState | null> => {
   const validator = await getBeaconValidator(endpoint, args);
 
@@ -459,10 +483,43 @@ export const waitForBeaconValidatorActivation = async (
   const deadline = Date.now() + timeoutMs;
   let lastObservedState: BeaconValidatorState | null = null;
 
+  const timeoutError = () =>
+    new Error(
+      `Timed out waiting for beacon validator activation for ${args.validatorId} after ${timeoutMs}ms; last observed state: ${describeActivationWaitState(lastObservedState)}`,
+    );
+
   while (true) {
-    const state = await getBeaconValidatorState(endpoint, {
-      validatorId: args.validatorId,
-    });
+    const remainingBudgetMs = deadline - Date.now();
+
+    if (remainingBudgetMs <= 0) {
+      throw timeoutError();
+    }
+
+    // Bound each attempt by the remaining budget so a stalled request can't
+    // block the wait past timeoutMs, and retry transient fetch failures
+    // (network errors, 429/5xx, this abort) instead of rejecting the whole
+    // wait on a single blip.
+    const { signal, dispose } = createBudgetSignal(remainingBudgetMs);
+    let state: BeaconValidatorState | null;
+
+    try {
+      state = await getBeaconValidatorState(endpoint, {
+        validatorId: args.validatorId,
+        signal,
+      });
+    } catch (error) {
+      const remainingMs = deadline - Date.now();
+
+      if (remainingMs <= 0) {
+        throw error;
+      }
+
+      await sleep(Math.min(pollIntervalMs, remainingMs));
+      continue;
+    } finally {
+      dispose();
+    }
+
     lastObservedState = state;
 
     if (state === null && args.failOnNotFound) {
@@ -488,9 +545,7 @@ export const waitForBeaconValidatorActivation = async (
     const remainingMs = deadline - Date.now();
 
     if (remainingMs <= 0) {
-      throw new Error(
-        `Timed out waiting for beacon validator activation for ${args.validatorId} after ${timeoutMs}ms; last observed state: ${describeActivationWaitState(lastObservedState)}`,
-      );
+      throw timeoutError();
     }
 
     await sleep(Math.min(pollIntervalMs, remainingMs));

@@ -148,6 +148,15 @@ describe('Mock API event completeness', () => {
     });
   });
 
+  it('keeps getBeaconValidatorStates mock responses index-aligned with the request', async () => {
+    const { createMockApi } = await import('@/mock/api');
+    const api = createMockApi(publicClient as never);
+
+    await expect(
+      api.getBeaconValidatorStates({ validatorIds: ['1', '2', '3'] }),
+    ).resolves.toEqual([null, null, null]);
+  });
+
   it('includes the full beacon helper surface', async () => {
     const { createMockApi } = await import('@/mock/api');
     const api = createMockApi(publicClient as never);
@@ -161,16 +170,26 @@ describe('Mock API event completeness', () => {
     expect(api.getBeaconValidatorLifecycleStage).toBeTypeOf('function');
     expect(api.waitForBeaconValidatorActivation).toBeTypeOf('function');
 
-    await expect(
-      api.waitForBeaconValidatorActivation({
-        validatorId: '1',
-        pollIntervalMs: 1_000,
-        timeoutMs: 5_000,
-      }),
-    ).resolves.toMatchObject({
-      status: 'active',
-      rawStatus: 'active_ongoing',
+    // The mock resolves a fixed constant regardless of validatorId/pollIntervalMs/
+    // timeoutMs, so only its surface shape is asserted here — an exact-value
+    // match would pass even if the mock stopped honoring the real
+    // BeaconValidatorState contract, since it doesn't drive off getBeaconValidatorState.
+    const activatedState = await api.waitForBeaconValidatorActivation({
+      validatorId: '1',
+      pollIntervalMs: 1_000,
+      timeoutMs: 5_000,
     });
+
+    expect(activatedState).toEqual(
+      expect.objectContaining({
+        publicKey: expect.any(String),
+        status: expect.any(String),
+        rawStatus: expect.any(String),
+        slashed: expect.any(Boolean),
+      }),
+    );
+    expect(typeof activatedState.balanceGwei).toBe('bigint');
+    expect(typeof activatedState.effectiveBalanceGwei).toBe('bigint');
 
     expect(
       api.getBeaconValidatorLifecycleStage({ status: 'withdrawal_done' }),

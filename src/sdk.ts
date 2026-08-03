@@ -75,6 +75,6 @@ const hasIncompletePrebuiltConfigShape = (props: unknown): boolean => {
     'contract' in props &&
     'subgraph' in props &&
     'rest' in props &&
-    !('beacon' in props)
+    !('beacon' in props && isNonNullObject(props.beacon))
   );
 };

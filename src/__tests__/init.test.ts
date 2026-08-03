@@ -163,6 +163,24 @@ describe('SDK Initiation', async () => {
         beacon: null,
       }),
     ).toBe(false);
+
+    const expectedError =
+      'Incomplete prebuilt config object: normalized SDK configs must include a beacon field. The normalized beacon shape is required even when beacon.endpoint is undefined.';
+
+    expect(
+      () =>
+        new SSVSDK({
+          ...sdk.config,
+          beacon: undefined,
+        } as unknown as typeof sdk.config),
+    ).toThrowError(expectedError);
+    expect(
+      () =>
+        new SSVSDK({
+          ...sdk.config,
+          beacon: null,
+        } as unknown as typeof sdk.config),
+    ).toThrowError(expectedError);
   });
 
   it('should reject an incomplete prebuilt config object missing beacon', () => {

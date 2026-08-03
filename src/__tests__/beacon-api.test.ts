@@ -86,6 +86,21 @@ describe('Beacon API', () => {
     expect(validator?.index).toBe('12');
   });
 
+  it('rejects an empty or blank validatorId instead of requesting the unfiltered list', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: '' }),
+    ).rejects.toThrow('getBeaconValidator requires a non-empty validatorId');
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: '   ' }),
+    ).rejects.toThrow('getBeaconValidator requires a non-empty validatorId');
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it('constructs bound beacon API methods', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(
@@ -578,7 +593,7 @@ describe('Beacon API', () => {
     ]);
   });
 
-  it('returns null entries for a batch not-found response', async () => {
+  it('throws when a batch validator request returns 404', async () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 404 }));
     vi.stubGlobal('fetch', fetchMock);
 
@@ -586,7 +601,9 @@ describe('Beacon API', () => {
       getBeaconValidatorStates('https://beacon.example', {
         validatorIds: ['1', '2'],
       }),
-    ).resolves.toEqual([null, null]);
+    ).rejects.toThrow(
+      'Beacon API request failed for getBeaconValidators with status 404',
+    );
   });
 
   it('throws a clear error when single validator response is missing data', async () => {
@@ -719,6 +736,72 @@ describe('Beacon API', () => {
 
     await activationExpectation;
     expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('retries after a transient fetch error while waiting for activation', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(null, { status: 503 }))
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ status: 'active_ongoing' }),
+          }),
+          { status: 200 },
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      },
+    );
+    const activationExpectation = expect(activationPromise).resolves.toMatchObject({
+      status: 'active',
+      rawStatus: 'active_ongoing',
+    });
+
+    await vi.advanceTimersByTimeAsync(1_000);
+
+    await activationExpectation;
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('aborts a request that stalls past its remaining budget instead of hanging past timeoutMs', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn().mockImplementation(
+      (_url: string, init?: RequestInit) =>
+        new Promise((_resolve, reject) => {
+          init?.signal?.addEventListener('abort', () => {
+            reject(init.signal!.reason);
+          });
+        }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 2_500,
+      },
+    );
+    const activationExpectation = expect(activationPromise).rejects.toThrow(
+      /time budget/,
+    );
+
+    await vi.advanceTimersByTimeAsync(2_500);
+
+    await activationExpectation;
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
   it('throws immediately in strict mode when a validator is not found', async () => {
