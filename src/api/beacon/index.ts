@@ -123,10 +123,20 @@ const parseBeaconJSON = async <T>(
 ): Promise<BeaconResponse<T>> => {
   try {
     return (await response.json()) as BeaconResponse<T>;
-  } catch {
-    throw new BeaconValidationError(
-      `Beacon API returned invalid JSON for ${methodName}`,
-    );
+  } catch (error) {
+    // response.json() rejects both for malformed JSON content (SyntaxError,
+    // once the body has been read in full) and for a body read that never
+    // completes (connection drop, or our own attempt-timeout abort firing
+    // mid-stream). Only the former is a permanent, non-retryable failure —
+    // the latter must propagate as-is so isRetryableActivationError's
+    // default (retryable) applies.
+    if (error instanceof SyntaxError) {
+      throw new BeaconValidationError(
+        `Beacon API returned invalid JSON for ${methodName}`,
+      );
+    }
+
+    throw error;
   }
 };
 

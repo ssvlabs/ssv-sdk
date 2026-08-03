@@ -1,5 +1,6 @@
 import {
   type BeaconValidator,
+  BeaconValidationError,
   getBeaconAPI,
   getBeaconValidatorLifecycleStage,
   getBeaconValidator,
@@ -834,6 +835,23 @@ describe('Beacon API', () => {
     ).rejects.toThrow('Beacon API returned invalid JSON for getBeaconValidator');
   });
 
+  it('propagates a body-read failure unchanged instead of treating it as invalid JSON', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: () => Promise.reject(new TypeError('terminated')),
+    } as unknown as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const error: unknown = await getBeaconValidator('https://beacon.example', {
+      validatorId: '1',
+    }).catch((caught: unknown) => caught);
+
+    expect(error).toBeInstanceOf(TypeError);
+    expect(error).not.toBeInstanceOf(BeaconValidationError);
+    expect((error as Error).message).toBe('terminated');
+  });
+
   it('throws a clear error when batch validator response data is invalid', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(
@@ -961,6 +979,45 @@ describe('Beacon API', () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(new Response(null, { status: 503 }))
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ status: 'active_ongoing' }),
+          }),
+          { status: 200 },
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      },
+    );
+    const activationExpectation = expect(activationPromise).resolves.toMatchObject({
+      status: 'active',
+      rawStatus: 'active_ongoing',
+    });
+
+    await vi.advanceTimersByTimeAsync(1_000);
+
+    await activationExpectation;
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('retries after a body-read failure on an otherwise-successful response', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: () => Promise.reject(new TypeError('terminated')),
+      } as unknown as Response)
       .mockResolvedValueOnce(
         new Response(
           JSON.stringify({
