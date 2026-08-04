@@ -824,6 +824,47 @@ describe('Beacon API', () => {
     ).rejects.toThrow('Beacon API returned an invalid response for getBeaconValidator');
   });
 
+  it('throws a clear error when the response data is explicitly null', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ data: null }), { status: 200 }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: '1' }),
+    ).rejects.toThrow('Beacon API response is missing data for getBeaconValidator');
+  });
+
+  it('throws a clear error when batch response data is explicitly null', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ data: null }), { status: 200 }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidators('https://beacon.example', { validatorIds: ['1'] }),
+    ).rejects.toThrow('Beacon API response is missing data for getBeaconValidators');
+  });
+
+  it('fails fast instead of polling to timeout when the response data is explicitly null', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ data: null }), { status: 200 }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('https://beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Beacon API response is missing data for getBeaconValidator',
+    );
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
   it('throws a clear error when the response body is not valid JSON', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response('not json', { status: 200 }),
@@ -1054,6 +1095,52 @@ describe('Beacon API', () => {
       });
     });
 
+  it('does not abort a healthy response that takes longer than a short pollIntervalMs', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn().mockImplementation(
+      (_url: string, init?: RequestInit) =>
+        new Promise((resolve, reject) => {
+          const timer = setTimeout(() => {
+            resolve(
+              new Response(
+                JSON.stringify({
+                  data: createRawValidator({ status: 'active_ongoing' }),
+                }),
+                { status: 200 },
+              ),
+            );
+          }, 700);
+          init?.signal?.addEventListener('abort', () => {
+            clearTimeout(timer);
+            reject(init.signal!.reason);
+          });
+        }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        // Shorter than the endpoint's real 700ms latency below — this used
+        // to make requestTimeoutMs (defaulting to pollIntervalMs) abort
+        // every attempt before a perfectly healthy response could arrive.
+        pollIntervalMs: 500,
+        timeoutMs: 5_000,
+      },
+    );
+    const activationExpectation = expect(activationPromise).resolves.toMatchObject({
+      status: 'active',
+      rawStatus: 'active_ongoing',
+    });
+
+    await vi.advanceTimersByTimeAsync(700);
+
+    await activationExpectation;
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
   it('aborts a stalled first attempt well before a large overall deadline and retries', async () => {
     vi.useFakeTimers();
 
@@ -1075,7 +1162,9 @@ describe('Beacon API', () => {
       'https://beacon.example',
       {
         validatorId: '12',
-        pollIntervalMs: 1_000,
+        // Deliberately shorter than requestTimeoutMs's default, to prove the
+        // per-attempt budget is no longer tied to pollIntervalMs.
+        pollIntervalMs: 500,
         timeoutMs,
       },
     );
@@ -1086,10 +1175,10 @@ describe('Beacon API', () => {
       },
     );
 
-    // requestTimeoutMs defaults to pollIntervalMs (1s), so the stalled first
-    // attempt is aborted and retried almost immediately — not after the full
-    // 30-minute deadline.
-    await vi.advanceTimersByTimeAsync(2_000);
+    // requestTimeoutMs defaults to DEFAULT_REQUEST_TIMEOUT_MS (10s), so the
+    // stalled first attempt is aborted and retried well before the full
+    // 30-minute deadline — but not as fast as the (much shorter) pollIntervalMs.
+    await vi.advanceTimersByTimeAsync(11_000);
 
     await activationExpectation;
     expect(fetchMock).toHaveBeenCalledTimes(2);
@@ -1107,6 +1196,10 @@ describe('Beacon API', () => {
         validatorId: '12',
         pollIntervalMs: 1_000,
         timeoutMs: 2_500,
+        // Explicit, since requestTimeoutMs no longer defaults to
+        // pollIntervalMs — this is what subdivides a short overall deadline
+        // into multiple bounded attempts.
+        requestTimeoutMs: 1_000,
       },
     );
     const activationExpectation = expect(activationPromise).rejects.toThrow(
@@ -1116,10 +1209,10 @@ describe('Beacon API', () => {
     await vi.advanceTimersByTimeAsync(2_500);
 
     await activationExpectation;
-    // requestTimeoutMs defaults to pollIntervalMs (1000ms): attempt 1 stalls
-    // for 1000ms then sleeps 1000ms, attempt 2 stalls for the remaining
-    // 500ms and lands exactly on the overall deadline — two bounded attempts
-    // total, never a single stall consuming the whole 2500ms budget.
+    // attempt 1 stalls for 1000ms then sleeps 1000ms, attempt 2 stalls for
+    // the remaining 500ms and lands exactly on the overall deadline — two
+    // bounded attempts total, never a single stall consuming the whole
+    // 2500ms budget.
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 

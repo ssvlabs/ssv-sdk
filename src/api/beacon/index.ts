@@ -61,7 +61,10 @@ export type WaitForBeaconValidatorActivationArgs = {
   timeoutMs: number;
   failOnNotFound?: boolean;
   // Caps each individual poll attempt so one stalled request can't consume
-  // the whole activation budget. Defaults to pollIntervalMs.
+  // the whole activation budget. Defaults to DEFAULT_REQUEST_TIMEOUT_MS —
+  // deliberately independent of pollIntervalMs, since a short poll interval
+  // is a statement about how often to check, not how long a single healthy
+  // response is allowed to take.
   requestTimeoutMs?: number;
 };
 
@@ -92,6 +95,9 @@ const BEACON_FAR_FUTURE_EPOCH = 18446744073709551615n;
 const BEACON_VALIDATORS_PATH = '/eth/v1/beacon/states/head/validators';
 const BEACON_GET_VALIDATORS_MAX_URL_LENGTH = 7000;
 const BEACON_GET_VALIDATORS_MAX_COUNT = 64;
+// Generous default per-attempt budget for waitForBeaconValidatorActivation —
+// independent of pollIntervalMs, which only controls check frequency.
+const DEFAULT_REQUEST_TIMEOUT_MS = 10_000;
 
 const missingBeaconEndpointError = () =>
   new Error(
@@ -108,7 +114,7 @@ const assertBeaconData = <T>(
     );
   }
 
-  if (typeof payload.data === 'undefined') {
+  if (payload.data === null || typeof payload.data === 'undefined') {
     throw new BeaconValidationError(
       `Beacon API response is missing data for ${methodName}`,
     );
@@ -631,7 +637,7 @@ export const waitForBeaconValidatorActivation = async (
   );
   const timeoutMs = assertPositiveInteger(args.timeoutMs, 'timeoutMs', methodName);
   const requestTimeoutMs = assertPositiveInteger(
-    args.requestTimeoutMs ?? pollIntervalMs,
+    args.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS,
     'requestTimeoutMs',
     methodName,
   );
