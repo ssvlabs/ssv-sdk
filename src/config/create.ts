@@ -54,7 +54,9 @@ export type ConfigReturnType = {
 export const isNonNullObject = (
   value: unknown,
 ): value is Record<PropertyKey, unknown> => {
-  return typeof value === 'object' && value !== null;
+  // typeof [] === 'object' in JS, so arrays must be excluded explicitly —
+  // otherwise e.g. isConfig({...validConfig, beacon: []}) would pass.
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 };
 
 export const isConfig = (props: unknown): props is ConfigReturnType => {

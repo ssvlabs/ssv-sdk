@@ -124,15 +124,17 @@ export const createMockApi = (
   });
 
   return {
-    checkOperatorDKGEnabled: vi.fn().mockImplementation(
-      (dkgAddresses: Array<{ id: string; address: string }>) =>
-      Promise.resolve(
-        dkgAddresses.map(({ id }) => ({
-          id,
-          isHealthy: true,
-        })),
+    checkOperatorDKGEnabled: vi
+      .fn()
+      .mockImplementation(
+        (dkgAddresses: Array<{ id: string; address: string }>) =>
+          Promise.resolve(
+            dkgAddresses.map(({ id }) => ({
+              id,
+              isHealthy: true,
+            })),
+          ),
       ),
-    ),
     getOwnerNonce: vi.fn().mockImplementation((args) =>
       Promise.resolve({
         blockNumber: typeof args.block === 'number' ? args.block : 1,

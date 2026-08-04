@@ -79,7 +79,9 @@ const hasIncompletePrebuiltConfigShape = (props: unknown): boolean => {
     return false;
   }
 
-  const looksPrebuilt = CONFIG_RETURN_TYPE_ONLY_KEYS.some((key) => key in props);
+  const looksPrebuilt = CONFIG_RETURN_TYPE_ONLY_KEYS.some(
+    (key) => key in props,
+  );
 
   // isConfig validates every field's presence and shape symmetrically, so
   // reuse it here instead of re-deriving which one field is broken — a

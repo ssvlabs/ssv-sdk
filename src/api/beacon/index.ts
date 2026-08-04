@@ -150,7 +150,11 @@ const parseBeaconJSON = async <T>(
   }
 };
 
-const assertString = (value: unknown, fieldName: string, methodName: string) => {
+const assertString = (
+  value: unknown,
+  fieldName: string,
+  methodName: string,
+) => {
   if (typeof value !== 'string') {
     throw new BeaconValidationError(
       `Beacon API returned an invalid response for ${methodName}: ${fieldName} must be a string`,
@@ -158,6 +162,26 @@ const assertString = (value: unknown, fieldName: string, methodName: string) => 
   }
 
   return value;
+};
+
+// Beacon validator pubkeys are BLS public keys: 48 bytes, 0x-prefixed hex,
+// case insensitive. https://github.com/ethereum/beacon-APIs types/primitive.yaml#Pubkey
+const BEACON_PUBKEY_PATTERN = /^0x[a-fA-F0-9]{96}$/;
+
+const assertBeaconPubkey = (
+  value: unknown,
+  fieldName: string,
+  methodName: string,
+) => {
+  const rawValue = assertString(value, fieldName, methodName);
+
+  if (!BEACON_PUBKEY_PATTERN.test(rawValue)) {
+    throw new BeaconValidationError(
+      `Beacon API returned an invalid response for ${methodName}: ${fieldName} must be a 0x-prefixed 48-byte hex string`,
+    );
+  }
+
+  return rawValue;
 };
 
 const assertBoolean = (
@@ -240,7 +264,11 @@ const parseOptionalSafeEpochString = (
     return null;
   }
 
-  const parsedValue = parseCanonicalUint64String(rawValue, fieldName, methodName);
+  const parsedValue = parseCanonicalUint64String(
+    rawValue,
+    fieldName,
+    methodName,
+  );
 
   if (parsedValue === BEACON_FAR_FUTURE_EPOCH) {
     return null;
@@ -266,7 +294,11 @@ const parseOptionalSafeNumberString = (
     return null;
   }
 
-  const parsedValue = parseCanonicalUint64String(rawValue, fieldName, methodName);
+  const parsedValue = parseCanonicalUint64String(
+    rawValue,
+    fieldName,
+    methodName,
+  );
 
   if (parsedValue > MAX_SAFE_INTEGER_BIGINT) {
     throw new BeaconValidationError(
@@ -331,7 +363,9 @@ const sleep = (delayMs: number) =>
 const createBudgetSignal = (budgetMs: number) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => {
-    controller.abort(new Error(`Beacon request exceeded its ${budgetMs}ms time budget`));
+    controller.abort(
+      new Error(`Beacon request exceeded its ${budgetMs}ms time budget`),
+    );
   }, budgetMs);
 
   return {
@@ -400,7 +434,11 @@ const mapBeaconValidatorState = (
   }
 
   return {
-    publicKey: assertString(validator.validator.pubkey, 'validator.pubkey', methodName),
+    publicKey: assertBeaconPubkey(
+      validator.validator.pubkey,
+      'validator.pubkey',
+      methodName,
+    ),
     validatorIndex: parseOptionalSafeNumberString(
       validator.index,
       'index',
@@ -420,7 +458,11 @@ const mapBeaconValidatorState = (
       'validator.effective_balance',
       methodName,
     ),
-    slashed: assertBoolean(validator.validator.slashed, 'validator.slashed', methodName),
+    slashed: assertBoolean(
+      validator.validator.slashed,
+      'validator.slashed',
+      methodName,
+    ),
     activationEligibilityEpoch: parseOptionalSafeEpochString(
       validator.validator.activation_eligibility_epoch,
       'validator.activation_eligibility_epoch',
@@ -553,7 +595,9 @@ export const getBeaconValidators = async (
     return [];
   }
 
-  if (args.validatorIds.some((validatorId) => validatorId.trim().length === 0)) {
+  if (
+    args.validatorIds.some((validatorId) => validatorId.trim().length === 0)
+  ) {
     throw new BeaconValidationError(
       'getBeaconValidators requires every validatorId to be non-empty',
     );
@@ -634,7 +678,8 @@ export const getBeaconValidatorStates = async (
   }
 
   return args.validatorIds.map(
-    (validatorId) => validatorsById.get(toValidatorLookupKey(validatorId)) ?? null,
+    (validatorId) =>
+      validatorsById.get(toValidatorLookupKey(validatorId)) ?? null,
   );
 };
 
@@ -652,7 +697,11 @@ export const waitForBeaconValidatorActivation = async (
     'pollIntervalMs',
     methodName,
   );
-  const timeoutMs = assertPositiveInteger(args.timeoutMs, 'timeoutMs', methodName);
+  const timeoutMs = assertPositiveInteger(
+    args.timeoutMs,
+    'timeoutMs',
+    methodName,
+  );
   const requestTimeoutMs = assertPositiveInteger(
     args.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS,
     'requestTimeoutMs',
@@ -668,7 +717,7 @@ export const waitForBeaconValidatorActivation = async (
       `Timed out waiting for beacon validator activation for ${args.validatorId} after ${timeoutMs}ms; last observed state: ${describeActivationWaitState(lastObservedState)}`,
     );
 
-  while (true) {
+  for (;;) {
     const remainingBudgetMs = deadline - Date.now();
 
     if (remainingBudgetMs <= 0) {

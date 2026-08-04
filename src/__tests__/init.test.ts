@@ -12,6 +12,17 @@ import {
 } from 'viem';
 import { describe, expect, it } from 'vitest';
 
+// Destructuring-to-discard (`const { x: _x, ...rest } = obj`) leaves an
+// unused binding; this avoids that while still preserving the right type.
+const omitKey = <T extends object, K extends keyof T>(
+  obj: T,
+  key: K,
+): Omit<T, K> => {
+  const clone: Partial<T> = { ...obj };
+  delete clone[key];
+  return clone as Omit<T, K>;
+};
+
 describe('SDK Initiation', async () => {
   const network = await initializeContract();
 
@@ -134,7 +145,7 @@ describe('SDK Initiation', async () => {
     const sdk = new SSVSDK({
       publicClient,
     });
-    const { beacon: _beacon, ...legacyConfig } = sdk.config;
+    const legacyConfig = omitKey(sdk.config, 'beacon');
 
     expect(isConfig(sdk.config)).toBe(true);
     expect(isConfig(legacyConfig)).toBe(false);
@@ -183,6 +194,35 @@ describe('SDK Initiation', async () => {
     ).toThrowError(expectedError);
   });
 
+  it.each(['beacon', 'rest', 'publicClient', 'api'] as const)(
+    'should reject an array in place of the %s field',
+    (fieldName) => {
+      const transport = http(hoodi.rpcUrls.default.http[0]);
+      const publicClient = createPublicClient({
+        chain: hoodi,
+        transport,
+      });
+
+      const sdk = new SSVSDK({
+        publicClient,
+      });
+
+      // typeof [] === 'object' in JS, so an array must be excluded
+      // explicitly wherever a config field is expected to be a plain object.
+      const malformedConfig = {
+        ...sdk.config,
+        [fieldName]: [],
+      };
+
+      expect(isConfig(malformedConfig)).toBe(false);
+      expect(
+        () => new SSVSDK(malformedConfig as unknown as typeof sdk.config),
+      ).toThrowError(
+        'Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields',
+      );
+    },
+  );
+
   it('should reject an incomplete prebuilt config object missing beacon', () => {
     const transport = http(hoodi.rpcUrls.default.http[0]);
     const publicClient = createPublicClient({
@@ -193,11 +233,12 @@ describe('SDK Initiation', async () => {
     const originalSdk = new SSVSDK({
       publicClient,
     });
-    const { beacon: _beacon, ...incompleteConfig } = originalSdk.config;
+    const incompleteConfig = omitKey(originalSdk.config, 'beacon');
 
     expect(isConfig(incompleteConfig)).toBe(false);
     expect(
-      () => new SSVSDK(incompleteConfig as unknown as typeof originalSdk.config),
+      () =>
+        new SSVSDK(incompleteConfig as unknown as typeof originalSdk.config),
     ).toThrowError(
       'Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields',
     );
@@ -216,7 +257,7 @@ describe('SDK Initiation', async () => {
         rest: { endpoint: 'https://custom-rest-endpoint.com/api' },
       },
     });
-    const { rest: _rest, ...incompleteConfig } = originalSdk.config;
+    const incompleteConfig = omitKey(originalSdk.config, 'rest');
 
     // Before the fix, hasIncompletePrebuiltConfigShape only ever inspected
     // beacon; a missing rest (or any other non-beacon field) short-circuited
@@ -225,7 +266,8 @@ describe('SDK Initiation', async () => {
     // erroring.
     expect(isConfig(incompleteConfig)).toBe(false);
     expect(
-      () => new SSVSDK(incompleteConfig as unknown as typeof originalSdk.config),
+      () =>
+        new SSVSDK(incompleteConfig as unknown as typeof originalSdk.config),
     ).toThrowError(
       'Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields',
     );
