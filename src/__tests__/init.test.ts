@@ -165,7 +165,7 @@ describe('SDK Initiation', async () => {
     ).toBe(false);
 
     const expectedError =
-      'Incomplete prebuilt config object: normalized SDK configs must include a beacon field. The normalized beacon shape is required even when beacon.endpoint is undefined.';
+      'Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields';
 
     expect(
       () =>
@@ -199,7 +199,35 @@ describe('SDK Initiation', async () => {
     expect(
       () => new SSVSDK(incompleteConfig as unknown as typeof originalSdk.config),
     ).toThrowError(
-      'Incomplete prebuilt config object: normalized SDK configs must include a beacon field. The normalized beacon shape is required even when beacon.endpoint is undefined.',
+      'Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields',
+    );
+  });
+
+  it('should reject an incomplete prebuilt config object missing a non-beacon field', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const originalSdk = new SSVSDK({
+      publicClient,
+      extendedConfig: {
+        rest: { endpoint: 'https://custom-rest-endpoint.com/api' },
+      },
+    });
+    const { rest: _rest, ...incompleteConfig } = originalSdk.config;
+
+    // Before the fix, hasIncompletePrebuiltConfigShape only ever inspected
+    // beacon; a missing rest (or any other non-beacon field) short-circuited
+    // the guard to false and silently fell through to createConfig, which
+    // would have rebuilt rest.endpoint from the chain default instead of
+    // erroring.
+    expect(isConfig(incompleteConfig)).toBe(false);
+    expect(
+      () => new SSVSDK(incompleteConfig as unknown as typeof originalSdk.config),
+    ).toThrowError(
+      'Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields',
     );
   });
 

@@ -68,6 +68,7 @@ const sdk = new SSVSDK({
   walletClient,
   extendedConfig: {
     beacon: {
+      // Optional — only needed for the beacon validator methods below.
       endpoint: 'https://your-beacon-node.example',
     },
   },
@@ -105,6 +106,8 @@ await sdk.api.waitForBeaconValidatorActivation({
   validatorId: '0xvalidator_public_key',
   pollIntervalMs: 12_000,
   timeoutMs: 30 * 60 * 1000,
+  // failOnNotFound: true,     // fail fast instead of treating "not found" as "not yet active"
+  // requestTimeoutMs: 10_000, // per-attempt timeout, independent of pollIntervalMs (defaults to 10s)
 });
 ```
 
@@ -127,7 +130,7 @@ Snapshot-aware SDK read methods return the queried data together with the subgra
 
 `sdk.utils.writeKeysharesFile(...)` is a Node.js utility and relies on filesystem access.
 
-Beacon validator helpers require `extendedConfig.beacon.endpoint` to be configured. `sdk.api.getBeaconValidatorState(...)` and `sdk.api.getBeaconValidatorStates(...)` return normalized beacon validator data, and `sdk.api.waitForBeaconValidatorActivation(...)` can be used to poll until a validator becomes active.
+Beacon validator helpers require `extendedConfig.beacon.endpoint` to be configured; the SDK works normally without it otherwise. `sdk.api.getBeaconValidatorState(...)` and `sdk.api.getBeaconValidatorStates(...)` return normalized beacon validator data, and `sdk.api.waitForBeaconValidatorActivation(...)` polls until a validator becomes active — its `requestTimeoutMs` option (default `10_000`) bounds each individual poll attempt independently of `pollIntervalMs`, and `failOnNotFound` (default `false`) controls whether a not-yet-visible validator fails fast or keeps polling. Failures surface as `BeaconHttpError` (carries the HTTP `status`; retried automatically for `408`/`429`/`5xx`, thrown immediately for other statuses) or `BeaconValidationError` (a malformed or unexpected response; always thrown immediately, never retried). `sdk.api.getBeaconValidator(...)` and `sdk.api.getBeaconValidators(...)` are lower-level reads that only validate the response envelope, not each validator's field-level shape — prefer the `...State`/`...States` variants unless you specifically need the raw shape. `sdk.api.getBeaconValidatorLifecycleStage(...)` derives a simplified lifecycle stage (`pending`/`active`/`exited`/`withdrawal_ready`/`withdrawn`) from a normalized status.
 
 ### Cluster Management
 

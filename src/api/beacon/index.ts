@@ -45,7 +45,7 @@ export type BeaconValidatorState = {
   publicKey: string;
   validatorIndex: number | null;
   status: BeaconValidatorStatus;
-  rawStatus: string;
+  rawStatus: RawBeaconValidatorStatus;
   balanceGwei: bigint;
   effectiveBalanceGwei: bigint;
   slashed: boolean;
@@ -82,6 +82,9 @@ export class BeaconHttpError extends Error {
   }
 }
 
+// Covers both "the remote response was invalid" and "the caller's own input
+// can never succeed" (e.g. a blank validatorId, a non-positive timeoutMs) —
+// both are permanent, non-retryable conditions for isRetryableActivationError.
 export class BeaconValidationError extends Error {
   constructor(message: string) {
     super(message);
@@ -92,6 +95,7 @@ export class BeaconValidationError extends Error {
 // Beacon APIs use the uint64 max value as a sentinel for epochs that are not
 // set yet; the same bound doubles as the valid range ceiling for uint64 fields.
 const BEACON_FAR_FUTURE_EPOCH = 18446744073709551615n;
+const MAX_SAFE_INTEGER_BIGINT = BigInt(Number.MAX_SAFE_INTEGER);
 const BEACON_VALIDATORS_PATH = '/eth/v1/beacon/states/head/validators';
 const BEACON_GET_VALIDATORS_MAX_URL_LENGTH = 7000;
 const BEACON_GET_VALIDATORS_MAX_COUNT = 64;
@@ -184,8 +188,10 @@ const mapOptionalString = (
 
 // The Beacon API's uint64 primitive is a decimal string; BigInt() itself is
 // far more permissive (accepts '', whitespace, signs, and hex), so malformed
-// or adversarial responses must be rejected before reaching BigInt().
-const CANONICAL_UNSIGNED_INTEGER_PATTERN = /^(0|[1-9][0-9]*)$/;
+// or adversarial responses must be rejected before reaching BigInt(). The
+// {0,19} bound caps total digit count at 20 (uint64's max), so a pathological
+// digit string is rejected by the regex itself before ever reaching BigInt().
+const CANONICAL_UNSIGNED_INTEGER_PATTERN = /^(0|[1-9][0-9]{0,19})$/;
 
 const parseCanonicalUint64String = (
   rawValue: string,
@@ -240,7 +246,7 @@ const parseOptionalSafeEpochString = (
     return null;
   }
 
-  if (parsedValue > BigInt(Number.MAX_SAFE_INTEGER)) {
+  if (parsedValue > MAX_SAFE_INTEGER_BIGINT) {
     throw new BeaconValidationError(
       `Beacon API returned an invalid response for ${methodName}: ${fieldName} exceeds MAX_SAFE_INTEGER`,
     );
@@ -262,7 +268,7 @@ const parseOptionalSafeNumberString = (
 
   const parsedValue = parseCanonicalUint64String(rawValue, fieldName, methodName);
 
-  if (parsedValue > BigInt(Number.MAX_SAFE_INTEGER)) {
+  if (parsedValue > MAX_SAFE_INTEGER_BIGINT) {
     throw new BeaconValidationError(
       `Beacon API returned an invalid response for ${methodName}: ${fieldName} exceeds MAX_SAFE_INTEGER`,
     );
@@ -304,7 +310,7 @@ const assertPositiveInteger = (
   methodName: string,
 ) => {
   if (!Number.isInteger(value) || value <= 0) {
-    throw new Error(
+    throw new BeaconValidationError(
       `Invalid ${fieldName} for ${methodName}: expected a positive integer number of milliseconds`,
     );
   }
@@ -401,7 +407,13 @@ const mapBeaconValidatorState = (
       methodName,
     ),
     status: mapBeaconValidatorStatus(validator.status, methodName),
-    rawStatus: assertString(validator.status, 'status', methodName),
+    // Safe: mapBeaconValidatorStatus above already threw unless
+    // validator.status is one of RawBeaconValidatorStatus's exact values.
+    rawStatus: assertString(
+      validator.status,
+      'status',
+      methodName,
+    ) as RawBeaconValidatorStatus,
     balanceGwei: parseBigIntString(validator.balance, 'balance', methodName),
     effectiveBalanceGwei: parseBigIntString(
       validator.validator.effective_balance,
@@ -442,24 +454,17 @@ const toValidatorLookupKey = (validatorId: string) => validatorId.toLowerCase();
 const dedupeValidatorIds = (validatorIds: string[]): string[] =>
   Array.from(new Set(validatorIds));
 
-const getBeaconValidatorsURL = (
-  endpoint: string,
-  validatorIds: string[],
-) => {
-  const url = join(endpoint, BEACON_VALIDATORS_PATH);
-
-  if (validatorIds.length === 0) {
-    return url;
-  }
-
-  return `${url}?${validatorIds
+// Only ever called with a non-empty, deduped id list (getBeaconValidators
+// early-returns before this point for an empty batch), so no empty-array case.
+const getBeaconValidatorsURL = (endpoint: string, validatorIds: string[]) =>
+  `${join(endpoint, BEACON_VALIDATORS_PATH)}?${validatorIds
     .map((validatorId) => `id=${encodeURIComponent(validatorId)}`)
     .join('&')}`;
-};
 
 const getBeaconValidatorsRequest = (
   endpoint: string,
   validatorIds: string[],
+  signal?: AbortSignal,
 ): { url: string; init?: RequestInit } => {
   const url = getBeaconValidatorsURL(endpoint, validatorIds);
 
@@ -474,6 +479,7 @@ const getBeaconValidatorsRequest = (
   ) {
     return {
       url,
+      init: signal ? { signal } : undefined,
     };
   }
 
@@ -485,10 +491,14 @@ const getBeaconValidatorsRequest = (
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ ids: validatorIds }),
+      signal,
     },
   };
 };
 
+// Validates the response envelope only (has a `data` key, right JSON shape).
+// Field-level shape (e.g. validator.pubkey, balance) is NOT checked here —
+// use getBeaconValidatorState for a fully-validated, normalized read.
 export const getBeaconValidator = async (
   endpoint: string | undefined,
   args: { validatorId: string; signal?: AbortSignal },
@@ -528,9 +538,12 @@ export const getBeaconValidator = async (
   );
 };
 
+// Validates the response envelope and that `data` is an array — not each
+// element's field-level shape. Use getBeaconValidatorStates for a fully
+// validated, normalized, input-aligned read.
 export const getBeaconValidators = async (
   endpoint: string | undefined,
-  args: { validatorIds: string[] },
+  args: { validatorIds: string[]; signal?: AbortSignal },
 ): Promise<BeaconValidator[]> => {
   if (!endpoint) {
     throw missingBeaconEndpointError();
@@ -547,7 +560,11 @@ export const getBeaconValidators = async (
   }
 
   const dedupedValidatorIds = dedupeValidatorIds(args.validatorIds);
-  const request = getBeaconValidatorsRequest(endpoint, dedupedValidatorIds);
+  const request = getBeaconValidatorsRequest(
+    endpoint,
+    dedupedValidatorIds,
+    args.signal,
+  );
   const response = request.init
     ? await fetch(request.url, request.init)
     : await fetch(request.url);
@@ -592,7 +609,7 @@ export const getBeaconValidatorState = async (
 
 export const getBeaconValidatorStates = async (
   endpoint: string | undefined,
-  args: { validatorIds: string[] },
+  args: { validatorIds: string[]; signal?: AbortSignal },
 ): Promise<Array<BeaconValidatorState | null>> => {
   const validators = await getBeaconValidators(endpoint, args);
   const validatorsById = new Map<string, BeaconValidatorState>();

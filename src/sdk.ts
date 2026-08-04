@@ -4,7 +4,12 @@ import { createOperatorManager } from '@/libs/operator';
 import { createUtils } from '@/libs/utils';
 import type { WalletClient } from 'viem';
 import type { ConfigReturnType } from '@/config';
-import { createConfig, createContractInteractions, isConfig } from '@/config';
+import {
+  createConfig,
+  createContractInteractions,
+  isConfig,
+  isNonNullObject,
+} from '@/config';
 import type { ConfigArgs } from '@/utils';
 import { configArgsSchema } from '@/utils';
 
@@ -23,7 +28,7 @@ export class SSVSDK {
     } else {
       if (hasIncompletePrebuiltConfigShape(props)) {
         throw new Error(
-          'Incomplete prebuilt config object: normalized SDK configs must include a beacon field. The normalized beacon shape is required even when beacon.endpoint is undefined.',
+          'Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields (publicClient, chain, api, contractAddresses, contract, subgraph, rest, beacon). Provide a complete config object, or pass ConfigArgs (publicClient/walletClient/extendedConfig) instead.',
         );
       }
 
@@ -56,25 +61,30 @@ export class SSVSDK {
   }
 }
 
-const isNonNullObject = (
-  value: unknown,
-): value is Record<PropertyKey, unknown> => {
-  return typeof value === 'object' && value !== null;
-};
+// Fields that only ever appear on a normalized ConfigReturnType, never on
+// raw ConfigArgs (publicClient/walletClient/extendedConfig) — their presence
+// signals "this was meant to be a prebuilt config."
+const CONFIG_RETURN_TYPE_ONLY_KEYS = [
+  'chain',
+  'api',
+  'contractAddresses',
+  'contract',
+  'subgraph',
+  'rest',
+  'beacon',
+] as const;
 
 const hasIncompletePrebuiltConfigShape = (props: unknown): boolean => {
   if (!isNonNullObject(props)) {
     return false;
   }
 
-  return (
-    'publicClient' in props &&
-    'chain' in props &&
-    'api' in props &&
-    'contractAddresses' in props &&
-    'contract' in props &&
-    'subgraph' in props &&
-    'rest' in props &&
-    !('beacon' in props && isNonNullObject(props.beacon))
-  );
+  const looksPrebuilt = CONFIG_RETURN_TYPE_ONLY_KEYS.some((key) => key in props);
+
+  // isConfig validates every field's presence and shape symmetrically, so
+  // reuse it here instead of re-deriving which one field is broken — a
+  // prebuilt-looking object that fails isConfig for ANY reason (not just an
+  // invalid beacon) must not silently fall through to createConfig, which
+  // would rebuild everything from chain defaults and discard custom values.
+  return looksPrebuilt && !isConfig(props);
 };

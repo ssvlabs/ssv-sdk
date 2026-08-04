@@ -152,9 +152,20 @@ describe('Mock API event completeness', () => {
     const { createMockApi } = await import('@/mock/api');
     const api = createMockApi(publicClient as never);
 
+    // Two different lengths: a hard-coded [null, null, null] would pass the
+    // 3-id case by coincidence but fail the 1-id and 5-id cases below.
+    await expect(
+      api.getBeaconValidatorStates({ validatorIds: ['1'] }),
+    ).resolves.toEqual([null]);
     await expect(
       api.getBeaconValidatorStates({ validatorIds: ['1', '2', '3'] }),
     ).resolves.toEqual([null, null, null]);
+    const fiveIds = ['1', '2', '3', '4', '5'];
+    const fiveResult = await api.getBeaconValidatorStates({
+      validatorIds: fiveIds,
+    });
+    expect(fiveResult).toHaveLength(fiveIds.length);
+    expect(fiveResult).toEqual(fiveIds.map(() => null));
   });
 
   it('includes the full beacon helper surface', async () => {
