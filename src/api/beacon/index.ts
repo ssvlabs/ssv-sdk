@@ -757,12 +757,18 @@ export const waitForBeaconValidatorActivation = async (
 
   const methodName = 'waitForBeaconValidatorActivation';
 
-  // A malformed endpoint throws a plain TypeError from buildBeaconURL, which
-  // isRetryableActivationError treats as retryable by default — left
-  // unchecked, that silently retries a failure that can never succeed for
+  // A malformed endpoint (or one with a scheme fetch can't handle, e.g.
+  // ftp:/mailto:) throws a plain TypeError — from buildBeaconURL, or later
+  // from fetch itself for an otherwise-valid URL with an unsupported scheme.
+  // isRetryableActivationError treats that as retryable by default, so left
+  // unchecked, this silently retries a failure that can never succeed for
   // the entire timeoutMs instead of failing immediately.
   try {
-    buildBeaconURL(endpoint, BEACON_VALIDATORS_PATH);
+    const url = buildBeaconURL(endpoint, BEACON_VALIDATORS_PATH);
+
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      throw new Error('unsupported protocol');
+    }
   } catch {
     throw new BeaconValidationError(
       `Invalid beacon endpoint for ${methodName}: ${endpoint}`,

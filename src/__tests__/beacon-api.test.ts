@@ -1767,6 +1767,25 @@ describe('Beacon API', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it('throws immediately on a non-http(s) endpoint scheme instead of retrying until timeout', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('ftp://beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Invalid beacon endpoint for waitForBeaconValidatorActivation: ftp://beacon.example',
+    );
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it('throws immediately on a malformed response instead of retrying until timeout', async () => {
     vi.useFakeTimers();
 
