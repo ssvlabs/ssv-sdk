@@ -618,6 +618,11 @@ export const getBeaconValidator = async (
     : await fetch(url);
 
   if (response.status === 404) {
+    // Same rationale as the !response.ok branch below: without
+    // failOnNotFound, this is the branch waitForBeaconValidatorActivation
+    // takes on every poll until the validator appears, so it's the
+    // higher-frequency path for an uncancelled body to accumulate on.
+    await response.body?.cancel();
     return null;
   }
 
