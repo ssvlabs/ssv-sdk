@@ -1748,6 +1748,48 @@ describe('Beacon API', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
+  it('surfaces the real HTTP error even when cancelling the response body itself rejects', async () => {
+    const rejectingBody = {
+      cancel: vi.fn().mockRejectedValue(new Error('cancel-failed')),
+    };
+    const response = new Response(null, { status: 401 });
+    Object.defineProperty(response, 'body', { value: rejectingBody });
+    const fetchMock = vi.fn().mockResolvedValue(response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: '12' }),
+    ).rejects.toThrow(
+      'Beacon API request failed for getBeaconValidator with status 401',
+    );
+  });
+
+  it('does not retry a permanent HTTP error just because cancelling its body rejects', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn().mockImplementation(() => {
+      const rejectingBody = {
+        cancel: vi.fn().mockRejectedValue(new Error('cancel-failed')),
+      };
+      const response = new Response(null, { status: 401 });
+      Object.defineProperty(response, 'body', { value: rejectingBody });
+      return Promise.resolve(response);
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('https://beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Beacon API request failed for getBeaconValidator with status 401',
+    );
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
   it('throws immediately on a malformed endpoint instead of retrying until timeout', async () => {
     vi.useFakeTimers();
 
@@ -1784,6 +1826,46 @@ describe('Beacon API', () => {
     );
 
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('throws immediately on an endpoint carrying credentials instead of retrying until timeout', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('https://user:pass@beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Invalid beacon endpoint for waitForBeaconValidatorActivation: https://user:pass@beacon.example',
+    );
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('does not retry a Fetch-spec-blocked port, but still retries other fetch-level TypeErrors', async () => {
+    vi.useFakeTimers();
+
+    const badPortError = new TypeError('fetch failed');
+    (badPortError as unknown as { cause?: unknown }).cause = new Error(
+      'bad port',
+    );
+    const fetchMock = vi.fn().mockRejectedValue(badPortError);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('http://beacon.example:25', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow('fetch failed');
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
   it('throws immediately on a malformed response instead of retrying until timeout', async () => {

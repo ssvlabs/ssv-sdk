@@ -114,6 +114,18 @@ const buildBeaconURL = (endpoint: string, path: string): URL => {
   return url;
 };
 
+// ReadableStream#cancel() can itself reject (e.g. an already-errored stream).
+// Releasing the connection is a best-effort courtesy — it must never replace
+// the meaningful result (a BeaconHttpError, or a 404's null) with whatever
+// cancellation itself failed with.
+const cancelResponseBody = async (response: Response): Promise<void> => {
+  try {
+    await response.body?.cancel();
+  } catch {
+    // Ignored — see rationale above.
+  }
+};
+
 const missingBeaconEndpointError = () =>
   new Error(
     'Beacon endpoint is not configured. Provide extendedConfig.beacon.endpoint in SDK config.',
@@ -425,6 +437,25 @@ const isRetryableActivationError = (error: unknown): boolean => {
     return RETRYABLE_HTTP_STATUSES.has(error.status) || error.status >= 500;
   }
 
+  // undici's fetch throws a generic TypeError for a syntactically valid
+  // endpoint on a Fetch-spec-blocked port (e.g. :25) — a permanent config
+  // error masquerading as a network failure, with this exact cause message
+  // as the only distinguishing signal. Deliberately narrow: every other
+  // TypeError from fetch (DNS failures, connection resets, etc.) must stay
+  // retryable, so only this specific cause is excluded, not TypeError as a
+  // whole.
+  // Error#cause is ES2022; this repo targets ES2020, so the type isn't on
+  // the lib's Error/TypeError declarations even though Node sets it.
+  const cause = (error as { cause?: unknown }).cause;
+
+  if (
+    error instanceof TypeError &&
+    cause instanceof Error &&
+    cause.message === 'bad port'
+  ) {
+    return false;
+  }
+
   return true;
 };
 
@@ -622,7 +653,7 @@ export const getBeaconValidator = async (
     // failOnNotFound, this is the branch waitForBeaconValidatorActivation
     // takes on every poll until the validator appears, so it's the
     // higher-frequency path for an uncancelled body to accumulate on.
-    await response.body?.cancel();
+    await cancelResponseBody(response);
     return null;
   }
 
@@ -630,7 +661,7 @@ export const getBeaconValidator = async (
     // Release the connection back to the pool instead of leaving the body
     // unconsumed — this path runs on every retried poll against an unhealthy
     // endpoint, so an uncancelled body here accumulates across a long wait.
-    await response.body?.cancel();
+    await cancelResponseBody(response);
     throw new BeaconHttpError(
       response.status,
       `Beacon API request failed for getBeaconValidator with status ${response.status}`,
@@ -681,7 +712,7 @@ export const getBeaconValidators = async (
   // here means the state/route itself is wrong (e.g. misconfigured
   // endpoint), so it must not be swallowed into an empty result.
   if (!response.ok) {
-    await response.body?.cancel();
+    await cancelResponseBody(response);
     throw new BeaconHttpError(
       response.status,
       `Beacon API request failed for getBeaconValidators with status ${response.status}`,
@@ -757,18 +788,24 @@ export const waitForBeaconValidatorActivation = async (
 
   const methodName = 'waitForBeaconValidatorActivation';
 
-  // A malformed endpoint (or one with a scheme fetch can't handle, e.g.
-  // ftp:/mailto:) throws a plain TypeError — from buildBeaconURL, or later
-  // from fetch itself for an otherwise-valid URL with an unsupported scheme.
+  // A malformed endpoint, one with a scheme fetch can't handle (e.g.
+  // ftp:/mailto:), or one carrying credentials (fetch refuses to construct a
+  // Request from a URL with a username/password) throws a plain TypeError.
   // isRetryableActivationError treats that as retryable by default, so left
   // unchecked, this silently retries a failure that can never succeed for
-  // the entire timeoutMs instead of failing immediately.
+  // the entire timeoutMs instead of failing immediately. This deliberately
+  // doesn't cover every way fetch can reject a syntactically valid endpoint
+  // (e.g. a Fetch-spec-blocked port) — those are handled in
+  // isRetryableActivationError instead, since they can only be observed by
+  // actually attempting the request.
   try {
     const url = buildBeaconURL(endpoint, BEACON_VALIDATORS_PATH);
 
     if (url.protocol !== 'http:' && url.protocol !== 'https:') {
       throw new Error('unsupported protocol');
     }
+
+    new Request(url);
   } catch {
     throw new BeaconValidationError(
       `Invalid beacon endpoint for ${methodName}: ${endpoint}`,
