@@ -83,7 +83,8 @@ const hasIncompletePrebuiltConfigShape = (props: unknown): boolean => {
     (key) => key in props,
   );
 
-  // isConfig validates every field's presence and shape symmetrically, so
+  // isConfig checks every field's presence and top-level shape symmetrically
+  // (it doesn't validate nested values like beacon.endpoint's type), so
   // reuse it here instead of re-deriving which one field is broken — a
   // prebuilt-looking object that fails isConfig for ANY reason (not just an
   // invalid beacon) must not silently fall through to createConfig, which
