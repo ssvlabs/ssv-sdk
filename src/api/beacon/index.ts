@@ -1,5 +1,3 @@
-import join from '@/utils/url-join';
-
 export type BeaconValidator = {
   index: string | null;
   balance: string;
@@ -102,6 +100,19 @@ const BEACON_GET_VALIDATORS_MAX_COUNT = 64;
 // Generous default per-attempt budget for waitForBeaconValidatorActivation —
 // independent of pollIntervalMs, which only controls check frequency.
 const DEFAULT_REQUEST_TIMEOUT_MS = 10_000;
+
+// The shared url-join utility appends the path *after* an existing query
+// string (e.g. a provider endpoint configured as
+// 'https://host?apiKey=secret' would produce '...?apiKey=secret/eth/v1/...'),
+// silently breaking any endpoint with query-string auth. Build on the
+// pathname directly instead, which naturally preserves the endpoint's own
+// query params so they can be merged with (not clobbered by) route-specific
+// ones like the batch GET's id[].
+const buildBeaconURL = (endpoint: string, path: string): URL => {
+  const url = new URL(endpoint);
+  url.pathname = `${url.pathname.replace(/\/+$/, '')}${path}`;
+  return url;
+};
 
 const missingBeaconEndpointError = () =>
   new Error(
@@ -350,6 +361,31 @@ const assertPositiveInteger = (
   return value;
 };
 
+// setTimeout (and AbortSignal-based timers built on it) silently clamps any
+// delay above the 32-bit signed int max down to ~1ms instead of throwing, so
+// a valid-looking multi-week value would fire almost immediately and busy-loop
+// instead of waiting. This only applies to values that actually reach a timer
+// (pollIntervalMs, requestTimeoutMs) — timeoutMs itself is just deadline
+// arithmetic (Date.now() + timeoutMs) and can be arbitrarily large, since
+// every timer derived from it is separately bounded by one of these two.
+const MAX_TIMER_DELAY_MS = 2_147_483_647;
+
+const assertPositiveTimerDelay = (
+  value: number,
+  fieldName: string,
+  methodName: string,
+) => {
+  const validated = assertPositiveInteger(value, fieldName, methodName);
+
+  if (validated > MAX_TIMER_DELAY_MS) {
+    throw new BeaconValidationError(
+      `Invalid ${fieldName} for ${methodName}: expected a positive integer number of milliseconds no greater than ${MAX_TIMER_DELAY_MS}`,
+    );
+  }
+
+  return validated;
+};
+
 const sleep = (delayMs: number) =>
   new Promise<void>((resolve) => {
     setTimeout(resolve, delayMs);
@@ -486,7 +522,19 @@ const mapBeaconValidatorState = (
   };
 };
 
-const toValidatorLookupKey = (validatorId: string) => validatorId.toLowerCase();
+// Response-derived index keys are always canonical decimal (they're built via
+// String(number)), but a caller-supplied index string might not be (e.g.
+// '0012'). Canonicalize plain-decimal lookups so both sides match; pubkeys
+// (0x-prefixed hex) never match the digits-only check and fall through
+// to a plain case-insensitive compare.
+const DECIMAL_LOOKUP_KEY_PATTERN = /^[0-9]+$/;
+
+const toValidatorLookupKey = (validatorId: string) => {
+  const normalized = validatorId.toLowerCase();
+  return DECIMAL_LOOKUP_KEY_PATTERN.test(normalized)
+    ? String(Number(normalized))
+    : normalized;
+};
 
 // Both the GET and POST validator-batch endpoints require unique transport
 // ids; deduping here (rather than in getBeaconValidatorStates) keeps this a
@@ -498,10 +546,16 @@ const dedupeValidatorIds = (validatorIds: string[]): string[] =>
 
 // Only ever called with a non-empty, deduped id list (getBeaconValidators
 // early-returns before this point for an empty batch), so no empty-array case.
-const getBeaconValidatorsURL = (endpoint: string, validatorIds: string[]) =>
-  `${join(endpoint, BEACON_VALIDATORS_PATH)}?${validatorIds
+const getBeaconValidatorsURL = (endpoint: string, validatorIds: string[]) => {
+  const url = buildBeaconURL(endpoint, BEACON_VALIDATORS_PATH);
+  const idQuery = validatorIds
     .map((validatorId) => `id=${encodeURIComponent(validatorId)}`)
-    .join('&')}`;
+    .join('&');
+  // Merge onto (rather than replace) any query the endpoint already carries.
+  const existingQuery = url.search.replace(/^\?/, '');
+  url.search = [existingQuery, idQuery].filter(Boolean).join('&');
+  return url.toString();
+};
 
 const getBeaconValidatorsRequest = (
   endpoint: string,
@@ -526,7 +580,7 @@ const getBeaconValidatorsRequest = (
   }
 
   return {
-    url: join(endpoint, BEACON_VALIDATORS_PATH),
+    url: buildBeaconURL(endpoint, BEACON_VALIDATORS_PATH).toString(),
     init: {
       method: 'POST',
       headers: {
@@ -555,10 +609,10 @@ export const getBeaconValidator = async (
     );
   }
 
-  const url = join(
+  const url = buildBeaconURL(
     endpoint,
-    `/eth/v1/beacon/states/head/validators/${encodeURIComponent(args.validatorId)}`,
-  );
+    `${BEACON_VALIDATORS_PATH}/${encodeURIComponent(args.validatorId)}`,
+  ).toString();
   const response = args.signal
     ? await fetch(url, { signal: args.signal })
     : await fetch(url);
@@ -692,7 +746,10 @@ export const waitForBeaconValidatorActivation = async (
   }
 
   const methodName = 'waitForBeaconValidatorActivation';
-  const pollIntervalMs = assertPositiveInteger(
+  // pollIntervalMs/requestTimeoutMs are passed to setTimeout-based timers and
+  // so are bounded by MAX_TIMER_DELAY_MS; timeoutMs is only ever used for
+  // Date.now()-based deadline arithmetic and can be arbitrarily large.
+  const pollIntervalMs = assertPositiveTimerDelay(
     args.pollIntervalMs,
     'pollIntervalMs',
     methodName,
@@ -702,7 +759,7 @@ export const waitForBeaconValidatorActivation = async (
     'timeoutMs',
     methodName,
   );
-  const requestTimeoutMs = assertPositiveInteger(
+  const requestTimeoutMs = assertPositiveTimerDelay(
     args.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS,
     'requestTimeoutMs',
     methodName,

@@ -230,6 +230,67 @@ describe('Beacon API', () => {
     );
   });
 
+  it('preserves an existing query string on the endpoint for single-validator reads', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator(),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await getBeaconValidator('https://beacon.example?apiKey=secret', {
+      validatorId: '1',
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/eth/v1/beacon/states/head/validators/1?apiKey=secret',
+    );
+  });
+
+  it('merges (not replaces) an existing query string on the endpoint for batch GET reads', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ data: [] }), { status: 200 }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await getBeaconValidators('https://beacon.example/api?apiKey=secret', {
+      validatorIds: ['1', '2'],
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/api/eth/v1/beacon/states/head/validators?apiKey=secret&id=1&id=2',
+    );
+  });
+
+  it('preserves an existing query string on the endpoint for batch POST reads', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ data: [] }), { status: 200 }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const validatorIds = Array.from({ length: 65 }, (_, index) => `${index}`);
+
+    await getBeaconValidators('https://beacon.example?apiKey=secret', {
+      validatorIds,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/eth/v1/beacon/states/head/validators?apiKey=secret',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: validatorIds }),
+      },
+    );
+  });
+
   it('deduplicates transport ids while preserving repeated aligned outputs', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(
@@ -262,6 +323,25 @@ describe('Beacon API', () => {
       VALID_PUBKEY_A,
       VALID_PUBKEY_B,
     ]);
+  });
+
+  it('matches a non-canonical (leading-zero) index request against the canonical response index', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [createRawValidator({ index: '12' })],
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const states = await getBeaconValidatorStates('https://beacon.example', {
+      validatorIds: ['0012'],
+    });
+
+    expect(states[0]).not.toBeNull();
+    expect(states[0]?.validatorIndex).toBe(12);
   });
 
   it('rejects a blank validatorId in a batch request instead of sending it', async () => {
@@ -1227,6 +1307,62 @@ describe('Beacon API', () => {
     ).rejects.toThrow('expected a positive integer number of milliseconds');
 
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['pollIntervalMs', { pollIntervalMs: 2_147_483_648, timeoutMs: 5_000 }],
+    [
+      'requestTimeoutMs',
+      {
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+        requestTimeoutMs: 2_147_483_648,
+      },
+    ],
+  ] as const)(
+    // setTimeout silently clamps delays above 2147483647ms to ~1ms instead of
+    // throwing — a valid-looking multi-week value would busy-loop and hammer
+    // the endpoint instead of waiting, so any field that reaches a timer
+    // directly (pollIntervalMs, requestTimeoutMs) must be rejected up front.
+    'rejects a %s exceeding the setTimeout delay limit before making any request',
+    async (_fieldName, args) => {
+      const fetchMock = vi.fn();
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        waitForBeaconValidatorActivation('https://beacon.example', {
+          validatorId: '12',
+          ...args,
+        }),
+      ).rejects.toThrow('no greater than 2147483647');
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    },
+  );
+
+  it('allows a timeoutMs exceeding the setTimeout delay limit, since it is never passed to a timer directly', async () => {
+    vi.useFakeTimers();
+
+    // timeoutMs only feeds Date.now()-based deadline arithmetic; every actual
+    // timer delay derived from it is separately bounded by pollIntervalMs/
+    // requestTimeoutMs, so an activation wait longer than ~24.8 days is valid.
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({ status: 'active_ongoing' }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('https://beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 60 * 24 * 60 * 60 * 1_000, // 60 days
+      }),
+    ).resolves.toMatchObject({ status: 'active' });
   });
 
   it('rejects immediately when the endpoint is missing, without ever polling', async () => {
