@@ -622,6 +622,10 @@ export const getBeaconValidator = async (
   }
 
   if (!response.ok) {
+    // Release the connection back to the pool instead of leaving the body
+    // unconsumed — this path runs on every retried poll against an unhealthy
+    // endpoint, so an uncancelled body here accumulates across a long wait.
+    await response.body?.cancel();
     throw new BeaconHttpError(
       response.status,
       `Beacon API request failed for getBeaconValidator with status ${response.status}`,
@@ -672,6 +676,7 @@ export const getBeaconValidators = async (
   // here means the state/route itself is wrong (e.g. misconfigured
   // endpoint), so it must not be swallowed into an empty result.
   if (!response.ok) {
+    await response.body?.cancel();
     throw new BeaconHttpError(
       response.status,
       `Beacon API request failed for getBeaconValidators with status ${response.status}`,
