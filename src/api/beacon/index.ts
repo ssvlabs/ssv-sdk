@@ -756,6 +756,19 @@ export const waitForBeaconValidatorActivation = async (
   }
 
   const methodName = 'waitForBeaconValidatorActivation';
+
+  // A malformed endpoint throws a plain TypeError from buildBeaconURL, which
+  // isRetryableActivationError treats as retryable by default — left
+  // unchecked, that silently retries a failure that can never succeed for
+  // the entire timeoutMs instead of failing immediately.
+  try {
+    buildBeaconURL(endpoint, BEACON_VALIDATORS_PATH);
+  } catch {
+    throw new BeaconValidationError(
+      `Invalid beacon endpoint for ${methodName}: ${endpoint}`,
+    );
+  }
+
   // pollIntervalMs/requestTimeoutMs are passed to setTimeout-based timers and
   // so are bounded by MAX_TIMER_DELAY_MS; timeoutMs is only ever used for
   // Date.now()-based deadline arithmetic and can be arbitrarily large.

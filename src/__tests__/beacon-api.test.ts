@@ -1748,6 +1748,25 @@ describe('Beacon API', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
+  it('throws immediately on a malformed endpoint instead of retrying until timeout', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('not-a-valid-url', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Invalid beacon endpoint for waitForBeaconValidatorActivation: not-a-valid-url',
+    );
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it('throws immediately on a malformed response instead of retrying until timeout', async () => {
     vi.useFakeTimers();
 
