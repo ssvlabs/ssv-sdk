@@ -617,6 +617,16 @@ const toValidatorLookupKey = (validatorId: string) => {
     : normalized;
 };
 
+// The spec allows any string as a validator id — an unmatched one simply
+// returns no data, "but this will not cause an error" (spec's own words).
+// A dot-segment id is the one shape that breaks that contract: '.' or '..'
+// survives encodeURIComponent unchanged (dots aren't escaped), and the URL
+// pathname setter's standard dot-segment normalization then turns the
+// request into the unfiltered validators collection or an unrelated parent
+// endpoint, silently expanding the query instead of just not matching.
+const isDotSegmentValidatorId = (validatorId: string): boolean =>
+  /^\.+$/.test(validatorId);
+
 // Both the GET and POST validator-batch endpoints require unique transport
 // ids; deduping here (rather than in getBeaconValidatorStates) keeps this a
 // transport-only concern — per-input-position output alignment already comes
@@ -690,6 +700,12 @@ export const getBeaconValidator = async (
     );
   }
 
+  if (isDotSegmentValidatorId(args.validatorId)) {
+    throw new BeaconValidationError(
+      `getBeaconValidator requires a real validatorId, not a dot-segment value ('${args.validatorId}') that URL path normalization would silently redirect elsewhere`,
+    );
+  }
+
   assertFetchableBeaconEndpoint(endpoint, 'getBeaconValidator');
 
   const url = buildBeaconURL(
@@ -746,6 +762,12 @@ export const getBeaconValidators = async (
   ) {
     throw new BeaconValidationError(
       'getBeaconValidators requires every validatorId to be non-empty',
+    );
+  }
+
+  if (args.validatorIds.some(isDotSegmentValidatorId)) {
+    throw new BeaconValidationError(
+      'getBeaconValidators requires every validatorId to be a real id, not a dot-segment value that URL path normalization would silently redirect elsewhere',
     );
   }
 

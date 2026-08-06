@@ -121,6 +121,35 @@ describe('Beacon API', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it.each(['.', '..', '...'])(
+    'rejects a dot-segment validatorId (%s) instead of letting URL normalization redirect it',
+    async (dotSegment) => {
+      const fetchMock = vi.fn();
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        getBeaconValidator('https://beacon.example', {
+          validatorId: dotSegment,
+        }),
+      ).rejects.toThrow(BeaconValidationError);
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    },
+  );
+
+  it('still allows an arbitrary non-matching validatorId, matching real server behavior', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response(null, { status: 404 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await getBeaconValidator('https://beacon.example', {
+      validatorId: 'not-a-real-id-but-not-a-dot-segment-either',
+    });
+
+    expect(result).toBeNull();
+  });
+
   it('redacts a path-embedded api key from the endpoint error, keeping only origin + the beacon api path', async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
@@ -405,6 +434,19 @@ describe('Beacon API', () => {
 
     await expect(promise).rejects.toThrow(BeaconValidationError);
     await expect(promise).rejects.not.toThrow(/super-secret/);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects a dot-segment validatorId in a batch call instead of letting URL normalization redirect it', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidators('https://beacon.example', {
+        validatorIds: ['12', '..'],
+      }),
+    ).rejects.toThrow(BeaconValidationError);
 
     expect(fetchMock).not.toHaveBeenCalled();
   });
