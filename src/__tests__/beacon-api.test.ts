@@ -1803,7 +1803,7 @@ describe('Beacon API', () => {
         timeoutMs: 5_000,
       }),
     ).rejects.toThrow(
-      'Invalid beacon endpoint for waitForBeaconValidatorActivation: not-a-valid-url',
+      'Invalid beacon endpoint for waitForBeaconValidatorActivation: (unparseable endpoint omitted to avoid leaking embedded credentials)',
     );
 
     expect(fetchMock).not.toHaveBeenCalled();
@@ -1868,6 +1868,30 @@ describe('Beacon API', () => {
 
     await expect(promise).rejects.toThrow(BeaconValidationError);
     await expect(promise).rejects.not.toThrow(/super-secret-123/);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('does not leak a credential that is visible in the raw string but makes the endpoint unparseable', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    // Invalid because the host is missing after '@', not because the
+    // credential syntax itself is malformed — 'super-secret' is still
+    // plainly visible in the raw string despite new URL() rejecting it.
+    const promise = waitForBeaconValidatorActivation(
+      'https://user:super-secret@',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      },
+    );
+
+    await expect(promise).rejects.toThrow(BeaconValidationError);
+    await expect(promise).rejects.not.toThrow(/super-secret/);
 
     expect(fetchMock).not.toHaveBeenCalled();
   });

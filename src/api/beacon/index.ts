@@ -798,12 +798,17 @@ export const waitForBeaconValidatorActivation = async (
   // (e.g. a Fetch-spec-blocked port) — those are handled in
   // isRetryableActivationError instead, since they can only be observed by
   // actually attempting the request.
-  // Reported only on a parse failure, where there's nothing to redact yet —
-  // once buildBeaconURL succeeds, this is replaced with a redacted form
-  // before any check that could reject a credentialed or query-string-auth
-  // endpoint (see below), so a password or API key never reaches an error
+  // An endpoint that fails to parse at all can still visibly contain a
+  // credential or query secret (e.g. 'https://user:secret@' — invalid only
+  // because the host is missing, not because the credential syntax is), so
+  // there's no substring of raw, unparsed input that's safe to assume is
+  // clean. Report a generic placeholder until buildBeaconURL succeeds and
+  // this is replaced with a redacted origin + pathname before any check
+  // that could reject a credentialed or query-string-auth endpoint (see
+  // below) — either way, a password or API key never reaches an error
   // message, log line, or error tracker.
-  let reportableEndpoint = endpoint;
+  let reportableEndpoint =
+    '(unparseable endpoint omitted to avoid leaking embedded credentials)';
 
   try {
     const url = buildBeaconURL(endpoint, BEACON_VALIDATORS_PATH);
