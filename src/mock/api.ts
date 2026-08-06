@@ -12,7 +12,7 @@ export const createMockApi = (
   publicClient: PublicClient,
 ): ConfigReturnType['api'] => {
   const defaultBeaconValidatorState: BeaconValidatorState = {
-    publicKey: '0xmock-beacon-validator',
+    publicKey: `0x${'deadbeef'.repeat(12)}`,
     validatorIndex: 0,
     status: 'active',
     rawStatus: 'active_ongoing',

@@ -193,7 +193,7 @@ describe('Mock API event completeness', () => {
 
     expect(activatedState).toEqual(
       expect.objectContaining({
-        publicKey: expect.any(String),
+        publicKey: expect.stringMatching(/^0x[a-fA-F0-9]{96}$/),
         status: expect.any(String),
         rawStatus: expect.any(String),
         slashed: expect.any(Boolean),
