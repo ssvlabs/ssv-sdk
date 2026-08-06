@@ -627,6 +627,31 @@ const toValidatorLookupKey = (validatorId: string) => {
 const isDotSegmentValidatorId = (validatorId: string): boolean =>
   /^\.+$/.test(validatorId);
 
+// A caller bypassing this SDK's own TS types via its compiled JS output can
+// pass a non-string validatorId, and even a well-typed string can contain
+// an unpaired UTF-16 surrogate that throws URIError from
+// encodeURIComponent — both are plain TypeError/URIError,
+// isRetryableActivationError's default, so left unchecked this retries a
+// permanent input error for the entire timeoutMs instead of failing fast.
+const assertEncodableValidatorId = (
+  validatorId: unknown,
+  methodName: string,
+): void => {
+  if (typeof validatorId !== 'string') {
+    throw new BeaconValidationError(
+      `${methodName} requires validatorId to be a string`,
+    );
+  }
+
+  try {
+    encodeURIComponent(validatorId);
+  } catch {
+    throw new BeaconValidationError(
+      `${methodName} requires a well-formed validatorId (found an unpaired surrogate)`,
+    );
+  }
+};
+
 // Both the GET and POST validator-batch endpoints require unique transport
 // ids; deduping here (rather than in getBeaconValidatorStates) keeps this a
 // transport-only concern — per-input-position output alignment already comes
@@ -694,6 +719,8 @@ export const getBeaconValidator = async (
     throw missingBeaconEndpointError();
   }
 
+  assertEncodableValidatorId(args.validatorId, 'getBeaconValidator');
+
   if (args.validatorId.trim().length === 0) {
     throw new BeaconValidationError(
       'getBeaconValidator requires a non-empty validatorId; an empty value would request the unfiltered validator list instead',
@@ -756,6 +783,10 @@ export const getBeaconValidators = async (
   if (args.validatorIds.length === 0) {
     return [];
   }
+
+  args.validatorIds.forEach((validatorId) =>
+    assertEncodableValidatorId(validatorId, 'getBeaconValidators'),
+  );
 
   if (
     args.validatorIds.some((validatorId) => validatorId.trim().length === 0)

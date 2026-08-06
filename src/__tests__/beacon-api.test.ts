@@ -150,6 +150,30 @@ describe('Beacon API', () => {
     expect(result).toBeNull();
   });
 
+  it('rejects a non-string validatorId (a JS caller bypassing the TS types) without ever fetching', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', {
+        validatorId: 123 as never,
+      }),
+    ).rejects.toThrow('getBeaconValidator requires validatorId to be a string');
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects a validatorId with an unpaired surrogate without ever fetching', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: '\uD800' }),
+    ).rejects.toThrow(/well-formed validatorId/);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it('redacts a path-embedded api key from the endpoint error, keeping only origin + the beacon api path', async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
@@ -447,6 +471,21 @@ describe('Beacon API', () => {
         validatorIds: ['12', '..'],
       }),
     ).rejects.toThrow(BeaconValidationError);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects a non-string id in a batch call without ever fetching', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidators('https://beacon.example', {
+        validatorIds: ['12', 456 as never],
+      }),
+    ).rejects.toThrow(
+      'getBeaconValidators requires validatorId to be a string',
+    );
 
     expect(fetchMock).not.toHaveBeenCalled();
   });
