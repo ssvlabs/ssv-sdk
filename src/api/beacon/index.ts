@@ -114,6 +114,48 @@ const buildBeaconURL = (endpoint: string, path: string): URL => {
   return url;
 };
 
+// Throws for an endpoint fetch could never use — malformed syntax, an
+// unsupported scheme, or embedded credentials (fetch refuses to construct a
+// Request from a URL with a username/password) — before any caller reaches
+// fetch() with it. Every entry point that accepts a caller-supplied endpoint
+// calls this first: without it, fetch()'s own TypeError for a credentialed
+// URL embeds the URL verbatim in its message, and Node's fetch throws that
+// TypeError however it's called, not just from the retry loop this was
+// originally added for.
+//
+// The reported endpoint is redacted to origin + our own fixed API path,
+// never the caller's own path or query string — a provider's endpoint can
+// embed an API key either way (path-based, e.g. '.../v3/<key>', or
+// query-string, e.g. '?apiKey=<key>'), and neither is safe to echo into an
+// error message, log line, or error tracker. An endpoint that fails to
+// parse at all can still visibly contain a credential (e.g.
+// 'https://user:secret@' is invalid only because the host is missing, not
+// because the credential syntax is), so there's no substring of raw,
+// unparsed input that's safe to assume is clean either — a generic
+// placeholder is reported instead in that case.
+const assertFetchableBeaconEndpoint = (
+  endpoint: string,
+  methodName: string,
+): void => {
+  let reportableEndpoint =
+    '(unparseable endpoint omitted to avoid leaking embedded credentials)';
+
+  try {
+    const url = buildBeaconURL(endpoint, BEACON_VALIDATORS_PATH);
+    reportableEndpoint = `${url.origin}${BEACON_VALIDATORS_PATH}`;
+
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      throw new Error('unsupported protocol');
+    }
+
+    new Request(url);
+  } catch {
+    throw new BeaconValidationError(
+      `Invalid beacon endpoint for ${methodName}: ${reportableEndpoint}`,
+    );
+  }
+};
+
 // ReadableStream#cancel() can itself reject (e.g. an already-errored stream).
 // Releasing the connection is a best-effort courtesy — it must never replace
 // the meaningful result (a BeaconHttpError, or a 404's null) with whatever
@@ -640,6 +682,8 @@ export const getBeaconValidator = async (
     );
   }
 
+  assertFetchableBeaconEndpoint(endpoint, 'getBeaconValidator');
+
   const url = buildBeaconURL(
     endpoint,
     `${BEACON_VALIDATORS_PATH}/${encodeURIComponent(args.validatorId)}`,
@@ -696,6 +740,8 @@ export const getBeaconValidators = async (
       'getBeaconValidators requires every validatorId to be non-empty',
     );
   }
+
+  assertFetchableBeaconEndpoint(endpoint, 'getBeaconValidators');
 
   const dedupedValidatorIds = dedupeValidatorIds(args.validatorIds);
   const request = getBeaconValidatorsRequest(
@@ -788,42 +834,15 @@ export const waitForBeaconValidatorActivation = async (
 
   const methodName = 'waitForBeaconValidatorActivation';
 
-  // A malformed endpoint, one with a scheme fetch can't handle (e.g.
-  // ftp:/mailto:), or one carrying credentials (fetch refuses to construct a
-  // Request from a URL with a username/password) throws a plain TypeError.
-  // isRetryableActivationError treats that as retryable by default, so left
-  // unchecked, this silently retries a failure that can never succeed for
-  // the entire timeoutMs instead of failing immediately. This deliberately
-  // doesn't cover every way fetch can reject a syntactically valid endpoint
-  // (e.g. a Fetch-spec-blocked port) — those are handled in
+  // Without this, a malformed/unfetchable endpoint throws a plain TypeError
+  // from the first poll's fetch, which isRetryableActivationError treats as
+  // retryable by default — silently retrying a failure that can never
+  // succeed for the entire timeoutMs instead of failing immediately. This
+  // deliberately doesn't cover every way fetch can reject a syntactically
+  // valid endpoint (e.g. a Fetch-spec-blocked port) — those are handled in
   // isRetryableActivationError instead, since they can only be observed by
   // actually attempting the request.
-  // An endpoint that fails to parse at all can still visibly contain a
-  // credential or query secret (e.g. 'https://user:secret@' — invalid only
-  // because the host is missing, not because the credential syntax is), so
-  // there's no substring of raw, unparsed input that's safe to assume is
-  // clean. Report a generic placeholder until buildBeaconURL succeeds and
-  // this is replaced with a redacted origin + pathname before any check
-  // that could reject a credentialed or query-string-auth endpoint (see
-  // below) — either way, a password or API key never reaches an error
-  // message, log line, or error tracker.
-  let reportableEndpoint =
-    '(unparseable endpoint omitted to avoid leaking embedded credentials)';
-
-  try {
-    const url = buildBeaconURL(endpoint, BEACON_VALIDATORS_PATH);
-    reportableEndpoint = `${url.origin}${url.pathname}`;
-
-    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-      throw new Error('unsupported protocol');
-    }
-
-    new Request(url);
-  } catch {
-    throw new BeaconValidationError(
-      `Invalid beacon endpoint for ${methodName}: ${reportableEndpoint}`,
-    );
-  }
+  assertFetchableBeaconEndpoint(endpoint, methodName);
 
   // pollIntervalMs/requestTimeoutMs are passed to setTimeout-based timers and
   // so are bounded by MAX_TIMER_DELAY_MS; timeoutMs is only ever used for

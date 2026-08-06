@@ -106,6 +106,41 @@ describe('Beacon API', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it('rejects a credentialed endpoint before fetching, without leaking the credential', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const promise = getBeaconValidator(
+      'https://user:super-secret@beacon.example',
+      { validatorId: '12' },
+    );
+
+    await expect(promise).rejects.toThrow(BeaconValidationError);
+    await expect(promise).rejects.not.toThrow(/super-secret/);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('redacts a path-embedded api key from the endpoint error, keeping only origin + the beacon api path', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    // A provider-style endpoint with an api key in the path (Infura's
+    // '/v3/<key>' shape), plus credentials, so both need to be excluded.
+    const promise = getBeaconValidator(
+      'https://user:pass@provider.example/v3/super-secret-api-key',
+      { validatorId: '12' },
+    );
+
+    await expect(promise).rejects.toThrow(
+      'Invalid beacon endpoint for getBeaconValidator: https://provider.example/eth/v1/beacon/states/head/validators',
+    );
+    await expect(promise).rejects.not.toThrow(/super-secret-api-key/);
+    await expect(promise).rejects.not.toThrow(/pass/);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
   it('constructs bound beacon API methods', async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(
@@ -355,6 +390,21 @@ describe('Beacon API', () => {
     ).rejects.toThrow(
       'getBeaconValidators requires every validatorId to be non-empty',
     );
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects a credentialed endpoint before fetching a batch, without leaking the credential', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const promise = getBeaconValidators(
+      'https://user:super-secret@beacon.example',
+      { validatorIds: ['12'] },
+    );
+
+    await expect(promise).rejects.toThrow(BeaconValidationError);
+    await expect(promise).rejects.not.toThrow(/super-secret/);
 
     expect(fetchMock).not.toHaveBeenCalled();
   });
