@@ -142,7 +142,15 @@ const assertFetchableBeaconEndpoint = (
 
   try {
     const url = buildBeaconURL(endpoint, BEACON_VALIDATORS_PATH);
-    reportableEndpoint = `${url.origin}${BEACON_VALIDATORS_PATH}`;
+
+    // An opaque-path scheme (a typo like 'htttps:', or a non-special scheme
+    // like 'mailto:'/'admin:') serializes url.origin as the literal string
+    // 'null' — not a credential leak on its own, but concatenating it would
+    // produce a confusing 'null/eth/v1/...' message. Keep the placeholder
+    // instead for anything without a real origin to report.
+    if (url.origin !== 'null') {
+      reportableEndpoint = `${url.origin}${BEACON_VALIDATORS_PATH}`;
+    }
 
     if (url.protocol !== 'http:' && url.protocol !== 'https:') {
       throw new Error('unsupported protocol');

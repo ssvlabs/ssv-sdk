@@ -1922,6 +1922,38 @@ describe('Beacon API', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it.each([
+    ['scheme typo', 'htttps://beacon.example/s3cr3t/'],
+    [
+      'non-special scheme with embedded credentials',
+      'admin:s3cr3t@beacon.example',
+    ],
+  ])(
+    'reports the generic placeholder, not a confusing "null/..." string, for an opaque-origin endpoint (%s)',
+    async (_label, endpoint) => {
+      vi.useFakeTimers();
+
+      const fetchMock = vi.fn();
+      vi.stubGlobal('fetch', fetchMock);
+
+      // These parse successfully (new URL() doesn't throw) but as an
+      // opaque-origin URL, where url.origin serializes to the literal
+      // string 'null' rather than a real origin.
+      const promise = waitForBeaconValidatorActivation(endpoint, {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      });
+
+      await expect(promise).rejects.toThrow(
+        'Invalid beacon endpoint for waitForBeaconValidatorActivation: (unparseable endpoint omitted to avoid leaking embedded credentials)',
+      );
+      await expect(promise).rejects.not.toThrow(/s3cr3t/);
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    },
+  );
+
   it('does not leak a credential that is visible in the raw string but makes the endpoint unparseable', async () => {
     vi.useFakeTimers();
 
