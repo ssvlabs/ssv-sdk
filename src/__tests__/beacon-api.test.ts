@@ -1822,27 +1822,52 @@ describe('Beacon API', () => {
         timeoutMs: 5_000,
       }),
     ).rejects.toThrow(
-      'Invalid beacon endpoint for waitForBeaconValidatorActivation: ftp://beacon.example',
+      'Invalid beacon endpoint for waitForBeaconValidatorActivation: ftp://beacon.example/eth/v1/beacon/states/head/validators',
     );
 
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it('throws immediately on an endpoint carrying credentials instead of retrying until timeout', async () => {
+  it('throws immediately on an endpoint carrying credentials instead of retrying until timeout, without leaking them', async () => {
     vi.useFakeTimers();
 
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
 
-    await expect(
-      waitForBeaconValidatorActivation('https://user:pass@beacon.example', {
+    const promise = waitForBeaconValidatorActivation(
+      'https://user:pass@beacon.example',
+      {
         validatorId: '12',
         pollIntervalMs: 1_000,
         timeoutMs: 5_000,
-      }),
-    ).rejects.toThrow(
-      'Invalid beacon endpoint for waitForBeaconValidatorActivation: https://user:pass@beacon.example',
+      },
     );
+
+    await expect(promise).rejects.toThrow(
+      'Invalid beacon endpoint for waitForBeaconValidatorActivation: https://beacon.example/eth/v1/beacon/states/head/validators',
+    );
+    await expect(promise).rejects.not.toThrow(/pass/);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('throws immediately on an endpoint with query-string auth, without leaking the query string', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const promise = waitForBeaconValidatorActivation(
+      'mailto:beacon.example?apiKey=super-secret-123',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      },
+    );
+
+    await expect(promise).rejects.toThrow(BeaconValidationError);
+    await expect(promise).rejects.not.toThrow(/super-secret-123/);
 
     expect(fetchMock).not.toHaveBeenCalled();
   });

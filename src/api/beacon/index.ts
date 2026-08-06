@@ -798,8 +798,16 @@ export const waitForBeaconValidatorActivation = async (
   // (e.g. a Fetch-spec-blocked port) — those are handled in
   // isRetryableActivationError instead, since they can only be observed by
   // actually attempting the request.
+  // Reported only on a parse failure, where there's nothing to redact yet —
+  // once buildBeaconURL succeeds, this is replaced with a redacted form
+  // before any check that could reject a credentialed or query-string-auth
+  // endpoint (see below), so a password or API key never reaches an error
+  // message, log line, or error tracker.
+  let reportableEndpoint = endpoint;
+
   try {
     const url = buildBeaconURL(endpoint, BEACON_VALIDATORS_PATH);
+    reportableEndpoint = `${url.origin}${url.pathname}`;
 
     if (url.protocol !== 'http:' && url.protocol !== 'https:') {
       throw new Error('unsupported protocol');
@@ -808,7 +816,7 @@ export const waitForBeaconValidatorActivation = async (
     new Request(url);
   } catch {
     throw new BeaconValidationError(
-      `Invalid beacon endpoint for ${methodName}: ${endpoint}`,
+      `Invalid beacon endpoint for ${methodName}: ${reportableEndpoint}`,
     );
   }
 
