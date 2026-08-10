@@ -1,0 +1,2263 @@
+import {
+  type BeaconValidator,
+  BeaconValidationError,
+  getBeaconAPI,
+  getBeaconValidatorLifecycleStage,
+  getBeaconValidator,
+  getBeaconValidatorState,
+  getBeaconValidators,
+  getBeaconValidatorStates,
+  waitForBeaconValidatorActivation,
+} from '@/api/beacon';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+const FAR_FUTURE_EPOCH = '18446744073709551615';
+
+// Beacon pubkeys are 0x-prefixed 48-byte (96 hex char) BLS keys; normalized
+// validation (mapBeaconValidatorState) now enforces this shape, so fixtures
+// must use valid-shaped keys wherever normalized reads are exercised.
+const VALID_PUBKEY_A = `0x${'a'.repeat(96)}`;
+const VALID_PUBKEY_B = `0x${'b'.repeat(96)}`;
+
+const createRawValidator = (overrides?: {
+  index?: BeaconValidator['index'] | null;
+  balance?: BeaconValidator['balance'];
+  status?: BeaconValidator['status'];
+  validator?: Partial<BeaconValidator['validator']>;
+}): BeaconValidator => ({
+  index:
+    typeof overrides?.index === 'undefined' ? '12' : (overrides.index as never),
+  balance: overrides?.balance ?? '32000000000',
+  status: overrides?.status ?? 'active_ongoing',
+  validator: {
+    pubkey: overrides?.validator?.pubkey ?? VALID_PUBKEY_A,
+    withdrawal_credentials:
+      overrides?.validator?.withdrawal_credentials ?? '0xdef',
+    effective_balance: overrides?.validator?.effective_balance ?? '32000000000',
+    slashed: overrides?.validator?.slashed ?? false,
+    activation_eligibility_epoch:
+      typeof overrides?.validator?.activation_eligibility_epoch === 'undefined'
+        ? '1'
+        : (overrides.validator.activation_eligibility_epoch as never),
+    activation_epoch:
+      typeof overrides?.validator?.activation_epoch === 'undefined'
+        ? '2'
+        : (overrides.validator.activation_epoch as never),
+    exit_epoch:
+      typeof overrides?.validator?.exit_epoch === 'undefined'
+        ? '3'
+        : (overrides.validator.exit_epoch as never),
+    withdrawable_epoch:
+      typeof overrides?.validator?.withdrawable_epoch === 'undefined'
+        ? '4'
+        : (overrides.validator.withdrawable_epoch as never),
+  },
+});
+
+describe('Beacon API', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+    vi.useRealTimers();
+  });
+
+  it('exports beacon helpers from the package entrypoint', async () => {
+    const entrypoint = await import('@/main');
+
+    expect(entrypoint.getBeaconValidatorState).toBeTypeOf('function');
+    expect(entrypoint.getBeaconValidatorStates).toBeTypeOf('function');
+    expect(entrypoint.getBeaconValidatorLifecycleStage).toBeTypeOf('function');
+    expect(entrypoint.waitForBeaconValidatorActivation).toBeTypeOf('function');
+  });
+
+  it('requests a single beacon validator by id', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator(),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const validator = await getBeaconValidator('https://beacon.example/api', {
+      validatorId: '0xabc/1',
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/api/eth/v1/beacon/states/head/validators/0xabc%2F1',
+    );
+    expect(validator?.index).toBe('12');
+  });
+
+  it('rejects an empty or blank validatorId instead of requesting the unfiltered list', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: '' }),
+    ).rejects.toThrow('getBeaconValidator requires a non-empty validatorId');
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: '   ' }),
+    ).rejects.toThrow('getBeaconValidator requires a non-empty validatorId');
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects a credentialed endpoint before fetching, without leaking the credential', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const promise = getBeaconValidator(
+      'https://user:super-secret@beacon.example',
+      { validatorId: '12' },
+    );
+
+    await expect(promise).rejects.toThrow(BeaconValidationError);
+    await expect(promise).rejects.not.toThrow(/super-secret/);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it.each(['.', '..', '...'])(
+    'rejects a dot-segment validatorId (%s) instead of letting URL normalization redirect it',
+    async (dotSegment) => {
+      const fetchMock = vi.fn();
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        getBeaconValidator('https://beacon.example', {
+          validatorId: dotSegment,
+        }),
+      ).rejects.toThrow(BeaconValidationError);
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    },
+  );
+
+  it('still allows an arbitrary non-matching validatorId, matching real server behavior', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response(null, { status: 404 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const result = await getBeaconValidator('https://beacon.example', {
+      validatorId: 'not-a-real-id-but-not-a-dot-segment-either',
+    });
+
+    expect(result).toBeNull();
+  });
+
+  it('rejects a non-string validatorId (a JS caller bypassing the TS types) without ever fetching', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', {
+        validatorId: 123 as never,
+      }),
+    ).rejects.toThrow('getBeaconValidator requires validatorId to be a string');
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects a validatorId with an unpaired surrogate without ever fetching', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: '\uD800' }),
+    ).rejects.toThrow(/well-formed validatorId/);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('redacts a path-embedded api key from the endpoint error, keeping only origin + the beacon api path', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    // A provider-style endpoint with an api key in the path (Infura's
+    // '/v3/<key>' shape), plus credentials, so both need to be excluded.
+    const promise = getBeaconValidator(
+      'https://user:pass@provider.example/v3/super-secret-api-key',
+      { validatorId: '12' },
+    );
+
+    await expect(promise).rejects.toThrow(
+      'Invalid beacon endpoint for getBeaconValidator: https://provider.example/eth/v1/beacon/states/head/validators',
+    );
+    await expect(promise).rejects.not.toThrow(/super-secret-api-key/);
+    await expect(promise).rejects.not.toThrow(/pass/);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('constructs bound beacon API methods', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [],
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const api = getBeaconAPI('https://beacon.example');
+    await api.getBeaconValidatorStates({ validatorIds: ['1', '2'] });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/eth/v1/beacon/states/head/validators?id=1&id=2',
+    );
+    expect(fetchMock.mock.calls[0]).toHaveLength(1);
+  });
+
+  it('uses GET for up to 64 deduplicated validator ids with a short URL', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [],
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const validatorIds = Array.from({ length: 64 }, (_, index) => `${index}`);
+
+    await getBeaconValidators('https://beacon.example/api', {
+      validatorIds,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      `https://beacon.example/api/eth/v1/beacon/states/head/validators?${validatorIds
+        .map((validatorId) => `id=${validatorId}`)
+        .join('&')}`,
+    );
+    expect(fetchMock.mock.calls[0]).toHaveLength(1);
+  });
+
+  it('uses POST once the deduplicated id count exceeds 64, even with a short URL', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [],
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    // The Beacon API GET endpoint caps id[] at 64 items (maxItems: 64,
+    // documented 414 above that) regardless of URL length.
+    const validatorIds = Array.from({ length: 65 }, (_, index) => `${index}`);
+
+    await getBeaconValidators('https://beacon.example/api', {
+      validatorIds,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/api/eth/v1/beacon/states/head/validators',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: validatorIds }),
+      },
+    );
+  });
+
+  it('passes an AbortSignal through on the batch GET path', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ data: [] }), { status: 200 }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const controller = new AbortController();
+
+    await getBeaconValidators('https://beacon.example', {
+      validatorIds: ['1', '2'],
+      signal: controller.signal,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/eth/v1/beacon/states/head/validators?id=1&id=2',
+      { signal: controller.signal },
+    );
+  });
+
+  it('passes an AbortSignal through on the batch POST path', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ data: [] }), { status: 200 }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const controller = new AbortController();
+    const validatorIds = Array.from({ length: 65 }, (_, index) => `${index}`);
+
+    await getBeaconValidators('https://beacon.example', {
+      validatorIds,
+      signal: controller.signal,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/eth/v1/beacon/states/head/validators',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: validatorIds }),
+        signal: controller.signal,
+      },
+    );
+  });
+
+  it('preserves an existing query string on the endpoint for single-validator reads', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator(),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await getBeaconValidator('https://beacon.example?apiKey=secret', {
+      validatorId: '1',
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/eth/v1/beacon/states/head/validators/1?apiKey=secret',
+    );
+  });
+
+  it('merges (not replaces) an existing query string on the endpoint for batch GET reads', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ data: [] }), { status: 200 }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await getBeaconValidators('https://beacon.example/api?apiKey=secret', {
+      validatorIds: ['1', '2'],
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/api/eth/v1/beacon/states/head/validators?apiKey=secret&id=1&id=2',
+    );
+  });
+
+  it('preserves an existing query string on the endpoint for batch POST reads', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ data: [] }), { status: 200 }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const validatorIds = Array.from({ length: 65 }, (_, index) => `${index}`);
+
+    await getBeaconValidators('https://beacon.example?apiKey=secret', {
+      validatorIds,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/eth/v1/beacon/states/head/validators?apiKey=secret',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: validatorIds }),
+      },
+    );
+  });
+
+  it('deduplicates transport ids while preserving repeated aligned outputs', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [
+            createRawValidator({
+              index: '5',
+              validator: { pubkey: VALID_PUBKEY_A },
+            }),
+            createRawValidator({
+              index: '7',
+              validator: { pubkey: VALID_PUBKEY_B },
+            }),
+          ],
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const states = await getBeaconValidatorStates('https://beacon.example', {
+      validatorIds: ['5', '5', '7'],
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/eth/v1/beacon/states/head/validators?id=5&id=7',
+    );
+    expect(states.map((state) => state?.publicKey)).toEqual([
+      VALID_PUBKEY_A,
+      VALID_PUBKEY_A,
+      VALID_PUBKEY_B,
+    ]);
+  });
+
+  it('matches a non-canonical (leading-zero) index request against the canonical response index', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [createRawValidator({ index: '12' })],
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const states = await getBeaconValidatorStates('https://beacon.example', {
+      validatorIds: ['0012'],
+    });
+
+    expect(states[0]).not.toBeNull();
+    expect(states[0]?.validatorIndex).toBe(12);
+  });
+
+  it('rejects a blank validatorId in a batch request instead of sending it', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidators('https://beacon.example', {
+        validatorIds: ['1', '   '],
+      }),
+    ).rejects.toThrow(
+      'getBeaconValidators requires every validatorId to be non-empty',
+    );
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects a credentialed endpoint before fetching a batch, without leaking the credential', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const promise = getBeaconValidators(
+      'https://user:super-secret@beacon.example',
+      { validatorIds: ['12'] },
+    );
+
+    await expect(promise).rejects.toThrow(BeaconValidationError);
+    await expect(promise).rejects.not.toThrow(/super-secret/);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects a dot-segment validatorId in a batch call instead of letting URL normalization redirect it', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidators('https://beacon.example', {
+        validatorIds: ['12', '..'],
+      }),
+    ).rejects.toThrow(BeaconValidationError);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('rejects a non-string id in a batch call without ever fetching', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidators('https://beacon.example', {
+        validatorIds: ['12', 456 as never],
+      }),
+    ).rejects.toThrow(
+      'getBeaconValidators requires validatorId to be a string',
+    );
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('uses POST for beacon validator batches when the GET URL would be too long', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [],
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const validatorIds = Array.from(
+      { length: 60 },
+      (_, index) => `0x${String(index).padStart(2, '0')}${'a'.repeat(120)}`,
+    );
+
+    await getBeaconValidators('https://beacon.example/api', {
+      validatorIds,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/api/eth/v1/beacon/states/head/validators',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: validatorIds }),
+      },
+    );
+  });
+
+  it('returns an empty validator batch without calling fetch', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidators('https://beacon.example/api', { validatorIds: [] }),
+    ).resolves.toEqual([]);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('returns empty validator states without calling fetch', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorStates('https://beacon.example', { validatorIds: [] }),
+    ).resolves.toEqual([]);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('throws the same missing endpoint error for empty batch validator states as single validator state reads', async () => {
+    const expectedError =
+      'Beacon endpoint is not configured. Provide extendedConfig.beacon.endpoint in SDK config.';
+
+    await expect(
+      getBeaconAPI().getBeaconValidatorState({ validatorId: '1' }),
+    ).rejects.toThrow(expectedError);
+
+    await expect(
+      getBeaconAPI().getBeaconValidatorStates({ validatorIds: [] }),
+    ).rejects.toThrow(expectedError);
+  });
+
+  it('returns null when a beacon validator is not found', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response(null, { status: 404 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: 'missing' }),
+    ).resolves.toBeNull();
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', {
+        validatorId: 'missing',
+      }),
+    ).resolves.toBeNull();
+  });
+
+  it('throws a clear error when beacon endpoint is missing', async () => {
+    await expect(
+      getBeaconAPI().getBeaconValidatorState({ validatorId: '1' }),
+    ).rejects.toThrow(
+      'Beacon endpoint is not configured. Provide extendedConfig.beacon.endpoint in SDK config.',
+    );
+  });
+
+  it('normalizes a single beacon validator state', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator(),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+    ).resolves.toEqual({
+      publicKey: VALID_PUBKEY_A,
+      validatorIndex: 12,
+      status: 'active',
+      rawStatus: 'active_ongoing',
+      balanceGwei: 32000000000n,
+      effectiveBalanceGwei: 32000000000n,
+      slashed: false,
+      activationEligibilityEpoch: 1,
+      activationEpoch: 2,
+      exitEpoch: 3,
+      withdrawableEpoch: 4,
+    });
+  });
+
+  it('maps far-future exit epoch sentinel to null for a single validator state', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({
+            validator: {
+              exit_epoch: FAR_FUTURE_EPOCH,
+            },
+          }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+    ).resolves.toMatchObject({
+      activationEligibilityEpoch: 1,
+      activationEpoch: 2,
+      exitEpoch: null,
+      withdrawableEpoch: 4,
+    });
+  });
+
+  it('maps far-future withdrawable epoch sentinel to null for a single validator state', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({
+            validator: {
+              withdrawable_epoch: FAR_FUTURE_EPOCH,
+            },
+          }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+    ).resolves.toMatchObject({
+      activationEligibilityEpoch: 1,
+      activationEpoch: 2,
+      exitEpoch: 3,
+      withdrawableEpoch: null,
+    });
+  });
+
+  it.each([
+    ['pending', 'pending'],
+    ['active', 'active'],
+    ['exited', 'exited'],
+    ['withdrawal_possible', 'withdrawal_ready'],
+    ['withdrawal_done', 'withdrawn'],
+  ] as const)(
+    'computes lifecycle stage %s from normalized beacon status %s',
+    (status, lifecycleStage) => {
+      expect(
+        getBeaconValidatorLifecycleStage({
+          status,
+        }),
+      ).toBe(lifecycleStage);
+    },
+  );
+
+  it.each([
+    ['pending_initialized', 'pending'],
+    ['pending_queued', 'pending'],
+    ['active_ongoing', 'active'],
+    ['active_exiting', 'active'],
+    ['active_slashed', 'active'],
+    ['exited_unslashed', 'exited'],
+    ['exited_slashed', 'exited'],
+    ['withdrawal_possible', 'withdrawal_possible'],
+    ['withdrawal_done', 'withdrawal_done'],
+  ] as const)(
+    'maps raw beacon status %s to normalized status %s',
+    async (rawStatus, status) => {
+      const fetchMock = vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ status: rawStatus }),
+          }),
+          { status: 200 },
+        ),
+      );
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        getBeaconValidatorState('https://beacon.example', {
+          validatorId: '12',
+        }),
+      ).resolves.toMatchObject({
+        status,
+        rawStatus,
+      });
+    },
+  );
+
+  it('rejects unknown validator statuses', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({ status: 'mystery_status' }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorState: unsupported status mystery_status',
+    );
+  });
+
+  it('fails clearly when validator.pubkey is missing', async () => {
+    // createRawValidator's overrides fall back via ?? on undefined, so
+    // pubkey: undefined would silently resolve to the default valid key —
+    // omit the property entirely to genuinely simulate it being absent.
+    const rawValidator = createRawValidator();
+    const validatorWithoutPubkey: Record<string, unknown> = {
+      ...rawValidator.validator,
+    };
+    delete validatorWithoutPubkey.pubkey;
+
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: { ...rawValidator, validator: validatorWithoutPubkey },
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorState: validator.pubkey must be a string',
+    );
+  });
+
+  it.each([
+    ['empty', ''],
+    ['non-hex characters', `0x${'g'.repeat(96)}`],
+    ['too short', `0x${'a'.repeat(95)}`],
+    ['too long', `0x${'a'.repeat(97)}`],
+    ['missing 0x prefix', 'a'.repeat(96)],
+  ] as const)(
+    'fails clearly when validator.pubkey is %s',
+    async (_label, pubkey) => {
+      const fetchMock = vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ validator: { pubkey } }),
+          }),
+          { status: 200 },
+        ),
+      );
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        getBeaconValidatorState('https://beacon.example', {
+          validatorId: '12',
+        }),
+      ).rejects.toThrow(
+        'Beacon API returned an invalid response for getBeaconValidatorState: validator.pubkey must be a 0x-prefixed 48-byte hex string',
+      );
+    },
+  );
+
+  it('accepts a valid mixed-case pubkey', async () => {
+    const mixedCasePubkey = `0x${'AbCdEf0123456789'.repeat(6)}`;
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({ validator: { pubkey: mixedCasePubkey } }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+    ).resolves.toMatchObject({ publicKey: mixedCasePubkey });
+  });
+
+  it('fails clearly when validator.slashed is malformed', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({
+            validator: {
+              slashed: 'false' as never,
+            },
+          }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorState: validator.slashed must be a boolean',
+    );
+  });
+
+  it.each([
+    ['empty string', ''],
+    ['whitespace', '   '],
+    ['negative', '-1'],
+    ['explicitly signed', '+1'],
+    ['hexadecimal', '0x10'],
+    ['leading zero', '007'],
+  ] as const)(
+    'rejects a non-canonical balance value (%s)',
+    async (_label, balance) => {
+      const fetchMock = vi
+        .fn()
+        .mockResolvedValue(
+          new Response(
+            JSON.stringify({ data: createRawValidator({ balance }) }),
+            { status: 200 },
+          ),
+        );
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        getBeaconValidatorState('https://beacon.example', {
+          validatorId: '12',
+        }),
+      ).rejects.toThrow(
+        'Beacon API returned an invalid response for getBeaconValidatorState: balance must be a canonical non-negative integer string',
+      );
+    },
+  );
+
+  it('rejects a balance value exceeding the uint64 range', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({ balance: '18446744073709551616' }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorState: balance exceeds the uint64 range',
+    );
+  });
+
+  it.each([
+    ['empty string', ''],
+    ['negative', '-1'],
+    ['hexadecimal', '0x1'],
+  ] as const)(
+    'rejects a non-canonical validator index value (%s)',
+    async (_label, index) => {
+      const fetchMock = vi
+        .fn()
+        .mockResolvedValue(
+          new Response(
+            JSON.stringify({ data: createRawValidator({ index }) }),
+            { status: 200 },
+          ),
+        );
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        getBeaconValidatorState('https://beacon.example', {
+          validatorId: '12',
+        }),
+      ).rejects.toThrow(
+        'Beacon API returned an invalid response for getBeaconValidatorState: index must be a canonical non-negative integer string',
+      );
+    },
+  );
+
+  it('throws instead of treating a validator index equal to the far-future sentinel as absent', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({ index: FAR_FUTURE_EPOCH }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    // index has no far-future-sentinel semantics (unlike the epoch fields),
+    // so a value that large is just out of range, not "not yet set".
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorState: index exceeds MAX_SAFE_INTEGER',
+    );
+  });
+
+  it.each([
+    ['empty string', ''],
+    ['negative', '-1'],
+    ['hexadecimal', '0x3'],
+  ] as const)(
+    'rejects a non-canonical exit_epoch value (%s)',
+    async (_label, exitEpoch) => {
+      const fetchMock = vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({
+              validator: { exit_epoch: exitEpoch as never },
+            }),
+          }),
+          { status: 200 },
+        ),
+      );
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        getBeaconValidatorState('https://beacon.example', {
+          validatorId: '12',
+        }),
+      ).rejects.toThrow(
+        'Beacon API returned an invalid response for getBeaconValidatorState: validator.exit_epoch must be a canonical non-negative integer string',
+      );
+    },
+  );
+
+  it('rejects an epoch value exceeding the uint64 range', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({
+            validator: { exit_epoch: '18446744073709551616' as never },
+          }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '12' }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorState: validator.exit_epoch exceeds the uint64 range',
+    );
+  });
+
+  it('converts optional numeric fields to null when unavailable', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({
+            index: null,
+            validator: {
+              activation_eligibility_epoch: null as never,
+              activation_epoch: null as never,
+              exit_epoch: null as never,
+              withdrawable_epoch: null as never,
+            },
+          }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', {
+        validatorId: '0xabc',
+      }),
+    ).resolves.toMatchObject({
+      validatorIndex: null,
+      activationEligibilityEpoch: null,
+      activationEpoch: null,
+      exitEpoch: null,
+      withdrawableEpoch: null,
+    });
+  });
+
+  it('returns normalized batch states in requested order and null for missing validators', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [
+            createRawValidator({
+              index: '2',
+              validator: { pubkey: VALID_PUBKEY_B },
+            }),
+            createRawValidator({
+              index: '1',
+              validator: { pubkey: VALID_PUBKEY_A },
+            }),
+          ],
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorStates('https://beacon.example', {
+        validatorIds: [VALID_PUBKEY_A, 'missing', '2'],
+      }),
+    ).resolves.toEqual([
+      {
+        publicKey: VALID_PUBKEY_A,
+        validatorIndex: 1,
+        status: 'active',
+        rawStatus: 'active_ongoing',
+        balanceGwei: 32000000000n,
+        effectiveBalanceGwei: 32000000000n,
+        slashed: false,
+        activationEligibilityEpoch: 1,
+        activationEpoch: 2,
+        exitEpoch: 3,
+        withdrawableEpoch: 4,
+      },
+      null,
+      {
+        publicKey: VALID_PUBKEY_B,
+        validatorIndex: 2,
+        status: 'active',
+        rawStatus: 'active_ongoing',
+        balanceGwei: 32000000000n,
+        effectiveBalanceGwei: 32000000000n,
+        slashed: false,
+        activationEligibilityEpoch: 1,
+        activationEpoch: 2,
+        exitEpoch: 3,
+        withdrawableEpoch: 4,
+      },
+    ]);
+  });
+
+  it('preserves output ordering and nulls for large POST batch validator state lookups', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [
+            createRawValidator({
+              index: '2',
+              validator: { pubkey: VALID_PUBKEY_B },
+            }),
+            createRawValidator({
+              index: '1',
+              validator: { pubkey: VALID_PUBKEY_A },
+            }),
+          ],
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const validatorIds = Array.from(
+      { length: 60 },
+      (_, index) => `missing-${index}-${'c'.repeat(120)}`,
+    );
+    validatorIds[0] = VALID_PUBKEY_A;
+    validatorIds[59] = '2';
+
+    const expected = Array.from({ length: 60 }, () => null) as Array<
+      Awaited<ReturnType<typeof getBeaconValidatorStates>>[number]
+    >;
+
+    expected[0] = {
+      publicKey: VALID_PUBKEY_A,
+      validatorIndex: 1,
+      status: 'active',
+      rawStatus: 'active_ongoing',
+      balanceGwei: 32000000000n,
+      effectiveBalanceGwei: 32000000000n,
+      slashed: false,
+      activationEligibilityEpoch: 1,
+      activationEpoch: 2,
+      exitEpoch: 3,
+      withdrawableEpoch: 4,
+    };
+    expected[59] = {
+      publicKey: VALID_PUBKEY_B,
+      validatorIndex: 2,
+      status: 'active',
+      rawStatus: 'active_ongoing',
+      balanceGwei: 32000000000n,
+      effectiveBalanceGwei: 32000000000n,
+      slashed: false,
+      activationEligibilityEpoch: 1,
+      activationEpoch: 2,
+      exitEpoch: 3,
+      withdrawableEpoch: 4,
+    };
+
+    await expect(
+      getBeaconValidatorStates('https://beacon.example', {
+        validatorIds,
+      }),
+    ).resolves.toEqual(expected);
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://beacon.example/eth/v1/beacon/states/head/validators',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: validatorIds }),
+      },
+    );
+  });
+
+  it('maps far-future epoch sentinels to null in batch normalization', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [
+            createRawValidator({
+              index: '1',
+              validator: {
+                pubkey: VALID_PUBKEY_A,
+                exit_epoch: FAR_FUTURE_EPOCH,
+              },
+            }),
+            createRawValidator({
+              index: '2',
+              validator: {
+                pubkey: VALID_PUBKEY_B,
+                withdrawable_epoch: FAR_FUTURE_EPOCH,
+              },
+            }),
+          ],
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorStates('https://beacon.example', {
+        validatorIds: [VALID_PUBKEY_A, VALID_PUBKEY_B],
+      }),
+    ).resolves.toEqual([
+      expect.objectContaining({
+        publicKey: VALID_PUBKEY_A,
+        exitEpoch: null,
+        withdrawableEpoch: 4,
+      }),
+      expect.objectContaining({
+        publicKey: VALID_PUBKEY_B,
+        exitEpoch: 3,
+        withdrawableEpoch: null,
+      }),
+    ]);
+  });
+
+  it('throws when a batch validator request returns 404', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response(null, { status: 404 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorStates('https://beacon.example', {
+        validatorIds: ['1', '2'],
+      }),
+    ).rejects.toThrow(
+      'Beacon API request failed for getBeaconValidators with status 404',
+    );
+  });
+
+  it('throws a clear error when single validator response is missing data', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response(JSON.stringify({}), { status: 200 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: '1' }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidator',
+    );
+  });
+
+  it('throws a clear error when the response data is explicitly null', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ data: null }), { status: 200 }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: '1' }),
+    ).rejects.toThrow(
+      'Beacon API response is missing data for getBeaconValidator',
+    );
+  });
+
+  it('throws a clear error when batch response data is explicitly null', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ data: null }), { status: 200 }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidators('https://beacon.example', { validatorIds: ['1'] }),
+    ).rejects.toThrow(
+      'Beacon API response is missing data for getBeaconValidators',
+    );
+  });
+
+  it('fails fast instead of polling to timeout when the response data is explicitly null', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ data: null }), { status: 200 }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('https://beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Beacon API response is missing data for getBeaconValidator',
+    );
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('throws a clear error when the response body is not valid JSON', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response('not json', { status: 200 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: '1' }),
+    ).rejects.toThrow(
+      'Beacon API returned invalid JSON for getBeaconValidator',
+    );
+  });
+
+  it('propagates a body-read failure unchanged instead of treating it as invalid JSON', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: () => Promise.reject(new TypeError('terminated')),
+    } as unknown as Response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const error: unknown = await getBeaconValidator('https://beacon.example', {
+      validatorId: '1',
+    }).catch((caught: unknown) => caught);
+
+    expect(error).toBeInstanceOf(TypeError);
+    expect(error).not.toBeInstanceOf(BeaconValidationError);
+    expect((error as Error).message).toBe('terminated');
+  });
+
+  it('throws a clear error when batch validator response data is invalid', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: {
+            invalid: true,
+          },
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidators('https://beacon.example', { validatorIds: ['1'] }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidators',
+    );
+  });
+
+  it('throws a clear error when normalized batch validator response is malformed', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: [
+            createRawValidator({
+              validator: {
+                effective_balance: 32000000000 as never,
+              },
+            }),
+          ],
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorStates('https://beacon.example', {
+        validatorIds: ['1'],
+      }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorStates: validator.effective_balance must be a string',
+    );
+  });
+
+  it('throws a clear error when a single validator entry is not an object', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ data: 'oops' }), { status: 200 }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '1' }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorState',
+    );
+  });
+
+  it('throws a clear error when a batch validator entry is not an object', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(
+        new Response(JSON.stringify({ data: [42] }), { status: 200 }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorStates('https://beacon.example', {
+        validatorIds: ['1'],
+      }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorStates',
+    );
+  });
+
+  it('throws a clear error when a validator entry is missing the nested validator object', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: { index: '1', balance: '1', status: 'active_ongoing' },
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidatorState('https://beacon.example', { validatorId: '1' }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorState: validator must be an object',
+    );
+  });
+
+  it.each([
+    ['zero', 0],
+    ['negative', -1],
+    ['non-integer', 1.5],
+  ] as const)(
+    'rejects a %s pollIntervalMs before making any request',
+    async (_label, pollIntervalMs) => {
+      const fetchMock = vi.fn();
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        waitForBeaconValidatorActivation('https://beacon.example', {
+          validatorId: '12',
+          pollIntervalMs,
+          timeoutMs: 5_000,
+        }),
+      ).rejects.toThrow('expected a positive integer number of milliseconds');
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    },
+  );
+
+  it.each([
+    ['zero', 0],
+    ['negative', -1],
+    ['non-integer', 1.5],
+  ] as const)(
+    'rejects a %s timeoutMs before making any request',
+    async (_label, timeoutMs) => {
+      const fetchMock = vi.fn();
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        waitForBeaconValidatorActivation('https://beacon.example', {
+          validatorId: '12',
+          pollIntervalMs: 1_000,
+          timeoutMs,
+        }),
+      ).rejects.toThrow('expected a positive integer number of milliseconds');
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    },
+  );
+
+  it('rejects a non-positive requestTimeoutMs before making any request', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('https://beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+        requestTimeoutMs: 0,
+      }),
+    ).rejects.toThrow('expected a positive integer number of milliseconds');
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['pollIntervalMs', { pollIntervalMs: 2_147_483_648, timeoutMs: 5_000 }],
+    [
+      'requestTimeoutMs',
+      {
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+        requestTimeoutMs: 2_147_483_648,
+      },
+    ],
+  ] as const)(
+    // setTimeout silently clamps delays above 2147483647ms to ~1ms instead of
+    // throwing — a valid-looking multi-week value would busy-loop and hammer
+    // the endpoint instead of waiting, so any field that reaches a timer
+    // directly (pollIntervalMs, requestTimeoutMs) must be rejected up front.
+    'rejects a %s exceeding the setTimeout delay limit before making any request',
+    async (_fieldName, args) => {
+      const fetchMock = vi.fn();
+      vi.stubGlobal('fetch', fetchMock);
+
+      await expect(
+        waitForBeaconValidatorActivation('https://beacon.example', {
+          validatorId: '12',
+          ...args,
+        }),
+      ).rejects.toThrow('no greater than 2147483647');
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    },
+  );
+
+  it('allows a timeoutMs exceeding the setTimeout delay limit, since it is never passed to a timer directly', async () => {
+    vi.useFakeTimers();
+
+    // timeoutMs only feeds Date.now()-based deadline arithmetic; every actual
+    // timer delay derived from it is separately bounded by pollIntervalMs/
+    // requestTimeoutMs, so an activation wait longer than ~24.8 days is valid.
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({ status: 'active_ongoing' }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('https://beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 60 * 24 * 60 * 60 * 1_000, // 60 days
+      }),
+    ).resolves.toMatchObject({ status: 'active' });
+  });
+
+  it('rejects immediately when the endpoint is missing, without ever polling', async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation(undefined, {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Beacon endpoint is not configured. Provide extendedConfig.beacon.endpoint in SDK config.',
+    );
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('waits for a validator to become active', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ status: 'pending_queued' }),
+          }),
+          { status: 200 },
+        ),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ status: 'active_ongoing' }),
+          }),
+          { status: 200 },
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      },
+    );
+    const activationExpectation = expect(
+      activationPromise,
+    ).resolves.toMatchObject({
+      status: 'active',
+      rawStatus: 'active_ongoing',
+    });
+
+    await vi.advanceTimersByTimeAsync(1_000);
+
+    await activationExpectation;
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps retrying by default when a validator is initially not found', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(null, { status: 404 }))
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ status: 'active_ongoing' }),
+          }),
+          { status: 200 },
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: 'missing',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      },
+    );
+    const activationExpectation = expect(
+      activationPromise,
+    ).resolves.toMatchObject({
+      status: 'active',
+      rawStatus: 'active_ongoing',
+    });
+
+    await vi.advanceTimersByTimeAsync(1_000);
+
+    await activationExpectation;
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('retries after a retryable HTTP status (503) while waiting for activation', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(null, { status: 503 }))
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ status: 'active_ongoing' }),
+          }),
+          { status: 200 },
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      },
+    );
+    const activationExpectation = expect(
+      activationPromise,
+    ).resolves.toMatchObject({
+      status: 'active',
+      rawStatus: 'active_ongoing',
+    });
+
+    await vi.advanceTimersByTimeAsync(1_000);
+
+    await activationExpectation;
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('retries after fetch() itself rejects (e.g. a genuine network failure)', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi
+      .fn()
+      .mockRejectedValueOnce(new TypeError('fetch failed'))
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ status: 'active_ongoing' }),
+          }),
+          { status: 200 },
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      },
+    );
+    const activationExpectation = expect(
+      activationPromise,
+    ).resolves.toMatchObject({
+      status: 'active',
+      rawStatus: 'active_ongoing',
+    });
+
+    await vi.advanceTimersByTimeAsync(1_000);
+
+    await activationExpectation;
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('retries after a body-read failure on an otherwise-successful response', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: () => Promise.reject(new TypeError('terminated')),
+      } as unknown as Response)
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ status: 'active_ongoing' }),
+          }),
+          { status: 200 },
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      },
+    );
+    const activationExpectation = expect(
+      activationPromise,
+    ).resolves.toMatchObject({
+      status: 'active',
+      rawStatus: 'active_ongoing',
+    });
+
+    await vi.advanceTimersByTimeAsync(1_000);
+
+    await activationExpectation;
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  const stallUntilAborted = (_url: string, init?: RequestInit) =>
+    new Promise((_resolve, reject) => {
+      init?.signal?.addEventListener('abort', () => {
+        reject(init.signal!.reason);
+      });
+    });
+
+  it('does not abort a healthy response that takes longer than a short pollIntervalMs', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn().mockImplementation(
+      (_url: string, init?: RequestInit) =>
+        new Promise((resolve, reject) => {
+          const timer = setTimeout(() => {
+            resolve(
+              new Response(
+                JSON.stringify({
+                  data: createRawValidator({ status: 'active_ongoing' }),
+                }),
+                { status: 200 },
+              ),
+            );
+          }, 700);
+          init?.signal?.addEventListener('abort', () => {
+            clearTimeout(timer);
+            reject(init.signal!.reason);
+          });
+        }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        // Shorter than the endpoint's real 700ms latency below — this used
+        // to make requestTimeoutMs (defaulting to pollIntervalMs) abort
+        // every attempt before a perfectly healthy response could arrive.
+        pollIntervalMs: 500,
+        timeoutMs: 5_000,
+      },
+    );
+    const activationExpectation = expect(
+      activationPromise,
+    ).resolves.toMatchObject({
+      status: 'active',
+      rawStatus: 'active_ongoing',
+    });
+
+    await vi.advanceTimersByTimeAsync(700);
+
+    await activationExpectation;
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('aborts a stalled first attempt well before a large overall deadline and retries', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi
+      .fn()
+      .mockImplementationOnce(stallUntilAborted)
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ status: 'active_ongoing' }),
+          }),
+          { status: 200 },
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const timeoutMs = 30 * 60 * 1_000; // 30 minutes
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        // Deliberately shorter than requestTimeoutMs's default, to prove the
+        // per-attempt budget is no longer tied to pollIntervalMs.
+        pollIntervalMs: 500,
+        timeoutMs,
+      },
+    );
+    const activationExpectation = expect(
+      activationPromise,
+    ).resolves.toMatchObject({
+      status: 'active',
+      rawStatus: 'active_ongoing',
+    });
+
+    // requestTimeoutMs defaults to DEFAULT_REQUEST_TIMEOUT_MS (10s), so the
+    // stalled first attempt is aborted and retried well before the full
+    // 30-minute deadline — but not as fast as the (much shorter) pollIntervalMs.
+    await vi.advanceTimersByTimeAsync(11_000);
+
+    await activationExpectation;
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps retrying across a sequence of stalled requests until the overall deadline elapses', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn().mockImplementation(stallUntilAborted);
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 2_500,
+        // Explicit, since requestTimeoutMs no longer defaults to
+        // pollIntervalMs — this is what subdivides a short overall deadline
+        // into multiple bounded attempts.
+        requestTimeoutMs: 1_000,
+      },
+    );
+    const activationExpectation =
+      expect(activationPromise).rejects.toThrow(/time budget/);
+
+    await vi.advanceTimersByTimeAsync(2_500);
+
+    await activationExpectation;
+    // attempt 1 stalls for 1000ms then sleeps 1000ms, attempt 2 stalls for
+    // the remaining 500ms and lands exactly on the overall deadline — two
+    // bounded attempts total, never a single stall consuming the whole
+    // 2500ms budget.
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('throws immediately in strict mode when a validator is not found', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response(null, { status: 404 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('https://beacon.example', {
+        validatorId: 'missing',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+        failOnNotFound: true,
+      }),
+    ).rejects.toThrow(
+      'Beacon validator missing was not found while waiting for activation',
+    );
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('throws immediately on a non-retryable HTTP status instead of retrying until timeout', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response(null, { status: 401 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('https://beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Beacon API request failed for getBeaconValidator with status 401',
+    );
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('surfaces the real HTTP error even when cancelling the response body itself rejects', async () => {
+    const rejectingBody = {
+      cancel: vi.fn().mockRejectedValue(new Error('cancel-failed')),
+    };
+    const response = new Response(null, { status: 401 });
+    Object.defineProperty(response, 'body', { value: rejectingBody });
+    const fetchMock = vi.fn().mockResolvedValue(response);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconValidator('https://beacon.example', { validatorId: '12' }),
+    ).rejects.toThrow(
+      'Beacon API request failed for getBeaconValidator with status 401',
+    );
+  });
+
+  it('does not retry a permanent HTTP error just because cancelling its body rejects', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn().mockImplementation(() => {
+      const rejectingBody = {
+        cancel: vi.fn().mockRejectedValue(new Error('cancel-failed')),
+      };
+      const response = new Response(null, { status: 401 });
+      Object.defineProperty(response, 'body', { value: rejectingBody });
+      return Promise.resolve(response);
+    });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('https://beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Beacon API request failed for getBeaconValidator with status 401',
+    );
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('throws immediately on a malformed endpoint instead of retrying until timeout', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('not-a-valid-url', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Invalid beacon endpoint for waitForBeaconValidatorActivation: (unparseable endpoint omitted to avoid leaking embedded credentials)',
+    );
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('throws immediately on a non-http(s) endpoint scheme instead of retrying until timeout', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('ftp://beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Invalid beacon endpoint for waitForBeaconValidatorActivation: ftp://beacon.example/eth/v1/beacon/states/head/validators',
+    );
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('throws immediately on an endpoint carrying credentials instead of retrying until timeout, without leaking them', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const promise = waitForBeaconValidatorActivation(
+      'https://user:pass@beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      },
+    );
+
+    await expect(promise).rejects.toThrow(
+      'Invalid beacon endpoint for waitForBeaconValidatorActivation: https://beacon.example/eth/v1/beacon/states/head/validators',
+    );
+    await expect(promise).rejects.not.toThrow(/pass/);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('throws immediately on an endpoint with query-string auth, without leaking the query string', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    const promise = waitForBeaconValidatorActivation(
+      'mailto:beacon.example?apiKey=super-secret-123',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      },
+    );
+
+    await expect(promise).rejects.toThrow(BeaconValidationError);
+    await expect(promise).rejects.not.toThrow(/super-secret-123/);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['scheme typo', 'htttps://beacon.example/s3cr3t/'],
+    [
+      'non-special scheme with embedded credentials',
+      'admin:s3cr3t@beacon.example',
+    ],
+  ])(
+    'reports the generic placeholder, not a confusing "null/..." string, for an opaque-origin endpoint (%s)',
+    async (_label, endpoint) => {
+      vi.useFakeTimers();
+
+      const fetchMock = vi.fn();
+      vi.stubGlobal('fetch', fetchMock);
+
+      // These parse successfully (new URL() doesn't throw) but as an
+      // opaque-origin URL, where url.origin serializes to the literal
+      // string 'null' rather than a real origin.
+      const promise = waitForBeaconValidatorActivation(endpoint, {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      });
+
+      await expect(promise).rejects.toThrow(
+        'Invalid beacon endpoint for waitForBeaconValidatorActivation: (unparseable endpoint omitted to avoid leaking embedded credentials)',
+      );
+      await expect(promise).rejects.not.toThrow(/s3cr3t/);
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    },
+  );
+
+  it('does not leak a credential that is visible in the raw string but makes the endpoint unparseable', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn();
+    vi.stubGlobal('fetch', fetchMock);
+
+    // Invalid because the host is missing after '@', not because the
+    // credential syntax itself is malformed — 'super-secret' is still
+    // plainly visible in the raw string despite new URL() rejecting it.
+    const promise = waitForBeaconValidatorActivation(
+      'https://user:super-secret@',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      },
+    );
+
+    await expect(promise).rejects.toThrow(BeaconValidationError);
+    await expect(promise).rejects.not.toThrow(/super-secret/);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('does not retry a Fetch-spec-blocked port, but still retries other fetch-level TypeErrors', async () => {
+    vi.useFakeTimers();
+
+    const badPortError = new TypeError('fetch failed');
+    (badPortError as unknown as { cause?: unknown }).cause = new Error(
+      'bad port',
+    );
+    const fetchMock = vi.fn().mockRejectedValue(badPortError);
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('http://beacon.example:25', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow('fetch failed');
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('throws immediately on a malformed response instead of retrying until timeout', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({ status: 'mystery_status' }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      waitForBeaconValidatorActivation('https://beacon.example', {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Beacon API returned an invalid response for getBeaconValidatorState: unsupported status mystery_status',
+    );
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('preserves the last retryable error when repeated failures exhaust the deadline', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response(null, { status: 503 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 2_500,
+      },
+    );
+    const activationExpectation = expect(activationPromise).rejects.toThrow(
+      'Beacon API request failed for getBeaconValidator with status 503',
+    );
+
+    await vi.advanceTimersByTimeAsync(2_500);
+
+    await activationExpectation;
+  });
+
+  it('waits while pending validators contain far-future epoch sentinels', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({
+              status: 'pending_queued',
+              validator: {
+                activation_epoch: FAR_FUTURE_EPOCH,
+                exit_epoch: FAR_FUTURE_EPOCH,
+                withdrawable_epoch: FAR_FUTURE_EPOCH,
+              },
+            }),
+          }),
+          { status: 200 },
+        ),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ status: 'active_ongoing' }),
+          }),
+          { status: 200 },
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      },
+    );
+    const activationExpectation = expect(
+      activationPromise,
+    ).resolves.toMatchObject({
+      status: 'active',
+      rawStatus: 'active_ongoing',
+    });
+
+    await vi.advanceTimersByTimeAsync(1_000);
+
+    await activationExpectation;
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('times out while waiting for validator activation', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn().mockImplementation(() =>
+      Promise.resolve(
+        new Response(
+          JSON.stringify({
+            data: createRawValidator({ status: 'pending_queued' }),
+          }),
+          { status: 200 },
+        ),
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 2_500,
+      },
+    );
+    const activationExpectation = expect(activationPromise).rejects.toThrow(
+      'Timed out waiting for beacon validator activation for 12 after 2500ms; last observed state: pending (pending_queued)',
+    );
+
+    await vi.advanceTimersByTimeAsync(3_000);
+
+    await activationExpectation;
+  });
+
+  it('times out in default mode after repeated not-found responses', async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response(null, { status: 404 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    const activationPromise = waitForBeaconValidatorActivation(
+      'https://beacon.example',
+      {
+        validatorId: 'missing',
+        pollIntervalMs: 1_000,
+        timeoutMs: 2_500,
+      },
+    );
+    const activationExpectation = expect(activationPromise).rejects.toThrow(
+      'Timed out waiting for beacon validator activation for missing after 2500ms; last observed state: not found',
+    );
+
+    await vi.advanceTimersByTimeAsync(3_000);
+
+    await activationExpectation;
+  });
+
+  it('fails clearly when activation is no longer possible', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          data: createRawValidator({ status: 'exited_unslashed' }),
+        }),
+        { status: 200 },
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(
+      getBeaconAPI('https://beacon.example').waitForBeaconValidatorActivation({
+        validatorId: '12',
+        pollIntervalMs: 1_000,
+        timeoutMs: 5_000,
+      }),
+    ).rejects.toThrow(
+      'Beacon validator 12 reached terminal stage exited before activation',
+    );
+  });
+});

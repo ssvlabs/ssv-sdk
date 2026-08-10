@@ -74,6 +74,11 @@ export const configArgsSchema = z
             endpoint: z.string().url().optional(),
           })
           .optional(),
+        beacon: z
+          .object({
+            endpoint: z.string().url().optional(),
+          })
+          .optional(),
         contracts: z
           .object({
             setter: z.string().optional(),
@@ -109,6 +114,9 @@ export type ConfigArgs = {
       apiKey?: string;
     };
     rest?: {
+      endpoint?: string;
+    };
+    beacon?: {
       endpoint?: string;
     };
     contracts?: {

@@ -7,7 +7,7 @@ import type {
   ReaderFunctions,
   WriterFunctions,
 } from '@/contract-interactions/types';
-import { createQueries, createSSVAPI } from '@/libs/api';
+import { createBeaconAPI, createQueries, createSSVAPI } from '@/libs/api';
 import type { ConfigArgs } from '@/utils/zod/config';
 import { configArgsSchema } from '@/utils/zod/config';
 import { GraphQLClient } from 'graphql-request';
@@ -24,7 +24,9 @@ export type ConfigReturnType = {
   publicClient: PublicClient;
   walletClient?: WalletClient;
   chain: Chain;
-  api: ReturnType<typeof createQueries> & ReturnType<typeof createSSVAPI>;
+  api: ReturnType<typeof createQueries> &
+    ReturnType<typeof createSSVAPI> &
+    ReturnType<typeof createBeaconAPI>;
   contractAddresses: {
     setter: Address;
     getter: Address;
@@ -44,19 +46,41 @@ export type ConfigReturnType = {
   rest: {
     endpoint: string;
   };
+  beacon: {
+    endpoint?: string;
+  };
+};
+
+export const isNonNullObject = (
+  value: unknown,
+): value is Record<PropertyKey, unknown> => {
+  // typeof [] === 'object' in JS, so arrays must be excluded explicitly —
+  // otherwise e.g. isConfig({...validConfig, beacon: []}) would pass.
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 };
 
 export const isConfig = (props: unknown): props is ConfigReturnType => {
+  if (!isNonNullObject(props)) {
+    return false;
+  }
+
   return (
-    typeof props === 'object' &&
-    props !== null &&
     'publicClient' in props &&
+    isNonNullObject(props.publicClient) &&
     'chain' in props &&
+    isNonNullObject(props.chain) &&
     'api' in props &&
+    isNonNullObject(props.api) &&
     'contractAddresses' in props &&
+    isNonNullObject(props.contractAddresses) &&
     'contract' in props &&
+    isNonNullObject(props.contract) &&
     'subgraph' in props &&
-    'rest' in props
+    isNonNullObject(props.subgraph) &&
+    'rest' in props &&
+    isNonNullObject(props.rest) &&
+    'beacon' in props &&
+    isNonNullObject(props.beacon)
   );
 };
 
@@ -144,6 +168,8 @@ export const createConfig = (props: ConfigArgs): ConfigReturnType => {
   const restEndpoint =
     extendedConfig?.rest?.endpoint || rest_endpoints[chainId];
 
+  const beaconEndpoint = extendedConfig?.beacon?.endpoint;
+
   const graphQLClient = new GraphQLClient(
     graphEndpoint,
     hasAPIKey
@@ -162,6 +188,7 @@ export const createConfig = (props: ConfigArgs): ConfigReturnType => {
     api: {
       ...createQueries(graphQLClient),
       ...createSSVAPI(restEndpoint),
+      ...createBeaconAPI(beaconEndpoint),
     },
     subgraph: {
       client: graphQLClient,
@@ -169,6 +196,9 @@ export const createConfig = (props: ConfigArgs): ConfigReturnType => {
     },
     rest: {
       endpoint: restEndpoint,
+    },
+    beacon: {
+      endpoint: beaconEndpoint,
     },
     contractAddresses: addresses,
     contract,

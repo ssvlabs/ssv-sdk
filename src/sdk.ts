@@ -4,7 +4,12 @@ import { createOperatorManager } from '@/libs/operator';
 import { createUtils } from '@/libs/utils';
 import type { WalletClient } from 'viem';
 import type { ConfigReturnType } from '@/config';
-import { createConfig, createContractInteractions, isConfig } from '@/config';
+import {
+  createConfig,
+  createContractInteractions,
+  isConfig,
+  isNonNullObject,
+} from '@/config';
 import type { ConfigArgs } from '@/utils';
 import { configArgsSchema } from '@/utils';
 
@@ -18,7 +23,18 @@ export class SSVSDK {
   readonly utils: ReturnType<typeof createUtils>;
 
   constructor(props: ConfigArgs | ConfigReturnType) {
-    this.config = isConfig(props) ? props : createConfig(props);
+    if (isConfig(props)) {
+      this.config = props;
+    } else {
+      if (hasIncompletePrebuiltConfigShape(props)) {
+        throw new Error(
+          'Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields (publicClient, chain, api, contractAddresses, contract, subgraph, rest, beacon). Provide a complete config object, or pass ConfigArgs (publicClient/walletClient/extendedConfig) instead.',
+        );
+      }
+
+      this.config = createConfig(props);
+    }
+
     this.clusters = createClusterManager(this.config);
     this.dao = createDaoManager(this.config);
     this.operators = createOperatorManager(this.config);
@@ -44,3 +60,34 @@ export class SSVSDK {
     return this;
   }
 }
+
+// Fields that only ever appear on a normalized ConfigReturnType, never on
+// raw ConfigArgs (publicClient/walletClient/extendedConfig) — their presence
+// signals "this was meant to be a prebuilt config."
+const CONFIG_RETURN_TYPE_ONLY_KEYS = [
+  'chain',
+  'api',
+  'contractAddresses',
+  'contract',
+  'subgraph',
+  'rest',
+  'beacon',
+] as const;
+
+const hasIncompletePrebuiltConfigShape = (props: unknown): boolean => {
+  if (!isNonNullObject(props)) {
+    return false;
+  }
+
+  const looksPrebuilt = CONFIG_RETURN_TYPE_ONLY_KEYS.some(
+    (key) => key in props,
+  );
+
+  // isConfig checks every field's presence and top-level shape symmetrically
+  // (it doesn't validate nested values like beacon.endpoint's type), so
+  // reuse it here instead of re-deriving which one field is broken — a
+  // prebuilt-looking object that fails isConfig for ANY reason (not just an
+  // invalid beacon) must not silently fall through to createConfig, which
+  // would rebuild everything from chain defaults and discard custom values.
+  return looksPrebuilt && !isConfig(props);
+};

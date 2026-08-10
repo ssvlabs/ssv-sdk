@@ -1,3 +1,4 @@
+import { isConfig } from '@/config';
 import { chains, hoodi, paid_graph_endpoints } from '@/config/chains';
 import { SSVSDK } from '@/sdk';
 import type { ConfigArgs } from '@/utils';
@@ -10,6 +11,17 @@ import {
   type PublicClient,
 } from 'viem';
 import { describe, expect, it } from 'vitest';
+
+// Destructuring-to-discard (`const { x: _x, ...rest } = obj`) leaves an
+// unused binding; this avoids that while still preserving the right type.
+const omitKey = <T extends object, K extends keyof T>(
+  obj: T,
+  key: K,
+): Omit<T, K> => {
+  const clone: Partial<T> = { ...obj };
+  delete clone[key];
+  return clone as Omit<T, K>;
+};
 
 describe('SDK Initiation', async () => {
   const network = await initializeContract();
@@ -70,6 +82,9 @@ describe('SDK Initiation', async () => {
       rest: {
         endpoint: 'https://custom-rest-endpoint.com/api',
       },
+      beacon: {
+        endpoint: 'https://custom-beacon-endpoint.com',
+      },
       contracts: customAddresses,
     } satisfies ConfigArgs['extendedConfig'];
 
@@ -84,7 +99,204 @@ describe('SDK Initiation', async () => {
     // Verify custom endpoints are used
     expect(sdk.config.subgraph.endpoint).toBe(extended.subgraph.endpoint);
     expect(sdk.config.rest.endpoint).toBe(extended.rest.endpoint);
+    expect(sdk.config.beacon.endpoint).toBe(extended.beacon.endpoint);
   });
+
+  it('should expose bound beacon helpers on sdk.api', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const sdk = new SSVSDK({
+      publicClient,
+    });
+
+    expect(sdk.api.getBeaconValidator).toBeTypeOf('function');
+    expect(sdk.api.getBeaconValidators).toBeTypeOf('function');
+    expect(sdk.api.getBeaconValidatorState).toBeTypeOf('function');
+    expect(sdk.api.getBeaconValidatorStates).toBeTypeOf('function');
+    expect(sdk.api.getBeaconValidatorLifecycleStage).toBeTypeOf('function');
+    expect(sdk.api.waitForBeaconValidatorActivation).toBeTypeOf('function');
+  });
+
+  it('should initialize without beacon endpoint in normal config args', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const sdk = new SSVSDK({
+      publicClient,
+    });
+
+    expect(sdk.config.beacon.endpoint).toBeUndefined();
+  });
+
+  it('should only treat normalized configs as ConfigReturnType', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const sdk = new SSVSDK({
+      publicClient,
+    });
+    const legacyConfig = omitKey(sdk.config, 'beacon');
+
+    expect(isConfig(sdk.config)).toBe(true);
+    expect(isConfig(legacyConfig)).toBe(false);
+  });
+
+  it('should reject malformed configs with an invalid beacon shape', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const sdk = new SSVSDK({
+      publicClient,
+    });
+
+    expect(
+      isConfig({
+        ...sdk.config,
+        beacon: undefined,
+      }),
+    ).toBe(false);
+    expect(
+      isConfig({
+        ...sdk.config,
+        beacon: null,
+      }),
+    ).toBe(false);
+
+    const expectedError =
+      'Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields';
+
+    expect(
+      () =>
+        new SSVSDK({
+          ...sdk.config,
+          beacon: undefined,
+        } as unknown as typeof sdk.config),
+    ).toThrowError(expectedError);
+    expect(
+      () =>
+        new SSVSDK({
+          ...sdk.config,
+          beacon: null,
+        } as unknown as typeof sdk.config),
+    ).toThrowError(expectedError);
+  });
+
+  it.each(['beacon', 'rest', 'publicClient', 'api'] as const)(
+    'should reject an array in place of the %s field',
+    (fieldName) => {
+      const transport = http(hoodi.rpcUrls.default.http[0]);
+      const publicClient = createPublicClient({
+        chain: hoodi,
+        transport,
+      });
+
+      const sdk = new SSVSDK({
+        publicClient,
+      });
+
+      // typeof [] === 'object' in JS, so an array must be excluded
+      // explicitly wherever a config field is expected to be a plain object.
+      const malformedConfig = {
+        ...sdk.config,
+        [fieldName]: [],
+      };
+
+      expect(isConfig(malformedConfig)).toBe(false);
+      expect(
+        () => new SSVSDK(malformedConfig as unknown as typeof sdk.config),
+      ).toThrowError(
+        'Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields',
+      );
+    },
+  );
+
+  it('should reject an incomplete prebuilt config object missing beacon', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const originalSdk = new SSVSDK({
+      publicClient,
+    });
+    const incompleteConfig = omitKey(originalSdk.config, 'beacon');
+
+    expect(isConfig(incompleteConfig)).toBe(false);
+    expect(
+      () =>
+        new SSVSDK(incompleteConfig as unknown as typeof originalSdk.config),
+    ).toThrowError(
+      'Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields',
+    );
+  });
+
+  it('should reject an incomplete prebuilt config object missing a non-beacon field', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const originalSdk = new SSVSDK({
+      publicClient,
+      extendedConfig: {
+        rest: { endpoint: 'https://custom-rest-endpoint.com/api' },
+      },
+    });
+    const incompleteConfig = omitKey(originalSdk.config, 'rest');
+
+    // Before the fix, hasIncompletePrebuiltConfigShape only ever inspected
+    // beacon; a missing rest (or any other non-beacon field) short-circuited
+    // the guard to false and silently fell through to createConfig, which
+    // would have rebuilt rest.endpoint from the chain default instead of
+    // erroring.
+    expect(isConfig(incompleteConfig)).toBe(false);
+    expect(
+      () =>
+        new SSVSDK(incompleteConfig as unknown as typeof originalSdk.config),
+    ).toThrowError(
+      'Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields',
+    );
+  });
+
+  it('should accept a fully normalized prebuilt config with beacon', () => {
+    const transport = http(hoodi.rpcUrls.default.http[0]);
+    const publicClient = createPublicClient({
+      chain: hoodi,
+      transport,
+    });
+
+    const existingConfig = new SSVSDK({
+      publicClient,
+      extendedConfig: {
+        beacon: {
+          endpoint: 'https://custom-beacon-endpoint.com',
+        },
+      },
+    }).config;
+
+    const sdk = new SSVSDK(existingConfig);
+
+    expect(sdk.config).toBe(existingConfig);
+    expect(sdk.config.beacon.endpoint).toBe(
+      'https://custom-beacon-endpoint.com',
+    );
+  });
+
   it('should initialize with paid subgraph', async () => {
     const transport = http(hoodi.rpcUrls.default.http[0]);
     const walletClient = createWalletClient({
@@ -134,6 +346,25 @@ describe('SDK Initiation', async () => {
           walletClient,
         });
       }).toThrowError('Public client must be provided');
+    });
+
+    it('should throw error when beacon endpoint is invalid', () => {
+      const transport = http(hoodi.rpcUrls.default.http[0]);
+      const publicClient = createPublicClient({
+        chain: hoodi,
+        transport,
+      });
+
+      expect(() => {
+        new SSVSDK({
+          publicClient,
+          extendedConfig: {
+            beacon: {
+              endpoint: 'not-a-url',
+            },
+          },
+        });
+      }).toThrowError('Invalid url');
     });
 
     it('should initialize without walletClient', () => {

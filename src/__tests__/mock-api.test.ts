@@ -147,4 +147,63 @@ describe('Mock API event completeness', () => {
       effectiveBalance: '32',
     });
   });
+
+  it('keeps getBeaconValidatorStates mock responses index-aligned with the request', async () => {
+    const { createMockApi } = await import('@/mock/api');
+    const api = createMockApi(publicClient as never);
+
+    // Two different lengths: a hard-coded [null, null, null] would pass the
+    // 3-id case by coincidence but fail the 1-id and 5-id cases below.
+    await expect(
+      api.getBeaconValidatorStates({ validatorIds: ['1'] }),
+    ).resolves.toEqual([null]);
+    await expect(
+      api.getBeaconValidatorStates({ validatorIds: ['1', '2', '3'] }),
+    ).resolves.toEqual([null, null, null]);
+    const fiveIds = ['1', '2', '3', '4', '5'];
+    const fiveResult = await api.getBeaconValidatorStates({
+      validatorIds: fiveIds,
+    });
+    expect(fiveResult).toHaveLength(fiveIds.length);
+    expect(fiveResult).toEqual(fiveIds.map(() => null));
+  });
+
+  it('includes the full beacon helper surface', async () => {
+    const { createMockApi } = await import('@/mock/api');
+    const api = createMockApi(publicClient as never);
+
+    expect(api.checkOperatorDKGEnabled).toBeTypeOf('function');
+    expect(api.getDaoValues).toBeTypeOf('function');
+    expect(api.getBeaconValidator).toBeTypeOf('function');
+    expect(api.getBeaconValidators).toBeTypeOf('function');
+    expect(api.getBeaconValidatorState).toBeTypeOf('function');
+    expect(api.getBeaconValidatorStates).toBeTypeOf('function');
+    expect(api.getBeaconValidatorLifecycleStage).toBeTypeOf('function');
+    expect(api.waitForBeaconValidatorActivation).toBeTypeOf('function');
+
+    // The mock resolves a fixed constant regardless of validatorId/pollIntervalMs/
+    // timeoutMs, so only its surface shape is asserted here — an exact-value
+    // match would pass even if the mock stopped honoring the real
+    // BeaconValidatorState contract, since it doesn't drive off getBeaconValidatorState.
+    const activatedState = await api.waitForBeaconValidatorActivation({
+      validatorId: '1',
+      pollIntervalMs: 1_000,
+      timeoutMs: 5_000,
+    });
+
+    expect(activatedState).toEqual(
+      expect.objectContaining({
+        publicKey: expect.stringMatching(/^0x[a-fA-F0-9]{96}$/),
+        status: expect.any(String),
+        rawStatus: expect.any(String),
+        slashed: expect.any(Boolean),
+      }),
+    );
+    expect(typeof activatedState.balanceGwei).toBe('bigint');
+    expect(typeof activatedState.effectiveBalanceGwei).toBe('bigint');
+
+    expect(
+      api.getBeaconValidatorLifecycleStage({ status: 'withdrawal_done' }),
+    ).toBe('withdrawn');
+  });
 });
