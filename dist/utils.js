@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const config = require("./config-ClGS9Tic.js");
+const config = require("./config-D2FqSbHy.js");
 const waitForTransaction = async (config2, fn) => {
   const hash = await fn;
   return config2.publicClient.waitForTransactionReceipt({ hash });

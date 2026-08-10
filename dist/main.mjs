@@ -1,10 +1,10 @@
-import { n as decodeOperatorPublicKey, C as stringifyBigints, E as tryCatch, k as configArgsSchema, H as contracts, I as paid_graph_endpoints, J as graph_endpoints, L as rest_endpoints, D as toSolidityCluster, w as isKeySharesItem, M as registerValidatorsByClusterSizeLimits, l as createClusterId, m as createEmptyCluster, A as roundOperatorFee, N as globals, g as bigintMax, o as ensureNoKeysharesErrors, p as ensureValidatorsUniqueness, G as validateConsistentOperatorPublicKeys, F as validateConsistentOperatorIds, B as sortNumbers, K as KeysharesValidationError, a as KeysharesValidationErrors } from "./config-BdEJjnYA.mjs";
-import { O, P, Q, R } from "./config-BdEJjnYA.mjs";
+import { n as decodeOperatorPublicKey, C as stringifyBigints, E as tryCatch, H as getBeaconAPI, k as configArgsSchema, I as contracts, J as paid_graph_endpoints, L as graph_endpoints, M as rest_endpoints, D as toSolidityCluster, w as isKeySharesItem, N as registerValidatorsByClusterSizeLimits, l as createClusterId, m as createEmptyCluster, A as roundOperatorFee, O as globals, g as bigintMax, o as ensureNoKeysharesErrors, p as ensureValidatorsUniqueness, G as validateConsistentOperatorPublicKeys, F as validateConsistentOperatorIds, B as sortNumbers, K as KeysharesValidationError, a as KeysharesValidationErrors } from "./config-DBpdNwEd.mjs";
+import { P, Q, R, S, T, U, V, W, X, Y, Z, $ } from "./config-DBpdNwEd.mjs";
 import { isUndefined, isEqual } from "lodash-es";
 import { isAddressEqual, decodeEventLog, encodeFunctionData, encodeAbiParameters, parseAbiParameters, zeroAddress } from "viem";
 import { GraphQLClient } from "graphql-request";
 import { S as SSVKeys, K as KeyShares, a as KeySharesItem } from "./KeyShares-Dlp4Pa3b.mjs";
-import { O as O2, b, c } from "./KeyShares-Dlp4Pa3b.mjs";
+import { O, b, c } from "./KeyShares-Dlp4Pa3b.mjs";
 var ClusterFeeAssetTypes = /* @__PURE__ */ ((ClusterFeeAssetTypes2) => {
   ClusterFeeAssetTypes2["ETH"] = "ETH";
   ClusterFeeAssetTypes2["SSV"] = "SSV";
@@ -5928,8 +5928,17 @@ const createQueries = (graphqlClient) => {
 const createSSVAPI = (endpoint) => {
   return getSSVAPI(endpoint);
 };
+const createBeaconAPI = (endpoint) => {
+  return getBeaconAPI(endpoint);
+};
+const isNonNullObject = (value) => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+};
 const isConfig = (props) => {
-  return typeof props === "object" && props !== null && "publicClient" in props && "chain" in props && "api" in props && "contractAddresses" in props && "contract" in props && "subgraph" in props && "rest" in props;
+  if (!isNonNullObject(props)) {
+    return false;
+  }
+  return "publicClient" in props && isNonNullObject(props.publicClient) && "chain" in props && isNonNullObject(props.chain) && "api" in props && isNonNullObject(props.api) && "contractAddresses" in props && isNonNullObject(props.contractAddresses) && "contract" in props && isNonNullObject(props.contract) && "subgraph" in props && isNonNullObject(props.subgraph) && "rest" in props && isNonNullObject(props.rest) && "beacon" in props && isNonNullObject(props.beacon);
 };
 const createContractInteractions = ({
   walletClient,
@@ -5998,6 +6007,7 @@ const createConfig = (props) => {
   });
   const graphEndpoint = extendedConfig?.subgraph?.endpoint || (hasAPIKey ? paid_graph_endpoints[chainId] : graph_endpoints[chainId]);
   const restEndpoint = extendedConfig?.rest?.endpoint || rest_endpoints[chainId];
+  const beaconEndpoint = extendedConfig?.beacon?.endpoint;
   const graphQLClient = new GraphQLClient(
     graphEndpoint,
     hasAPIKey ? {
@@ -6012,7 +6022,8 @@ const createConfig = (props) => {
     chain: publicClient.chain,
     api: {
       ...createQueries(graphQLClient),
-      ...createSSVAPI(restEndpoint)
+      ...createSSVAPI(restEndpoint),
+      ...createBeaconAPI(beaconEndpoint)
     },
     subgraph: {
       client: graphQLClient,
@@ -6020,6 +6031,9 @@ const createConfig = (props) => {
     },
     rest: {
       endpoint: restEndpoint
+    },
+    beacon: {
+      endpoint: beaconEndpoint
     },
     contractAddresses: addresses,
     contract
@@ -6967,7 +6981,16 @@ class SSVSDK {
   contract;
   utils;
   constructor(props) {
-    this.config = isConfig(props) ? props : createConfig(props);
+    if (isConfig(props)) {
+      this.config = props;
+    } else {
+      if (hasIncompletePrebuiltConfigShape(props)) {
+        throw new Error(
+          "Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields (publicClient, chain, api, contractAddresses, contract, subgraph, rest, beacon). Provide a complete config object, or pass ConfigArgs (publicClient/walletClient/extendedConfig) instead."
+        );
+      }
+      this.config = createConfig(props);
+    }
     this.clusters = createClusterManager(this.config);
     this.dao = createDaoManager(this.config);
     this.operators = createOperatorManager(this.config);
@@ -6991,17 +7014,38 @@ class SSVSDK {
     return this;
   }
 }
+const CONFIG_RETURN_TYPE_ONLY_KEYS = [
+  "chain",
+  "api",
+  "contractAddresses",
+  "contract",
+  "subgraph",
+  "rest",
+  "beacon"
+];
+const hasIncompletePrebuiltConfigShape = (props) => {
+  if (!isNonNullObject(props)) {
+    return false;
+  }
+  const looksPrebuilt = CONFIG_RETURN_TYPE_ONLY_KEYS.some(
+    (key) => key in props
+  );
+  return looksPrebuilt && !isConfig(props);
+};
 export {
+  P as BeaconHttpError,
+  Q as BeaconValidationError,
   KeyShares,
   KeySharesItem,
-  O2 as OperatorPublicKeyError,
+  O as OperatorPublicKeyError,
   b as OperatorsCountsMismatchError,
   SSVKeys,
   c as SSVKeysException,
   SSVSDK,
-  O as chainIds,
-  P as chains,
+  R as chainIds,
+  S as chains,
   contracts,
+  createBeaconAPI,
   createClusterManager,
   createConfig,
   createContractInteractions,
@@ -7012,6 +7056,12 @@ export {
   createSSVAPI,
   createUtils,
   createWriter,
+  getBeaconAPI,
+  T as getBeaconValidator,
+  U as getBeaconValidatorLifecycleStage,
+  V as getBeaconValidatorState,
+  W as getBeaconValidatorStates,
+  X as getBeaconValidators,
   getCluster,
   getClusterBalance$1 as getClusterBalance,
   getClusterSnapshot,
@@ -7025,10 +7075,12 @@ export {
   getValidators,
   globals,
   graph_endpoints,
-  Q as hoodi,
+  Y as hoodi,
   isConfig,
-  R as networks,
+  isNonNullObject,
+  Z as networks,
   paid_graph_endpoints,
   registerValidatorsByClusterSizeLimits,
-  rest_endpoints
+  rest_endpoints,
+  $ as waitForBeaconValidatorActivation
 };
