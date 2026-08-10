@@ -1,3 +1,24 @@
+# 1.1.0 (2026-08-10)
+
+### Features
+
+- add a beacon chain client, exposed on `sdk.api` and configured via `extendedConfig.beacon.endpoint`
+- read validator state with `getBeaconValidator`, `getBeaconValidators`, `getBeaconValidatorState` and `getBeaconValidatorStates`
+- wait for activation with `waitForBeaconValidatorActivation`, and classify status with `getBeaconValidatorLifecycleStage`
+- report beacon failures as `BeaconHttpError` and `BeaconValidationError`, redacting credentials and query-string secrets from error messages
+
+### Fixes
+
+- reject incomplete prebuilt SDK configs instead of accepting a partially normalized object
+
+### Tests
+
+- add coverage for the beacon API, SDK initialization and the mock API
+
+### Docs
+
+- correct the `isConfig` comment to not overclaim nested validation
+
 # 1.0.2 (2026-05-21)
 
 ### Features
