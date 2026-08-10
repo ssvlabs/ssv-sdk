@@ -22,7 +22,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-const config = require("./config-ClGS9Tic.js");
+const config = require("./config-D2FqSbHy.js");
 const lodashEs = require("lodash-es");
 const viem = require("viem");
 const graphqlRequest = require("graphql-request");
@@ -5950,8 +5950,17 @@ const createQueries = (graphqlClient) => {
 const createSSVAPI = (endpoint) => {
   return getSSVAPI(endpoint);
 };
+const createBeaconAPI = (endpoint) => {
+  return config.getBeaconAPI(endpoint);
+};
+const isNonNullObject = (value) => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+};
 const isConfig = (props) => {
-  return typeof props === "object" && props !== null && "publicClient" in props && "chain" in props && "api" in props && "contractAddresses" in props && "contract" in props && "subgraph" in props && "rest" in props;
+  if (!isNonNullObject(props)) {
+    return false;
+  }
+  return "publicClient" in props && isNonNullObject(props.publicClient) && "chain" in props && isNonNullObject(props.chain) && "api" in props && isNonNullObject(props.api) && "contractAddresses" in props && isNonNullObject(props.contractAddresses) && "contract" in props && isNonNullObject(props.contract) && "subgraph" in props && isNonNullObject(props.subgraph) && "rest" in props && isNonNullObject(props.rest) && "beacon" in props && isNonNullObject(props.beacon);
 };
 const createContractInteractions = ({
   walletClient,
@@ -6020,6 +6029,7 @@ const createConfig = (props) => {
   });
   const graphEndpoint = extendedConfig?.subgraph?.endpoint || (hasAPIKey ? config.paid_graph_endpoints[chainId] : config.graph_endpoints[chainId]);
   const restEndpoint = extendedConfig?.rest?.endpoint || config.rest_endpoints[chainId];
+  const beaconEndpoint = extendedConfig?.beacon?.endpoint;
   const graphQLClient = new graphqlRequest.GraphQLClient(
     graphEndpoint,
     hasAPIKey ? {
@@ -6034,7 +6044,8 @@ const createConfig = (props) => {
     chain: publicClient.chain,
     api: {
       ...createQueries(graphQLClient),
-      ...createSSVAPI(restEndpoint)
+      ...createSSVAPI(restEndpoint),
+      ...createBeaconAPI(beaconEndpoint)
     },
     subgraph: {
       client: graphQLClient,
@@ -6042,6 +6053,9 @@ const createConfig = (props) => {
     },
     rest: {
       endpoint: restEndpoint
+    },
+    beacon: {
+      endpoint: beaconEndpoint
     },
     contractAddresses: addresses,
     contract
@@ -6989,7 +7003,16 @@ class SSVSDK {
   contract;
   utils;
   constructor(props) {
-    this.config = isConfig(props) ? props : createConfig(props);
+    if (isConfig(props)) {
+      this.config = props;
+    } else {
+      if (hasIncompletePrebuiltConfigShape(props)) {
+        throw new Error(
+          "Incomplete prebuilt config object: this looks like a normalized SDK config but is missing or has an invalid value for one of its required fields (publicClient, chain, api, contractAddresses, contract, subgraph, rest, beacon). Provide a complete config object, or pass ConfigArgs (publicClient/walletClient/extendedConfig) instead."
+        );
+      }
+      this.config = createConfig(props);
+    }
     this.clusters = createClusterManager(this.config);
     this.dao = createDaoManager(this.config);
     this.operators = createOperatorManager(this.config);
@@ -7013,9 +7036,35 @@ class SSVSDK {
     return this;
   }
 }
+const CONFIG_RETURN_TYPE_ONLY_KEYS = [
+  "chain",
+  "api",
+  "contractAddresses",
+  "contract",
+  "subgraph",
+  "rest",
+  "beacon"
+];
+const hasIncompletePrebuiltConfigShape = (props) => {
+  if (!isNonNullObject(props)) {
+    return false;
+  }
+  const looksPrebuilt = CONFIG_RETURN_TYPE_ONLY_KEYS.some(
+    (key) => key in props
+  );
+  return looksPrebuilt && !isConfig(props);
+};
+exports.BeaconHttpError = config.BeaconHttpError;
+exports.BeaconValidationError = config.BeaconValidationError;
 exports.chainIds = config.chainIds;
 exports.chains = config.chains;
 exports.contracts = config.contracts;
+exports.getBeaconAPI = config.getBeaconAPI;
+exports.getBeaconValidator = config.getBeaconValidator;
+exports.getBeaconValidatorLifecycleStage = config.getBeaconValidatorLifecycleStage;
+exports.getBeaconValidatorState = config.getBeaconValidatorState;
+exports.getBeaconValidatorStates = config.getBeaconValidatorStates;
+exports.getBeaconValidators = config.getBeaconValidators;
 exports.globals = config.globals;
 exports.graph_endpoints = config.graph_endpoints;
 exports.hoodi = config.hoodi;
@@ -7023,6 +7072,7 @@ exports.networks = config.networks;
 exports.paid_graph_endpoints = config.paid_graph_endpoints;
 exports.registerValidatorsByClusterSizeLimits = config.registerValidatorsByClusterSizeLimits;
 exports.rest_endpoints = config.rest_endpoints;
+exports.waitForBeaconValidatorActivation = config.waitForBeaconValidatorActivation;
 exports.KeyShares = KeyShares.KeyShares;
 exports.KeySharesItem = KeyShares.KeySharesItem;
 exports.OperatorPublicKeyError = KeyShares.OperatorPublicKeyError;
@@ -7030,6 +7080,7 @@ exports.OperatorsCountsMismatchError = KeyShares.OperatorsCountsMismatchError;
 exports.SSVKeys = KeyShares.SSVKeys;
 exports.SSVKeysException = KeyShares.SSVKeysException;
 exports.SSVSDK = SSVSDK;
+exports.createBeaconAPI = createBeaconAPI;
 exports.createClusterManager = createClusterManager;
 exports.createConfig = createConfig;
 exports.createContractInteractions = createContractInteractions;
@@ -7052,3 +7103,4 @@ exports.getQueries = getQueries;
 exports.getValidator = getValidator;
 exports.getValidators = getValidators;
 exports.isConfig = isConfig;
+exports.isNonNullObject = isNonNullObject;

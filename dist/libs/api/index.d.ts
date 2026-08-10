@@ -20,3 +20,23 @@ export declare const createSSVAPI: (endpoint: string) => {
         isHealthy: boolean;
     }[]>;
 };
+export declare const createBeaconAPI: (endpoint?: string) => {
+    getBeaconValidator: (args: {
+        validatorId: string;
+        signal?: AbortSignal;
+    }) => Promise<import('../../api/beacon').BeaconValidator | null>;
+    getBeaconValidators: (args: {
+        validatorIds: string[];
+        signal?: AbortSignal;
+    }) => Promise<import('../../api/beacon').BeaconValidator[]>;
+    getBeaconValidatorState: (args: {
+        validatorId: string;
+        signal?: AbortSignal;
+    }) => Promise<import('../../api/beacon').BeaconValidatorState | null>;
+    getBeaconValidatorStates: (args: {
+        validatorIds: string[];
+        signal?: AbortSignal;
+    }) => Promise<(import('../../api/beacon').BeaconValidatorState | null)[]>;
+    getBeaconValidatorLifecycleStage: (state: Pick<import('../../api/beacon').BeaconValidatorState, "status">) => import('../../api/beacon').BeaconValidatorLifecycleStage;
+    waitForBeaconValidatorActivation: (args: import('../../api/beacon').WaitForBeaconValidatorActivationArgs) => Promise<import('../../api/beacon').BeaconValidatorState>;
+};

@@ -12,6 +12,9 @@ export type ConfigArgs = {
         rest?: {
             endpoint?: string;
         };
+        beacon?: {
+            endpoint?: string;
+        };
         contracts?: {
             setter?: Address;
             getter?: Address;

@@ -1,3 +1,4 @@
+export * from './api/beacon';
 export * from './api/subgraph';
 export * from './config';
 export * from './contract-interactions';

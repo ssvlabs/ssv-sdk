@@ -1,5 +1,5 @@
 import { ContractInteractions, ReaderFunctions, WriterFunctions } from '../contract-interactions/types';
-import { createQueries, createSSVAPI } from '../libs/api';
+import { createBeaconAPI, createQueries, createSSVAPI } from '../libs/api';
 import { ConfigArgs } from '../utils/zod/config';
 import { GraphQLClient } from 'graphql-request';
 import { Address, Chain, PublicClient, WalletClient } from 'viem';
@@ -8,7 +8,7 @@ export type ConfigReturnType = {
     publicClient: PublicClient;
     walletClient?: WalletClient;
     chain: Chain;
-    api: ReturnType<typeof createQueries> & ReturnType<typeof createSSVAPI>;
+    api: ReturnType<typeof createQueries> & ReturnType<typeof createSSVAPI> & ReturnType<typeof createBeaconAPI>;
     contractAddresses: {
         setter: Address;
         getter: Address;
@@ -28,7 +28,11 @@ export type ConfigReturnType = {
     rest: {
         endpoint: string;
     };
+    beacon: {
+        endpoint?: string;
+    };
 };
+export declare const isNonNullObject: (value: unknown) => value is Record<PropertyKey, unknown>;
 export declare const isConfig: (props: unknown) => props is ConfigReturnType;
 type CreateContractInteractionsArgs = {
     walletClient?: WalletClient;
